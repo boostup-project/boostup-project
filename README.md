@@ -1,6 +1,6 @@
 # 🚀 BoostUp Project
 
-
+<br>
 
 ## Commit / PR Convention
 - `feat` : 새로운 기능 추가
@@ -10,7 +10,7 @@
 - `test` : 테스트 추가/수정
 - `chore` : 기타
 
-
+<br>
 
 ## branch Convention
 - `feat` : 새로운 기능 추가
