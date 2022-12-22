@@ -15,7 +15,7 @@ public class CareerImage {
     private String originFileName;
     private String fileName;
     private String filePath;
-    private String fileSize;
+    private Long fileSize;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "LESSON_ID")
@@ -26,7 +26,7 @@ public class CareerImage {
                        String originFileName,
                        String fileName,
                        String filePath,
-                       String fileSize) {
+                       Long fileSize) {
         this.id = id;
         this.originFileName = originFileName;
         this.fileName = fileName;
