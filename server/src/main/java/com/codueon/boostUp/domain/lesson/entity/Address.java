@@ -9,7 +9,6 @@ import java.util.List;
 
 @Entity
 @Getter
-@NoArgsConstructor
 public class Address {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -18,5 +17,4 @@ public class Address {
     private String address;
     @OneToMany(mappedBy = "lesson", cascade = CascadeType.ALL)
     private List<LessonAddress> lessonAddresses = new ArrayList<>();
-
 }
