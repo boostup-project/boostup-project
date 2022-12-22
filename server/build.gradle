@@ -5,16 +5,16 @@ buildscript {
 }
 
 plugins {
-	id 'java'
-	id 'org.springframework.boot' version '3.0.0'
-	id 'io.spring.dependency-management' version '1.1.0'
+	id 'org.springframework.boot' version '2.7.6'
+	id 'io.spring.dependency-management' version '1.0.15.RELEASE'
 	id "com.ewerk.gradle.plugins.querydsl" version "1.0.10"
 	id "org.asciidoctor.jvm.convert" version "3.3.2"    // (1)
+	id 'java'
 }
 
 group = 'com.codueon'
 version = '0.0.1-SNAPSHOT'
-sourceCompatibility = '17'
+sourceCompatibility = '11'
 
 repositories {
 	mavenCentral()
@@ -28,12 +28,10 @@ configurations {
 	asciidoctorExtensions
 }
 
-
 /** feign client 사용을 위한 스프링클라우드 설정 필요*/
 ext {
 	set('springCloudVersion', "2021.0.3")
 }
-
 
 dependencies {
 	// (4) mockmvc 라이브러리
@@ -63,7 +61,7 @@ dependencies {
 	//h2
 	runtimeOnly 'com.h2database:h2'
 	// mysql
-//	implementation 'mysql:mysql-connector-java'
+//    implementation 'mysql:mysql-connector-java'
 	//mapper 자동 생성
 	implementation 'org.mapstruct:mapstruct:1.5.3.Final'
 	annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.3.Final'
@@ -83,7 +81,7 @@ dependencies {
 	implementation "com.querydsl:querydsl-jpa:${queryDslVersion}"
 	implementation "com.querydsl:querydsl-apt:${queryDslVersion}"
 	// S3
-	implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
+//	implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
 	// Spring Batch
 	implementation 'org.springframework.boot:spring-boot-starter-batch'
 	testImplementation 'org.springframework.batch:spring-batch-test'
@@ -97,15 +95,17 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
 	// mockito library
 	testImplementation group: 'org.mockito', name: 'mockito-core', version: '2.1.0'
-//	// aws parameter store
-//	implementation 'com.coveo:spring-boot-parameter-store-integration:1.5.0'-boot-starter-test'
-  }
+	// aws parameter store
+//	implementation group: 'io.awspring.cloud', name: 'spring-cloud-starter-aws-parameter-store-config'
+}
 
 dependencyManagement {
 	imports {
 		mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}" // feign client dependency
+//		mavenBom "io.awspring.cloud:spring-cloud-aws-dependencies:2.3.3"
 	}
 }
+
 
 // (6)
 tasks.named('test') {
