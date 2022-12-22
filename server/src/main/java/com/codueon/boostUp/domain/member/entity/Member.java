@@ -1,9 +1,10 @@
 package com.codueon.boostUp.domain.member.entity;
 
 import javax.persistence.*;
-
-import lombok.*;
-
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,7 +12,6 @@ import java.util.List;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Member {
-
     @Id
     @Column(name = "MEMBER_ID")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
