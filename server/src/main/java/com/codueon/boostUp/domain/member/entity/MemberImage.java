@@ -1,36 +1,42 @@
-package com.codueon.boostUp.domain.lesson.entity;
+package com.codueon.boostUp.domain.member.entity;
 
-import lombok.*;
-
+import lombok.Getter;
+import lombok.Builder;
+import lombok.AccessLevel;
 import javax.persistence.*;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class CareerImage {
+public class MemberImage {
     @Id
+    @Column(name = "MEMBER_IMAGE_ID")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "CAREER_IMAGE_ID")
     private Long id;
     private String originFileName;
     private String fileName;
     private String filePath;
-    private String fileSize;
+    private Long fileSize;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "LESSON_ID")
-    private Lesson lesson;
+    @OneToOne
+    @JoinColumn(name = "MEMBER_ID")
+    private Member member;
 
     @Builder
-    public CareerImage(Long id,
+    public MemberImage(Long id,
                        String originFileName,
                        String fileName,
                        String filePath,
-                       String fileSize) {
+                       Long fileSize) {
         this.id = id;
         this.originFileName = originFileName;
         this.fileName = fileName;
         this.filePath = filePath;
         this.fileSize = fileSize;
+    }
+
+    public void setMember(Member member) {
+        this.member = member;
     }
 }
