@@ -3,7 +3,6 @@ package com.codueon.boostUp.global.webhook;
 import com.codueon.boostUp.domain.member.exception.AuthException;
 import com.codueon.boostUp.global.exception.BusinessLogicException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;

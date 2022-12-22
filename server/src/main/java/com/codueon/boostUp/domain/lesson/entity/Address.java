@@ -1,6 +1,5 @@
 package com.codueon.boostUp.domain.lesson.entity;
 
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -20,9 +19,4 @@ public class Address {
     @OneToMany(mappedBy = "lesson", cascade = CascadeType.ALL)
     private List<LessonAddress> lessonAddresses = new ArrayList<>();
 
-    @Builder
-    public Address(Long id, String address) {
-        this.id = id;
-        this.address = address;
-    }
 }
