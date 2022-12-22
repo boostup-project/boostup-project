@@ -8,7 +8,7 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
-@Entity
+@Entity(name = "LANGUAGES")
 @Getter
 @NoArgsConstructor
 public class Language {
@@ -16,12 +16,13 @@ public class Language {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "LANGUAGE_ID")
     private Long id;
-    private String language;
+    private String languages;
     @OneToMany(mappedBy = "lesson", cascade = CascadeType.ALL)
     private List<LessonLanguage> lessonLanguages = new ArrayList<>();
+
     @Builder
-    public Language(Long id, String language) {
+    public Language(Long id, String languages) {
         this.id = id;
-        this.language = language;
+        this.languages = languages;
     }
 }
