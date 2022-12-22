@@ -1,9 +1,6 @@
 package com.codueon.boostUp.domain.lesson.entity;
 
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.io.CharArrayReader;
@@ -12,7 +9,6 @@ import java.util.List;
 
 @Entity
 @Getter
-@Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Lesson {
     @Id
@@ -22,15 +18,34 @@ public class Lesson {
     private String title;
     private String career;
     private String introduction;
-    private int cost;
+    private Integer cost;
     private String personality;
     private String curriculum;
-    private long memberId;
+    private Long memberId;
 
-    @OneToMany(mappedBy = "lession", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "lesson", cascade = CascadeType.ALL)
     private List<CareerImage> careerImages = new ArrayList<>();
     @OneToMany(mappedBy = "lesson", cascade = CascadeType.ALL)
     private List<LessonLanguage> lessonLanguages = new ArrayList<>();
     @OneToMany(mappedBy = "lesson", cascade = CascadeType.ALL)
     private List<LessonAddress> lessonAddresses = new ArrayList<>();
+
+    @Builder
+    public Lesson(Long id,
+                  String title,
+                  String career,
+                  String introduction,
+                  Integer cost,
+                  String personality,
+                  String curriculum,
+                  Long memberId) {
+        this.id = id;
+        this.title = title;
+        this.career = career;
+        this.introduction = introduction;
+        this.cost = cost;
+        this.personality = personality;
+        this.curriculum = curriculum;
+        this.memberId = memberId;
+    }
 }
