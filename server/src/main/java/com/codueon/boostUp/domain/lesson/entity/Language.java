@@ -9,7 +9,6 @@ import java.util.List;
 
 @Entity(name = "LANGUAGES")
 @Getter
-@NoArgsConstructor
 public class Language {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -18,5 +17,4 @@ public class Language {
     private String languages;
     @OneToMany(mappedBy = "lesson", cascade = CascadeType.ALL)
     private List<LessonLanguage> lessonLanguages = new ArrayList<>();
-
 }

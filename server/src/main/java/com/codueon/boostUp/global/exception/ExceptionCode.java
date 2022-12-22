@@ -21,7 +21,6 @@ public enum ExceptionCode {
     BLACK_LIST(504, "로그아웃 처리된 토큰입니다."),
     MISSING_HEADER_ACCESS_TOKEN(504,"헤더에 엑세스 토큰을 넣어주세요."),
 
-
     // 중복여부
     EMAIL_ALREADY_EXIST(504, "이미 존재하는 이메일입니다."),
     NICKNAME_ALREADY_EXIST(504, "이미 존재하는 닉네임입니다."),
