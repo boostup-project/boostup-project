@@ -19,6 +19,7 @@ public class Address {
     private String address;
     @OneToMany(mappedBy = "lesson", cascade = CascadeType.ALL)
     private List<LessonAddress> lessonAddresses = new ArrayList<>();
+
     @Builder
     public Address(Long id, String address) {
         this.id = id;
