@@ -1,4 +1,5 @@
 # 🚀 BoostUp Project
+<br>
 ## 👨‍👩‍👧‍👦 팀원 소개
 
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
@@ -41,6 +42,7 @@
 
 ```
  feat: issue
+ ex) feat: 엔티티 작성
 ```
 
 <br>
@@ -54,5 +56,6 @@
 - `chore` : 기타
 
 ```
- feat/issue
+ feat/issue#[이슈번호]
+ ex) feat/issue#1
 ```
