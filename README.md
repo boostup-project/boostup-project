@@ -41,7 +41,6 @@
 
 ```
  feat/issue
- ex) feat/issue
 ```
 
 <br>
@@ -56,5 +55,4 @@
 
 ```
  feat/issue
- ex) feat/issue
 ```
