@@ -1,5 +1,5 @@
 # 🚀 BoostUp Project
-## 팀원 소개
+## 👨‍👩‍👧‍👦 팀원 소개
 
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
 <!-- prettier-ignore-start -->
@@ -31,7 +31,7 @@
 <br><br><br><br>
 <br>
 
-## Commit / PR Convention
+## 💫 Commit / PR Convention
 - `feat` : 새로운 기능 추가
 - `fix` : 버그 수정
 - `refactor` : 코드 리팩토링
@@ -45,7 +45,7 @@
 
 <br>
 
-## branch Convention
+## 💫 branch Convention
 - `feat` : 새로운 기능 추가
 - `fix` : 버그 수정
 - `refactor` : 코드 리팩토링
