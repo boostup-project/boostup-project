@@ -6,12 +6,12 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class FindPassword {
+public class FindPasswordDto {
     private String name;
     private String email;
 
     @Builder
-    public FindPassword(String name, String email) {
+    public FindPasswordDto(String name, String email) {
         this.name = name;
         this.email = email;
     }
