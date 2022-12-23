@@ -39,6 +39,11 @@
 - `test` : 테스트 추가/수정
 - `chore` : 기타
 
+```
+ feat/Issue
+ ex) feat/Issue
+```
+
 <br>
 
 ## branch Convention
@@ -48,3 +53,8 @@
 - `style` : CSS 추가/수정
 - `test` : 테스트 추가/수정
 - `chore` : 기타
+
+```
+ feat/Issue
+ ex) feat/Issue
+```
