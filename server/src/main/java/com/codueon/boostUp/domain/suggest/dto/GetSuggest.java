@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 
 @Getter
 @NoArgsConstructor
-public class SuggestResponse {
+public class GetSuggest {
 
     private Long suggestId;
 
@@ -29,15 +29,15 @@ public class SuggestResponse {
     private LocalDateTime createdAt;
 
     @Builder
-    public SuggestResponse(Long suggestId,
-                           String title,
-                           String name,
-                           LocalDateTime startTime,
-                           LocalDateTime endTime,
-                           String language,
-                           String requests,
-                           String status,
-                           LocalDateTime createdAt) {
+    public GetSuggest(Long suggestId,
+                      String title,
+                      String name,
+                      LocalDateTime startTime,
+                      LocalDateTime endTime,
+                      String language,
+                      String requests,
+                      String status,
+                      LocalDateTime createdAt) {
         this.suggestId = suggestId;
         this.title = title;
         this.name = name;
