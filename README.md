@@ -40,7 +40,7 @@
 - `chore` : 기타
 
 ```
- feat/issue
+ feat: issue
 ```
 
 <br>
