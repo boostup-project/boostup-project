@@ -1,9 +1,6 @@
 package com.codueon.boostUp.domain.lesson.controller;
 
-import com.codueon.boostUp.domain.lesson.dto.GetDetailLesson;
-import com.codueon.boostUp.domain.lesson.dto.GetMypageLesson;
-import com.codueon.boostUp.domain.lesson.dto.PostEditLesson;
-import com.codueon.boostUp.domain.lesson.dto.PostLesson;
+import com.codueon.boostUp.domain.lesson.dto.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -35,5 +32,9 @@ public class LessonController {
     @DeleteMapping("/lesson/{lesson-id}")
     public ResponseEntity deleteLesson(@PathVariable("lesson-id") Long lessonId) {
         return ResponseEntity.noContent().build();
+    }
+    @PostMapping("/search")
+    public ResponseEntity searchLesson(@RequestBody PostSearchLesson postSearchLesson) {
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 }
