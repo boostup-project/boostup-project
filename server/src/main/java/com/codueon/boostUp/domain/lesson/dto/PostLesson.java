@@ -18,7 +18,7 @@ public class PostLesson {
         private String curriculum;
 
         @Builder
-        public Post(String title,
+        public PostLesson(String title,
                     String introduction,
                     String language,
                     String career,
