@@ -40,7 +40,7 @@
 - `chore` : 기타
 
 ```
- feat: issue내용
+ feat: 이슈내용
  ex) feat: 엔티티 작성
 ```
 
@@ -55,6 +55,6 @@
 - `chore` : 기타
 
 ```
- feat/issue내용#[이슈번호]
- ex) feat/issue#1
+ feat/이슈내용#[이슈번호]
+ ex) feat/entity#1
 ```
