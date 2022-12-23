@@ -10,6 +10,9 @@ assignees: ''
 ## 📝 Github Issue
 Issue 설명
 
+## 💫 Branch
+feat/이슈요약#[이슈번호]
+> ex) feat/member#0
 
 ## ✔️ Check List
 > 이슈 체크리스트
