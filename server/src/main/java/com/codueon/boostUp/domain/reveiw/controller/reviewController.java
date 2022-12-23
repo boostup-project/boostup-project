@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class reviewController {
 
-    @PostMapping("/review/lesson/{lesson-id/suggest/{suggest-id}")
+    @PostMapping("/review/lesson/{lesson-id}/suggest/{suggest-id}")
     public ResponseEntity<?> postReview(@PathVariable("lesson-id") Long lessonId,
                                         @PathVariable("suggest-id") Long suggestId,
                                         @RequestBody PostReview postReview) {
