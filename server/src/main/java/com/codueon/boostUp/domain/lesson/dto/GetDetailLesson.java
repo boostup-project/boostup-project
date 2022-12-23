@@ -1,5 +1,6 @@
 package com.codueon.boostUp.domain.lesson.dto;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
