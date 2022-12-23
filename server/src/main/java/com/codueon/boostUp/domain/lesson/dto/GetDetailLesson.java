@@ -19,7 +19,8 @@ public class GetDetailLesson {
     private String images;
     private String curriculum;
     private Boolean isBookmark;
-
+    
+    @
     public GetDetailLesson(String title,
                            Integer cost,
                            String profileImage,
