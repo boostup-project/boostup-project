@@ -40,8 +40,8 @@
 - `chore` : 기타
 
 ```
- feat/Issue
- ex) feat/Issue
+ feat/issue
+ ex) feat/issue
 ```
 
 <br>
@@ -55,6 +55,6 @@
 - `chore` : 기타
 
 ```
- feat/Issue
- ex) feat/Issue
+ feat/issue
+ ex) feat/issue
 ```
