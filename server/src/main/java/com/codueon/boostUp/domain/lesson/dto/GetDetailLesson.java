@@ -20,7 +20,7 @@ public class GetDetailLesson {
     private String curriculum;
     private Boolean isBookmark;
     
-    @
+    @Builder
     public GetDetailLesson(String title,
                            Integer cost,
                            String profileImage,
