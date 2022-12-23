@@ -1,5 +1,4 @@
 # 🚀 BoostUp Project
-<br>
 ## 👨‍👩‍👧‍👦 팀원 소개
 
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
