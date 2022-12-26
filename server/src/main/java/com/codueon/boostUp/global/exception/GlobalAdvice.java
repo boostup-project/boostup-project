@@ -65,4 +65,11 @@ public class GlobalAdvice {
         sendErrorToDiscord.sendServerExceptionToDiscord(e);
         return ErrorResponse.of(HttpStatus.BAD_REQUEST, "파라미터가 유효하지 않습니다.");
     }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public ErrorResponse handleNullPointException(NullPointerException e) {
+        sendErrorToDiscord.sendServerExceptionToDiscord(e);
+        return ErrorResponse.of(HttpStatus.INTERNAL_SERVER_ERROR, "500 Error");
+    }
 }
