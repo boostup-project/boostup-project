@@ -13,6 +13,4 @@ public class Language {
     @Column(name = "LANGUAGE_ID")
     private Long id;
     private String languages;
-    @OneToMany(mappedBy = "lesson", cascade = CascadeType.ALL)
-    private List<LessonLanguage> lessonLanguages = new ArrayList<>();
 }

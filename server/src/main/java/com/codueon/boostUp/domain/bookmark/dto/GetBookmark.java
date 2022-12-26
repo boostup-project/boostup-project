@@ -9,6 +9,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Getter
 @NoArgsConstructor
@@ -28,21 +29,25 @@ public class GetBookmark {
 
     private Integer cost;
 
-    private List<Long> languages;
+    private List<String> languages;
 
-    private List<Long> address;
+    private List<String> address;
 
     @Builder
     @QueryProjection
-    public GetBookmark(Bookmark bookmark, Lesson lesson) {
+    public GetBookmark(Bookmark bookmark, String name, Lesson lesson) {
         this.bookmarkId = bookmark.getId();
         this.lessonId = lesson.getId();
         this.image = "";
-        this.bookmarkUrl = bookmarkUrl;
-        this.title = title;
+        this.bookmarkUrl = bookmark.getBookmarkUrl();
+        this.title = lesson.getTitle();
         this.name = name;
-        this.cost = cost;
-        this.languages = languages;
-        this.address = address;
+        this.cost = lesson.getCost();
+        this.languages = lesson.getLessonLanguages().stream()
+                .map(language -> language.getLanguages().getLanguages())
+                .collect(Collectors.toList());
+        this.address = lesson.getLessonAddresses().stream()
+                .map(address -> address.getAdress().getAddress())
+                .collect(Collectors.toList());
     }
 }

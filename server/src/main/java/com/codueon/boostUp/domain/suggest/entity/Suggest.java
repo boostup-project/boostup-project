@@ -6,7 +6,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -18,11 +17,9 @@ public class Suggest {
     @Column(name = "SUGGEST_ID")
     private Long id;
 
-    private LocalDateTime startTime;
+    private String days;
 
-    private LocalDateTime endTime;
-
-    private String language;
+    private String languages;
 
     @Column(length = 500)
     private String requests;
@@ -40,16 +37,14 @@ public class Suggest {
     @Builder
     public Suggest(
             Long id,
-            LocalDateTime startTime,
-            LocalDateTime endTime,
-            String language,
+            String days,
+            String languages,
             String requests,
             Long lessonId,
             Long memberId) {
         this.id = id;
-        this.startTime = startTime;
-        this.endTime = endTime;
-        this.language = language;
+        this.days = days;
+        this.languages = languages;
         this.requests = requests;
         this.lessonId = lessonId;
         this.memberId = memberId;
