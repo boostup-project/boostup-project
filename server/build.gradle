@@ -97,6 +97,8 @@ dependencies {
 	testImplementation group: 'org.mockito', name: 'mockito-core', version: '2.1.0'
 	// aws parameter store
 //	implementation group: 'io.awspring.cloud', name: 'spring-cloud-starter-aws-parameter-store-config'
+
+	implementation 'org.springframework.boot:spring-boot-starter-websocket'
 }
 
 dependencyManagement {
