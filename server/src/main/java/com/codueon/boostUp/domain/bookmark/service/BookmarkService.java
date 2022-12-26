@@ -1,8 +1,11 @@
 package com.codueon.boostUp.domain.bookmark.service;
 
+import com.codueon.boostUp.domain.bookmark.dto.GetBookmark;
 import com.codueon.boostUp.domain.bookmark.entity.Bookmark;
 import com.codueon.boostUp.domain.bookmark.repository.BookmarkRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -24,7 +27,7 @@ public class BookmarkService {
         );
     }
 
-    public List<Bookmark> findBookmarkList(Long memberId) {
-        return bookmarkRepository.findAllByMemberId(memberId);
+    public Page<GetBookmark> findBookmarkList(Long memberId, Pageable pageable) {
+        return bookmarkRepository.getBookmarkList(memberId, pageable);
     }
 }
