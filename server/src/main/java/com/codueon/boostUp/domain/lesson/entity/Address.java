@@ -15,6 +15,4 @@ public class Address {
     @Column(name = "ADDRESS_ID")
     private Long id;
     private String address;
-    @OneToMany(mappedBy = "lesson", cascade = CascadeType.ALL)
-    private List<LessonAddress> lessonAddresses = new ArrayList<>();
 }

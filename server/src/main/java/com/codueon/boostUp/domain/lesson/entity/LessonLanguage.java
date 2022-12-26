@@ -20,5 +20,5 @@ public class LessonLanguage {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "LANGUAGE_ID")
-    private Language language;
+    private Language languages;
 }

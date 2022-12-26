@@ -1,8 +1,11 @@
 package com.codueon.boostUp.domain.bookmark.controller;
 
+import com.codueon.boostUp.domain.bookmark.dto.GetBookmark;
 import com.codueon.boostUp.domain.bookmark.entity.Bookmark;
 import com.codueon.boostUp.domain.bookmark.service.BookmarkService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,10 +28,10 @@ public class BookmarkController {
     }
 
     @GetMapping
-    public ResponseEntity getBookmarks() {
+    public ResponseEntity getBookmarks(Pageable pageable) {
         // TODO : 시큐리티 적용 시 Authentication 객체 추가 요
         Long memberId = 1L; // 임시 하드 코딩 ㅋㅋ
-        List<Bookmark> bookmarkList = bookmarkService.findBookmarkList(memberId);
+        Page<GetBookmark> bookmarkList = bookmarkService.findBookmarkList(memberId, pageable);
         return ResponseEntity.ok().build();
     }
 }
