@@ -1,6 +1,6 @@
 ---
 name: daily-Log
-about: retrospect template.
+about: daily log template.
 title: '[Daily-Log] Name YYYY-MM-DD'
 labels: ''
 assignees: ''
