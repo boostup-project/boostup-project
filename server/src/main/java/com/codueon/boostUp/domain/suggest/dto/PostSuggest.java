@@ -4,25 +4,20 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
-
 @Getter
 @NoArgsConstructor
 public class PostSuggest {
 
-    private LocalDateTime startTime;
+    private String days;
 
-    private LocalDateTime endTime;
-
-    private String language;
+    private String languages;
 
     private String requests;
 
     @Builder
-    public PostSuggest(LocalDateTime startTime, LocalDateTime endTime, String language, String requests) {
-        this.startTime = startTime;
-        this.endTime = endTime;
-        this.language = language;
+    public PostSuggest(String days, String languages, String requests) {
+        this.days = days;
+        this.languages = languages;
         this.requests = requests;
     }
 }
