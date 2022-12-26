@@ -1,5 +1,9 @@
 package com.codueon.boostUp.domain.bookmark.dto;
 
+import com.codueon.boostUp.domain.bookmark.entity.Bookmark;
+import com.codueon.boostUp.domain.lesson.entity.Lesson;
+import com.codueon.boostUp.domain.member.entity.Member;
+import com.querydsl.core.annotations.QueryProjection;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -29,18 +33,11 @@ public class GetBookmark {
     private List<Long> address;
 
     @Builder
-    public GetBookmark(Long bookmarkId,
-                       Long lessonId,
-                       String image,
-                       String bookmarkUrl,
-                       String title,
-                       String name,
-                       Integer cost,
-                       List<Long> languages,
-                       List<Long> address) {
-        this.bookmarkId = bookmarkId;
-        this.lessonId = lessonId;
-        this.image = image;
+    @QueryProjection
+    public GetBookmark(Bookmark bookmark, Lesson lesson) {
+        this.bookmarkId = bookmark.getId();
+        this.lessonId = lesson.getId();
+        this.image = "";
         this.bookmarkUrl = bookmarkUrl;
         this.title = title;
         this.name = name;
