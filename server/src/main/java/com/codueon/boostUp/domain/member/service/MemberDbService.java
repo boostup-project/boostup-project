@@ -16,7 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class MemberDbService {
     private final MemberRepository memberRepository;
-    private final PasswordEncoder passwordEncoder;
+//    private final PasswordEncoder passwordEncoder;
 
     /**
      * 사용자 정보 조회 메서드
@@ -71,9 +71,9 @@ public class MemberDbService {
      * @return String(인코딩된 비밀번호)
      * @author LimJaeminZ
      */
-    public String encodingPassword(String password) {
-        return passwordEncoder.encode(password);
-    }
+//    public String encodingPassword(String password) {
+//        return passwordEncoder.encode(password);
+//    }
 
     /**
      * 비밀번호 확인 메서드
@@ -83,8 +83,8 @@ public class MemberDbService {
      * @author LimJaeminZ
      */
     public void isValidPassword(Member findMember, String password) {
-        if(!passwordEncoder.matches(password, findMember.getPassword())) {
-            throw new AuthException(ExceptionCode.INVALID_MEMBER);
-        }
+//        if(!passwordEncoder.matches(password, findMember.getPassword())) {
+//            throw new AuthException(ExceptionCode.INVALID_MEMBER);
+//        }
     }
 }
