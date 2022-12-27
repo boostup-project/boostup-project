@@ -7,11 +7,11 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 public class PostReview {
-    private Double score;
+    private Integer score;
     private String comment;
 
     @Builder
-    public PostReview(Double score, String comment) {
+    public PostReview(Integer score, String comment) {
         this.score = score;
         this.comment = comment;
     }

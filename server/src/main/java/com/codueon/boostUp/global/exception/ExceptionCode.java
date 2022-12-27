@@ -3,19 +3,22 @@ package com.codueon.boostUp.global.exception;
 import lombok.Getter;
 
 public enum ExceptionCode {
-    PLACE_NOT_FOUND(504, "존재하지 않는 호스팅입니다."),
-    MEMBER_NOT_FOUND(504, "존재하지 않는 회원입니다."),
-    REVIEW_NOT_FOUND(504, "존재하지 않는 후기입니다."),
-    BOOKMARK_NOT_FOUND(504, "존재하지 않는 북마크입니다."),
-    CATEGORY_NOT_FOUND(504, "존재하지 않는 카테고리입니다."),
-    RESERVATION_NOT_FOUND(504, "존재하지 않는 예약입니다."),
-    CHAT_NOT_FOUND(504, "존재하지 않는 메시지입니다."),
 
+    // 정보 NOT FOUND
+    BOOKMARK_NOT_FOUND(504, "존재하지 않는 북마크입니다."),
+    LESSON_NOT_FOUND(504, "존재하지 않는 강의 목록입니다."),
+    MEMBER_NOT_FOUND(504, "존재하지 않는 회원입니다."),
+    REVIEW_NOT_FOUND(504, "존재하지 않는 과외 후기입니다."),
+    SUGGEST_NOT_FOUND(504, "존재하지 않는 과외 신청 내역입니다."),
+    LANGUAGE_NOT_FOUND(504, "존재하지 않는 언어입니다."),
+    ADDRESS_NOT_FOUND(504, "존재하지 않는 주소입니다."),
+    CHAT_NOT_FOUND(504, "존재하지 않는 메시지입니다."),
+    RESERVATION_NOT_FOUND(504, "존재하지 않는 예약입니다."),
+
+    // 인증 인가
     INVALID_ACCESS(403, "유효하지 않은 접근입니다."),
     INVALID_MEMBER(403, "회원 정보를 다시 확인하세요."),
-    INVALID_OAUTH2(404, "지원하지 않는 OAuth2 프로바이더입니다."),
-
-    //토큰
+    INVALID_OAUTH2(403, "지원하지 않는 OAuth2 프로바이더입니다."),
     INVALID_AUTH_TOKEN(504, "유효하지 않은 토큰입니다."),
     INVALID_REFRESH_TOKEN(504, "리프레시 토큰이 유효하지 않습니다."),
     MISMATCH_ACCESS_TOKEN(504, "엑세스 토큰의 유저 정보가 일치하지 않습니다."),
@@ -30,13 +33,20 @@ public enum ExceptionCode {
     // 요청 실패
     UPLOAD_FAILED(504, "업로드가 실패했습니다."),
     PAYMENT_URL_REQUEST_FAILED(504, "결제 URL 요청을 실패했습니다."),
-    HOST_CANNOT_RESERVATION(504, "호스트는 예약할 수 없습니다."),
-    HOST_CANNOT_BOOKMARK(504, "호스트는 북마크를 등록할 수 없습니다."),
-    HOST_CANNOT_REVIEW(504, "호스트는 리뷰를 남길 수 없습니다."),
+    TUTOR_CANNOT_RESERVATION(504, "과외 선생님은 자신의 과외를 신청할 수 없습니다."),
+    TUTOR_CANNOT_BOOKMARK(504, "과외 선생님은 자신의 과외 북마크를 등록할 수 없습니다."),
+    TUTOR_CANNOT_REVIEW(504, "과외 선생님은 자기 과외 리뷰를 남길 수 없습니다."),
 
+    // TODO: 과외 신청 - 결제 관련
+    NOT_ACCEPT_SUGGEST(504, "과외 수락 상태가 아닙니다."),
+    NOT_PAY_SUCCESS(504, "결제 완료 상태가 아닙니다."),
+
+    // 리뷰 관련
+    REVIEW_ONLY_ONE(504, "리뷰는 한 번만 가능합니다."),
+
+    // 이미지 관련
     NO_IMAGE(504, "이미지가 비어있습니다."),
-    UNAUTHORIZED_FOR_UPDATE(403, "수정 권한이 없습니다."),
-    RESERVATION_MAX_CAPACITY_OVER(504, "최대 수용 인원을 초과했습니다.");
+    UNAUTHORIZED_FOR_UPDATE(403, "수정 권한이 없습니다.");
 
     @Getter
     private final int status;
