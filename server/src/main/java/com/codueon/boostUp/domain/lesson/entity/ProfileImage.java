@@ -1,28 +1,30 @@
 package com.codueon.boostUp.domain.lesson.entity;
 
-import lombok.*;
-
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import javax.persistence.*;
 
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class CareerImage {
+public class ProfileImage {
     @Id
+    @Column(name = "PROFILE_IMAGE_ID")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "CAREER_IMAGE_ID")
     private Long id;
     private String originFileName;
     private String fileName;
     private String filePath;
     private Long fileSize;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "LESSON_INFO_ID")
-    private LessonInfo lessonInfo;
+    @OneToOne
+    @JoinColumn(name = "LESSON_ID")
+    private Lesson lesson;
 
     @Builder
-    public CareerImage(Long id,
+    public ProfileImage(Long id,
                        String originFileName,
                        String fileName,
                        String filePath,
@@ -34,7 +36,7 @@ public class CareerImage {
         this.fileSize = fileSize;
     }
 
-    public void addLessonInfo(LessonInfo lessonInfo) {
-        this.lessonInfo = lessonInfo;
+    public void addLesson(Lesson lesson) {
+        this.lesson = lesson;
     }
 }
