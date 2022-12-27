@@ -12,6 +12,7 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity postLoginMember(@RequestBody PostLogin login) {
+
         return ResponseEntity.ok().build();
     }
 
