@@ -1,5 +1,7 @@
 package com.codueon.boostUp.domain.lesson.entity;
 
+import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -7,7 +9,7 @@ import javax.persistence.*;
 
 @Entity
 @Getter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class LessonAddress {
 
     @Id
@@ -22,4 +24,19 @@ public class LessonAddress {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ADRESS_ID")
     private Address adress;
+
+    @Builder
+    public LessonAddress(Long id, Lesson lesson, Address address) {
+        this.id = id;
+        this.lesson = lesson;
+        this.adress = address;
+    }
+
+    public void addLesson(Lesson lesson) {
+        this.lesson = lesson;
+    }
+
+    public void addAddress(Address address) {
+        this.adress = address;
+    }
 }
