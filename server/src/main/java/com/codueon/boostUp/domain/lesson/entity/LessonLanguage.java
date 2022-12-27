@@ -1,5 +1,7 @@
 package com.codueon.boostUp.domain.lesson.entity;
 
+import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -7,7 +9,7 @@ import javax.persistence.*;
 
 @Entity
 @Getter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class LessonLanguage {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,4 +23,21 @@ public class LessonLanguage {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "LANGUAGE_ID")
     private Language languages;
+
+    @Builder
+    public LessonLanguage(Long id,
+                          Lesson lesson,
+                          Language languages) {
+        this.id = id;
+        this.lesson = lesson;
+        this.languages = languages;
+    }
+
+    public void addLesson(Lesson lesson) {
+        this.lesson = lesson;
+    }
+
+    public void addLanguage(Language language) {
+        this.languages = language;
+    }
 }
