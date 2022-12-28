@@ -1,8 +1,14 @@
 package com.codueon.boostUp.domain.suggest.contoller;
 
+import com.codueon.boostUp.domain.dto.MultiResponseDto;
+import com.codueon.boostUp.domain.suggest.dto.GetStudentSuggest;
+import com.codueon.boostUp.domain.suggest.dto.GetTeacherSuggest;
 import com.codueon.boostUp.domain.suggest.dto.PostSuggest;
+import com.codueon.boostUp.domain.suggest.service.SuggestDbService;
 import com.codueon.boostUp.domain.suggest.service.SuggestService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,7 +19,7 @@ import javax.validation.Valid;
 @RequiredArgsConstructor
 public class SuggestController {
 
-//    private final SuggestDbService suggestDbService;
+    private final SuggestDbService suggestDbService;
     private final SuggestService suggestService;
 
     @PostMapping("/lesson/{lesson-id}/suggest")
@@ -63,16 +69,22 @@ public class SuggestController {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/suggest/teacher")
-    public ResponseEntity getTeacherSuggest() {
+    @GetMapping("lesson/{lesson-id}/suggest/teacher/tab/{tab-id}")
+    public ResponseEntity<MultiResponseDto<?>> getTeacherSuggest(@PathVariable("lesson-id") Long lessonId,
+                                                                 @PathVariable("tab-id") Long tabId,
+                                                                 Pageable pageable) {
 
-        return ResponseEntity.ok().build();
+        Long memberId = 1L;
+        Page<GetTeacherSuggest> suggestions = suggestDbService.getTeacherSuggestsOnMyPage(lessonId, memberId, tabId, pageable);
+        return ResponseEntity.ok(new MultiResponseDto<>(suggestions));
     }
 
     @GetMapping("/suggest/student")
-    public ResponseEntity getStudentSuggest() {
+    public ResponseEntity<MultiResponseDto<?>> getStudentSuggest(Pageable pageable) {
 
-        return ResponseEntity.ok().build();
+        Long memberId = 1L;
+        Page<GetStudentSuggest> suggestions = suggestDbService.getStudentSuggestsOnMyPage(memberId, pageable);
+        return ResponseEntity.ok(new MultiResponseDto<>(suggestions));
     }
 
     @DeleteMapping("/suggest/{suggest-id}")
