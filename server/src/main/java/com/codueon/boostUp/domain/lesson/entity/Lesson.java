@@ -59,5 +59,6 @@ public class Lesson {
 
     public void addLessonAddress(LessonAddress lessonAddress) {
         if (lessonAddress.getLesson() != this) lessonAddress.addLesson(this);
+        this.lessonAddresses.add(lessonAddress);
     }
 }

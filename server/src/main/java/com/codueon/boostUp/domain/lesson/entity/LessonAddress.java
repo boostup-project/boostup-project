@@ -23,13 +23,13 @@ public class LessonAddress {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ADRESS_ID")
-    private Address adress;
+    private Address address;
 
     @Builder
     public LessonAddress(Long id, Lesson lesson, Address address) {
         this.id = id;
         this.lesson = lesson;
-        this.adress = address;
+        this.address = address;
     }
 
     public void addLesson(Lesson lesson) {
@@ -37,6 +37,6 @@ public class LessonAddress {
     }
 
     public void addAddress(Address address) {
-        this.adress = address;
+        this.address = address;
     }
 }
