@@ -16,7 +16,7 @@ public class Lesson {
     @Column(name = "LESSON_ID")
     private Long id;
     private String title;
-    private String career;
+    private Integer career;
     private String introduction;
     private Integer cost;
     private String personality;
