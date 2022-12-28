@@ -26,8 +26,8 @@ public class BookmarkRepositoryImpl implements CustomBookmarkRepository {
     @Override
     public Page<GetBookmark> getBookmarkList(Long memberId, Pageable pageable) {
         List<GetBookmark> result = queryFactory
-                .select(new QGetBookmark(bookmark,
-                        member.name,
+                .select(new QGetBookmark(
+                        bookmark,
                         lesson
                 ))
                 .from(bookmark)

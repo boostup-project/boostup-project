@@ -7,11 +7,11 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 public class PatchReview {
-    private Double score;
+    private Integer score;
     private String comment;
 
     @Builder
-    public PatchReview(Double score, String comment) {
+    public PatchReview(Integer score, String comment) {
         this.score = score;
         this.comment = comment;
     }

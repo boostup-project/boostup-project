@@ -35,13 +35,13 @@ public class GetBookmark {
 
     @Builder
     @QueryProjection
-    public GetBookmark(Bookmark bookmark, String name, Lesson lesson) {
+    public GetBookmark(Bookmark bookmark, Lesson lesson) {
         this.bookmarkId = bookmark.getId();
         this.lessonId = lesson.getId();
-        this.image = "";
+        this.image = lesson.getProfileImage().getFilePath();
         this.bookmarkUrl = bookmark.getBookmarkUrl();
         this.title = lesson.getTitle();
-        this.name = name;
+        this.name = lesson.getName();
         this.cost = lesson.getCost();
         this.languages = lesson.getLessonLanguages().stream()
                 .map(language -> language.getLanguages().getLanguages())
