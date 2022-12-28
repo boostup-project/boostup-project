@@ -13,10 +13,12 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
 
+@WithMockUser
 @AutoConfigureMockMvc
 @MockBean(JpaMetamodelMappingContext.class)
 @WebMvcTest(controllers = {SuggestController.class})
@@ -55,6 +57,8 @@ class SuggestControllerTest {
 
         suggest = Suggest.builder()
                 .id(1L)
+                .lessonId(1L)
+                .memberId(1L)
                 .days("월, 수, 금")
                 .languages("Java")
                 .requests("누워서 수업 들어도 되나요?")

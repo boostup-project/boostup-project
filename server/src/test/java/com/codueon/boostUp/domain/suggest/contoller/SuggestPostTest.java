@@ -9,6 +9,7 @@ import org.springframework.test.web.servlet.ResultActions;
 
 import static org.mockito.Mockito.doNothing;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 public class SuggestPostTest extends SuggestControllerTest{
@@ -35,6 +36,7 @@ public class SuggestPostTest extends SuggestControllerTest{
                                 .accept(MediaType.APPLICATION_JSON)
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(content)
+                                .with(csrf())
 
                 );
 
