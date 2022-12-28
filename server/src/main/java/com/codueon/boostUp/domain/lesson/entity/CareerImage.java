@@ -18,8 +18,8 @@ public class CareerImage {
     private Long fileSize;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "LESSON_ID")
-    private Lesson lesson;
+    @JoinColumn(name = "LESSON_INFO_ID")
+    private LessonInfo lessonInfo;
 
     @Builder
     public CareerImage(Long id,
@@ -32,5 +32,9 @@ public class CareerImage {
         this.fileName = fileName;
         this.filePath = filePath;
         this.fileSize = fileSize;
+    }
+
+    public void addLessonInfo(LessonInfo lessonInfo) {
+        this.lessonInfo = lessonInfo;
     }
 }

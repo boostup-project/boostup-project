@@ -33,7 +33,7 @@ public class Lesson {
     @Builder
     public Lesson(Long id,
                   String title,
-                  String career,
+                  Integer career,
                   String introduction,
                   Integer cost,
                   String personality,
