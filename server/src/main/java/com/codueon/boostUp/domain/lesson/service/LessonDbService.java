@@ -14,7 +14,7 @@ public class LessonDbService {
 
     public Lesson ifExistsReturnLesson(Long lessonId) {
         return lessonRepository.findById(lessonId)
-                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.PLACE_NOT_FOUND));
+                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.LESSON_NOT_FOUND));
     }
 
     public void saveLesson(Lesson lesson) {
