@@ -17,6 +17,9 @@ public class Lesson {
     private Long id;
     private String name;
     private String title;
+
+    private String career;
+    private String introduction;
     private String company;
     private String career;
     private Integer cost;
