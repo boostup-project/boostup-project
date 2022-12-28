@@ -1,6 +1,8 @@
 package com.codueon.boostUp.domain.member.entity;
 
 import javax.persistence.*;
+
+import com.codueon.boostUp.global.util.Auditable;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -11,7 +13,7 @@ import java.util.List;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Member {
+public class Member extends Auditable {
     @Id
     @Column(name = "MEMBER_ID")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
