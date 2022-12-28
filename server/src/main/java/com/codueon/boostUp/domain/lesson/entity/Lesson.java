@@ -18,10 +18,9 @@ public class Lesson {
     private String name;
     private String title;
 
-    private String career;
+    private Integer career;
     private String introduction;
     private String company;
-    private String career;
     private Integer cost;
     private Long memberId;
 
@@ -37,7 +36,7 @@ public class Lesson {
                   String name,
                   String title,
                   String company,
-                  String career,
+                  Integer career,
                   Integer cost,
                   Long memberId) {
         this.id = id;
