@@ -1,7 +1,9 @@
 package com.codueon.boostUp.domain.suggest.contoller;
 
 import com.codueon.boostUp.domain.suggest.dto.PostSuggest;
+import com.codueon.boostUp.domain.suggest.service.SuggestService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,11 +13,16 @@ import javax.validation.Valid;
 @RequiredArgsConstructor
 public class SuggestController {
 
+//    private final SuggestDbService suggestDbService;
+    private final SuggestService suggestService;
+
     @PostMapping("/lesson/{lesson-id}/suggest")
-    public ResponseEntity postSuggest(@PathVariable("lesson-id") Long lessonId,
+    public ResponseEntity<?> createSuggest(@PathVariable("lesson-id") Long lessonId,
                                       @RequestBody @Valid PostSuggest post) {
 
-        return ResponseEntity.ok().build();
+        Long memberId = 1L;
+        suggestService.createSuggest(post, lessonId, memberId);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @GetMapping("/lesson/{lesson-id}/suggest/{suggest-id}/accept")

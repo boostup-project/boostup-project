@@ -4,6 +4,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Getter
 @NoArgsConstructor
 public class PostEditLesson {
@@ -11,7 +13,7 @@ public class PostEditLesson {
     private String career;
     private String introduction;
     private Integer cost;
-    private String language;
+    private List<Long> languages;
     private String personality;
     private String address;
     private String images;
@@ -22,7 +24,7 @@ public class PostEditLesson {
                           String career,
                           String introduction,
                           Integer cost,
-                          String language,
+                          List<Long> languages,
                           String personality,
                           String address,
                           String images,
@@ -31,7 +33,7 @@ public class PostEditLesson {
         this.career = career;
         this.introduction = introduction;
         this.cost = cost;
-        this.language = language;
+        this.languages = languages;
         this.personality = personality;
         this.address = address;
         this.images = images;

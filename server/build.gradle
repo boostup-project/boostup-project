@@ -43,7 +43,7 @@ dependencies {
 	//스프링 웹
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	//스프링 시큐리티
-//	implementation 'org.springframework.boot:spring-boot-starter-security'
+	implementation 'org.springframework.boot:spring-boot-starter-security'
 	// Redis
 	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
 	// embedded-redis
@@ -74,7 +74,7 @@ dependencies {
 	runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.5'
 	runtimeOnly    'io.jsonwebtoken:jjwt-jackson:0.11.5'
 	//test용 시큐리티
-//	testImplementation 'org.springframework.security:spring-security-test'
+	testImplementation 'org.springframework.security:spring-security-test'
 	//파일 업로드
 	implementation 'commons-io:commons-io:2.11.0'
 	// querydsl 디펜던시 추가
@@ -97,6 +97,8 @@ dependencies {
 	testImplementation group: 'org.mockito', name: 'mockito-core', version: '2.1.0'
 	// aws parameter store
 //	implementation group: 'io.awspring.cloud', name: 'spring-cloud-starter-aws-parameter-store-config'
+
+	implementation 'org.springframework.boot:spring-boot-starter-websocket'
 }
 
 dependencyManagement {

@@ -29,7 +29,7 @@ public class Bookmark {
                     Long memberId,
                     Long lessonId) {
         this.id = id;
-        this.bookmarkUrl = "http://localhost:300/lesson/" + lessonId;
+        this.bookmarkUrl = "http://localhost:3000/lesson/" + lessonId;
         this.memberId = memberId;
         this.lessonId = lessonId;
     }

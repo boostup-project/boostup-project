@@ -1,10 +1,15 @@
 package com.codueon.boostUp.domain.bookmark.dto;
 
+import com.codueon.boostUp.domain.bookmark.entity.Bookmark;
+import com.codueon.boostUp.domain.lesson.entity.Lesson;
+import com.codueon.boostUp.domain.member.entity.Member;
+import com.querydsl.core.annotations.QueryProjection;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Getter
 @NoArgsConstructor
@@ -24,28 +29,25 @@ public class GetBookmark {
 
     private Integer cost;
 
-    private List<Long> languages;
+    private List<String> languages;
 
-    private List<Long> address;
+    private List<String> address;
 
     @Builder
-    public GetBookmark(Long bookmarkId,
-                       Long lessonId,
-                       String image,
-                       String bookmarkUrl,
-                       String title,
-                       String name,
-                       Integer cost,
-                       List<Long> languages,
-                       List<Long> address) {
-        this.bookmarkId = bookmarkId;
-        this.lessonId = lessonId;
-        this.image = image;
-        this.bookmarkUrl = bookmarkUrl;
-        this.title = title;
+    @QueryProjection
+    public GetBookmark(Bookmark bookmark, String name, Lesson lesson) {
+        this.bookmarkId = bookmark.getId();
+        this.lessonId = lesson.getId();
+        this.image = "";
+        this.bookmarkUrl = bookmark.getBookmarkUrl();
+        this.title = lesson.getTitle();
         this.name = name;
-        this.cost = cost;
-        this.languages = languages;
-        this.address = address;
+        this.cost = lesson.getCost();
+        this.languages = lesson.getLessonLanguages().stream()
+                .map(language -> language.getLanguages().getLanguages())
+                .collect(Collectors.toList());
+        this.address = lesson.getLessonAddresses().stream()
+                .map(address -> address.getAdress().getAddress())
+                .collect(Collectors.toList());
     }
 }
