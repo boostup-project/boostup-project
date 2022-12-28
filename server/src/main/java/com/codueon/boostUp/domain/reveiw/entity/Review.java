@@ -1,5 +1,6 @@
 package com.codueon.boostUp.domain.reveiw.entity;
 
+import com.codueon.boostUp.domain.reveiw.dto.PatchReview;
 import com.codueon.boostUp.global.util.Auditable;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -7,6 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.Optional;
 
 @Entity
 @Getter
@@ -18,10 +20,10 @@ public class Review extends Auditable {
     @Column(name = "REVIEW")
     private Long id;
 
+    private Integer score;
+
     @Column(length = 1000)
     private String comment;
-
-    private Integer score;
 
     private Long lessonId;
 
@@ -34,5 +36,12 @@ public class Review extends Auditable {
         this.score = score;
         this.lessonId = lessonId;
         this.memberId = memberId;
+    }
+
+    public void editReview(PatchReview editReview) {
+        Optional.ofNullable(editReview.getScore())
+                .ifPresent(score -> this.score = score);
+        Optional.ofNullable(editReview.getComment())
+                .ifPresent(comment -> this.comment = comment);
     }
 }
