@@ -54,7 +54,7 @@ public class GetStudentSuggest {
                 .map(language -> language.getLanguages().getLanguages())
                 .collect(Collectors.toList());
         this.address = lesson.getLessonAddresses().stream()
-                .map(address -> address.getAdress().getAddress())
+                .map(address -> address.getAddress().getAddress())
                 .collect(Collectors.toList());
         this.status = suggest.getStatus().getStatus();
         this.createdAt = LocalDateTime.now();

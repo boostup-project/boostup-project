@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 
 @Getter
 @NoArgsConstructor
-public class GetReview extends Auditable {
+public class GetReview {
     private Long reviewId;
     private String image;
     private String name;
