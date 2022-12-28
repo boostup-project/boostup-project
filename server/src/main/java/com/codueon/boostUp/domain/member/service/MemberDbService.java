@@ -33,11 +33,11 @@ public class MemberDbService {
     /**
      * 이메일 중복 검사 메서드
      *
-     * @param postMember 회원가입 정보
+     * @param email 사용자 이메일
      * @author LimJaeminZ
      */
-    public void verifyEmail(PostMember postMember) {
-        memberRepository.findByEmail(postMember.getEmail()).ifPresent(e -> {
+    public void verifyEmail(String email) {
+        memberRepository.findByEmail(email).ifPresent(e -> {
             throw new BusinessLogicException(ExceptionCode.EMAIL_ALREADY_EXIST);
         });
     }
@@ -45,11 +45,11 @@ public class MemberDbService {
     /**
      * 닉네임 중복 검사 메서드
      *
-     * @param postMember
+     * @param name 사용자 닉네임
      * @author LimJaeminZ
      */
-    public void verifyName(PostMember postMember) {
-        memberRepository.findByName(postMember.getName()).ifPresent(e -> {
+    public void verifyName(String name) {
+        memberRepository.findByName(name).ifPresent(e -> {
             throw new BusinessLogicException(ExceptionCode.NICKNAME_ALREADY_EXIST);
         });
     }
