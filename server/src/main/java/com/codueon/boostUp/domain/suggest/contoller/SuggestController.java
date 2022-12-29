@@ -88,8 +88,10 @@ public class SuggestController {
     }
 
     @DeleteMapping("/suggest/{suggest-id}")
-    public ResponseEntity cancelSuggest(@PathVariable("lesson-id") Long lessonId) {
+    public ResponseEntity cancelSuggest(@PathVariable("suggest-id") Long suggestId) {
 
+        Long memberId = 1L;
+        suggestDbService.cancelSuggest(suggestId, memberId);
         return ResponseEntity.noContent().build();
     }
 
