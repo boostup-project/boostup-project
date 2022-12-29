@@ -1,0 +1,48 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+  font-family: "SCDream1";
+  src: url("../public/fonts/SCDream1.otf");
+}
+
+@font-face {
+  font-family: "SCDream2";
+  src: url("../public/fonts/SCDream2.otf");
+}
+
+@font-face {
+  font-family: "SCDream3";
+  src: "../public/fonts/SCDream3.otf";
+}
+
+@font-face {
+  font-family: "SCDream4";
+  src: url("../public/fonts/SCDream4.otf");
+}
+
+@font-face {
+  font-family: "SCDream5";
+  src: url("../public/fonts/SCDream5.otf");
+}
+
+@font-face {
+  font-family: "SCDream6";
+  src: url("../public/fonts/SCDream6.otf");
+}
+
+@font-face {
+  font-family: "SCDream7";
+  src: url("../public/fonts/SCDream7.otf");
+}
+
+@font-face {
+  font-family: "SCDream8";
+  src: url("../public/fonts/SCDream8.otf");
+}
+
+@font-face {
+  font-family: "SCDream9";
+  src: url("../public/fonts/SCDream9.otf");
+}
