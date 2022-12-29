@@ -32,6 +32,8 @@ public class Suggest {
 
     private Long memberId;
 
+    private Integer quantity;
+
     private LocalDateTime startTime;
 
     private LocalDateTime endTime;
@@ -45,6 +47,10 @@ public class Suggest {
 
     public void setEndTime() {
         this.endTime = LocalDateTime.now();
+    }
+
+    public void setQuantity(Integer quantity) {
+        this.quantity = quantity;
     }
 
     @Builder

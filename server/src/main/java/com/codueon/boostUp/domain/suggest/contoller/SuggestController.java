@@ -31,10 +31,13 @@ public class SuggestController {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    @GetMapping("/lesson/{lesson-id}/suggest/{suggest-id}/accept")
+    @PostMapping("/lesson/{lesson-id}/suggest/{suggest-id}/accept")
     public ResponseEntity acceptSuggest(@PathVariable("lesson-id") Long lessonId,
-                                        @PathVariable("suggest-id") Long suggestId) {
+                                        @PathVariable("suggest-id") Long suggestId,
+                                        @RequestBody Integer quantity) {
 
+        Long memberId = 1L;
+        suggestService.acceptSuggest(lessonId, suggestId, memberId, quantity);
         return ResponseEntity.ok().build();
     }
 
