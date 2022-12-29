@@ -24,7 +24,7 @@ public class SuggestGetTest extends SuggestControllerTest{
     @DisplayName("GET 마이페이지 신청 내역 조회 - 선생님용")
     void getTeacherSuggest() throws Exception{
 
-        int tabId = 1L;
+        int tabId = 1;
 
         Lesson lesson = Lesson.builder()
                 .id(1L)
