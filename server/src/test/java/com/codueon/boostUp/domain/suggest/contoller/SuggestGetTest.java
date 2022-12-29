@@ -21,7 +21,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class SuggestGetTest extends SuggestControllerTest{
 
     @Test
-    @DisplayName("마이페이지 신청 내역 조회 - 선생님용")
+    @DisplayName("GET 마이페이지 신청 내역 조회 - 선생님용")
     void getTeacherSuggest() throws Exception{
 
         Long tabId = 1L;
@@ -34,7 +34,7 @@ public class SuggestGetTest extends SuggestControllerTest{
         List<GetTeacherSuggest> suggestList = new ArrayList<>();
         suggestList.add(new GetTeacherSuggest(suggest, lesson.getId(), lesson.getName()));
 
-        given(suggestDbService.getTeacherSuggestsOnMyPage(Mockito.anyLong(), Mockito.anyLong(), Mockito.anyLong(), Mockito.any(Pageable.class)))
+        given(suggestDbService.getTeacherSuggestsOnMyPage(Mockito.anyLong(), Mockito.anyLong(), Mockito.anyInt(), Mockito.any(Pageable.class)))
                 .willReturn(new PageImpl<>(suggestList));
 
         ResultActions actions =
@@ -48,7 +48,7 @@ public class SuggestGetTest extends SuggestControllerTest{
     }
 
     @Test
-    @DisplayName("마이페이지 신청 내역 조회 - 학생용")
+    @DisplayName("GET 마이페이지 신청 내역 조회 - 학생용")
     void getStudentSuggest() throws Exception{
 
         ProfileImage profileImage = ProfileImage.builder().filePath("gddong.jpg").build();
