@@ -5,26 +5,27 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @NoArgsConstructor
-public class GetMypageLesson {
+public class GetStudentLesson {
     private String title;
     private LocalDateTime startTime;
     private LocalDateTime endTime;
-    private String languages;
+    private List<String> languages;
     private String requests;
     private LocalDateTime createdAt;
     private String status;
 
     @Builder
-    public GetMypageLesson(String title,
-                           LocalDateTime startTime,
-                           LocalDateTime endTime,
-                           String languages,
-                           String requests,
-                           LocalDateTime createdAt,
-                           String status) {
+    public GetStudentLesson(String title,
+                            LocalDateTime startTime,
+                            LocalDateTime endTime,
+                            List<String> languages,
+                            String requests,
+                            LocalDateTime createdAt,
+                            String status) {
         this.title = title;
         this.startTime = startTime;
         this.endTime = endTime;
