@@ -6,7 +6,7 @@ const Home = () => {
       <div className="w-screen h-fit bg-pointColor  font-SCDream3 text-lg">
         안녕하세요
       </div>
-      <div className="w-screen h-fit bg-slate-300 font-SCDream9 text-lg ">
+      <div className="w-screen h-fit desktop:bg-pointColor tablet:bg-textColor bg-bgColor  font-SCDream9 text-lg ">
         안녕하세요
       </div>
     </>
