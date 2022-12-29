@@ -71,7 +71,7 @@ public class SuggestController {
 
     @GetMapping("lesson/{lesson-id}/suggest/teacher/tab/{tab-id}")
     public ResponseEntity<MultiResponseDto<?>> getTeacherSuggest(@PathVariable("lesson-id") Long lessonId,
-                                                                 @PathVariable("tab-id") Long tabId,
+                                                                 @PathVariable("tab-id") int tabId,
                                                                  Pageable pageable) {
 
         Long memberId = 1L;

@@ -26,7 +26,7 @@ public class SuggestDbService {
         return suggestRepository.save(suggest);
     }
 
-    public Page<GetTeacherSuggest> getTeacherSuggestsOnMyPage(Long lessonId, Long memberId, Long tabId, Pageable pageable) {
+    public Page<GetTeacherSuggest> getTeacherSuggestsOnMyPage(Long lessonId, Long memberId, int tabId, Pageable pageable) {
         return suggestRepository.getTeacherSuggestsOnMyPage(lessonId, memberId, tabId, pageable);
     }
 
