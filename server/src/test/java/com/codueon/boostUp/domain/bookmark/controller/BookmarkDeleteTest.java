@@ -20,7 +20,7 @@ public class BookmarkDeleteTest extends BookmarkControllerTest {
 
         ResultActions actions =
                 mockMvc.perform(
-                        get("/bookmark/lesson/{lesson-id}", lessonId)
+                        get("/bookmark/lesson/{lesson-id}/edit", lessonId)
                                 .accept(MediaType.APPLICATION_JSON)
                                 .contentType(MediaType.APPLICATION_JSON)
                 );
