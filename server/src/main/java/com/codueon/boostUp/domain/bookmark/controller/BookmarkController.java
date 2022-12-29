@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class BookmarkController {
     private final BookmarkService bookmarkService;
 
-    @GetMapping("/lesson/{lesson-id}")
+    @GetMapping("/lesson/{lesson-id}/edit")
     public ResponseEntity changeBookmark(@PathVariable("lesson-id") Long lessonId) {
         // TODO : 시큐리티 적용 시 Authentication 객체 추가 요
         Long memberId = 1L; // 임시 하드 코딩 ㅋㅋ

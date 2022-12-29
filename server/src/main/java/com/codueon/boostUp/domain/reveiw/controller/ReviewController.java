@@ -2,10 +2,7 @@ package com.codueon.boostUp.domain.reveiw.controller;
 
 
 import com.codueon.boostUp.domain.dto.MultiResponseDto;
-import com.codueon.boostUp.domain.reveiw.dto.GetReview;
-import com.codueon.boostUp.domain.reveiw.dto.GetReviewMyPage;
-import com.codueon.boostUp.domain.reveiw.dto.PatchReview;
-import com.codueon.boostUp.domain.reveiw.dto.PostReview;
+import com.codueon.boostUp.domain.reveiw.dto.*;
 import com.codueon.boostUp.domain.reveiw.service.ReviewService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -45,10 +42,10 @@ public class ReviewController {
      * @author mozzi327
      */
     @GetMapping("/lesson/{lesson-id}")
-    public ResponseEntity<MultiResponseDto> getDetailInfoReviews(@PathVariable("lesson-id") Long lessonId,
+    public ResponseEntity<GetAllDetailReviews> getDetailInfoReviews(@PathVariable("lesson-id") Long lessonId,
                                                   Pageable pageable) {
         Page<GetReview> getReviews = reviewService.findAllDetailInfoReviews(lessonId, pageable);
-        return ResponseEntity.ok().body(new MultiResponseDto<>(getReviews));
+        return ResponseEntity.ok().body(new GetAllDetailReviews(getReviews));
     }
 
     /**
