@@ -45,5 +45,29 @@ public class SuggestPostTest extends SuggestControllerTest{
 
     }
 
+    @Test
+    @DisplayName("POST 신청 수락하기")
+    void acceptSuggest() throws Exception{
+
+        Long lessonId = 1L;
+        Integer quantity = 1;
+
+        String content = gson.toJson(quantity);
+
+        doNothing().when(suggestService).acceptSuggest(Mockito.anyLong(), Mockito.anyLong(), Mockito.anyLong(), Mockito.anyInt());
+
+        ResultActions actions =
+                mockMvc.perform(
+                        post("/lesson/{lesson-id}/suggest/{suggest-id}/accept", lessonId, suggest.getId())
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .accept(MediaType.APPLICATION_JSON)
+                                .content(content)
+                                .with(csrf())
+                );
+
+        actions.andExpect(status().isOk())
+                .andReturn();
+    }
+
 
 }
