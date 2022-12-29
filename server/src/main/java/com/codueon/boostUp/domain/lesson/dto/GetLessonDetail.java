@@ -8,21 +8,21 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class GetLessonDetail {
    private String introduction;
-   private String company;
-   private Integer career;
+   private String detailCompany;
    private String personality;
-   private String favoriteLocation;
+   private Integer detailCost;
+   private String detailLocation;
 
    @Builder
     public GetLessonDetail(String introduction,
-                           String company,
-                           Integer career,
+                           String detailCompany,
                            String personality,
-                           String favoriteLocation) {
+                           Integer detailCost,
+                           String detailLocation) {
         this.introduction = introduction;
-        this.company = company;
-        this.career = career;
+        this.detailCompany = detailCompany;
         this.personality = personality;
-        this.favoriteLocation = favoriteLocation;
+        this.detailCost = detailCost;
+        this.detailLocation = detailLocation;
     }
 }

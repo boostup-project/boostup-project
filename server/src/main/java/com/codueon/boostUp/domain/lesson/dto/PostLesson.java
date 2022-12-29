@@ -16,7 +16,7 @@ public class PostLesson {
         private List<Long> address;
         private Integer cost;
         private String introduction;
-        private String detailCareer;
+        private String detailCompany;
         private String detailLocation;
         private String personality;
         private String  detailCost;
@@ -30,7 +30,7 @@ public class PostLesson {
                           List<Long> address,
                           Integer cost,
                           String introduction,
-                          String detailCareer,
+                          String detailCompany,
                           String detailLocation,
                           String personality,
                           String detailCost,
@@ -42,7 +42,7 @@ public class PostLesson {
                 this.address = address;
                 this.cost = cost;
                 this.introduction = introduction;
-                this.detailCareer = detailCareer;
+                this.detailCompany = detailCompany;
                 this.detailLocation = detailLocation;
                 this.personality = personality;
                 this.detailCost = detailCost;
