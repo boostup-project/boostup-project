@@ -8,7 +8,7 @@ import java.util.List;
 
 @Getter
 @NoArgsConstructor
-public class PatchLessonInfo {
+public class PostLessonInfoEdit {
     private List<Long> languages;
     private String name;
     private String title;
@@ -18,13 +18,13 @@ public class PatchLessonInfo {
     private List<Long> addresses;
 
     @Builder
-    public PatchLessonInfo(List<Long> languages,
-                           String name,
-                           String title,
-                           String company,
-                           Integer career,
-                           Integer cost,
-                           List<Long> addresses) {
+    public PostLessonInfoEdit(List<Long> languages,
+                              String name,
+                              String title,
+                              String company,
+                              Integer career,
+                              Integer cost,
+                              List<Long> addresses) {
         this.languages = languages;
         this.name = name;
         this.title = title;
