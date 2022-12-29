@@ -36,6 +36,5 @@ public class ReviewPatchTest extends ReviewControllerTest {
 
         actions.andExpect(status().isOk())
                 .andReturn();
-
     }
 }
