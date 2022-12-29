@@ -15,7 +15,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class SuggestPostTest extends SuggestControllerTest{
 
     @Test
-    @DisplayName("신청 프로세스 1 - 과외 신청")
+    @DisplayName("POST 신청 프로세스 1 - 과외 신청")
     void createSuggest() throws Exception{
 
         Long lessonId = 1L;
