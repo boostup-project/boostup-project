@@ -26,7 +26,9 @@ public class GetTeacherSuggest {
 
     private String status;
 
-    private LocalDateTime createdAt;
+    private LocalDateTime startTime;
+
+    private LocalDateTime endTime;
 
     @Builder
     @QueryProjection
@@ -40,6 +42,7 @@ public class GetTeacherSuggest {
         this.languages = suggest.getLanguages();
         this.requests = suggest.getRequests();
         this.status = suggest.getStatus().getStatus();
-        this.createdAt = LocalDateTime.now();
+        this.startTime = suggest.getStartTime();
+        this.endTime = suggest.getEndTime();
     }
 }
