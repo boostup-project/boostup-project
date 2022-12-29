@@ -1,9 +1,11 @@
 package com.codueon.boostUp.domain.bookmark.controller;
 
 import com.codueon.boostUp.domain.bookmark.dto.GetBookmark;
+import com.codueon.boostUp.domain.bookmark.dto.WrapBookmark;
 import com.codueon.boostUp.domain.bookmark.entity.Bookmark;
 import com.codueon.boostUp.domain.bookmark.service.BookmarkService;
 import com.codueon.boostUp.domain.dto.MultiResponseDto;
+import com.codueon.boostUp.domain.dto.SingleResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -30,7 +32,7 @@ public class BookmarkController {
         // TODO : 시큐리티 적용 시 Authentication 객체 추가 요
         Long memberId = 1L; // 임시 하드 코딩 ㅋㅋ
         boolean isBookmarked = bookmarkService.isMemberBookmarked(memberId, lessonId);
-        return ResponseEntity.ok().body(isBookmarked);
+        return ResponseEntity.ok().body(new WrapBookmark(isBookmarked));
     }
 
     /**
@@ -44,7 +46,7 @@ public class BookmarkController {
         // TODO : 시큐리티 적용 시 Authentication 객체 추가 요
         Long memberId = 1L; // 임시 하드 코딩 ㅋㅋ
         boolean isBookmarked = bookmarkService.changeBookmarkStatus(memberId, lessonId);
-        return ResponseEntity.ok().body(isBookmarked);
+        return ResponseEntity.ok().body(new WrapBookmark(isBookmarked));
     }
 
     /**

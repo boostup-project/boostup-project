@@ -8,6 +8,7 @@ import org.springframework.test.web.servlet.ResultActions;
 
 import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 public class BookmarkCreateTest extends BookmarkControllerTest {
@@ -26,6 +27,7 @@ public class BookmarkCreateTest extends BookmarkControllerTest {
                 );
 
         actions.andExpect(status().isOk())
+                .andExpect(jsonPath("$.bookmark").value(true))
                 .andReturn();
     }
 }

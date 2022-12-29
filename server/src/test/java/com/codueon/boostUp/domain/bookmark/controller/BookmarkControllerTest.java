@@ -3,7 +3,7 @@ package com.codueon.boostUp.domain.bookmark.controller;
 import com.codueon.boostUp.domain.bookmark.entity.Bookmark;
 import com.codueon.boostUp.domain.bookmark.repository.BookmarkRepository;
 import com.codueon.boostUp.domain.bookmark.service.BookmarkService;
-import com.codueon.boostUp.domain.lesson.entity.Lesson;
+import com.codueon.boostUp.domain.lesson.entity.*;
 import com.codueon.boostUp.domain.member.entity.Member;
 import com.codueon.boostUp.global.webhook.SendErrorToDiscord;
 import com.google.gson.Gson;
@@ -50,10 +50,43 @@ public class BookmarkControllerTest {
 
         lesson = Lesson.builder()
                 .id(1L)
+                .name("홍자루")
                 .title("자바 숙성 강의")
                 .cost(5000)
                 .memberId(1L)
+                .company("배달의 민족")
+                .career(100)
                 .build();
+
+        Language language = Language.builder()
+                .id(1L)
+                .languages("Java")
+                .build();
+
+        LessonLanguage lessonLanguage = LessonLanguage.builder()
+                .id(1L)
+                .lesson(lesson)
+                .languages(language)
+                .build();
+
+        Address address = Address.builder()
+                .id(1L)
+                .address("강남구")
+                .build();
+
+        LessonAddress lessonAddress = LessonAddress.builder()
+                .id(1L)
+                .lesson(lesson)
+                .address(address)
+                .build();
+
+        ProfileImage profileImage = ProfileImage.builder()
+                .filePath("https://test.com/image/test.png")
+                .build();
+
+        lesson.addLessonLanguage(lessonLanguage);
+        lesson.addLessonAddress(lessonAddress);
+        lesson.addProfileImage(profileImage);
 
         bookmark = Bookmark.builder()
                 .id(1L)

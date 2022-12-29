@@ -47,6 +47,8 @@ public class ReviewGetTest extends ReviewControllerTest {
                 );
 
         actions.andExpect(status().isOk())
+                .andExpect(jsonPath("$.average").value(4.0))
+                .andExpect(jsonPath("$.totalReviews").value(1))
                 .andExpect(jsonPath("$.data[0].reviewId").value(review.getId()))
                 .andExpect(jsonPath("$.data[0].image").value(image))
                 .andExpect(jsonPath("$.data[0].name").value(member.getName()))
