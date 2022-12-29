@@ -3,6 +3,7 @@ package com.codueon.boostUp.domain.suggest.contoller;
 import com.codueon.boostUp.domain.dto.MultiResponseDto;
 import com.codueon.boostUp.domain.suggest.dto.GetStudentSuggest;
 import com.codueon.boostUp.domain.suggest.dto.GetTeacherSuggest;
+import com.codueon.boostUp.domain.suggest.dto.PostReason;
 import com.codueon.boostUp.domain.suggest.dto.PostSuggest;
 import com.codueon.boostUp.domain.suggest.service.SuggestDbService;
 import com.codueon.boostUp.domain.suggest.service.SuggestService;
@@ -41,9 +42,14 @@ public class SuggestController {
         return ResponseEntity.ok().build();
     }
 
-    @DeleteMapping("/lesson/{lesson-id}/suggest")
-    public ResponseEntity declineSuggest(@PathVariable("lesson-id") Long lessonId) {
+    @PostMapping("/lesson/{lesson-id}/suggest/{suggest-id}/decline")
+    public ResponseEntity declineSuggest(@PathVariable("lesson-id") Long lessonId,
+                                         @PathVariable("suggest-id") Long suggestId,
+                                         @RequestBody PostReason postReason) {
 
+
+        Long memberId = 1L;
+        suggestDbService.declineSuggest(lessonId, suggestId, memberId, postReason);
         return ResponseEntity.noContent().build();
     }
 
