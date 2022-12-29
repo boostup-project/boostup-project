@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 public class PostSearchLesson {
     private String name;
     private String address;
-    private String career;
+    private Integer career;
     private String language;
     private Integer startCost;
     private Integer endCost;
@@ -17,7 +17,7 @@ public class PostSearchLesson {
     @Builder
     public PostSearchLesson(String name,
                             String address,
-                            String career,
+                            Integer career,
                             String language,
                             Integer startCost,
                             Integer endCost) {

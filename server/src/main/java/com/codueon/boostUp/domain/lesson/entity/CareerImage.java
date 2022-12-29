@@ -12,6 +12,7 @@ public class CareerImage {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "CAREER_IMAGE_ID")
     private Long id;
+    private Long lessonId;
     private String originFileName;
     private String fileName;
     private String filePath;
@@ -23,11 +24,13 @@ public class CareerImage {
 
     @Builder
     public CareerImage(Long id,
+                       Long lessonId,
                        String originFileName,
                        String fileName,
                        String filePath,
                        Long fileSize) {
         this.id = id;
+        this.lessonId = lessonId;
         this.originFileName = originFileName;
         this.fileName = fileName;
         this.filePath = filePath;
