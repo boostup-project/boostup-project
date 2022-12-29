@@ -34,6 +34,10 @@ module.exports = {
         php: "#527ACC",
       },
     },
+    screens: {
+      "desktop" : "1024px",
+      "tablet" : "764px",
+    },
   },
   plugins: [],
 };
