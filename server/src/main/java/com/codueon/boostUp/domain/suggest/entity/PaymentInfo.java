@@ -26,11 +26,11 @@ public class PaymentInfo {
 
     private String itemName;
 
-    private String quantity;
+    private Integer quantity;
 
-    private String totalAmount;
+    private Integer totalAmount;
 
-    private String taxFreeAmount;
+    private Integer taxFreeAmount;
 
     private String approvalUrl;
 
@@ -42,6 +42,7 @@ public class PaymentInfo {
     @JoinColumn(name = "SUGGEST_ID")
     private Suggest suggest;
 
-
-
+    public void setQuantity(Integer quantity) {
+        this.quantity = quantity;
+    }
 }
