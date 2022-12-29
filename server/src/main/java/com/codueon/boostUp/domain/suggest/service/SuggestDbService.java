@@ -42,6 +42,11 @@ public class SuggestDbService {
             throw new BusinessLogicException(ExceptionCode.INVALID_ACCESS);
         }
 
+        if (!findSuggest.getStatus().equals(Suggest.SuggestStatus.ACCEPT_IN_PROGRESS) &&
+            !findSuggest.getStatus().equals(Suggest.SuggestStatus.PAY_IN_PROGRESS)) {
+            throw new BusinessLogicException(ExceptionCode.INVALID_ACCESS);
+        }
+
         suggestRepository.delete(findSuggest);
     }
 }
