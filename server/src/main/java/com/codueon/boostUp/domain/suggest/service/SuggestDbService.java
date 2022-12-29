@@ -33,4 +33,15 @@ public class SuggestDbService {
     public Page<GetStudentSuggest> getStudentSuggestsOnMyPage(Long memberId, Pageable pageable) {
         return suggestRepository.getStudentSuggestsOnMyPage(memberId, pageable);
     }
+
+    public void cancelSuggest(Long suggestId, Long memberId) {
+
+        Suggest findSuggest = ifExistsReturnSuggest(suggestId);
+
+        if (!memberId.equals(findSuggest.getMemberId())) {
+            throw new BusinessLogicException(ExceptionCode.INVALID_ACCESS);
+        }
+
+        suggestRepository.delete(findSuggest);
+    }
 }
