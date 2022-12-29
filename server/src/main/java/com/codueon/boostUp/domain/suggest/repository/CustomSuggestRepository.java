@@ -7,7 +7,7 @@ import org.springframework.data.domain.Pageable;
 
 public interface CustomSuggestRepository {
 
-    Page<GetTeacherSuggest> getTeacherSuggestsOnMyPage(Long lessonId, Long memberId, Long tabId, Pageable pageable);
+    Page<GetTeacherSuggest> getTeacherSuggestsOnMyPage(Long lessonId, Long memberId, int tabId, Pageable pageable);
 
     Page<GetStudentSuggest> getStudentSuggestsOnMyPage(Long memberId, Pageable pageable);
 }

@@ -26,7 +26,7 @@ public class SuggestRepositoryImpl implements CustomSuggestRepository{
     }
 
     @Override
-    public Page<GetTeacherSuggest> getTeacherSuggestsOnMyPage(Long lessonId, Long memberId, Long tabId, Pageable pageable) {
+    public Page<GetTeacherSuggest> getTeacherSuggestsOnMyPage(Long lessonId, Long memberId, int tabId, Pageable pageable) {
         List<GetTeacherSuggest> results = queryFactory
                 .select(new QGetTeacherSuggest(
                         suggest,
@@ -47,12 +47,13 @@ public class SuggestRepositoryImpl implements CustomSuggestRepository{
         return new PageImpl<>(results, pageable, total);
     }
 
-    private BooleanExpression changeStatusByTabId(Long tabId) {
-        if(tabId == 1) return suggest.status.eq(Suggest.SuggestStatus.ACCEPT_IN_PROGRESS);
-        else if(tabId == 2) {
-            return suggest.status.eq(Suggest.SuggestStatus.PAY_IN_PROGRESS).and(
+    private BooleanExpression changeStatusByTabId(int tabId) {
+        switch (tabId) {
+            case 1: return suggest.status.eq(Suggest.SuggestStatus.ACCEPT_IN_PROGRESS);
+            case 2: return suggest.status.eq(Suggest.SuggestStatus.PAY_IN_PROGRESS).and(
                     suggest.status.eq(Suggest.SuggestStatus.DURING_LESSON));
-        } else return suggest.status.eq(Suggest.SuggestStatus.END_OF_LESSON);
+            default: return suggest.status.eq(Suggest.SuggestStatus.END_OF_LESSON);
+        }
     }
 
     @Override
