@@ -15,13 +15,13 @@ public class LessonController {
     }
 
     @GetMapping("/lesson")
-    public ResponseEntity<?> getMypageLesson(@RequestBody GetMypageLesson getMypageLesson) {
+    public ResponseEntity<?> getMypageLesson(@RequestBody GetStudentLesson getMypageLesson) {
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
     @GetMapping("/lesson/{lesson-id}")
     public ResponseEntity<?> getDetailLesson(@PathVariable("lesson-id") Long lessonId,
-                                             @RequestBody GetDetailLesson getDetailLesson) {
+                                             @RequestBody GetLessonDetail getDetailLesson) {
         return ResponseEntity.status(HttpStatus.OK).build();
     }
     @PostMapping("/lesson/{lesson-id}/edit")
