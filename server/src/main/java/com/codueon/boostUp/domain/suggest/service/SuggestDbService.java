@@ -1,7 +1,7 @@
 package com.codueon.boostUp.domain.suggest.service;
 
 import com.codueon.boostUp.domain.suggest.dto.GetStudentSuggest;
-import com.codueon.boostUp.domain.suggest.dto.GetTeacherSuggest;
+import com.codueon.boostUp.domain.suggest.dto.GetTutorSuggest;
 import com.codueon.boostUp.domain.suggest.entity.Reason;
 import com.codueon.boostUp.domain.suggest.entity.Suggest;
 import com.codueon.boostUp.domain.suggest.repository.ReasonRepository;
@@ -37,8 +37,8 @@ public class SuggestDbService {
         suggestRepository.delete(suggest);
     }
 
-    public Page<GetTeacherSuggest> getTeacherSuggestsOnMyPage(Long lessonId, Long memberId, int tabId, Pageable pageable) {
-        return suggestRepository.getTeacherSuggestsOnMyPage(lessonId, memberId, tabId, pageable);
+    public Page<GetTutorSuggest> getTutorSuggestsOnMyPage(Long lessonId, Long memberId, int tabId, Pageable pageable) {
+        return suggestRepository.getTutorSuggestsOnMyPage(lessonId, memberId, tabId, pageable);
     }
 
     public Page<GetStudentSuggest> getStudentSuggestsOnMyPage(Long memberId, Pageable pageable) {
