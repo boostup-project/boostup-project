@@ -16,6 +16,8 @@ public class GetStudentSuggest {
 
     private Long suggestId;
 
+    private Long lessonId;
+
     private String name;
 
     private String title;
@@ -39,6 +41,7 @@ public class GetStudentSuggest {
     public GetStudentSuggest(Suggest suggest,
                              Lesson lesson) {
         this.suggestId = suggest.getId();
+        this.lessonId = lesson.getId();
         this.name = lesson.getName();
         this.title = lesson.getTitle();
         this.profileImage = lesson.getProfileImage().getFilePath();

@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 
 @Getter
 @NoArgsConstructor
-public class GetTeacherSuggest {
+public class GetTutorSuggest {
 
     private Long suggestId;
 
@@ -32,9 +32,9 @@ public class GetTeacherSuggest {
 
     @Builder
     @QueryProjection
-    public GetTeacherSuggest(Suggest suggest,
-                             Long lessonId,
-                             String name) {
+    public GetTutorSuggest(Suggest suggest,
+                           Long lessonId,
+                           String name) {
         this.suggestId = suggest.getId();
         this.lessonId = lessonId;
         this.name = name;
