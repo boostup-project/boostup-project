@@ -82,7 +82,7 @@ public class SuggestPostTest extends SuggestControllerTest{
 
         String content = gson.toJson(postReason);
 
-        doNothing().when(suggestDbService).declineSuggest(Mockito.anyLong(), Mockito.anyLong(), Mockito.anyLong(), Mockito.any());
+        doNothing().when(suggestService).declineSuggest(Mockito.anyLong(), Mockito.anyLong(), Mockito.anyLong(), Mockito.any());
 
         ResultActions actions =
                 mockMvc.perform(
