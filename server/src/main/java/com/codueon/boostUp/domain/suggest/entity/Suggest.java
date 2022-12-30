@@ -55,14 +55,17 @@ public class Suggest {
         this.quantity = quantity;
     }
 
+    public void setTotalCost(Integer totalCost) {
+        this.totalCost = totalCost;
+    }
+
     @Builder
-    public Suggest(
-            Long id,
-            String days,
-            String languages,
-            String requests,
-            Long lessonId,
-            Long memberId) {
+    public Suggest( Long id,
+                    String days,
+                    String languages,
+                    String requests,
+                    Long lessonId,
+                    Long memberId ) {
         this.id = id;
         this.days = days;
         this.languages = languages;
