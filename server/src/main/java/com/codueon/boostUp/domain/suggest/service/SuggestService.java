@@ -24,7 +24,8 @@ public class SuggestService {
 
     @Transactional
     public void createSuggest(PostSuggest post, Long lessonId, Long memberId) {
-//        Lesson findLesson = lessonDbService.ifExistsReturnLesson(lessonId);
+
+        Lesson findLesson = lessonDbService.ifExistsReturnLesson(lessonId);
 
 //        if(memberId.equals(findLesson.getMemberId())) {
 //            throw new BusinessLogicException(ExceptionCode.TUTOR_CANNOT_RESERVATION);
@@ -56,6 +57,7 @@ public class SuggestService {
 
         findSuggest.setQuantity(quantity);
         findSuggest.setStartTime();
+        findSuggest.setTotalCost(Math.abs(findLesson.getCost() * findSuggest.getQuantity()));
         findSuggest.setStatus(Suggest.SuggestStatus.PAY_IN_PROGRESS);
 
         suggestDbService.saveSuggest(findSuggest);
