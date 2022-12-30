@@ -4,7 +4,7 @@ import com.codueon.boostUp.domain.lesson.entity.Lesson;
 import com.codueon.boostUp.domain.lesson.entity.ProfileImage;
 import com.codueon.boostUp.domain.suggest.dto.GetStudentSuggest;
 import com.codueon.boostUp.domain.suggest.dto.GetSuggestInfo;
-import com.codueon.boostUp.domain.suggest.dto.GetTeacherSuggest;
+import com.codueon.boostUp.domain.suggest.dto.GetTutorSuggest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -23,7 +23,7 @@ public class SuggestGetTest extends SuggestControllerTest{
 
     @Test
     @DisplayName("GET 마이페이지 신청 내역 조회 - 선생님용")
-    void getTeacherSuggest() throws Exception{
+    void getTutorSuggest() throws Exception{
 
         int tabId = 1;
 
@@ -32,15 +32,15 @@ public class SuggestGetTest extends SuggestControllerTest{
                 .name("길동씨")
                 .build();
 
-        List<GetTeacherSuggest> suggestList = new ArrayList<>();
-        suggestList.add(new GetTeacherSuggest(suggest, lesson.getId(), lesson.getName()));
+        List<GetTutorSuggest> suggestList = new ArrayList<>();
+        suggestList.add(new GetTutorSuggest(suggest, lesson.getId(), lesson.getName()));
 
-        given(suggestDbService.getTeacherSuggestsOnMyPage(Mockito.anyLong(), Mockito.anyLong(), Mockito.anyInt(), Mockito.any(Pageable.class)))
+        given(suggestDbService.getTutorSuggestsOnMyPage(Mockito.anyLong(), Mockito.anyLong(), Mockito.anyInt(), Mockito.any(Pageable.class)))
                 .willReturn(new PageImpl<>(suggestList));
 
         ResultActions actions =
                 mockMvc.perform(
-                        get("/lesson/{lesson-id}/suggest/teacher/tab/{tab-id}", 1L, tabId)
+                        get("/lesson/{lesson-id}/suggest/tutor/tab/{tab-id}", 1L, tabId)
                 );
 
         actions.andExpect(status().isOk())

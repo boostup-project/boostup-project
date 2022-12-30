@@ -2,7 +2,7 @@ package com.codueon.boostUp.domain.suggest.contoller;
 
 import com.codueon.boostUp.domain.dto.MultiResponseDto;
 import com.codueon.boostUp.domain.suggest.dto.GetStudentSuggest;
-import com.codueon.boostUp.domain.suggest.dto.GetTeacherSuggest;
+import com.codueon.boostUp.domain.suggest.dto.GetTutorSuggest;
 import com.codueon.boostUp.domain.suggest.dto.PostReason;
 import com.codueon.boostUp.domain.suggest.dto.PostSuggest;
 import com.codueon.boostUp.domain.suggest.service.SuggestDbService;
@@ -86,13 +86,13 @@ public class SuggestController {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("lesson/{lesson-id}/suggest/teacher/tab/{tab-id}")
-    public ResponseEntity<MultiResponseDto<?>> getTeacherSuggest(@PathVariable("lesson-id") Long lessonId,
+    @GetMapping("lesson/{lesson-id}/suggest/tutor/tab/{tab-id}")
+    public ResponseEntity<MultiResponseDto<?>> getTutorSuggest(@PathVariable("lesson-id") Long lessonId,
                                                                  @PathVariable("tab-id") int tabId,
                                                                  Pageable pageable) {
 
         Long memberId = 1L;
-        Page<GetTeacherSuggest> suggestions = suggestDbService.getTeacherSuggestsOnMyPage(lessonId, memberId, tabId, pageable);
+        Page<GetTutorSuggest> suggestions = suggestDbService.getTutorSuggestsOnMyPage(lessonId, memberId, tabId, pageable);
         return ResponseEntity.ok(new MultiResponseDto<>(suggestions));
     }
 
