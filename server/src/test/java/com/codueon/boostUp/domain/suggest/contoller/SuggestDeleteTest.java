@@ -16,7 +16,7 @@ public class SuggestDeleteTest extends SuggestControllerTest{
     @DisplayName("DELETE 과외 신청 취소")
     void cancelSuggest() throws Exception{
 
-        doNothing().when(suggestDbService).cancelSuggest(Mockito.anyLong(), Mockito.anyLong());
+        doNothing().when(suggestService).cancelSuggest(Mockito.anyLong(), Mockito.anyLong());
 
         ResultActions actions =
                 mockMvc.perform(
