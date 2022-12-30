@@ -49,12 +49,20 @@ public class SuggestController {
 
 
         Long memberId = 1L;
-        suggestDbService.declineSuggest(lessonId, suggestId, memberId, postReason);
+        suggestService.declineSuggest(lessonId, suggestId, memberId, postReason);
         return ResponseEntity.noContent().build();
     }
 
+    @GetMapping("/lesson/{lesson-id}/suggest/{suggest-id}/suggest-info")
+    public ResponseEntity getSuggestInfo(@PathVariable("suggest-id") Long suggestId,
+                                         @PathVariable("lesson-id") Long lessonId) {
+
+        Long memberId = 1L;
+        return ResponseEntity.ok(suggestService.getSuggestInfo(suggestId, lessonId, memberId));
+    }
+
     @GetMapping("/lesson/suggest/{suggest-id}/payment")
-    public ResponseEntity  orderPayment(@PathVariable("suggest-id") Long suggestId) {
+    public ResponseEntity orderPayment(@PathVariable("suggest-id") Long suggestId) {
 
         return ResponseEntity.ok().build();
     }
@@ -100,7 +108,7 @@ public class SuggestController {
     public ResponseEntity cancelSuggest(@PathVariable("suggest-id") Long suggestId) {
 
         Long memberId = 1L;
-        suggestDbService.cancelSuggest(suggestId, memberId);
+        suggestService.cancelSuggest(suggestId, memberId);
         return ResponseEntity.noContent().build();
     }
 

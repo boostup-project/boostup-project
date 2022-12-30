@@ -34,6 +34,8 @@ public class Suggest {
 
     private Integer quantity;
 
+    private Integer totalCost;
+
     private LocalDateTime startTime;
 
     private LocalDateTime endTime;
