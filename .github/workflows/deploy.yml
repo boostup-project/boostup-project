@@ -26,10 +26,10 @@ jobs:
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          BUCKET_NAME: ${{ secrets.BUCKET_NAME }}
+#           BUCKET_NAME: ${{ secrets.BUCKET_NAME }}
           AWS_EC2_METADATA_DISABLED: true
         run: |
-          aws s3 sync ./out s3://${{ secrets.BUCKET_NAME }}
+          aws s3 sync ./out s3://codeuon
         working-directory: ./client
       - name: cloudfron 캐시 무효화
         run: |
