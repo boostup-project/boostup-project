@@ -28,7 +28,10 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_EC2_METADATA_DISABLED: true
         run: |
-          aws s3 sync ./out s3://${{ secrets.S3_BUCKET_NAME }}
+          aws s3 sync \
+            --region ap-northeast-2 \
+            _site s3://codeuon \
+            --delete
         working-directory: ./client
       - name: cloudfron 캐시 무효화
         run: |
