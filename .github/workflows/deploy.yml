@@ -35,4 +35,4 @@ jobs:
         working-directory: ./client
       - name: cloudfron 캐시 무효화
         run: |
-          aws cloudfront create-invalidation --${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }} $ --paths "/index.html" "/bundle.js"
+          aws cloudfront create-invalidation --${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }} $ --paths "/index.html"
