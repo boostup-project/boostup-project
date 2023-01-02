@@ -12,6 +12,9 @@ const Home = () => {
       <div className="w-screen h-fit desktop:bg-pointColor tablet:bg-textColor bg-bgColor  font-SCDream9 text-lg ">
         자동배포 들어가요
       </div>
+      <div className="w-screen h-fit desktop:bg-pointColor tablet:bg-textColor bg-bgColor  font-SCDream9 text-lg ">
+        cloudfront 들어가요
+      </div>
     </>
   );
 };
