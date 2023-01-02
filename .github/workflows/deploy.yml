@@ -1,0 +1,38 @@
+name: fe_deploy
+on:
+  push:
+    branches:
+      - client
+jobs:
+  build:
+    runs-on: ubuntu-18.04
+    steps:
+      - name: 소스 코드 체크
+        uses: actions/checkout@v2
+      - name: 프로젝트에서 사용하는 모든 디펜던시 설치
+        run: npm install
+        working-directory: ./client
+      - name: 프로젝트 빌드
+        run: npm run build
+        working-directory: ./client
+      - name: AWS CLI 버전 확인
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_EC2_METADATA_DISABLED: true
+        run: |
+          aws --version
+      - name: S3 버켓에 빌드된 파일 업로드
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_EC2_METADATA_DISABLED: true
+        run: |
+          aws s3 sync \
+            --region ap-northeast-2 \
+            build s3://${{ secrets.BUCKET_NAME }} \
+            --delete
+        working-directory: ./client
+      - name: cloudfron 캐시 무효화
+        run: |
+          aws cloudfront create-invalidation --${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }} $ --paths "/index.html"
