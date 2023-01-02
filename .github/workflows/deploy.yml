@@ -5,7 +5,7 @@ on:
       - client
 jobs:
   build:
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-latest
     steps:
       - name: 소스 코드 체크
         uses: actions/checkout@v2
@@ -28,10 +28,7 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_EC2_METADATA_DISABLED: true
         run: |
-          aws s3 sync \
-            --region ap-northeast-2 \
-            build s3://${{ secrets.BUCKET_NAME }} \
-            --delete
+          aws s3 sync ./out s3://${{ secrets.S3_BUCKET_NAME }}
         working-directory: ./client
       - name: cloudfron 캐시 무효화
         run: |
