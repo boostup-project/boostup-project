@@ -55,7 +55,7 @@ public class SuggestPostTest extends SuggestControllerTest{
 
         String content = gson.toJson(quantity);
 
-        doNothing().when(suggestService).acceptSuggest(Mockito.anyLong(), Mockito.anyLong(), Mockito.anyLong(), Mockito.anyInt());
+        doNothing().when(suggestService).acceptSuggest(Mockito.anyLong(), Mockito.anyLong(), Mockito.anyInt());
 
         ResultActions actions =
                 mockMvc.perform(
@@ -82,7 +82,7 @@ public class SuggestPostTest extends SuggestControllerTest{
 
         String content = gson.toJson(postReason);
 
-        doNothing().when(suggestService).declineSuggest(Mockito.anyLong(), Mockito.anyLong(), Mockito.anyLong(), Mockito.any());
+        doNothing().when(suggestService).declineSuggest(Mockito.anyLong(), Mockito.anyLong(), Mockito.any());
 
         ResultActions actions =
                 mockMvc.perform(
