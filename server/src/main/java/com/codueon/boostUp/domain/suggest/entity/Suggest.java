@@ -95,4 +95,11 @@ public class Suggest {
             this.status = status;
         }
     }
+
+    public void addPaymentInfo(PaymentInfo paymentInfo) {
+        if (paymentInfo.getSuggest() != this) {
+            paymentInfo.setSuggest(this);
+        }
+        this.paymentInfo = paymentInfo;
+    }
 }

@@ -44,7 +44,7 @@ public class GetStudentSuggest {
         this.lessonId = lesson.getId();
         this.name = lesson.getName();
         this.title = lesson.getTitle();
-        this.profileImage = lesson.getProfileImage().getFilePath();
+//        this.profileImage = lesson.getProfileImage().getFilePath();
         this.company = lesson.getCompany();
         this.career = lesson.getCareer();
         this.cost = lesson.getCost();
