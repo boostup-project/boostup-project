@@ -37,7 +37,7 @@ public class SuggestService {
     @Transactional
     public void createSuggest(PostSuggest post, Long lessonId, Long memberId) {
 
-        Lesson findLesson = lessonDbService.ifExistsReturnLesson(lessonId);
+//        Lesson findLesson = lessonDbService.ifExistsReturnLesson(lessonId);
 
 //        if(memberId.equals(findLesson.getMemberId())) {
 //            throw new BusinessLogicException(ExceptionCode.TUTOR_CANNOT_RESERVATION);
@@ -57,17 +57,13 @@ public class SuggestService {
     }
 
     @Transactional
-    public void acceptSuggest(Long lessonId, Long suggestId, Long memberId, Integer quantity) {
-
-        Lesson findLesson = lessonDbService.ifExistsReturnLesson(lessonId);
-
-        if (!memberId.equals(findLesson.getMemberId())) {
-            throw new BusinessLogicException(ExceptionCode.INVALID_ACCESS);
-        }
+    public void acceptSuggest(Long suggestId, Long memberId, Integer quantity) {
 
         Suggest findSuggest = suggestDbService.ifExistsReturnSuggest(suggestId);
+        Lesson findLesson = lessonDbService.ifExistsReturnLesson(findSuggest.getLessonId());
 
-        if (!findSuggest.getStatus().equals(Suggest.SuggestStatus.ACCEPT_IN_PROGRESS)) {
+        if (!memberId.equals(findLesson.getMemberId()) ||
+                !findSuggest.getStatus().equals(Suggest.SuggestStatus.ACCEPT_IN_PROGRESS)) {
             throw new BusinessLogicException(ExceptionCode.INVALID_ACCESS);
         }
 
@@ -96,10 +92,10 @@ public class SuggestService {
         suggestDbService.deleteSuggest(findSuggest);
     }
 
-    public void declineSuggest(Long lessonId, Long suggestId, Long memberId, PostReason postReason) {
+    public void declineSuggest(Long suggestId, Long memberId, PostReason postReason) {
 
         Suggest findSuggest = suggestDbService.ifExistsReturnSuggest(suggestId);
-        Lesson findLesson = lessonDbService.ifExistsReturnLesson(lessonId);
+        Lesson findLesson = lessonDbService.ifExistsReturnLesson(findSuggest.getLessonId());
 
         if (!memberId.equals(findLesson.getMemberId()) ||
                 !findSuggest.getStatus().equals(Suggest.SuggestStatus.ACCEPT_IN_PROGRESS)) {
@@ -113,10 +109,10 @@ public class SuggestService {
 
     }
 
-    public GetSuggestInfo getSuggestInfo(Long suggestId, Long lessonId, Long memberId) {
+    public GetSuggestInfo getSuggestInfo(Long suggestId, Long memberId) {
 
-        Lesson findLesson = lessonDbService.ifExistsReturnLesson(lessonId);
         Suggest findSuggest = suggestDbService.ifExistsReturnSuggest(suggestId);
+        Lesson findLesson = lessonDbService.ifExistsReturnLesson(findSuggest.getLessonId());
 
         if (!memberId.equals(findSuggest.getMemberId()) ||
             findSuggest.getStatus().equals(Suggest.SuggestStatus.ACCEPT_IN_PROGRESS)) {

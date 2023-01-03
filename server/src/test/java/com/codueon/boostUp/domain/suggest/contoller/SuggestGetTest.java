@@ -103,7 +103,7 @@ public class SuggestGetTest extends SuggestControllerTest{
         GetSuggestInfo getSuggestInfo =
                 new GetSuggestInfo(lesson, totalCost, quantity);
 
-        given(suggestService.getSuggestInfo(Mockito.anyLong(), Mockito.anyLong(), Mockito.anyLong()))
+        given(suggestService.getSuggestInfo(Mockito.anyLong(), Mockito.anyLong()))
                 .willReturn(getSuggestInfo);
 
         ResultActions actions =

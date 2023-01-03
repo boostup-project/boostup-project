@@ -31,33 +31,30 @@ public class SuggestController {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    @PostMapping("/lesson/{lesson-id}/suggest/{suggest-id}/accept")
-    public ResponseEntity acceptSuggest(@PathVariable("lesson-id") Long lessonId,
-                                        @PathVariable("suggest-id") Long suggestId,
-                                        @RequestBody Integer quantity) {
+    @PostMapping("/lesson/suggest/{suggest-id}/accept")
+    public ResponseEntity acceptSuggest(@PathVariable("suggest-id") Long suggestId,
+                                        @RequestBody PostPaymentUrl post) {
 
         Long memberId = 1L;
-        suggestService.acceptSuggest(lessonId, suggestId, memberId, quantity);
+        suggestService.acceptSuggest(suggestId, memberId, post.getQuantity());
         return ResponseEntity.ok().build();
     }
 
-    @PostMapping("/lesson/{lesson-id}/suggest/{suggest-id}/decline")
-    public ResponseEntity declineSuggest(@PathVariable("lesson-id") Long lessonId,
-                                         @PathVariable("suggest-id") Long suggestId,
+    @PostMapping("/lesson/suggest/{suggest-id}/decline")
+    public ResponseEntity declineSuggest(@PathVariable("suggest-id") Long suggestId,
                                          @RequestBody PostReason postReason) {
 
 
         Long memberId = 1L;
-        suggestService.declineSuggest(lessonId, suggestId, memberId, postReason);
+        suggestService.declineSuggest(suggestId, memberId, postReason);
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping("/lesson/{lesson-id}/suggest/{suggest-id}/suggest-info")
-    public ResponseEntity getSuggestInfo(@PathVariable("suggest-id") Long suggestId,
-                                         @PathVariable("lesson-id") Long lessonId) {
+    @GetMapping("/lesson/suggest/{suggest-id}/suggest-info")
+    public ResponseEntity getSuggestInfo(@PathVariable("suggest-id") Long suggestId) {
 
         Long memberId = 1L;
-        return ResponseEntity.ok(suggestService.getSuggestInfo(suggestId, lessonId, memberId));
+        return ResponseEntity.ok(suggestService.getSuggestInfo(suggestId, memberId));
     }
 
     @GetMapping("/lesson/suggest/{suggest-id}/payment")
