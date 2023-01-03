@@ -2,8 +2,10 @@ package com.codueon.boostUp.domain.suggest.service;
 
 import com.codueon.boostUp.domain.suggest.dto.GetStudentSuggest;
 import com.codueon.boostUp.domain.suggest.dto.GetTutorSuggest;
+import com.codueon.boostUp.domain.suggest.entity.PaymentInfo;
 import com.codueon.boostUp.domain.suggest.entity.Reason;
 import com.codueon.boostUp.domain.suggest.entity.Suggest;
+import com.codueon.boostUp.domain.suggest.repository.PaymentInfoRepository;
 import com.codueon.boostUp.domain.suggest.repository.ReasonRepository;
 import com.codueon.boostUp.domain.suggest.repository.SuggestRepository;
 import com.codueon.boostUp.global.exception.BusinessLogicException;
@@ -19,6 +21,7 @@ public class SuggestDbService {
 
     private final SuggestRepository suggestRepository;
     private final ReasonRepository reasonRepository;
+    private final PaymentInfoRepository paymentInfoRepository;
 
     public Suggest ifExistsReturnSuggest(Long suggestId) {
         return suggestRepository.findById(suggestId)
@@ -31,6 +34,10 @@ public class SuggestDbService {
 
     public void saveReason(Reason reason) {
         reasonRepository.save(reason);
+    }
+
+    public void savePayment(PaymentInfo paymentInfo) {
+        paymentInfoRepository.save(paymentInfo);
     }
 
     public void deleteSuggest(Suggest suggest) {
