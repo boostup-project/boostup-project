@@ -1,10 +1,8 @@
 package com.codueon.boostUp.domain.suggest.contoller;
 
 import com.codueon.boostUp.domain.dto.MultiResponseDto;
-import com.codueon.boostUp.domain.suggest.dto.GetStudentSuggest;
-import com.codueon.boostUp.domain.suggest.dto.GetTutorSuggest;
-import com.codueon.boostUp.domain.suggest.dto.PostReason;
-import com.codueon.boostUp.domain.suggest.dto.PostSuggest;
+import com.codueon.boostUp.domain.suggest.dto.*;
+import com.codueon.boostUp.domain.suggest.response.Message;
 import com.codueon.boostUp.domain.suggest.service.SuggestDbService;
 import com.codueon.boostUp.domain.suggest.service.SuggestService;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 @RestController
@@ -62,9 +61,14 @@ public class SuggestController {
     }
 
     @GetMapping("/lesson/suggest/{suggest-id}/payment")
-    public ResponseEntity orderPayment(@PathVariable("suggest-id") Long suggestId) {
+    public ResponseEntity<Message<?>> orderPayment(@PathVariable("suggest-id") Long suggestId,
+                                       HttpServletRequest request) {
 
-        return ResponseEntity.ok().build();
+        Long memberId = 1L;
+        String requestUrl = request.getRequestURL().toString().replace(request.getRequestURI(), "");
+        Message<?> message = suggestService.getKaKapPayUrl(suggestId, memberId, requestUrl);
+        if (message.getData() == null) suggestService.getFailedPayMessage();
+        return ResponseEntity.ok().body(message);
     }
 
     @GetMapping("/api/suggest/{suggest-id}/completed")
