@@ -14,7 +14,7 @@
 
 @font-face {
   font-family: "SCDream3";
-  src: "../public/fonts/SCDream3.otf";
+  src: url("../public/fonts/SCDream3.otf");
 }
 
 @font-face {
