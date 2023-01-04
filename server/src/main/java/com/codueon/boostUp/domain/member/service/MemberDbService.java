@@ -1,6 +1,5 @@
 package com.codueon.boostUp.domain.member.service;
 
-import com.codueon.boostUp.domain.member.dto.PostMember;
 import com.codueon.boostUp.domain.member.entity.Member;
 import com.codueon.boostUp.domain.member.exception.AuthException;
 import com.codueon.boostUp.domain.member.repository.MemberRepository;
@@ -28,6 +27,18 @@ public class MemberDbService {
     public Member ifExistsReturnMember(Long memberId) {
         return memberRepository.findById(memberId)
                 .orElseThrow(() -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
+    }
+
+    /**
+     * 사용자 정보 조회 메서드(이메일)
+     *
+     * @param email 사용자 이메일
+     * @return Member
+     * @author LimJaeminZ
+     */
+    public Member ifExistsMemberByEmail(String email) {
+        return memberRepository.findByEmail(email).orElseThrow(() ->
+                new AuthException(ExceptionCode.MEMBER_NOT_FOUND));
     }
 
     /**
