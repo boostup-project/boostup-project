@@ -2,10 +2,9 @@ import Header from "components/Header";
 
 const test = () => {
   return (
-    <>
+    <div className="flex justify-center bg-bgColor">
       <Header />
-      <div>test</div>
-    </>
+    </div>
   );
 };
 export default test;
