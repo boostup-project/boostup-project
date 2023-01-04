@@ -20,10 +20,11 @@ import java.util.List;
 public class LessonController {
     private final LessonService lessonService;
     private final LessonDbService lessonDbService;
+
     @PostMapping(value = "/lesson/regist", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> postLesson(@RequestPart(value = "data") PostLesson postLesson,
-                                        @RequestPart(value = "file") MultipartFile file,
-                                        @RequestPart(value = "files") List<MultipartFile> files) throws Exception {
+                                        @RequestPart(value = "profileImage") MultipartFile file,
+                                        @RequestPart(value = "careerImage") List<MultipartFile> files) throws Exception {
         Long memberId = 1L;
         lessonService.createLesson(postLesson,memberId,file, files);
         return ResponseEntity.status(HttpStatus.CREATED).build();
