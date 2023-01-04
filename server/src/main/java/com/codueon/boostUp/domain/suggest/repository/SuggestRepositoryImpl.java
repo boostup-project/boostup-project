@@ -50,7 +50,7 @@ public class SuggestRepositoryImpl implements CustomSuggestRepository{
     private BooleanExpression changeStatusByTabId(int tabId) {
         switch (tabId) {
             case 1: return suggest.status.eq(Suggest.SuggestStatus.ACCEPT_IN_PROGRESS);
-            case 2: return suggest.status.eq(Suggest.SuggestStatus.PAY_IN_PROGRESS).and(
+            case 2: return suggest.status.eq(Suggest.SuggestStatus.PAY_IN_PROGRESS).or(
                     suggest.status.eq(Suggest.SuggestStatus.DURING_LESSON));
             default: return suggest.status.eq(Suggest.SuggestStatus.END_OF_LESSON);
         }

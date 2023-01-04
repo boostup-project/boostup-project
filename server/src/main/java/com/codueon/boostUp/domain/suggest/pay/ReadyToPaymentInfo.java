@@ -21,7 +21,6 @@ public class ReadyToPaymentInfo {
     private String cancel_url;
 
     @Builder
-
     public ReadyToPaymentInfo(String cid,
                               String partner_order_id,
                               String partner_user_id,

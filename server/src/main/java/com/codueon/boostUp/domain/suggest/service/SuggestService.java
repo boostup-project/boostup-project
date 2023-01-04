@@ -138,6 +138,7 @@ public class SuggestService {
                 .tid(payReadyInfo.getTid())
                 .build();
 
+        paymentInfo.setSuggest(findSuggest);
         suggestDbService.savePayment(paymentInfo);
 
         return Message.builder()
