@@ -1,15 +1,24 @@
 package com.codueon.boostUp.global.file;
 
+import com.amazonaws.services.s3.model.ObjectMetadata;
+import net.bytebuddy.asm.Advice;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.io.File;
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.UUID;
+
+import static com.google.common.io.Files.getFileExtension;
 
 @Component
 public class FileHandler {
@@ -91,4 +100,18 @@ public class FileHandler {
             }
         return fileList;
     }
+    public UploadFile uploadFile(MultipartFile multipartFile) throws  IOException {
+        String fileName = createFileName(multipartFile.getOriginalFilename());
+        String path = "images";
+        return UploadFile.builder()
+                .originFileName(multipartFile.getOriginalFilename())
+                .fileName(fileName)
+                .filePath(path)
+                .fileSize(multipartFile.getSize())
+                .build();
+    }
+    private String createFileName(String fileName) {
+        return UUID.randomUUID().toString().concat(getFileExtension(fileName));
+    }
+
 }
