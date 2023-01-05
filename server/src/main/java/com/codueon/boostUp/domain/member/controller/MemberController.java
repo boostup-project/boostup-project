@@ -21,20 +21,9 @@ public class MemberController {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    @PatchMapping("/edit")
-    public ResponseEntity patchMember(@RequestBody PatchMember patchMember) {
-        // TODO : 시큐리티 적용 시 Authentication 객체 추가 요
-        return ResponseEntity.ok().build();
-    }
-
     @PostMapping("/profile")
-    public ResponseEntity postProfileImage(@RequestPart(value = "file") MultipartFile file) {
-        // TODO : 시큐리티 적용 시 Authentication 객체 추가 요
-        return ResponseEntity.ok().build();
-    }
-
-    @GetMapping
-    public ResponseEntity getMember() {
+    public ResponseEntity postProfileImage(@RequestBody PatchMember patchMember,
+                                           @RequestPart(value = "file") MultipartFile file) {
         // TODO : 시큐리티 적용 시 Authentication 객체 추가 요
         return ResponseEntity.ok().build();
     }

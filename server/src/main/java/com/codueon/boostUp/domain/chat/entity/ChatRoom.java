@@ -34,4 +34,9 @@ public class ChatRoom extends Auditable implements Serializable {
         this.merchant = merchant;
         this.student = student;
     }
+
+    public Member getPartner(Long memberId) {
+        if (student.getId() == memberId) return merchant;
+        return student;
+    }
 }

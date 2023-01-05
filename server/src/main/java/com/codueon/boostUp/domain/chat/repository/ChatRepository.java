@@ -17,6 +17,7 @@ import static com.codueon.boostUp.domain.chat.entity.QChatRoom.chatRoom;
 @Repository
 public class ChatRepository {
     private final JPAQueryFactory jpaQueryFactory;
+    private final EntityManager em;
     private final RedisMessageListenerContainer redisMessageListenerContainer;
     private final RedisSubscriber redisSubscriber;
 
@@ -24,6 +25,7 @@ public class ChatRepository {
                           RedisMessageListenerContainer redisMessageListenerContainer,
                           RedisSubscriber redisSubscriber) {
         this.jpaQueryFactory = new JPAQueryFactory(em);
+        this.em = em;
         this.redisMessageListenerContainer = redisMessageListenerContainer;
         this.redisSubscriber = redisSubscriber;
     }
@@ -40,6 +42,10 @@ public class ChatRepository {
                         )))
                 .orderBy(chatMessage.createdAt.desc())
                 .fetch();
+    }
+
+    public void save(ChatMessage message) {
+        em.persist(message);
     }
 
     public List<ChatMessage> findAllChatsInRoom(Long roomId) {

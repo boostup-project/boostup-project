@@ -13,6 +13,7 @@ public enum ExceptionCode {
     LANGUAGE_NOT_FOUND(504, "존재하지 않는 언어입니다."),
     ADDRESS_NOT_FOUND(504, "존재하지 않는 주소입니다."),
     CHAT_NOT_FOUND(504, "존재하지 않는 메시지입니다."),
+    CHATROOM_NOT_FOUND(504, "존재하지 않는 채팅방입니다."),
     RESERVATION_NOT_FOUND(504, "존재하지 않는 예약입니다."),
 
     // 인증 인가
