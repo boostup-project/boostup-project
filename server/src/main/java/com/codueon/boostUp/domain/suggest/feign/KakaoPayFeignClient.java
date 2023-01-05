@@ -1,7 +1,9 @@
 package com.codueon.boostUp.domain.suggest.feign;
 
 import com.codueon.boostUp.domain.suggest.pay.PayReadyInfo;
+import com.codueon.boostUp.domain.suggest.pay.PaySuccessInfo;
 import com.codueon.boostUp.domain.suggest.pay.ReadyToPaymentInfo;
+import com.codueon.boostUp.domain.suggest.pay.RequestForPaymentInfo;
 import com.codueon.boostUp.domain.suggest.utils.PayConstants;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.cloud.openfeign.SpringQueryMap;
@@ -16,4 +18,11 @@ public interface KakaoPayFeignClient {
                                  @RequestHeader(PayConstants.ACCEPT) String accept,
                                  @RequestHeader(PayConstants.CONTENT_TYPE) String contentType,
                                  @SpringQueryMap ReadyToPaymentInfo paymentInfo);
+
+    @PostMapping(value = "/v1/payment/approve")
+    PaySuccessInfo successForPayment(
+            @RequestHeader(PayConstants.AUTHORIZATION) String authorization,
+            @RequestHeader(PayConstants.ACCEPT) String accept,
+            @RequestHeader(PayConstants.CONTENT_TYPE) String contentType,
+            @SpringQueryMap RequestForPaymentInfo query);
 }
