@@ -8,11 +8,12 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Getter
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class ChatMessage extends Auditable {
+public class ChatMessage {
 
     @Id
     @Column(name = "CHAT_MESSAGE_ID")
@@ -34,16 +35,21 @@ public class ChatMessage extends Auditable {
     @JoinColumn(name = "room")
     private ChatRoom room;
 
+    @Column(name = "created_at")
+    private LocalDateTime createdAt;
+
     @Builder
     public ChatMessage(Long id,
                        Member sender,
                        Member receiver,
                        String content,
-                       ChatRoom room) {
+                       ChatRoom room,
+                       LocalDateTime createdAt) {
         this.id = id;
         this.sender = sender;
         this.receiver = receiver;
         this.content = content;
         this.room = room;
+        this.createdAt = createdAt;
     }
 }
