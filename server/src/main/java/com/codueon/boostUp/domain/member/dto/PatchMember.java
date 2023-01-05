@@ -8,13 +8,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class PatchMember {
     private String name;
-    private String address;
-    private String company;
 
     @Builder
-    public PatchMember(String name, String address, String company) {
+    public PatchMember(String name) {
         this.name = name;
-        this.address = address;
-        this.company = company;
     }
 }
