@@ -18,6 +18,7 @@ public class LessonInfo {
     @Column(name = "LESSON_INFO_ID")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    private Long lessonId;
     private String introduction;
     private String companies;
     private String favoriteLocation;
@@ -28,12 +29,14 @@ public class LessonInfo {
 
     @Builder
     public LessonInfo(Long id,
+                      Long lessonId,
                       String introduction,
                       String companies,
                       String favoriteLocation,
                       String personality,
                       String costs) {
         this.id = id;
+        this.lessonId = lessonId;
         this.introduction = introduction;
         this.companies = companies;
         this.favoriteLocation = favoriteLocation;

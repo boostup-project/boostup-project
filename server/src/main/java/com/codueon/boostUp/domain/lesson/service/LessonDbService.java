@@ -4,14 +4,20 @@ import com.codueon.boostUp.domain.lesson.entity.*;
 import com.codueon.boostUp.domain.lesson.repository.*;
 import com.codueon.boostUp.global.exception.BusinessLogicException;
 import com.codueon.boostUp.global.exception.ExceptionCode;
+import com.codueon.boostUp.global.file.UploadFile;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import static com.codueon.boostUp.domain.lesson.entity.QLessonInfo.lessonInfo;
+
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class LessonDbService {
      private final LessonRepository lessonRepository;
      private final LessonInfoRepository lessonInfoRepository;
@@ -32,11 +38,19 @@ public class LessonDbService {
         lessonRepository.save(lesson);
     }
     public void saveLessonInfo(LessonInfo lessonInfo) { lessonInfoRepository.save(lessonInfo);}
-    public void saveProfileImage(ProfileImage profileImage) {
-        profileImageRepository.save(profileImage);
+    public void saveProfileImage(ProfileImage profileImage, Lesson lesson) {
+        lesson.addProfileImage(profileImage);
     }
-    public void saveCareerImage(CareerImage careerImage) {
-        careerImageRepository.save(careerImage);
+    public void saveCareerImage(List<UploadFile> uploadFileList, LessonInfo lessonInfo) {
+        uploadFileList.forEach(uploadFiles-> {
+            CareerImage createCareerImage = CareerImage.builder()
+                    .originFileName(uploadFiles.getOriginFileName())
+                    .fileName(uploadFiles.getFileName())
+                    .filePath(uploadFiles.getFilePath())
+                    .fileSize(uploadFiles.getFileSize())
+                    .build();
+            lessonInfo.addCareerImage(createCareerImage);
+        });
     }
 
     public void saveLanguageList(List<Long> languageList, Lesson lesson) {
@@ -44,7 +58,8 @@ public class LessonDbService {
                 s -> {
                     Optional<Language> language = languageRepository.findById(s);
                     LessonLanguage lessonLanguage = new LessonLanguage(s, lesson, language.get());
-                    lessonLanguageRepository.save(lessonLanguage);
+                    lessonLanguage.addLanguage(language.get());
+                    lesson.addLessonLanguage(lessonLanguage);
                 }
         );
     }
@@ -53,7 +68,8 @@ public class LessonDbService {
                 s -> {
                     Optional<Address> address = addressRepository.findById(s);
                     LessonAddress lessonAddress = new LessonAddress(s, lesson, address.get());
-                    lessonAddressRepository.save(lessonAddress);
+                    lessonAddress.addAddress(address.get());
+                    lesson.addLessonAddress(lessonAddress);
                 }
         );
     }
@@ -62,5 +78,8 @@ public class LessonDbService {
     }
     public void deleteLesson(Lesson lesson) {
         lessonRepository.delete(lesson);
+    }
+    public Lesson returnSavedLesson(Lesson lesson) {
+        return lessonRepository.save(lesson);
     }
 }
