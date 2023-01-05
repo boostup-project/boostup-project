@@ -22,11 +22,11 @@ public class Lesson {
     private Integer cost;
     private Long memberId;
 
-    @OneToOne(mappedBy = "lesson", cascade = CascadeType.REMOVE)
+    @OneToOne(mappedBy = "lesson")
     private ProfileImage profileImage;
-    @OneToMany(mappedBy = "lesson", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "lesson")
     private List<LessonLanguage> lessonLanguages = new ArrayList<>();
-    @OneToMany(mappedBy = "lesson", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "lesson")
     private List<LessonAddress> lessonAddresses = new ArrayList<>();
 
     @Builder
