@@ -14,7 +14,7 @@ public class LessonAddress {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "Lesson_ADRESS_ID")
+    @Column(name = "LESSON_ADDRESS_ID")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -22,13 +22,12 @@ public class LessonAddress {
     private Lesson lesson;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "ADRESS_ID")
+    @JoinColumn(name = "ADDRESS_ID")
     private Address address;
 
     @Builder
-    public LessonAddress(Long id, Lesson lesson, Address address) {
+    public LessonAddress(Long id,  Address address) {
         this.id = id;
-        this.lesson = lesson;
         this.address = address;
     }
 

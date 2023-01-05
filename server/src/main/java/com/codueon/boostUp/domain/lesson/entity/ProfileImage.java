@@ -4,6 +4,8 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.web.multipart.MultipartFile;
+
 import javax.persistence.*;
 
 @Entity
@@ -34,6 +36,15 @@ public class ProfileImage {
         this.fileName = fileName;
         this.filePath = filePath;
         this.fileSize = fileSize;
+    }
+
+    public static ProfileImage toEntity(MultipartFile profileImage, String filePath) {
+        return ProfileImage.builder()
+                .originFileName(profileImage.getOriginalFilename())
+                .fileName(profileImage.getOriginalFilename())
+                .filePath(filePath)
+                .fileSize(profileImage.getSize())
+                .build();
     }
 
     public void addLesson(Lesson lesson) {

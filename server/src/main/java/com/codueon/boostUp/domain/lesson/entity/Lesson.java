@@ -1,5 +1,6 @@
 package com.codueon.boostUp.domain.lesson.entity;
 
+import com.codueon.boostUp.domain.lesson.dto.PostLesson;
 import lombok.*;
 
 import javax.persistence.*;
@@ -22,11 +23,11 @@ public class Lesson {
     private Integer cost;
     private Long memberId;
 
-    @OneToOne(mappedBy = "lesson")
+    @OneToOne(mappedBy = "lesson", cascade = CascadeType.ALL)
     private ProfileImage profileImage;
-    @OneToMany(mappedBy = "lesson")
+    @OneToMany(mappedBy = "lesson", cascade = CascadeType.ALL)
     private List<LessonLanguage> lessonLanguages = new ArrayList<>();
-    @OneToMany(mappedBy = "lesson")
+    @OneToMany(mappedBy = "lesson", cascade = CascadeType.ALL)
     private List<LessonAddress> lessonAddresses = new ArrayList<>();
 
     @Builder
@@ -46,7 +47,19 @@ public class Lesson {
         this.memberId = memberId;
     }
 
+    public static Lesson toEntity(PostLesson postLesson, String name, Long memberId) {
+        return Lesson.builder()
+                .name(name)
+                .title(postLesson.getTitle())
+                .company(postLesson.getCompany())
+                .career(postLesson.getCareer())
+                .memberId(memberId)
+                .cost(postLesson.getCost())
+                .build();
+    }
+
     public void addProfileImage(ProfileImage profileImage) {
+        if(profileImage.getLesson() != this) profileImage.addLesson(this);
         this.profileImage = profileImage;
     }
 
