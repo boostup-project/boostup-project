@@ -32,6 +32,8 @@ module.exports = {
         swift: "#F09AB9",
         c: "#A69AF0",
         php: "#527ACC",
+        negativeMessage : "#FF000F",
+        disabledBtnColor : "#5090F2"
       },
     },
     screens: {

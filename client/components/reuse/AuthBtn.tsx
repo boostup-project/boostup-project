@@ -1,5 +1,5 @@
 interface Props {
-    onClick : () => void;
+    onClick : (e:any) => void;
     children : React.ReactNode;
 }
 
