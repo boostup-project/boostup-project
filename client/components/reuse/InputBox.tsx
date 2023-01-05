@@ -1,7 +1,7 @@
 interface Props {
-  placeholder: string;
-  value: string;
-  onChange: (e: any) => void;
+  placeholder?: string;
+  value?: string;
+  onChange?: (e: any) => void;
 }
 
 const InputBox = ({ placeholder, value, onChange }: Props) => {
