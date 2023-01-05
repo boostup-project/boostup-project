@@ -1,5 +1,6 @@
 package com.codueon.boostUp.domain.suggest.contoller;
 
+import com.codueon.boostUp.domain.suggest.dto.PostReason;
 import com.codueon.boostUp.domain.suggest.dto.PostSuggest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -43,6 +44,57 @@ public class SuggestPostTest extends SuggestControllerTest{
         actions.andExpect(status().isCreated())
                 .andReturn();
 
+    }
+
+    @Test
+    @DisplayName("POST 신청 수락하기")
+    void acceptSuggest() throws Exception{
+
+        Long lessonId = 1L;
+        Integer quantity = 1;
+
+        String content = gson.toJson(quantity);
+
+        doNothing().when(suggestService).acceptSuggest(Mockito.anyLong(), Mockito.anyLong(), Mockito.anyInt());
+
+        ResultActions actions =
+                mockMvc.perform(
+                        post("/lesson/{lesson-id}/suggest/{suggest-id}/accept", lessonId, suggest.getId())
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .accept(MediaType.APPLICATION_JSON)
+                                .content(content)
+                                .with(csrf())
+                );
+
+        actions.andExpect(status().isOk())
+                .andReturn();
+    }
+
+    @Test
+    @DisplayName("POST 과외 신청 거절하기")
+    void declineSuggest() throws Exception {
+
+        Long lessonId = 1L;
+
+        PostReason postReason = PostReason.builder()
+                .reason("배울 자세가 안 되어있음 쯧")
+                .build();
+
+        String content = gson.toJson(postReason);
+
+        doNothing().when(suggestService).declineSuggest(Mockito.anyLong(), Mockito.anyLong(), Mockito.any());
+
+        ResultActions actions =
+                mockMvc.perform(
+                        post("/lesson/{lesson-id}/suggest/{suggest-id}/decline", lessonId, suggest.getId())
+                                .accept(MediaType.APPLICATION_JSON)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(content)
+                                .with(csrf())
+                );
+
+        actions.andExpect(status().isNoContent())
+                .andReturn();
     }
 
 

@@ -1,9 +1,9 @@
 package com.codueon.boostUp.domain.suggest.repository;
 
 import com.codueon.boostUp.domain.suggest.dto.GetStudentSuggest;
-import com.codueon.boostUp.domain.suggest.dto.GetTeacherSuggest;
+import com.codueon.boostUp.domain.suggest.dto.GetTutorSuggest;
 import com.codueon.boostUp.domain.suggest.dto.QGetStudentSuggest;
-import com.codueon.boostUp.domain.suggest.dto.QGetTeacherSuggest;
+import com.codueon.boostUp.domain.suggest.dto.QGetTutorSuggest;
 import com.codueon.boostUp.domain.suggest.entity.Suggest;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -26,9 +26,9 @@ public class SuggestRepositoryImpl implements CustomSuggestRepository{
     }
 
     @Override
-    public Page<GetTeacherSuggest> getTeacherSuggestsOnMyPage(Long lessonId, Long memberId, int tabId, Pageable pageable) {
-        List<GetTeacherSuggest> results = queryFactory
-                .select(new QGetTeacherSuggest(
+    public Page<GetTutorSuggest> getTutorSuggestsOnMyPage(Long lessonId, Long memberId, int tabId, Pageable pageable) {
+        List<GetTutorSuggest> results = queryFactory
+                .select(new QGetTutorSuggest(
                         suggest,
                         lesson.id,
                         lesson.name
@@ -50,7 +50,7 @@ public class SuggestRepositoryImpl implements CustomSuggestRepository{
     private BooleanExpression changeStatusByTabId(int tabId) {
         switch (tabId) {
             case 1: return suggest.status.eq(Suggest.SuggestStatus.ACCEPT_IN_PROGRESS);
-            case 2: return suggest.status.eq(Suggest.SuggestStatus.PAY_IN_PROGRESS).and(
+            case 2: return suggest.status.eq(Suggest.SuggestStatus.PAY_IN_PROGRESS).or(
                     suggest.status.eq(Suggest.SuggestStatus.DURING_LESSON));
             default: return suggest.status.eq(Suggest.SuggestStatus.END_OF_LESSON);
         }

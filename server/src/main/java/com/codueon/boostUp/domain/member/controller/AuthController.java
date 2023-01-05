@@ -1,5 +1,7 @@
 package com.codueon.boostUp.domain.member.controller;
 
+import com.codueon.boostUp.domain.member.dto.TokenDto;
+import com.codueon.boostUp.domain.member.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -10,10 +12,13 @@ import com.codueon.boostUp.domain.member.dto.PostLogin;
 @RequiredArgsConstructor
 public class AuthController {
 
+    private final AuthService authService;
     @PostMapping("/login")
     public ResponseEntity postLoginMember(@RequestBody PostLogin login) {
-
-        return ResponseEntity.ok().build();
+        TokenDto.Response response = authService.loginMember(login);
+        return ResponseEntity.ok()
+                .headers(response.getHeaders())
+                .body(response.getResponse());
     }
 
     @DeleteMapping("/logout")

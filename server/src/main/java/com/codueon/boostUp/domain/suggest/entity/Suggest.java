@@ -32,6 +32,10 @@ public class Suggest {
 
     private Long memberId;
 
+    private Integer quantity;
+
+    private Integer totalCost;
+
     private LocalDateTime startTime;
 
     private LocalDateTime endTime;
@@ -47,14 +51,21 @@ public class Suggest {
         this.endTime = LocalDateTime.now();
     }
 
+    public void setQuantity(Integer quantity) {
+        this.quantity = quantity;
+    }
+
+    public void setTotalCost(Integer totalCost) {
+        this.totalCost = totalCost;
+    }
+
     @Builder
-    public Suggest(
-            Long id,
-            String days,
-            String languages,
-            String requests,
-            Long lessonId,
-            Long memberId) {
+    public Suggest( Long id,
+                    String days,
+                    String languages,
+                    String requests,
+                    Long lessonId,
+                    Long memberId ) {
         this.id = id;
         this.days = days;
         this.languages = languages;
@@ -83,5 +94,12 @@ public class Suggest {
             this.stepNumber = stepNumber;
             this.status = status;
         }
+    }
+
+    public void addPaymentInfo(PaymentInfo paymentInfo) {
+        if (paymentInfo.getSuggest() != this) {
+            paymentInfo.setSuggest(this);
+        }
+        this.paymentInfo = paymentInfo;
     }
 }

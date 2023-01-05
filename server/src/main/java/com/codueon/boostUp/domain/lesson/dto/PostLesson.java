@@ -9,6 +9,7 @@ import java.util.List;
 @Getter
 @NoArgsConstructor
 public class PostLesson {
+        private Long lessonId;
         private String title;
         private List<Long> languages;
         private String company;
@@ -16,25 +17,27 @@ public class PostLesson {
         private List<Long> address;
         private Integer cost;
         private String introduction;
-        private String detailCareer;
+        private String detailCompany;
         private String detailLocation;
         private String personality;
         private String  detailCost;
         private String curriculum;
 
         @Builder
-        public PostLesson(String title,
+        public PostLesson(Long lessonId,
+                          String title,
                           List<Long> languages,
                           String company,
                           Integer career,
                           List<Long> address,
                           Integer cost,
                           String introduction,
-                          String detailCareer,
+                          String detailCompany,
                           String detailLocation,
                           String personality,
                           String detailCost,
                           String curriculum) {
+                this.lessonId = lessonId;
                 this.title = title;
                 this.languages = languages;
                 this.company = company;
@@ -42,7 +45,7 @@ public class PostLesson {
                 this.address = address;
                 this.cost = cost;
                 this.introduction = introduction;
-                this.detailCareer = detailCareer;
+                this.detailCompany = detailCompany;
                 this.detailLocation = detailLocation;
                 this.personality = personality;
                 this.detailCost = detailCost;
