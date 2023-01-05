@@ -70,7 +70,6 @@ public class ReviewControllerTest {
 
         LessonLanguage lessonLanguage = LessonLanguage.builder()
                 .id(1L)
-                .lesson(lesson)
                 .languages(language)
                 .build();
 
@@ -81,7 +80,6 @@ public class ReviewControllerTest {
 
         LessonAddress lessonAddress = LessonAddress.builder()
                 .id(1L)
-                .lesson(lesson)
                 .address(address)
                 .build();
 

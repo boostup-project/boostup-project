@@ -16,16 +16,12 @@ import java.util.Optional;
 import static com.codueon.boostUp.domain.lesson.entity.QLessonInfo.lessonInfo;
 
 @Service
-@RequiredArgsConstructor
 @Transactional
+@RequiredArgsConstructor
 public class LessonDbService {
      private final LessonRepository lessonRepository;
      private final LessonInfoRepository lessonInfoRepository;
-     private final ProfileImageRepository profileImageRepository;
-     private final CareerImageRepository careerImageRepository;
      private final LanguageRepository languageRepository;
-     private final LessonLanguageRepository lessonLanguageRepository;
-     private final LessonAddressRepository lessonAddressRepository;
      private final AddressRepository addressRepository;
      private final CurriculumRepository curriculumRepository;
 
@@ -37,10 +33,15 @@ public class LessonDbService {
     public void saveLesson(Lesson lesson) {
         lessonRepository.save(lesson);
     }
-    public void saveLessonInfo(LessonInfo lessonInfo) { lessonInfoRepository.save(lessonInfo);}
+
+    public void saveLessonInfo(LessonInfo lessonInfo) {
+        lessonInfoRepository.save(lessonInfo);
+    }
+
     public void saveProfileImage(ProfileImage profileImage, Lesson lesson) {
         lesson.addProfileImage(profileImage);
     }
+
     public void saveCareerImage(List<UploadFile> uploadFileList, LessonInfo lessonInfo) {
         uploadFileList.forEach(uploadFiles-> {
             CareerImage createCareerImage = CareerImage.builder()
@@ -53,33 +54,49 @@ public class LessonDbService {
         });
     }
 
-    public void saveLanguageList(List<Long> languageList, Lesson lesson) {
+    public void addLanguageList(List<Long> languageList, Lesson lesson) {
         languageList.forEach(
                 s -> {
-                    Optional<Language> language = languageRepository.findById(s);
-                    LessonLanguage lessonLanguage = new LessonLanguage(s, lesson, language.get());
-                    lessonLanguage.addLanguage(language.get());
+                    Language language = findIfExistLanguage(s);
+                    LessonLanguage lessonLanguage = LessonLanguage.builder()
+                            .languages(language)
+                            .build();
                     lesson.addLessonLanguage(lessonLanguage);
                 }
         );
     }
-    public void saveAddressList(List<Long> addressList, Lesson lesson) {
+
+    public void addAddressList(List<Long> addressList, Lesson lesson) {
         addressList.forEach(
                 s -> {
-                    Optional<Address> address = addressRepository.findById(s);
-                    LessonAddress lessonAddress = new LessonAddress(s, lesson, address.get());
-                    lessonAddress.addAddress(address.get());
+                    Address address = findIfExistAddress(s);
+                    LessonAddress lessonAddress = LessonAddress.builder()
+                            .address(address)
+                            .build();
                     lesson.addLessonAddress(lessonAddress);
                 }
         );
     }
+
     public void saveCurriculum(Curriculum curriculum) {
         curriculumRepository.save(curriculum);
     }
+
     public void deleteLesson(Lesson lesson) {
         lessonRepository.delete(lesson);
     }
+
     public Lesson returnSavedLesson(Lesson lesson) {
         return lessonRepository.save(lesson);
+    }
+
+    public Language findIfExistLanguage(Long languageId) {
+        return languageRepository.findById(languageId)
+                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.LANGUAGE_NOT_FOUND));
+    }
+
+    public Address findIfExistAddress(Long addressId) {
+        return addressRepository.findById(addressId)
+                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.ADDRESS_NOT_FOUND));
     }
 }

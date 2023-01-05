@@ -1,5 +1,6 @@
 package com.codueon.boostUp.domain.lesson.entity;
 
+import com.codueon.boostUp.domain.lesson.dto.PostLesson;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -47,5 +48,16 @@ public class LessonInfo {
     public void addCareerImage(CareerImage careerImage) {
         if(careerImage.getLessonInfo() != this) careerImage.addLessonInfo(this);
         careerImages.add(careerImage);
+    }
+
+    public static LessonInfo toEntity(Long lessonId, PostLesson postLesson) {
+        return LessonInfo.builder()
+                .lessonId(lessonId)
+                .introduction(postLesson.getIntroduction())
+                .companies(postLesson.getDetailCompany())
+                .favoriteLocation(postLesson.getDetailLocation())
+                .personality(postLesson.getPersonality())
+                .costs(postLesson.getDetailCost())
+                .build();
     }
 }

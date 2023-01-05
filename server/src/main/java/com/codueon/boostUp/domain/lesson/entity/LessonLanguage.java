@@ -26,10 +26,8 @@ public class LessonLanguage {
 
     @Builder
     public LessonLanguage(Long id,
-                          Lesson lesson,
                           Language languages) {
         this.id = id;
-        this.lesson = lesson;
         this.languages = languages;
     }
 

@@ -35,7 +35,6 @@ public class LessonController {
                                        @RequestPart(value = "data") PostEditLesson postEditLesson,
                                        @RequestPart(value = "profileImage") MultipartFile file) throws Exception {
         Long memberId = 1L;
-
         return null;
     }
 

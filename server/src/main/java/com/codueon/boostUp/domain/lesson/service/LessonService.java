@@ -1,4 +1,5 @@
 package com.codueon.boostUp.domain.lesson.service;
+
 import com.codueon.boostUp.domain.lesson.dto.PostEditLesson;
 import com.codueon.boostUp.domain.lesson.dto.PostLesson;
 import com.codueon.boostUp.domain.lesson.entity.*;
@@ -8,12 +9,14 @@ import com.codueon.boostUp.global.file.AwsS3Service;
 import com.codueon.boostUp.global.file.FileHandler;
 import com.codueon.boostUp.global.file.UploadFile;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,56 +27,87 @@ public class LessonService {
     private final FileHandler fileHandler;
     private final MemberDbService memberDbService;
 
+    /**
+     * 과외 등록 메서드
+     * @param postLesson 과외 등록 정보
+     * @param memberId 사용자 식별자
+     * @param profileImage 프로필 사진
+     * @param careerImage 경력 사진
+     * @author Quartz614
+     */
     @Transactional
-    public void createLesson(PostLesson postLesson, Long memberId, MultipartFile profileImage, List<MultipartFile> careerImage) throws Exception {
+    public void createLesson(PostLesson postLesson,
+                             Long memberId,
+                             MultipartFile profileImage,
+                             List<MultipartFile> careerImage) {
         Member findMember = memberDbService.ifExistsReturnMember(memberId);
-        Lesson lesson = Lesson.builder()
-                .name(findMember.getName())
-                .title(postLesson.getTitle())
-                .company(postLesson.getCompany())
-                .career(postLesson.getCareer())
-                .memberId(memberId)
-                .cost(postLesson.getCost())
-                .build();
+        Lesson savedLesson = saveLessonAndReturnLesson(postLesson, findMember, profileImage);
+        saveLessonInfo(savedLesson, postLesson, careerImage);
+        saveCurriculum(savedLesson, postLesson);
+    }
+
+    /**
+     * Lesson을 저장하고 객체를 리턴하는 메서드
+     * @param postLesson 과외 등록 정보
+     * @param member 사용자 식별자
+     * @param profileImage 프로필 사진
+     * @return Lesson
+     * @author Quartz614
+     */
+    @SneakyThrows
+    private Lesson saveLessonAndReturnLesson(PostLesson postLesson,
+                                             Member member,
+                                             MultipartFile profileImage) {
+        Lesson lesson = Lesson.toEntity(postLesson, member.getName(), member.getId());
 
         UploadFile uploadFile = fileHandler.uploadFile(profileImage);
+        ProfileImage createProfileImage = ProfileImage.toEntity(profileImage, uploadFile.getFilePath());
 
-        ProfileImage createProfileImage = ProfileImage.builder()
-                .originFileName(profileImage.getOriginalFilename())
-                .fileName(profileImage.getOriginalFilename())
-                .filePath(uploadFile.getFilePath())
-                .fileSize(profileImage.getSize())
-                .build();
-
+        createProfileImage.addLesson(lesson);
         lesson.addProfileImage(createProfileImage);
-        List<Long> lessonLanguagesList = postLesson.getLanguages();
-        lessonDbService.saveLanguageList(lessonLanguagesList,lesson);
-        List<Long> lessonAddressList = postLesson.getAddress();
-        lessonDbService.saveAddressList(lessonAddressList,lesson);
 
-        lessonDbService.saveLesson(lesson);
+        lessonDbService.addLanguageList(postLesson.getLanguages(), lesson);
+        lessonDbService.addAddressList(postLesson.getAddress(), lesson);
 
-        Lesson saveLesson = lessonDbService.returnSavedLesson(lesson);
-        LessonInfo lessonInfo = LessonInfo.builder()
-                .lessonId(saveLesson.getId())
-                .introduction(postLesson.getIntroduction())
-                .companies(postLesson.getDetailCompany())
-                .favoriteLocation(postLesson.getDetailLocation())
-                .personality(postLesson.getPersonality())
-                .costs(postLesson.getDetailCost())
-                .build();
+        return lessonDbService.returnSavedLesson(lesson);
+    }
 
+    /**
+     * 과외 디테일 정보 저장 메서드
+     * @param savedLesson 저장 후 조회된 요약 정보
+     * @param postLesson 과외 등록 정보
+     * @param careerImage 경력 사진
+     * @author Quartz614
+     */
+    @SneakyThrows
+    private void saveLessonInfo(Lesson savedLesson,
+                                PostLesson postLesson,
+                                List<MultipartFile> careerImage) {
+        LessonInfo lessonInfo = LessonInfo.toEntity(savedLesson.getId(), postLesson);
         List<UploadFile> uploadFileList = fileHandler.parseUploadFileInfo(careerImage);
         lessonDbService.saveCareerImage(uploadFileList, lessonInfo);
         lessonDbService.saveLessonInfo(lessonInfo);
+    }
 
+    /**
+     * 커리큘럼 저장 메서드
+     * @param savedLesson 저장 후 조회된 요약 정보
+     * @param postLesson 과외 등록 정보
+     * @author Quartz614
+     */
+    private void saveCurriculum(Lesson savedLesson, PostLesson postLesson) {
         Curriculum curriculum = Curriculum.builder()
-                .lessonId(saveLesson.getId())
+                .lessonId(savedLesson.getId())
                 .curriculum(postLesson.getCurriculum())
                 .build();
+
         lessonDbService.saveCurriculum(curriculum);
     }
-    public void updateLesson(Long lessonId, PostEditLesson postEditLesson, Long memberId, MultipartFile file) {
+
+    public void updateLesson(Long lessonId,
+                             PostEditLesson postEditLesson,
+                             Long memberId,
+                             MultipartFile file) {
         Member findMember = memberDbService.ifExistsReturnMember(memberId);
         Lesson updateLesson = lessonDbService.ifExistsReturnLesson(lessonId);
     }
