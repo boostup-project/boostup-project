@@ -2,11 +2,10 @@ package com.codueon.boostUp.domain.suggest.service;
 
 import com.codueon.boostUp.domain.lesson.entity.Lesson;
 import com.codueon.boostUp.domain.member.entity.Member;
+import com.codueon.boostUp.domain.suggest.entity.PaymentInfo;
 import com.codueon.boostUp.domain.suggest.entity.Suggest;
 import com.codueon.boostUp.domain.suggest.feign.KakaoPayFeignClient;
-import com.codueon.boostUp.domain.suggest.pay.KakaoPayHeader;
-import com.codueon.boostUp.domain.suggest.pay.PayReadyInfo;
-import com.codueon.boostUp.domain.suggest.pay.ReadyToPaymentInfo;
+import com.codueon.boostUp.domain.suggest.pay.*;
 import com.codueon.boostUp.domain.suggest.utils.PayConstants;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,6 +36,11 @@ public class FeignService {
     KakaoPayFeignClient kakaoFeignClient;
 
 
+    /**
+     * 카카오페이 결제 헤더 입력 메서드
+     * @return KakaoPayHeader
+     * @author LeeGoh
+     */
     public KakaoPayHeader setHeaders() {
         return KakaoPayHeader.builder()
                 .adminKey(PayConstants.KAKAO_AK + adminKey)
@@ -45,7 +49,16 @@ public class FeignService {
                 .build();
     }
 
-    public ReadyToPaymentInfo setParams(String requestUrl, Suggest suggest, Member member, Lesson lesson) {
+    /**
+     * 카카오페이 결제 전 파라미터 입력 메서드
+     * @param requestUrl 요청 URL
+     * @param suggest 신청 정보
+     * @param member 사용자 정보
+     * @param lesson 과외 정보
+     * @return ReadyToPaymentInfo
+     * @author LeeGoh
+     */
+    public ReadyToPaymentInfo setReadyParams(String requestUrl, Suggest suggest, Member member, Lesson lesson) {
         return ReadyToPaymentInfo.builder()
                 .cid(cid)
                 .approval_url(requestUrl + paymentProcessUri + "/" + suggest.getId() + "/completed")
@@ -61,6 +74,13 @@ public class FeignService {
                 .build();
     }
 
+    /**
+     * 결제 URL 생성 결과 메서드
+     * @param headers KakaoPayHeader
+     * @param params ReadyToPaymentInfo
+     * @return PayReadyInfo
+     * @author LeeGoh
+     */
     public PayReadyInfo getPayReadyInfo(KakaoPayHeader headers,
                                         ReadyToPaymentInfo params) {
         try {
@@ -74,6 +94,48 @@ public class FeignService {
             log.error(e.getMessage());
         }
         return null;
+    }
+
+    /**
+     * 결제 후 예약 정보 조회를 위한 파라미터 입력 메서드
+     * @param pgToken Payment Gateway Token
+     * @param paymentInfo 결제 정보
+     * @return RequestForPaymentInfo
+     * @author LeeGoh
+     */
+    public RequestForPaymentInfo setRequestParams(String pgToken, PaymentInfo paymentInfo) {
+        return RequestForPaymentInfo.builder()
+                .cid(paymentInfo.getCid())
+                .tid(paymentInfo.getTid())
+                .partner_order_id(paymentInfo.getPartnerOrderId())
+                .partner_user_id(paymentInfo.getPartnerUserId())
+                .pg_token(pgToken)
+                .total_amount(paymentInfo.getTotalAmount())
+                .build();
+    }
+
+    /**
+     * 결제 완료 후 신청 정보 요청 메서드
+     * @param headers KakaoPayHeader
+     * @param params RequestForPaymentInfo
+     * @return PaySuccessInfo
+     * @author LeeGoh
+     */
+    public PaySuccessInfo getSuccessResponse(KakaoPayHeader headers, RequestForPaymentInfo params) {
+
+        try {
+            return kakaoFeignClient
+                    .successForPayment(
+                            headers.getAdminKey(),
+                            headers.getAccept(),
+                            headers.getContentType(),
+                            params
+                    );
+        } catch (RestClientException e) {
+            log.error(e.getMessage());
+        }
+        return null;
+
     }
 
 }
