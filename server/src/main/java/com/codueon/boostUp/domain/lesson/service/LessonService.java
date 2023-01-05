@@ -1,4 +1,5 @@
 package com.codueon.boostUp.domain.lesson.service;
+import com.codueon.boostUp.domain.lesson.dto.PostEditLesson;
 import com.codueon.boostUp.domain.lesson.dto.PostLesson;
 import com.codueon.boostUp.domain.lesson.entity.*;
 import com.codueon.boostUp.domain.member.entity.Member;
@@ -24,7 +25,7 @@ public class LessonService {
     private final MemberDbService memberDbService;
 
     @Transactional
-    public void createLesson(PostLesson postLesson, Long memberId, MultipartFile file,List<MultipartFile> files) throws Exception {
+    public void createLesson(PostLesson postLesson, Long memberId, MultipartFile profileImage, List<MultipartFile> careerImage) throws Exception {
         Member findMember = memberDbService.ifExistsReturnMember(memberId);
         Lesson lesson = Lesson.builder()
                 .name(findMember.getName())
@@ -35,56 +36,45 @@ public class LessonService {
                 .cost(postLesson.getCost())
                 .build();
 
-        UploadFile uploadFile = fileHandler.uploadFile(file);
-        lessonDbService.saveLesson(lesson);
+        UploadFile uploadFile = fileHandler.uploadFile(profileImage);
+
+        ProfileImage createProfileImage = ProfileImage.builder()
+                .originFileName(profileImage.getOriginalFilename())
+                .fileName(profileImage.getOriginalFilename())
+                .filePath(uploadFile.getFilePath())
+                .fileSize(profileImage.getSize())
+                .build();
+
+        lesson.addProfileImage(createProfileImage);
         List<Long> lessonLanguagesList = postLesson.getLanguages();
         lessonDbService.saveLanguageList(lessonLanguagesList,lesson);
         List<Long> lessonAddressList = postLesson.getAddress();
         lessonDbService.saveAddressList(lessonAddressList,lesson);
 
-        ProfileImage profileImage = ProfileImage.builder()
-                .originFileName(file.getOriginalFilename())
-                .fileName(file.getOriginalFilename())
-                .filePath(uploadFile.getFilePath())
-                .fileSize(file.getSize())
-                .build();
-        profileImage.addLesson(lesson);
-        lessonDbService.saveProfileImage(profileImage);
+        lessonDbService.saveLesson(lesson);
 
+        Lesson saveLesson = lessonDbService.returnSavedLesson(lesson);
         LessonInfo lessonInfo = LessonInfo.builder()
+                .lessonId(saveLesson.getId())
                 .introduction(postLesson.getIntroduction())
                 .companies(postLesson.getDetailCompany())
                 .favoriteLocation(postLesson.getDetailLocation())
                 .personality(postLesson.getPersonality())
                 .costs(postLesson.getDetailCost())
                 .build();
+
+        List<UploadFile> uploadFileList = fileHandler.parseUploadFileInfo(careerImage);
+        lessonDbService.saveCareerImage(uploadFileList, lessonInfo);
         lessonDbService.saveLessonInfo(lessonInfo);
 
-        List<UploadFile> uploadFileList = fileHandler.parseUploadFileInfo(files);
-        List<CareerImage> careerImageList = new ArrayList<>();
-
-         uploadFileList.forEach(uploadFiles-> {
-            CareerImage careerImage = CareerImage.builder()
-                    .originFileName(uploadFiles.getOriginFileName())
-                    .fileName(uploadFiles.getFileName())
-                    .filePath(uploadFiles.getFilePath())
-                    .fileSize(uploadFiles.getFileSize())
-                    .build();
-            careerImageList.add(careerImage);
-        });
-
-        //파일이 존재할 때 처리
-        if (!careerImageList.isEmpty()) {
-            for (CareerImage careerImage : careerImageList) {
-                //파일 DB 저장
-                careerImage.addLessonInfo(lessonInfo);
-                lessonDbService.saveCareerImage(careerImage);
-            }
-        }
         Curriculum curriculum = Curriculum.builder()
-                .lessonId(lesson.getId())
+                .lessonId(saveLesson.getId())
                 .curriculum(postLesson.getCurriculum())
                 .build();
         lessonDbService.saveCurriculum(curriculum);
+    }
+    public void updateLesson(Long lessonId, PostEditLesson postEditLesson, Long memberId, MultipartFile file) {
+        Member findMember = memberDbService.ifExistsReturnMember(memberId);
+        Lesson updateLesson = lessonDbService.ifExistsReturnLesson(lessonId);
     }
 }

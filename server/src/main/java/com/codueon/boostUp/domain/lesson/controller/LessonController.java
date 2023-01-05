@@ -23,17 +23,20 @@ public class LessonController {
 
     @PostMapping(value = "/lesson/regist", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> postLesson(@RequestPart(value = "data") PostLesson postLesson,
-                                        @RequestPart(value = "profileImage") MultipartFile file,
-                                        @RequestPart(value = "careerImage") List<MultipartFile> files) throws Exception {
+                                        @RequestPart(value = "profileImage") MultipartFile profileImage,
+                                        @RequestPart(value = "careerImage") List<MultipartFile> careerImage) throws Exception  {
         Long memberId = 1L;
-        lessonService.createLesson(postLesson,memberId,file, files);
+        lessonService.createLesson(postLesson, memberId, profileImage, careerImage);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @PostMapping("/lesson/{lesson-id}/edit")
     public ResponseEntity updateLesson(@PathVariable("lesson-id") Long lessonId,
-                                       @RequestBody PostEditLesson postEditLesson) {
-        return ResponseEntity.status(HttpStatus.OK).build();
+                                       @RequestPart(value = "data") PostEditLesson postEditLesson,
+                                       @RequestPart(value = "profileImage") MultipartFile file) throws Exception {
+        Long memberId = 1L;
+
+        return null;
     }
 
     @DeleteMapping("/lesson/{lesson-id}")
