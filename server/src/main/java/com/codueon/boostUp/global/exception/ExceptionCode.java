@@ -6,7 +6,9 @@ public enum ExceptionCode {
 
     // 정보 NOT FOUND
     BOOKMARK_NOT_FOUND(504, "존재하지 않는 북마크입니다."),
-    LESSON_NOT_FOUND(504, "존재하지 않는 강의 목록입니다."),
+    LESSON_NOT_FOUND(504, "존재하지 않는 과외 요약 정보입니다."),
+    LESSON_INFO_NOT_FOUND(504, "존재하지 않는 과외 상세 정보입니다."),
+    CURRICULUM_NOT_FOUND(504, "존재하지 않는 과외 커리큘럼 정보입니다"),
     MEMBER_NOT_FOUND(504, "존재하지 않는 회원입니다."),
     REVIEW_NOT_FOUND(504, "존재하지 않는 과외 후기입니다."),
     SUGGEST_NOT_FOUND(504, "존재하지 않는 과외 신청 내역입니다."),
@@ -15,6 +17,7 @@ public enum ExceptionCode {
     CHAT_NOT_FOUND(504, "존재하지 않는 메시지입니다."),
     CHATROOM_NOT_FOUND(504, "존재하지 않는 채팅방입니다."),
     RESERVATION_NOT_FOUND(504, "존재하지 않는 예약입니다."),
+
 
     // 인증 인가
     INVALID_ACCESS(403, "유효하지 않은 접근입니다."),

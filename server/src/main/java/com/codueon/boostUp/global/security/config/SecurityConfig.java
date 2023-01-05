@@ -57,7 +57,7 @@ public class SecurityConfig {
                 .antMatchers("/lesson/**").permitAll()
                 .antMatchers("/suggest/**").permitAll()
                 .antMatchers("/api/**").permitAll()
-                .anyRequest().authenticated();
+                .anyRequest().permitAll();
 
         return http.build();
     }

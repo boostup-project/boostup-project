@@ -84,8 +84,8 @@ public class LessonService {
                                 PostLesson postLesson,
                                 List<MultipartFile> careerImage) {
         LessonInfo lessonInfo = LessonInfo.toEntity(savedLesson.getId(), postLesson);
-        List<UploadFile> uploadFileList = fileHandler.parseUploadFileInfo(careerImage);
-        lessonDbService.saveCareerImage(uploadFileList, lessonInfo);
+        List<UploadFile> careerImages = fileHandler.parseUploadFileInfo(careerImage);
+        lessonDbService.saveCareerImage(careerImages, lessonInfo);
         lessonDbService.saveLessonInfo(lessonInfo);
     }
 
