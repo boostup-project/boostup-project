@@ -5,6 +5,8 @@ import com.codueon.boostUp.domain.lesson.entity.Curriculum;
 import com.codueon.boostUp.domain.lesson.entity.Lesson;
 import com.codueon.boostUp.domain.lesson.entity.LessonInfo;
 import com.codueon.boostUp.domain.lesson.repository.LessonRepository;
+import com.codueon.boostUp.global.exception.BusinessLogicException;
+import com.codueon.boostUp.global.exception.ExceptionCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -19,17 +21,6 @@ public class SearchService {
     private final LessonRepository lessonRepository;
 
     /**
-     * 사용자가 신청한 과외 목록을 조회하는 메서드
-     * @param memberId 사용자 식별자
-     * @return Page(GetStudentLesson)
-     * @author mozzi327
-     *
-     */
-    public Page<GetStudentLesson> getMyLessons(Long memberId, Pageable pageable) {
-        return lessonRepository.getMyPageLessonInfo(memberId, pageable);
-    }
-
-    /**
      * 메인페이지 조회 메서드
      * @param memberId 사용자 식별자
      * @param pageable 페이지 정보
@@ -38,7 +29,36 @@ public class SearchService {
      */
     public Page<GetMainPageLesson> getMainPageLessons(Long memberId, Pageable pageable) {
         if (memberId == null) return lessonRepository.getMainPageLessons(pageable);
-        else return lessonRepository.getMainPageLessonsAndBookmarkInfo(memberId, pageable);
+        return lessonRepository.getMainPageLessonsAndBookmarkInfo(memberId, pageable);
+    }
+
+    /**
+     * 메인페이지 상세 검색 메서드
+     * @param memberId 사용자 식별자
+     * @param postSearchLesson 상세 검색 정보
+     * @param pageable 페이지 정보
+     * @return Page(GetMainPageLesson)
+     * @author mozzi327
+     */
+    public Page<GetMainPageLesson> getDetailSearchLessons(Long memberId,
+                                                          PostSearchLesson postSearchLesson,
+                                                          Pageable pageable) {
+        if (memberId != null) return lessonRepository.getDetailSearchMainPageLessonAndGetBookmarkInfo(memberId, postSearchLesson, pageable);
+        return lessonRepository.getDetailSearchMainPageLesson(postSearchLesson, pageable);
+    }
+
+    /**
+     * 메인페이지 언어 별 과외 조회 메서드
+     * @param languageId 사용 언어 식별자
+     * @param pageable 페이지 정보
+     * @return Page(GetMainPageLesson)
+     * @author mozzi327
+     */
+    public Page<GetMainPageLesson> getMainPageLessonsAboutLanguage(Long memberId,
+                                                                   Long languageId,
+                                                                   Pageable pageable) {
+        if (memberId != null) return lessonRepository.getMainPageLessonByLanguageAndBookmarkInfo(memberId, languageId, pageable);
+        return lessonRepository.getMainPageLessonByLanguage(languageId, pageable);
     }
 
     /**
@@ -77,6 +97,19 @@ public class SearchService {
         Curriculum findCurriculum = lessonDbService.ifExsistsReturnCurriculum(lessonId);
         return GetLessonCurriculum.builder()
                 .curriculum(findCurriculum.getCurriculum())
+                .build();
+    }
+
+    /**
+     * 선생님 자신의 과외 요약 정보를 조회하는 메서드
+     * @param memberId 사용자 식별자
+     * @return GetLesson
+     * @author mozzi327
+     */
+    public GetTutorLesson getMyLesson(Long memberId) {
+        Lesson findLesson = lessonDbService.ifExistsReturnLessonByMemberId(memberId);
+        return GetTutorLesson.builder()
+                .lesson(findLesson)
                 .build();
     }
 }
