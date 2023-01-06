@@ -38,6 +38,11 @@
 - `style` : CSS 추가/수정
 - `test` : 테스트 추가/수정
 - `chore` : 기타
+- `comment` : 필요한 주석 추가 및 변경
+- `rename` : 파일 혹은 폴더명을 수정하거나 옮김
+- `remove` : 파일을 삭제하는 작업만 수행
+- `!BREAKING CHANGE` : 커다란 API 변경
+- `!HOTFIX`: 급하게 치명적인 버그를 고침
 
 ```
  feat: 이슈내용
@@ -52,7 +57,8 @@
 - `refactor` : 코드 리팩토링
 - `style` : CSS 추가/수정
 - `test` : 테스트 추가/수정
-- `chore` : 기타
+- `chore` : 빌드 업무 수정, 패키지 매니저 수정 (코드 변경 X)
+
 
 ```
  feat/이슈내용#[이슈번호]
