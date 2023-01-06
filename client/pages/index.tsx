@@ -1,19 +1,12 @@
 import React from "react";
-
+import CreateModalContainer from "components/reuse/CreateModalContainer";
 const Home = () => {
   return (
     <>
-      <div className="w-screen h-fit bg-pointColor  font-SCDream3 text-lg">
-        안녕하세요
-      </div>
-      <div className="w-screen h-fit desktop:bg-pointColor tablet:bg-textColor bg-bgColor  font-SCDream9 text-lg ">
-        안녕하세요
-      </div>
-      <div className="w-screen h-fit desktop:bg-pointColor tablet:bg-textColor bg-bgColor  font-SCDream9 text-lg ">
-        자동배포 들어가요
-      </div>
-      <div className="w-screen h-fit desktop:bg-pointColor tablet:bg-textColor bg-bgColor  font-SCDream9 text-lg ">
-        cloudfront 들어가요
+      <div className="flex flex-col bg-bgColor items-center justify-center w-full h-screen">
+        <CreateModalContainer>
+
+        </CreateModalContainer>
       </div>
     </>
   );
