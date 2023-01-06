@@ -79,11 +79,11 @@ const Header = () => {
           </div>
         </nav>
       </header>
-      {/* {seek && (
+      {seek && (
         <div className="absolute top-40 desktop:hidden">
           <SearchPop onSubmit={onSubmit} absolute={false} />
         </div>
-      )} */}
+      )}
     </>
   );
 };

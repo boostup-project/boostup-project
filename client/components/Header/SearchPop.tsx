@@ -1,7 +1,7 @@
 import { useForm, Controller } from "react-hook-form";
 import { langDict, addDict } from "../reuse/dict";
 import AuthBtn from "../reuse/AuthBtn";
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import Select from "react-select";
 
 interface Props {
@@ -16,12 +16,10 @@ export const SearchPop = ({ onSubmit, absolute }: Props) => {
 
   const langArr = Object.keys(langDict);
   const addArr = Object.keys(addDict);
-  /**${
-        absolute && `absolute`
-      } */
+
   return (
     <div
-      className={`bg-white absolute tablet:top-[32px] desktop:top-[86px] w-full h-fit border border-borderColor rounded-br-md rounded-bl-md`}
+      className={`bg-white desktop:absolute tablet:top-[8px] desktop:top-[86px] desktop:w-full h-fit border border-borderColor rounded-br-md rounded-bl-md`}
     >
       <form
         className="flex flex-col justify-center items-center"
@@ -73,20 +71,6 @@ export const SearchPop = ({ onSubmit, absolute }: Props) => {
                 control={control}
                 defaultValue=""
               />
-              {/* <select
-                {...register("address")}
-                className="w-full h-fit p-2 border border-borderColor outline-pointColor rounded-md font-SCDream2 text-sm text-textColor placeholder:text-center mt-4 text-center"
-              >
-                {addArr.map((el: string, idx: number) => (
-                  <option
-                    className="bg-white font-SCDream2 text-sm text-textColor"
-                    key={idx}
-                    value={addDict[el]}
-                  >
-                    {el}
-                  </option>
-                ))}
-              </select> */}
             </div>
           </div>
         </label>
@@ -129,7 +113,9 @@ export const SearchPop = ({ onSubmit, absolute }: Props) => {
             </div>
           </div>
         </label>
-        <AuthBtn className="mt-4 mb-4">검색</AuthBtn>
+        <div className="w-full h-fit mt-4 mb-4 flex justify-center items-center">
+          <AuthBtn>검색</AuthBtn>
+        </div>
       </form>
     </div>
   );
