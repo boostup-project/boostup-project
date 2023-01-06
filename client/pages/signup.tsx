@@ -49,7 +49,7 @@ const Signup = () => {
                 type="text"
                 value={name}
                 placeholder="닉네임을 입력하세요"
-                className = " w-full h-fit p-2 border border-borderColor outline-pointColor rounded-md font-SCDream4 text-[11px] text-textColor tablet:text-sm"
+                className = " w-full h-fit p-2 border border-borderColor outline-pointColor rounded-xl font-SCDream4 text-[11px] text-textColor tablet:text-sm"
                 {...register("name", {
                     required: "필수로 입력해야되는 값입니다.",
                     onChange: handleNameChange,
@@ -70,7 +70,7 @@ const Signup = () => {
                 type="email"
                 value={email}
                 placeholder="이메일을 입력하세요"
-                className="w-full h-fit p-2 border border-borderColor outline-pointColor rounded-md font-SCDream4 text-textColor text-[11px] tablet:text-sm"
+                className="w-full h-fit p-2 border border-borderColor outline-pointColor rounded-xl font-SCDream4 text-textColor text-[11px] tablet:text-sm"
                 {...register("email", {
                     required: "필수로 입력해야되는 값입니다.",
                     onChange: handleEmailChange,
@@ -91,7 +91,7 @@ const Signup = () => {
                 type="password"
                 value={password}
                 placeholder="비밀번호를 입력하세요"
-                className="w-full h-fit p-2 border border-borderColor outline-pointColor rounded-md font-SCDream4 text-[11px] text-textColor tablet:text-sm"
+                className="w-full h-fit p-2 border border-borderColor outline-pointColor rounded-xl font-SCDream4 text-[11px] text-textColor tablet:text-sm"
                 {...register("password", {
                     required: "필수로 입력해야되는 값입니다.",
                     onChange: handlePasswordChange,
@@ -113,7 +113,7 @@ const Signup = () => {
                 type="password"
                 value={passwordCheck}
                 placeholder="동일한 비밀번호를 입력하세요"
-                className="w-full h-fit p-2 border border-borderColor outline-pointColor rounded-md font-SCDream4 text-[11px] text-textColor tablet:text-sm"
+                className="w-full h-fit p-2 border border-borderColor outline-pointColor rounded-xl font-SCDream4 text-[11px] text-textColor tablet:text-sm"
                 {...register("passwordCheck", {
                     required: "필수로 입력해야되는 값입니다.",
                     onChange: handlePasswordCheckChange,

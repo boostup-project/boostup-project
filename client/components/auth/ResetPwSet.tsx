@@ -46,7 +46,7 @@ const ResetPwSet = () => {
           type="password"
           placeholder="새로운 비밀번호를 입력하세요"
           value={pw}
-          className="w-full h-fit p-2 border  border-borderColor outline-pointColor rounded-md font-SCDream4 tablet:text-sm text-[12px] text-textColor"
+          className="w-full h-fit p-2 border  border-borderColor outline-pointColor rounded-xl font-SCDream4 tablet:text-sm text-[12px] text-textColor"
           {...register("password", {
             required: "필수로 입력해야되는 값입니다.",
             onChange: handlePwChange,
@@ -79,7 +79,7 @@ const ResetPwSet = () => {
           type="password"
           placeholder="다시한번 비밀번호를 입력하세요"
           value={rePw}
-          className="w-full h-fit p-2 border  border-borderColor outline-pointColor rounded-md font-SCDream4 tablet:text-sm text-[12px] text-textColor"
+          className="w-full h-fit p-2 border  border-borderColor outline-pointColor rounded-xl font-SCDream4 tablet:text-sm text-[12px] text-textColor"
           {...register("checkPassword", {
             required: "필수로 입력해야되는 값입니다.",
             onChange: handleCheckPwChange,
