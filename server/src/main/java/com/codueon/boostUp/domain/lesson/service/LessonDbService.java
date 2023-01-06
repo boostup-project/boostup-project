@@ -155,6 +155,17 @@ public class LessonDbService {
     }
 
     /**
+     * 과외 요약 정보 조회 메서드(사용자 식별자)
+     * @param memberId 사용자 식별자
+     * @return Lesson
+     * @author mozzi327
+     */
+    public Lesson ifExistsReturnLessonByMemberId(Long memberId) {
+        return lessonRepository.findByMemberId(memberId)
+                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.LESSON_NOT_FOUND));
+    }
+
+    /**
      * 과외 상세 정보 조회 메서드
      * @param lessonId 과외 식별자
      * @return LessonInfo
