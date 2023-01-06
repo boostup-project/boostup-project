@@ -1,5 +1,6 @@
-import React from "react";
+import { atom } from "recoil";
 
-export const index = () => {
-  return <div>index</div>;
-};
+export const logUser = atom({
+  key: "logUser",
+  default: false,
+});
