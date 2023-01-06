@@ -45,7 +45,7 @@ public class GetSuggestInfo {
                 .map(address -> address.getAddress().getAddress())
                 .collect(Collectors.toList());
         this.company = lesson.getCompany();
-//        this.profileImage = lesson.getProfileImage().getFilePath();
+        this.profileImage = lesson.getProfileImage().getFilePath();
         this.cost = lesson.getCost();
         this.totalCost = totalCost;
         this.quantity = quantity;
