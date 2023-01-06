@@ -3,7 +3,6 @@ package com.codueon.boostUp.domain.suggest.contoller;
 import com.codueon.boostUp.domain.lesson.entity.Lesson;
 import com.codueon.boostUp.domain.lesson.entity.ProfileImage;
 import com.codueon.boostUp.domain.suggest.dto.GetStudentSuggest;
-import com.codueon.boostUp.domain.suggest.dto.GetSuggestInfo;
 import com.codueon.boostUp.domain.suggest.dto.GetTutorSuggest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -79,39 +78,4 @@ public class SuggestGetTest extends SuggestControllerTest{
                 .andReturn();
     }
 
-    @Test
-    @DisplayName("GET 결제 페이지 조회")
-    void getSuggestInfo() throws Exception {
-
-        Integer quantity = 5;
-        Integer totalCost = 250000;
-
-        ProfileImage profileImage = ProfileImage.builder()
-                .filePath("gddong.jpg")
-                .build();
-
-        Lesson lesson = Lesson.builder()
-                .id(1L)
-                .title("Java에게 뿌셔지기")
-                .name("명품강사 길동씨")
-                .company("네카라쿠배 가고싶다")
-                .cost(50000)
-                .build();
-
-        lesson.addProfileImage(profileImage);
-
-        GetSuggestInfo getSuggestInfo =
-                new GetSuggestInfo(lesson, totalCost, quantity);
-
-        given(suggestService.getSuggestInfo(Mockito.anyLong(), Mockito.anyLong()))
-                .willReturn(getSuggestInfo);
-
-        ResultActions actions =
-                mockMvc.perform(
-                        get("/lesson/{lesson-id}/suggest/{suggest-id}/suggest-info", lesson.getId(), suggest.getLessonId())
-                );
-
-        actions.andExpect(status().isOk())
-                .andReturn();
-    }
 }
