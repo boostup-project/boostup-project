@@ -15,6 +15,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 public class SuggestDbService {
@@ -43,6 +45,16 @@ public class SuggestDbService {
     public PaymentInfo ifExistsReturnPaymentInfo(Long suggestId) {
         return paymentInfoRepository.findBySuggestId(suggestId)
                 .orElseThrow(() -> new BusinessLogicException(ExceptionCode.RESERVATION_NOT_FOUND));
+    }
+
+    /**
+     * 결제 정보 조회 메서드 2 - 예외처리 X
+     * @param suggestId 신청 식별자
+     * @return PaymentInfo
+     * @author LeeGoh
+     */
+    public Optional<PaymentInfo> isPaymentInfo(Long suggestId) {
+        return paymentInfoRepository.findBySuggestId(suggestId);
     }
 
     /**
@@ -79,6 +91,15 @@ public class SuggestDbService {
      */
     public void deleteSuggest(Suggest suggest) {
         suggestRepository.delete(suggest);
+    }
+
+    /**
+     * 결제 정보 삭제 메서드
+     * @param paymentInfo 결제 정보
+     * @author LeeGoh
+     */
+    public void deletePaymentInfo(PaymentInfo paymentInfo) {
+        paymentInfoRepository.delete(paymentInfo);
     }
 
     /**
