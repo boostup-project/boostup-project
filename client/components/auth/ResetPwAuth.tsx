@@ -54,7 +54,7 @@ const ResetPwAuth = ({setIsAuth}:Props) => {
           type="text"
           placeholder="찾고자 하는 계정의 닉네임을 입력해주세요"
           value={name}
-          className="w-full h-fit p-2 border  border-borderColor outline-pointColor rounded-md font-SCDream4 tablet:text-sm text-[12px] text-textColor"
+          className="w-full h-fit p-2 border  border-borderColor outline-pointColor rounded-xl font-SCDream4 tablet:text-sm text-[12px] text-textColor"
           {...register("nickname", {
             required: "필수로 입력해야되는 값입니다.",
             onChange: handleNameChange,
@@ -83,7 +83,7 @@ const ResetPwAuth = ({setIsAuth}:Props) => {
           type="text"
           placeholder="찾고자 하는 계정의 이메일을 입력해주세요"
           value={email}
-          className="w-full h-fit p-2 border  border-borderColor outline-pointColor rounded-md font-SCDream4 tablet:text-sm text-[12px] text-textColor"
+          className="w-full h-fit p-2 border  border-borderColor outline-pointColor rounded-xl font-SCDream4 tablet:text-sm text-[12px] text-textColor"
           {...register("email", {
             required: "필수로 입력해야되는 값입니다.",
             onChange: handleEmailChange,

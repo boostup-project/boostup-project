@@ -39,7 +39,7 @@ const Login = () => {
                 type="email"
                 value = {email}
                 placeholder="이메일을 입력하세요"
-                className="w-full h-fit p-2 border border-borderColor outline-pointColor rounded-md font-SCDream4 text-[11px] text-textColor tablet:text-sm"
+                className="w-full h-fit p-2 border border-borderColor outline-pointColor rounded-xl font-SCDream4 text-[11px] text-textColor tablet:text-sm"
                 {...register("email", {
                     required: "필수로 입력해야되는 값입니다.",
                     onChange: handleEmailChange,
@@ -61,7 +61,7 @@ const Login = () => {
                 type="password"
                 value={password}
                 placeholder="비밀번호를 입력하세요"
-                className="w-full h-fit p-2 border border-borderColor outline-pointColor rounded-md font-SCDream4 text-[11px] text-textColor tablet:text-sm"
+                className="w-full h-fit p-2 border border-borderColor outline-pointColor rounded-xl font-SCDream4 text-[11px] text-textColor tablet:text-sm"
                 {...register("password", {
                     required: "필수로 입력해야되는 값입니다.",
                     onChange: handlePasswordChange,
