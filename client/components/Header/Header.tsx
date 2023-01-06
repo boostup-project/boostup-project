@@ -8,6 +8,7 @@ import Logo from "../../public/images/logo.png";
 import Exit from "assets/icon/Exit";
 import Magnify from "assets/icon/Magnify";
 import { SearchPop } from "./SearchPop";
+import Link from "next/link";
 
 interface SearchData {
   name: string;
@@ -71,9 +72,10 @@ const Header = () => {
             ) : (
               <>
                 <div className="mr-8" onClick={e => setLog(!log)}>
-                  로그인
+                  <Link href="/login">로그인</Link>
                 </div>
-                <div>회원가입</div>
+                <div>
+                <Link href="/signup">회원가입</Link></div>
               </>
             )}
           </div>

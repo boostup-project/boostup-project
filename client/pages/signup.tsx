@@ -3,7 +3,7 @@ import AuthContainer from "components/reuse/AuthContainer";
 import { useState } from "react";
 import {useForm} from "react-hook-form";
 import { ErrorMessage } from "@hookform/error-message";
-
+import Link from "next/link";
 const Signup = () => {
     const [name, setName] =useState<string>('')
     const [email, setEmail] = useState<string>('');
@@ -34,14 +34,15 @@ const Signup = () => {
 
 
     return(<>
-         <div className="flex flex-col bg-bgColor items-center justify-center w-full h-screen">
+         <div className="flex flex-col bg-bgColor items-center mt-36 w-full h-screen">
          
          <div className="flex flex-col w-full h-fit justify-center items-center font-SCDream5 text-xl text-textColor mb-2">
          회원가입
          </div>
-         
+         <div className="flex flex-col w-full h-fit justify-center items-center font-SCDream3 text-sm text-pointColor mb-2">
+         회원가입 후 원하는 선생님을 찜 해보세요!</div>
          <AuthContainer>
-            <form onSubmit={handleSubmit(onSubmit, failSubmit)}>
+            <form onSubmit={handleSubmit(onSubmit, failSubmit)} className = "w-full h-fit">
             <div className="flex flex-col justify-center items-start w-full h-fit font-SCDream5 text-sm text-textColor mb-1">
             닉네임
             </div>
@@ -131,6 +132,11 @@ const Signup = () => {
                 <div className="flex flex-col w-full h-fit justify-center items-center mt-7">
                 <AuthBtn onClick={handleSubmit}>회원가입</AuthBtn>
                 </div>
+
+                <div className="w-full h-fit flex flex-col justify-center items-center text-pointColor mt-7">
+                <Link href="/login">이미 가입하셨나요?</Link>
+                </div>
+
             </form>
          </AuthContainer>
          </div>
