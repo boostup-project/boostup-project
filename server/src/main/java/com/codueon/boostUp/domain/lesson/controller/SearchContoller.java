@@ -16,12 +16,56 @@ public class SearchContoller {
     // TODO : Notice! 해당 서비스는 LessonController와 합쳐질 예정입니다.
     private final SearchService searchService;
 
-    @GetMapping("/lesson")
-    public ResponseEntity<?> getMyPageLesson(Pageable pageable) {
+    /**
+     * 메인페이지 과외 전체 조회 컨트롤러 메서드
+     * @param pageable 페이지 정보
+     * @return Page(GetMainPageLesson)
+     * @author mozzi327
+     */
+    @GetMapping("/home")
+    public ResponseEntity<MultiResponseDto<?>> getMainPageLessonInfos(Pageable pageable) {
+        // TODO : 시큐리티 적용 시 Authentication 객체 추가 요
+        Long memberId = 1L;
+        Page<GetMainPageLesson> response = searchService.getMainPageLessons(memberId, pageable);
+        return ResponseEntity.ok().body(new MultiResponseDto<>(response));
+    }
+
+    @PostMapping("/search")
+    public ResponseEntity getDetailSearchForLesson(@RequestBody PostSearchLesson postSearchLesson,
+                                                   Pageable pageable) {
+        // TODO : 시큐리티 적용 시 Authentication 객체 추가 요
+        Long memberId = 1L;
+        Page<GetMainPageLesson> response = searchService.getDetailSearchLessons(memberId, postSearchLesson, pageable);
+        return ResponseEntity.ok().body(new MultiResponseDto<>(response));
+    }
+
+    /**
+     * 메인페이지 언어 별 과외 조회 컨트롤러 메서드
+     * @param languageId 사용 언어 식별자
+     * @param pageable 페이지 정보
+     * @return Page(GetMainPageLesson)
+     * @author mozzi327
+     */
+    @GetMapping("/language/{language-id}")
+    public ResponseEntity getLessonByLanguage(@PathVariable("language-id") Long languageId,
+                                              Pageable pageable) {
+        // TODO : 시큐리티 적용 시 Authentication 객체 추가 요
+        Long memberId = 1L;
+        Page<GetMainPageLesson> response = searchService.getMainPageLessonsAboutLanguage(memberId, languageId, pageable);
+        return ResponseEntity.ok().body(new MultiResponseDto<>(response));
+    }
+
+    /**
+     * 과외 요약 정보 조회 컨트롤러 메서드(선생님 자기 과외 정보)
+     * @return GetLesson
+     * @author mozzi327
+     */
+    @GetMapping("/lesson/tutor")
+    public ResponseEntity<?> getMyPageMyClassInfo() {
         // TODO : 시큐리티 적용 시 Authentication 객체 추가 요
         Long memberId = 1L; // 임시 하드 코딩
-        Page<GetStudentLesson> response = searchService.getMyLessons(memberId, pageable);
-        return ResponseEntity.status(HttpStatus.OK).build();
+        GetTutorLesson response = searchService.getMyLesson(memberId);
+        return ResponseEntity.ok().body(response);
     }
 
     /**
@@ -58,18 +102,5 @@ public class SearchContoller {
     public ResponseEntity<?> getCurriculum(@PathVariable("lesson-id") Long lessonId) {
         GetLessonCurriculum response = searchService.getDetailLessonCurriculum(lessonId);
         return ResponseEntity.ok().body(response);
-    }
-
-
-    @PostMapping("/search")
-    public ResponseEntity searchLesson(@RequestBody PostSearchLesson postSearchLesson) {
-        return ResponseEntity.status(HttpStatus.OK).build();
-    }
-
-    @GetMapping("/home")
-    public ResponseEntity<MultiResponseDto<?>> getMainPageLessonInfos(Pageable pageable) {
-        Long memberId = 1L;
-        Page<GetMainPageLesson> response = searchService.getMainPageLessons(memberId, pageable);
-        return ResponseEntity.ok().body(new MultiResponseDto<>(response));
     }
 }
