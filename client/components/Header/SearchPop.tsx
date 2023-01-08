@@ -19,7 +19,7 @@ export const SearchPop = ({ onSubmit, absolute }: Props) => {
 
   return (
     <div
-      className={`bg-white desktop:absolute tablet:top-[8px] desktop:top-[86px] desktop:w-full h-fit border border-borderColor rounded-br-md rounded-bl-md`}
+      className={`bg-white desktop:absolute tablet:top-[8px] desktop:top-[86px] desktop:w-full h-fit border border-borderColor rounded-br-xl rounded-bl-xl`}
     >
       <form
         className="flex flex-col justify-center items-center"
@@ -28,7 +28,7 @@ export const SearchPop = ({ onSubmit, absolute }: Props) => {
         <label className="w-full  flex flex-col items-center mt-5">
           <div className="text-textColor text-center">닉네임</div>
           <input
-            className="desktop:w-8/12 w-5/6 h-fit p-2 border  border-borderColor outline-pointColor rounded-md font-SCDream2 text-sm text-textColor placeholder:text-center mt-5"
+            className="desktop:w-8/12 w-5/6 h-fit p-2 border  border-borderColor outline-pointColor rounded-xl font-SCDream2 text-sm text-textColor placeholder:text-center mt-5"
             type="text"
             placeholder="원하는 과외쌤의 닉네임을 입력학세요"
             {...register("name")}
@@ -37,7 +37,7 @@ export const SearchPop = ({ onSubmit, absolute }: Props) => {
         <label className="w-full flex flex-col items-center mt-4">
           <div className="text-textColor text-center">경력</div>
           <input
-            className="desktop:w-8/12 w-5/6 h-fit p-2 border  border-borderColor outline-pointColor rounded-md font-SCDream2 text-sm text-textColor placeholder:text-center mt-4"
+            className="desktop:w-8/12 w-5/6 h-fit p-2 border  border-borderColor outline-pointColor rounded-xl font-SCDream2 text-sm text-textColor placeholder:text-center mt-4"
             type="text"
             placeholder="원하는 과외쌤의 경력을 숫자로 입력하세요"
             {...register("carrer")}
@@ -48,7 +48,7 @@ export const SearchPop = ({ onSubmit, absolute }: Props) => {
           <div className="desktop:w-8/12 w-5/6 flex justify-between items-center">
             <div className="w-5/12 text-center flex flex-col even:items-end">
               <div>시,도</div>
-              <div className="w-full h-fit p-2 border border-borderColor outline-pointColor rounded-md font-SCDream2 text-sm text-textColor bg-white text-center mt-4">
+              <div className="w-full h-fit p-2 border border-borderColor outline-pointColor rounded-xl font-SCDream2 text-sm text-textColor bg-white text-center mt-4">
                 <span>서울특별시</span>
               </div>
             </div>
@@ -78,7 +78,7 @@ export const SearchPop = ({ onSubmit, absolute }: Props) => {
           <div className="text-textColor text-center">개발언어</div>
           <select
             {...register("language")}
-            className="desktop:w-8/12 w-5/6 h-fit p-2 border  border-borderColor outline-pointColor rounded-md font-SCDream2 text-sm text-textColor placeholder:text-center mt-4 text-center"
+            className="desktop:w-8/12 w-5/6 h-fit p-2 border  border-borderColor outline-pointColor rounded-xl font-SCDream2 text-sm text-textColor placeholder:text-center mt-4 text-center"
           >
             {langArr.map((el: string, idx: number) => (
               <option key={idx} value={langDict[el]}>
@@ -93,7 +93,7 @@ export const SearchPop = ({ onSubmit, absolute }: Props) => {
             <div className="w-5/12 text-center flex flex-col items-center">
               <span>최소금액</span>
               <input
-                className="w-full h-fit p-2 border  border-borderColor outline-pointColor rounded-md font-SCDream2 text-sm text-textColor placeholder:text-center mt-4"
+                className="w-full h-fit p-2 border  border-borderColor outline-pointColor rounded-xl font-SCDream2 text-sm text-textColor placeholder:text-center mt-4"
                 type="text"
                 placeholder="최소금액"
                 {...register("startCost")}
@@ -105,7 +105,7 @@ export const SearchPop = ({ onSubmit, absolute }: Props) => {
             <div className="w-5/12 text-center flex flex-col items-center">
               <span>최대금액</span>
               <input
-                className="w-full h-fit p-2 border  border-borderColor outline-pointColor rounded-md font-SCDream2 text-sm text-textColor placeholder:text-center mt-4"
+                className="w-full h-fit p-2 border  border-borderColor outline-pointColor rounded-xl font-SCDream2 text-sm text-textColor placeholder:text-center mt-4"
                 type="text"
                 placeholder="최대금액"
                 {...register("endCost")}
