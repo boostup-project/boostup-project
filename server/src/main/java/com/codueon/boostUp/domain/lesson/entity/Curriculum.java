@@ -1,5 +1,7 @@
 package com.codueon.boostUp.domain.lesson.entity;
 
+import com.codueon.boostUp.domain.lesson.dto.PatchLessonCurriculum;
+import com.codueon.boostUp.domain.lesson.dto.PostLessonInfoEdit;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -28,5 +30,9 @@ public class Curriculum {
         this.id = id;
         this.curriculum = curriculum;
         this.lessonId = lessonId;
+    }
+
+    public void editCurriculum(PatchLessonCurriculum patchLessonCurriculum) {
+        this.curriculum = patchLessonCurriculum.getCurriculum();
     }
 }
