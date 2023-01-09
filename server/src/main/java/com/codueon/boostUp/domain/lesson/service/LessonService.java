@@ -1,12 +1,22 @@
 package com.codueon.boostUp.domain.lesson.service;
 
+import com.codueon.boostUp.domain.bookmark.repository.BookmarkRepository;
+import com.codueon.boostUp.domain.bookmark.service.BookmarkService;
 import com.codueon.boostUp.domain.lesson.dto.PatchLessonCurriculum;
 import com.codueon.boostUp.domain.lesson.dto.PostLesson;
 import com.codueon.boostUp.domain.lesson.dto.PostLessonDetailEdit;
 import com.codueon.boostUp.domain.lesson.dto.PostLessonInfoEdit;
 import com.codueon.boostUp.domain.lesson.entity.*;
+import com.codueon.boostUp.domain.lesson.repository.LessonInfoRepository;
 import com.codueon.boostUp.domain.member.entity.Member;
 import com.codueon.boostUp.domain.member.service.MemberDbService;
+import com.codueon.boostUp.domain.reveiw.entity.Review;
+import com.codueon.boostUp.domain.reveiw.service.ReviewService;
+import com.codueon.boostUp.domain.suggest.dto.GetSuggestInfo;
+import com.codueon.boostUp.domain.suggest.entity.Suggest;
+import com.codueon.boostUp.domain.suggest.service.SuggestDbService;
+import com.codueon.boostUp.global.exception.BusinessLogicException;
+import com.codueon.boostUp.global.exception.ExceptionCode;
 import com.codueon.boostUp.global.file.FileHandler;
 import com.codueon.boostUp.global.file.UploadFile;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +34,10 @@ public class LessonService {
     private final LessonDbService lessonDbService;
     private final FileHandler fileHandler;
     private final MemberDbService memberDbService;
+    private final SuggestDbService suggestDbService;
+    private final ReviewService reviewService;
+    private final BookmarkRepository bookmarkRepository;
+    private final LessonInfoRepository lessonInfoRepository;
 
     /**
      * 과외 등록 메서드
@@ -182,5 +196,36 @@ public class LessonService {
         Curriculum updateCurriculum = lessonDbService.ifExsistsReturnCurriculum(lessonId);
         updateCurriculum.editCurriculum(patchLessonCurriculum);
         lessonDbService.editCurriculum(updateCurriculum);
+    }
+
+    /**
+     * 과외 삭제 메서드
+     * @param memberId 회원 식별자
+     * @param lessonId 과외 식별자
+     * @author Quartz614
+     */
+    @Transactional
+    public void deleteLesson(Long memberId, Long lessonId) {
+        Member findMember = memberDbService.ifExistsReturnMember(memberId);
+        Lesson findLesson = lessonDbService.ifExistsReturnLesson(lessonId);
+        LessonInfo findLessonInfo = lessonDbService.ifExsitsReturnLessonInfo(lessonId);
+        Curriculum findCurriculum = lessonDbService.ifExsistsReturnCurriculum(lessonId);
+        List<Suggest> findSuggest = suggestDbService.findAllSuggestForLesson(lessonId);
+
+        reviewService.removeAllByReviews(lessonId);
+        bookmarkRepository.deleteByLessonId(lessonId);
+
+        for (Suggest suggest : findSuggest) {
+            if (suggest.getStatus().equals(Suggest.SuggestStatus.ACCEPT_IN_PROGRESS)) {
+                throw new BusinessLogicException(ExceptionCode.NOT_ACCEPT_SUGGEST);
+            } else if (suggest.getStatus().equals(Suggest.SuggestStatus.DURING_LESSON)) {
+                throw new BusinessLogicException(ExceptionCode.NOT_PAY_SUCCESS);
+            } else if (suggest.getStatus().equals(Suggest.SuggestStatus.PAY_IN_PROGRESS)) {
+                throw new BusinessLogicException(ExceptionCode.NOT_PAY_SUCCESS);
+            }
+        }
+        lessonDbService.deleteLesson(findLesson);
+        lessonDbService.deleteLessonInfo(findLessonInfo);
+        lessonDbService.deleteCurriculum(findCurriculum);
     }
 }

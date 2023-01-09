@@ -94,6 +94,16 @@ public class ReviewService {
     }
 
     /**
+     * 리뷰 전체 삭제 메서드
+     *
+     * @param lessonId 과외 식별자
+     * @author Quartz614
+     */
+    public void removeAllByReviews(Long lessonId) {
+        reviewRepository.removeAllByLessonId(lessonId);
+    }
+
+    /**
      * 사용자 리뷰가 이미 작성되어 있는지 확인하는 메서드
      * @param lessonId 과외 식별자
      * @param memberId 페이지 정보
