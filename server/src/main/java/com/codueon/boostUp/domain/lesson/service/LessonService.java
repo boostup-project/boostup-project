@@ -1,6 +1,7 @@
 package com.codueon.boostUp.domain.lesson.service;
 
 import com.codueon.boostUp.domain.lesson.dto.PostLesson;
+import com.codueon.boostUp.domain.lesson.dto.PostLessonDetailEdit;
 import com.codueon.boostUp.domain.lesson.dto.PostLessonInfoEdit;
 import com.codueon.boostUp.domain.lesson.entity.*;
 import com.codueon.boostUp.domain.member.entity.Member;
@@ -115,12 +116,11 @@ public class LessonService {
      * @param memberId           회원 식별자
      * @param profileImage      회원 프로필 이미지
      */
-
-
+    @SneakyThrows
     public void updateLessonInfo(Long lessonId,
                                  PostLessonInfoEdit postLessonInfoEdit,
                                  Long memberId,
-                                 MultipartFile profileImage) throws Exception {
+                                 MultipartFile profileImage) {
         Member findMember = memberDbService.ifExistsReturnMember(memberId);
         Lesson updateLesson = lessonDbService.ifExistsReturnLesson(lessonId);
 //        if (!Objects.equals(updateLesson.getMemberId(), findMember)) {
@@ -145,5 +145,17 @@ public class LessonService {
                 .build();
         updateLesson.addProfileImage(editProfileImage);
         lessonDbService.saveLesson(updateLesson);
+    }
+    @SneakyThrows
+    public void updateLessonDetail(Long lessonId,
+                                   PostLessonDetailEdit postLessonDetailEdit,
+                                   Long memberId,
+                                   List<MultipartFile> careerImage) {
+        Member findMember = memberDbService.ifExistsReturnMember(memberId);
+        LessonInfo updateLessonDetail = lessonDbService.ifExsitsReturnLessonInfo(lessonId);
+        updateLessonDetail.editLessonDetail(postLessonDetailEdit);
+        List<UploadFile> uploadFileList = fileHandler.parseUploadFileInfo(careerImage);
+        lessonDbService.editCareerImage(uploadFileList, updateLessonDetail);
+        lessonDbService.saveLessonInfo(updateLessonDetail);
     }
 }

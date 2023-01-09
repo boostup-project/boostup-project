@@ -41,7 +41,7 @@ public class LessonController {
     }
 
     /**
-     * 과외 수정 컨트롤러
+     * 과외 요약 정보 수정 컨트롤러
      *
      * @param lessonId 과외 식별자
      * @param postLessonInfoEdit 수정 과외 요약 정보
@@ -56,6 +56,27 @@ public class LessonController {
                                        @RequestPart(value = "profileImage") MultipartFile profileImage) {
         Long memberId = 1L;
         lessonService.updateLessonInfo(lessonId, postLessonInfoEdit, memberId, profileImage);
+
+        return ResponseEntity.ok().build();
+    }
+
+    /**
+     * 과외 상세 정보 수정 컨트롤러
+     *
+     * @param lessonId 과외 식별자
+     * @param postLessonDetailEdit 수정 과외 상세 정보
+     * @param careerImage 경력 이미지
+     * @return ResponseEntity
+     * @author Quartz614
+     */
+
+    @SneakyThrows
+    @PostMapping("/lesson/{lesson-id}/detailInfo/edit")
+    public ResponseEntity updateLessonDetail(@PathVariable("lesson-id") Long lessonId,
+                                             @RequestPart(value = "data") PostLessonDetailEdit postLessonDetailEdit,
+                                             @RequestPart(value = "careerImage") List<MultipartFile> careerImage) {
+        Long memberId = 1L;
+        lessonService.updateLessonDetail(lessonId, postLessonDetailEdit, memberId, careerImage);
 
         return ResponseEntity.ok().build();
     }
