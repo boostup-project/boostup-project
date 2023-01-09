@@ -31,7 +31,7 @@ public class LessonController {
      * @throws Exception
      * @author Quartz614
      */
-    @PostMapping(value = "/lesson/regist", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PostMapping(value = "/lesson/regist")
     public ResponseEntity<?> postLesson(@RequestPart(value = "data") PostLesson postLesson,
                                         @RequestPart(value = "profileImage") MultipartFile profileImage,
                                         @RequestPart(value = "careerImage") List<MultipartFile> careerImage) throws Exception {
@@ -69,7 +69,6 @@ public class LessonController {
      * @return ResponseEntity
      * @author Quartz614
      */
-
     @SneakyThrows
     @PostMapping("/lesson/{lesson-id}/detailInfo/edit")
     public ResponseEntity updateLessonDetail(@PathVariable("lesson-id") Long lessonId,
@@ -77,6 +76,22 @@ public class LessonController {
                                              @RequestPart(value = "careerImage") List<MultipartFile> careerImage) {
         Long memberId = 1L;
         lessonService.updateLessonDetail(lessonId, postLessonDetailEdit, memberId, careerImage);
+
+        return ResponseEntity.ok().build();
+    }
+
+    /**
+     * 과외 진행 방식 정보 수정 컨트롤러
+     * @param lessonId 과외 식별자
+     * @param patchLessonCurriculum 과외 진행 방식 정보
+     * @return ResponseEntity
+     * @author Quartz614
+     */
+    @PatchMapping("/lesson/{lesson-id}/curriculum/edit")
+    public ResponseEntity updateCurriculum(@PathVariable("lesson-id") Long lessonId,
+                                                 @RequestBody PatchLessonCurriculum patchLessonCurriculum) {
+        Long memberId = 1L;
+        lessonService.updateCurriculum(lessonId, patchLessonCurriculum, memberId);
 
         return ResponseEntity.ok().build();
     }

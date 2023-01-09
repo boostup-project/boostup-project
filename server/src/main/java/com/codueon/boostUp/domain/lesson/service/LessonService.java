@@ -1,5 +1,6 @@
 package com.codueon.boostUp.domain.lesson.service;
 
+import com.codueon.boostUp.domain.lesson.dto.PatchLessonCurriculum;
 import com.codueon.boostUp.domain.lesson.dto.PostLesson;
 import com.codueon.boostUp.domain.lesson.dto.PostLessonDetailEdit;
 import com.codueon.boostUp.domain.lesson.dto.PostLessonInfoEdit;
@@ -53,7 +54,6 @@ public class LessonService {
      * @return Lesson
      * @author Quartz614
      */
-
     @SneakyThrows
     private Lesson saveLessonAndReturnLesson(PostLesson postLesson,
                                              Member member,
@@ -80,7 +80,6 @@ public class LessonService {
      * @param careerImage 경력 사진
      * @author Quartz614
      */
-
     @SneakyThrows
     private void saveLessonInfo(Lesson savedLesson,
                                 PostLesson postLesson,
@@ -98,7 +97,6 @@ public class LessonService {
      * @param postLesson  과외 등록 정보
      * @author Quartz614
      */
-
     private void saveCurriculum(Lesson savedLesson, PostLesson postLesson) {
         Curriculum curriculum = Curriculum.builder()
                 .lessonId(savedLesson.getId())
@@ -109,12 +107,13 @@ public class LessonService {
     }
 
     /**
-     * 과외 요약정보 수정 메서드 (로컬)
+     * 과외 요약 정보 수정 메서드 (로컬)
      *
-     * @param lessonId           과외 식별자
-     * @param postLessonInfoEdit 과외 수정 정보
-     * @param memberId           회원 식별자
-     * @param profileImage      회원 프로필 이미지
+     * @param lessonId 과외 식별자
+     * @param postLessonInfoEdit 수정 과외 요약정보
+     * @param memberId 회원 식별자
+     * @param profileImage 회원 프로필 이미지
+     * @author Quartz614
      */
     @SneakyThrows
     public void updateLessonInfo(Long lessonId,
@@ -146,6 +145,15 @@ public class LessonService {
         updateLesson.addProfileImage(editProfileImage);
         lessonDbService.saveLesson(updateLesson);
     }
+
+    /**
+     * 과외 상세 정보 수정 메서드(로컬)
+     * @param lessonId 과외 식별자
+     * @param postLessonDetailEdit 수정 과외 상세정보
+     * @param memberId 회원 식별자
+     * @param careerImage 경력 이미지
+     * @author Quartz614
+     */
     @SneakyThrows
     public void updateLessonDetail(Long lessonId,
                                    PostLessonDetailEdit postLessonDetailEdit,
@@ -157,5 +165,22 @@ public class LessonService {
         List<UploadFile> uploadFileList = fileHandler.parseUploadFileInfo(careerImage);
         lessonDbService.editCareerImage(uploadFileList, updateLessonDetail);
         lessonDbService.saveLessonInfo(updateLessonDetail);
+    }
+
+    /**
+     * 커리큘럼 수정 메서드
+     * @param lessonId 과외 식별자
+     * @param patchLessonCurriculum 수정 커리큘럼 정보
+     * @param memberId 회원 식별자
+     * @author Quartz614
+     */
+    @SneakyThrows
+    public void updateCurriculum(Long lessonId,
+                                       PatchLessonCurriculum patchLessonCurriculum,
+                                       Long memberId) {
+        Member findMember = memberDbService.ifExistsReturnMember(memberId);
+        Curriculum updateCurriculum = lessonDbService.ifExsistsReturnCurriculum(lessonId);
+        updateCurriculum.editCurriculum(patchLessonCurriculum);
+        lessonDbService.editCurriculum(updateCurriculum);
     }
 }
