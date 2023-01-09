@@ -4,7 +4,7 @@ import lombok.Builder;
 import lombok.Getter;
 
 @Getter
-public class RequestForPaymentInfo {
+public class RequestForKakaoPaymentInfo {
 
     private String cid;
     private String tid;
@@ -14,12 +14,12 @@ public class RequestForPaymentInfo {
     private String partner_order_id;
 
     @Builder
-    public RequestForPaymentInfo(String cid,
-                                 String tid,
-                                 String pg_token,
-                                 Integer total_amount,
-                                 String partner_user_id,
-                                 String partner_order_id) {
+    public RequestForKakaoPaymentInfo(String cid,
+                                      String tid,
+                                      String pg_token,
+                                      Integer total_amount,
+                                      String partner_user_id,
+                                      String partner_order_id) {
         this.cid = cid;
         this.tid = tid;
         this.pg_token = pg_token;

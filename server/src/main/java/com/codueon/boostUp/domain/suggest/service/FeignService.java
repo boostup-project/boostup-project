@@ -5,6 +5,7 @@ import com.codueon.boostUp.domain.member.entity.Member;
 import com.codueon.boostUp.domain.suggest.entity.PaymentInfo;
 import com.codueon.boostUp.domain.suggest.entity.Suggest;
 import com.codueon.boostUp.domain.suggest.feign.KakaoPayFeignClient;
+import com.codueon.boostUp.domain.suggest.feign.TossPayFeignClient;
 import com.codueon.boostUp.domain.suggest.pay.*;
 import com.codueon.boostUp.domain.suggest.utils.PayConstants;
 import lombok.extern.slf4j.Slf4j;
@@ -14,6 +15,9 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestClientException;
+
+import java.util.Base64;
+import java.util.UUID;
 
 @Slf4j
 @Service
@@ -32,12 +36,18 @@ public class FeignService {
     @Value("${kakao.pay.taxfree}")
     private Integer taxFreeAmount;
 
+    @Value("${toss.secret-key}")
+    private String SECRET_KEY;
+
     @Autowired
     KakaoPayFeignClient kakaoFeignClient;
 
+    @Autowired
+    TossPayFeignClient tossPayFeignClient;
+
 
     /**
-     * 카카오페이 결제 헤더 입력 메서드
+     * Kakao 결제 헤더 입력 메서드
      * @return KakaoPayHeader
      * @author LeeGoh
      */
@@ -50,39 +60,72 @@ public class FeignService {
     }
 
     /**
-     * 카카오페이 결제 전 파라미터 입력 메서드
+     * Toss 결제 헤더 입력 메서드
+     * @return TossPayHeader
+     * @author LeeGoh
+     */
+    public TossPayHeader setTossHeaders() {
+        return TossPayHeader.builder()
+                .adminKey(PayConstants.TOSS_AK + Base64.getEncoder().encodeToString((SECRET_KEY + ":").getBytes()))
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .build();
+    }
+
+    /**
+     * Kakao 결제 전 파라미터 입력 메서드
      * @param requestUrl 요청 URL
      * @param suggest 신청 정보
      * @param member 사용자 정보
      * @param lesson 과외 정보
-     * @return ReadyToPaymentInfo
+     * @param paymentInfo 결제 정보
+     * @return ReadyToKakaoPaymentInfo
      * @author LeeGoh
      */
-    public ReadyToPaymentInfo setReadyParams(String requestUrl, Suggest suggest, Member member, Lesson lesson) {
-        return ReadyToPaymentInfo.builder()
+    public ReadyToKakaoPaymentInfo setReadyParams(String requestUrl, Suggest suggest, Member member, Lesson lesson, PaymentInfo paymentInfo) {
+        return ReadyToKakaoPaymentInfo.builder()
                 .cid(cid)
-                .approval_url(requestUrl + paymentProcessUri + "/" + suggest.getId() + "/completed")
-                .cancel_url(requestUrl + paymentProcessUri + "/" + suggest.getId() + "/cancel")
-                .fail_url(requestUrl + paymentProcessUri + "/" + suggest.getId() + "/fail")
+                .approval_url(requestUrl + paymentProcessUri + "/" + suggest.getId() + "/kakao/completed")
+                .cancel_url(requestUrl + paymentProcessUri + "/" + suggest.getId() + "/kakao/cancel")
+                .fail_url(requestUrl + paymentProcessUri + "/" + suggest.getId() + "/kakao/fail")
                 .partner_order_id(suggest.getId() + "/" + member.getId() + "/" + lesson.getTitle())
                 .partner_user_id(member.getId().toString())
                 .item_name(lesson.getTitle())
-                .quantity(suggest.getQuantity())
-                .total_amount(suggest.getQuantity() * lesson.getCost())
+                .quantity(paymentInfo.getQuantity())
+                .total_amount(paymentInfo.getQuantity() * lesson.getCost())
                 .val_amount(suggest.getTotalCost())
                 .tax_free_amount(taxFreeAmount)
                 .build();
     }
 
     /**
-     * 결제 URL 생성 결과 메서드
-     * @param headers KakaoPayHeader
-     * @param params ReadyToPaymentInfo
-     * @return PayReadyInfo
+     * Toss 결제 전 파라미터 입력 메서드
+     * @param requestUrl 요청 URL
+     * @param suggest 신청 정보
+     * @param paymentInfo 결제 정보
+     * @param lesson 과외 정보
+     * @return ReadyToTossPaymentInfo
      * @author LeeGoh
      */
-    public PayReadyInfo getPayReadyInfo(KakaoPayHeader headers,
-                                        ReadyToPaymentInfo params) {
+    public ReadyToTossPaymentInfo setReadyTossParams(String requestUrl, Suggest suggest, Lesson lesson, PaymentInfo paymentInfo) {
+        return ReadyToTossPaymentInfo.builder()
+                .successUrl(requestUrl + paymentProcessUri + "/" + suggest.getId() + "/toss/completed")
+                .failUrl(requestUrl + paymentProcessUri + "/" + suggest.getId() + "/toss/fail")
+                .amount(paymentInfo.getQuantity() * lesson.getCost())
+                .method("카드")
+                .orderId(UUID.randomUUID().toString())
+                .orderName(lesson.getTitle())
+                .build();
+    }
+
+    /**
+     * Kakao 결제 URL 생성 결과 메서드
+     * @param headers KakaoPayHeader
+     * @param params ReadyToPaymentInfo
+     * @return KakaoPayReadyInfo
+     * @author LeeGoh
+     */
+    public KakaoPayReadyInfo getPayReadyInfo(KakaoPayHeader headers,
+                                             ReadyToKakaoPaymentInfo params) {
         try {
             return kakaoFeignClient.readyForPayment(
                     headers.getAdminKey(),
@@ -97,14 +140,35 @@ public class FeignService {
     }
 
     /**
+     * Toss 결제 URL 생성 결과 메서드
+     * @param headers TossPayHeader
+     * @param body ReadyToTossPaymentInfo
+     * @return TossPayReadyInfo
+     * @author LeeGoh
+     */
+    public TossPayReadyInfo getTossPayReadyInfo(TossPayHeader headers,
+                                                ReadyToTossPaymentInfo body) {
+        try {
+            return tossPayFeignClient.readyForTossPayment(
+                    headers.getAdminKey(),
+                    headers.getContentType(),
+                    body
+            );
+        } catch (RestClientException e) {
+            log.error(e.getMessage());
+        }
+        return null;
+    }
+
+    /**
      * 결제 후 예약 정보 조회를 위한 파라미터 입력 메서드
      * @param pgToken Payment Gateway Token
      * @param paymentInfo 결제 정보
-     * @return RequestForPaymentInfo
+     * @return RequestForKakaoPaymentInfo
      * @author LeeGoh
      */
-    public RequestForPaymentInfo setRequestParams(String pgToken, PaymentInfo paymentInfo) {
-        return RequestForPaymentInfo.builder()
+    public RequestForKakaoPaymentInfo setRequestParams(String pgToken, PaymentInfo paymentInfo) {
+        return RequestForKakaoPaymentInfo.builder()
                 .cid(paymentInfo.getCid())
                 .tid(paymentInfo.getTid())
                 .partner_order_id(paymentInfo.getPartnerOrderId())
@@ -117,11 +181,11 @@ public class FeignService {
     /**
      * 결제 완료 후 신청 정보 요청 메서드
      * @param headers KakaoPayHeader
-     * @param params RequestForPaymentInfo
-     * @return PaySuccessInfo
+     * @param params RequestForKakaoPaymentInfo
+     * @return getSuccessKakaoResponse
      * @author LeeGoh
      */
-    public PaySuccessInfo getSuccessResponse(KakaoPayHeader headers, RequestForPaymentInfo params) {
+    public KakaoPaySuccessInfo getSuccessKakaoResponse(KakaoPayHeader headers, RequestForKakaoPaymentInfo params) {
 
         try {
             return kakaoFeignClient

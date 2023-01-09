@@ -88,12 +88,12 @@ public class SuggestController {
     }
 
     /**
-     * 신청 프로세스 4 결제 URL 요청 컨트롤러 메서드
+     * 신청 프로세스 4 결제 URL 요청 컨트롤러 메서드 Kakao
      * @param suggestId 신청 식별자
      * @return Message
      * @author LeeGoh
      */
-    @GetMapping("/lesson/suggest/{suggest-id}/payment")
+    @GetMapping("/lesson/suggest/{suggest-id}/kakao/payment")
     public ResponseEntity<Message<?>> orderPayment(@PathVariable("suggest-id") Long suggestId,
                                        HttpServletRequest request) {
 
@@ -105,17 +105,34 @@ public class SuggestController {
     }
 
     /**
+     * 신청 프로세스 4 결제 URL 요청 컨트롤러 메서드 Toss
+     * @param suggestId 신청 식별자
+     * @return Message
+     * @author LeeGoh
+     */
+    @GetMapping("/lesson/suggest/{suggest-id}/toss/payment")
+    public ResponseEntity<Message<?>> orderPaymentWithToss(@PathVariable("suggest-id") Long suggestId,
+                                                           HttpServletRequest request) {
+
+        Long memberId = 1L;
+        String requestUrl = request.getRequestURL().toString().replace(request.getRequestURI(), "");
+        Message<?> message = suggestService.getTossPayUrl(suggestId, memberId, requestUrl);
+        if (message.getData() == null) suggestService.getFailedPayMessage();
+        return ResponseEntity.ok().body(message);
+    }
+
+    /**
      * 신청 프로세스 5 결제 성공 컨트롤러 메서드
      * @param suggestId 신청 식별자
      * @param pgToken Payment Gateway Token
      * @return Message
      * @author LeeGoh
      */
-    @GetMapping("/api/suggest/{suggest-id}/completed")
+    @GetMapping("/api/suggest/{suggest-id}/kakao/completed")
     public ResponseEntity<Message<?>> successPayment(@PathVariable("suggest-id") Long suggestId,
                                                      @RequestParam("pg_token") String pgToken) {
 
-        Message<?> message = suggestService.getSuccessPaymentInfo(suggestId, pgToken);
+        Message<?> message = suggestService.getSuccessKakaoPaymentInfo(suggestId, pgToken);
         if (message.getData() == null) suggestService.getFailedPayMessage();
         return ResponseEntity.ok().build();
     }
