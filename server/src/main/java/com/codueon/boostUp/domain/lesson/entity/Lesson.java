@@ -24,11 +24,11 @@ public class Lesson {
     private Integer cost;
     private Long memberId;
 
-    @OneToOne(mappedBy = "lesson", cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "lesson", cascade = CascadeType.ALL, orphanRemoval = true)
     private ProfileImage profileImage;
-    @OneToMany(mappedBy = "lesson", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "lesson", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<LessonLanguage> lessonLanguages = new ArrayList<>();
-    @OneToMany(mappedBy = "lesson", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "lesson", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<LessonAddress> lessonAddresses = new ArrayList<>();
 
     @Builder
@@ -73,17 +73,14 @@ public class Lesson {
         if (lessonAddress.getLesson() != this) lessonAddress.addLesson(this);
         this.lessonAddresses.add(lessonAddress);
     }
-    public void editLessonInfo(String title,
-                               String company,
-                               Integer career,
-                               Integer cost,
-                               List<LessonAddress> lessonAddresses,
-                               List<LessonLanguage> lessonLanguages) {
-        this.title = title;
-        this.company = company;
-        this.career = career;
-        this.cost = cost;
-        this.lessonAddresses = lessonAddresses;
-        this.lessonLanguages = lessonLanguages;
+
+    public void editLessonInfo(PostLessonInfoEdit postLessonInfoEdit) {
+        this.title = postLessonInfoEdit.getTitle();
+        this.company = postLessonInfoEdit.getCompany();
+        this.career = postLessonInfoEdit.getCareer();
+        this.cost = postLessonInfoEdit.getCost();
+        this.lessonAddresses.clear();
+        this.lessonLanguages.clear();
+
     }
 }
