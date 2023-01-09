@@ -14,7 +14,7 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-public class PaySuccessInfo {
+public class KakaoPaySuccessInfo {
 
     private String aid;
     private String tid;
