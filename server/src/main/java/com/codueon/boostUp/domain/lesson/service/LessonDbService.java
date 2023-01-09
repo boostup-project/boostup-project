@@ -270,11 +270,30 @@ public class LessonDbService {
 
     /*--------------------------------------- DB Delete 메서드 --------------------------------------*/
 
+    /**
+     * 과외 삭제 메서드
+     * @param lesson 과외
+     * @author Quartz614
+     */
     public void deleteLesson(Lesson lesson) {
         lessonRepository.delete(lesson);
     }
 
-    public void delete(Long lessonId) {
-        lessonRepository.deleteById(lessonId);
+    /**
+     * 과외 상세 정보 삭제 메서드
+     * @param lessonInfo 과외 상세 정보
+     * @author Quartz614
+     */
+    public void deleteLessonInfo(LessonInfo lessonInfo) {
+        lessonInfoRepository.delete(lessonInfo);
+    }
+
+    /**
+     * 커리큘럼 삭제 메서드
+     * @param curriculum 커리큘럼
+     * @author Quartz614
+     */
+    public void deleteCurriculum(Curriculum curriculum) {
+        curriculumRepository.delete(curriculum);
     }
 }

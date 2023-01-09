@@ -89,15 +89,24 @@ public class LessonController {
      */
     @PatchMapping("/lesson/{lesson-id}/curriculum/edit")
     public ResponseEntity updateCurriculum(@PathVariable("lesson-id") Long lessonId,
-                                                 @RequestBody PatchLessonCurriculum patchLessonCurriculum) {
+                                           @RequestBody PatchLessonCurriculum patchLessonCurriculum) {
         Long memberId = 1L;
         lessonService.updateCurriculum(lessonId, patchLessonCurriculum, memberId);
 
         return ResponseEntity.ok().build();
     }
 
-    @DeleteMapping(value = "/lesson/{lesson-id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    /**
+     * 과외 삭제 컨트롤러
+     * @param lessonId 과외 식별자
+     * @return ResponseEntity
+     * @author Quartz614
+     */
+    @DeleteMapping(value = "/lesson/{lesson-id}")
     public ResponseEntity deleteLesson(@PathVariable("lesson-id") Long lessonId) {
+        Long memberId = 1L;
+        lessonService.deleteLesson(memberId, lessonId);
+
         return ResponseEntity.noContent().build();
     }
 }
