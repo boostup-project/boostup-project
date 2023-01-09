@@ -6,7 +6,7 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class ReadyToPaymentInfo {
+public class ReadyToKakaoPaymentInfo {
 
     private String cid;
     private String partner_order_id;
@@ -21,17 +21,17 @@ public class ReadyToPaymentInfo {
     private String cancel_url;
 
     @Builder
-    public ReadyToPaymentInfo(String cid,
-                              String partner_order_id,
-                              String partner_user_id,
-                              String item_name,
-                              Integer quantity,
-                              Integer total_amount,
-                              Integer val_amount,
-                              Integer tax_free_amount,
-                              String approval_url,
-                              String fail_url,
-                              String cancel_url) {
+    public ReadyToKakaoPaymentInfo(String cid,
+                                   String partner_order_id,
+                                   String partner_user_id,
+                                   String item_name,
+                                   Integer quantity,
+                                   Integer total_amount,
+                                   Integer val_amount,
+                                   Integer tax_free_amount,
+                                   String approval_url,
+                                   String fail_url,
+                                   String cancel_url) {
         this.cid = cid;
         this.partner_order_id = partner_order_id;
         this.partner_user_id = partner_user_id;

@@ -12,7 +12,7 @@ import java.util.Date;
 @Getter
 @NoArgsConstructor
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-public class PayReadyInfo {
+public class KakaoPayReadyInfo {
 
     @JsonProperty("partner_order_id")
     private String partnerOrderId;
@@ -42,15 +42,15 @@ public class PayReadyInfo {
     private Date createdAt;
 
     @Builder
-    public PayReadyInfo(String partnerOrderId,
-                        String partnerUserId,
-                        String itemName,
-                        Integer quantity,
-                        Integer totalAmount,
-                        Integer taxFreeAmount,
-                        String tid,
-                        String nextRedirectPcUrl,
-                        Date createdAt) {
+    public KakaoPayReadyInfo(String partnerOrderId,
+                             String partnerUserId,
+                             String itemName,
+                             Integer quantity,
+                             Integer totalAmount,
+                             Integer taxFreeAmount,
+                             String tid,
+                             String nextRedirectPcUrl,
+                             Date createdAt) {
         this.partnerOrderId = partnerOrderId;
         this.partnerUserId = partnerUserId;
         this.itemName = itemName;

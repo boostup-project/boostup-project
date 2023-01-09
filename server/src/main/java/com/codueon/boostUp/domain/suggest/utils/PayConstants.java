@@ -9,6 +9,7 @@ public class PayConstants {
     public static final String ACCEPT = "Accept";
     public static final String FAIL_URL = "fail_url";
     public static final String KAKAO_AK = "KakaoAK ";
+    public static final String TOSS_AK = "Basic ";
     public static final String PG_TOKEN = "pg_token";
     public static final String QUANTITY = "quantity";
     public static final String ITEM_NAME = "item_name";
