@@ -7,6 +7,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -36,6 +37,10 @@ public class GetStudentSuggest {
 
     private String status;
 
+    private LocalDateTime startTime;
+
+    private LocalDateTime endTime;
+
     @Builder
     @QueryProjection
     public GetStudentSuggest(Suggest suggest,
@@ -44,7 +49,7 @@ public class GetStudentSuggest {
         this.lessonId = lesson.getId();
         this.name = lesson.getName();
         this.title = lesson.getTitle();
-//        this.profileImage = lesson.getProfileImage().getFilePath();
+        this.profileImage = lesson.getProfileImage().getFilePath();
         this.company = lesson.getCompany();
         this.career = lesson.getCareer();
         this.cost = lesson.getCost();
@@ -55,5 +60,7 @@ public class GetStudentSuggest {
                 .map(address -> address.getAddress().getAddress())
                 .collect(Collectors.toList());
         this.status = suggest.getStatus().getStatus();
+        this.startTime = suggest.getStartTime();
+        this.endTime = suggest.getEndTime();
     }
 }

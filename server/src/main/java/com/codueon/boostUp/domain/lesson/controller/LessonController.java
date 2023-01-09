@@ -23,7 +23,7 @@ public class LessonController {
     @PostMapping(value = "/lesson/regist", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> postLesson(@RequestPart(value = "data") PostLesson postLesson,
                                         @RequestPart(value = "profileImage") MultipartFile profileImage,
-                                        @RequestPart(value = "careerImage") List<MultipartFile> careerImage) throws Exception  {
+                                        @RequestPart(value = "careerImage") List<MultipartFile> careerImage) throws Exception {
         Long memberId = 1L;
         lessonService.createLesson(postLesson, memberId, profileImage, careerImage);
         return ResponseEntity.status(HttpStatus.CREATED).build();
