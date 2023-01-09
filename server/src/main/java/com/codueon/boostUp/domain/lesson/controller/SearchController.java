@@ -6,14 +6,13 @@ import com.codueon.boostUp.domain.lesson.service.SearchService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-public class SearchContoller {
-    // TODO : Notice! 해당 서비스는 LessonController와 합쳐질 예정입니다.
+public class SearchController {
+    // TODO : Notice! 해당 서비스는 LessonController 와 합쳐질 예정입니다.
     private final SearchService searchService;
 
     /**
@@ -23,15 +22,22 @@ public class SearchContoller {
      * @author mozzi327
      */
     @GetMapping("/home")
-    public ResponseEntity<MultiResponseDto<?>> getMainPageLessonInfos(Pageable pageable) {
+    public ResponseEntity<?> getMainPageLessonInfos(Pageable pageable) {
         // TODO : 시큐리티 적용 시 Authentication 객체 추가 요
         Long memberId = 1L;
         Page<GetMainPageLesson> response = searchService.getMainPageLessons(memberId, pageable);
         return ResponseEntity.ok().body(new MultiResponseDto<>(response));
     }
 
+    /**
+     * 메인페이지 상세 검색 컨트롤러 메서드
+     * @param postSearchLesson 상세 검색 정보
+     * @param pageable 페이지 정보
+     * @return Page(GetMainPageLesson)
+     * @author mozzi327
+     */
     @PostMapping("/search")
-    public ResponseEntity getDetailSearchForLesson(@RequestBody PostSearchLesson postSearchLesson,
+    public ResponseEntity<?> getDetailSearchForLesson(@RequestBody PostSearchLesson postSearchLesson,
                                                    Pageable pageable) {
         // TODO : 시큐리티 적용 시 Authentication 객체 추가 요
         Long memberId = 1L;
@@ -47,7 +53,7 @@ public class SearchContoller {
      * @author mozzi327
      */
     @GetMapping("/language/{language-id}")
-    public ResponseEntity getLessonByLanguage(@PathVariable("language-id") Long languageId,
+    public ResponseEntity<?> getLessonByLanguage(@PathVariable("language-id") Long languageId,
                                               Pageable pageable) {
         // TODO : 시큐리티 적용 시 Authentication 객체 추가 요
         Long memberId = 1L;
