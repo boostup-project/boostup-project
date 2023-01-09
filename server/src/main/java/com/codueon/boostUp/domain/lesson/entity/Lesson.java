@@ -1,6 +1,7 @@
 package com.codueon.boostUp.domain.lesson.entity;
 
 import com.codueon.boostUp.domain.lesson.dto.PostLesson;
+import com.codueon.boostUp.domain.lesson.dto.PostLessonDetailEdit;
 import com.codueon.boostUp.domain.lesson.dto.PostLessonInfoEdit;
 import lombok.*;
 
@@ -81,6 +82,5 @@ public class Lesson {
         this.cost = postLessonInfoEdit.getCost();
         this.lessonAddresses.clear();
         this.lessonLanguages.clear();
-
     }
 }

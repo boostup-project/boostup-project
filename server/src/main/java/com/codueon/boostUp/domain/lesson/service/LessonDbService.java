@@ -229,11 +229,17 @@ public class LessonDbService {
         ).collect(Collectors.toList());
     }
 
-
-
-
-
-
+    public void editCareerImage(List<UploadFile> careerImages, LessonInfo lessonInfo) {
+        careerImages.forEach(careerImage -> {
+            CareerImage createCareerImage = CareerImage.builder()
+                    .originFileName(careerImage.getOriginFileName())
+                    .fileName(careerImage.getFileName())
+                    .filePath(careerImage.getFilePath())
+                    .fileSize(careerImage.getFileSize())
+                    .build();
+            lessonInfo.addCareerImage(createCareerImage);
+        });
+    }
 
     /*--------------------------------------- DB Delete 메서드 --------------------------------------*/
 
