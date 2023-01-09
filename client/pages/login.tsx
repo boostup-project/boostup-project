@@ -3,6 +3,7 @@ import AuthContainer from "components/reuse/container/AuthContainer";
 import { useState } from "react";
 import {useForm} from "react-hook-form";
 import { ErrorMessage } from "@hookform/error-message";
+import Link from "next/link";
 
 const Login = () => {
     const [email, setEmail] = useState<string>('');
@@ -26,10 +27,11 @@ const Login = () => {
       };
 
     return(<>
-         <div className="flex flex-col bg-bgColor items-center justify-center w-full h-screen">
+         <div className="flex flex-col bg-bgColor items-center mt-44 w-full h-screen">
           <div className="flex flex-col w-full h-fit justify-center items-center font-SCDream5 text-xl text-textColor mb-2">
             로그인</div>
-
+            <div className="flex flex-col w-full h-fit justify-center items-center font-SCDream3 text-sm text-pointColor mb-2">
+            로그인 후 원하는 선생님을 만나보세요!</div>
           <AuthContainer>
           <form onSubmit={handleSubmit(onSubmit, failSubmit)}
           className = "w-full h-fit">
@@ -79,6 +81,11 @@ const Login = () => {
                 <div className="w-full h-fit flex flex-col justify-center items-center mt-7">
                 <AuthBtn onClick={handleSubmit}>로그인</AuthBtn>
                 </div>
+                <div className="w-full h-fit flex flex-row justify-center items-center text-pointColor mt-7">
+                <Link href="/resetPassword">비밀번호를 잊으셨나요?</Link>  /   <Link href="/signup">  아직 회원이 아니신가요?</Link>
+                </div>
+
+
             </form>
           </AuthContainer>
         </div>
