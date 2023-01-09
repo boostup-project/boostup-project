@@ -19,7 +19,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class LessonController {
     private final LessonService lessonService;
-    private final LessonDbService lessonDbService;
 
     @PostMapping(value = "/lesson/regist", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> postLesson(@RequestPart(value = "data") PostLesson postLesson,
@@ -32,13 +31,14 @@ public class LessonController {
 
     @PostMapping("/lesson/{lesson-id}/edit")
     public ResponseEntity updateLesson(@PathVariable("lesson-id") Long lessonId,
-                                       @RequestPart(value = "data") PostEditLesson postEditLesson,
-                                       @RequestPart(value = "profileImage") MultipartFile file) throws Exception {
+                                       @RequestPart(value = "data") PostLessonInfoEdit postLessonInfoEdit,
+                                       @RequestPart(value = "profileImage") MultipartFile profileImage) throws Exception {
         Long memberId = 1L;
-        return null;
+        lessonService.updateLesson(lessonId, postLessonInfoEdit, memberId, profileImage);
+        return ResponseEntity.ok().build();
     }
 
-    @DeleteMapping("/lesson/{lesson-id}")
+    @DeleteMapping(value = "/lesson/{lesson-id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity deleteLesson(@PathVariable("lesson-id") Long lessonId) {
         return ResponseEntity.noContent().build();
     }

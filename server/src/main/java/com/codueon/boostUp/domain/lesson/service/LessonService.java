@@ -1,24 +1,27 @@
 package com.codueon.boostUp.domain.lesson.service;
 
-import com.codueon.boostUp.domain.lesson.dto.PostEditLesson;
 import com.codueon.boostUp.domain.lesson.dto.PostLesson;
+import com.codueon.boostUp.domain.lesson.dto.PostLessonDetailEdit;
+import com.codueon.boostUp.domain.lesson.dto.PostLessonInfoEdit;
 import com.codueon.boostUp.domain.lesson.entity.*;
 import com.codueon.boostUp.domain.member.entity.Member;
 import com.codueon.boostUp.domain.member.service.MemberDbService;
-import com.codueon.boostUp.global.file.AwsS3Service;
+import com.codueon.boostUp.global.exception.BusinessLogicException;
+import com.codueon.boostUp.global.exception.ExceptionCode;
 import com.codueon.boostUp.global.file.FileHandler;
 import com.codueon.boostUp.global.file.UploadFile;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -29,10 +32,11 @@ public class LessonService {
 
     /**
      * 과외 등록 메서드
-     * @param postLesson 과외 등록 정보
-     * @param memberId 사용자 식별자
+     *
+     * @param postLesson   과외 등록 정보
+     * @param memberId     사용자 식별자
      * @param profileImage 프로필 사진
-     * @param careerImage 경력 사진
+     * @param careerImage  경력 사진
      * @author Quartz614
      */
     @Transactional
@@ -48,8 +52,9 @@ public class LessonService {
 
     /**
      * Lesson을 저장하고 객체를 리턴하는 메서드
-     * @param postLesson 과외 등록 정보
-     * @param member 사용자 식별자
+     *
+     * @param postLesson   과외 등록 정보
+     * @param member       사용자 식별자
      * @param profileImage 프로필 사진
      * @return Lesson
      * @author Quartz614
@@ -74,8 +79,9 @@ public class LessonService {
 
     /**
      * 과외 디테일 정보 저장 메서드
+     *
      * @param savedLesson 저장 후 조회된 요약 정보
-     * @param postLesson 과외 등록 정보
+     * @param postLesson  과외 등록 정보
      * @param careerImage 경력 사진
      * @author Quartz614
      */
@@ -91,8 +97,9 @@ public class LessonService {
 
     /**
      * 커리큘럼 저장 메서드
+     *
      * @param savedLesson 저장 후 조회된 요약 정보
-     * @param postLesson 과외 등록 정보
+     * @param postLesson  과외 등록 정보
      * @author Quartz614
      */
     private void saveCurriculum(Lesson savedLesson, PostLesson postLesson) {
@@ -104,11 +111,46 @@ public class LessonService {
         lessonDbService.saveCurriculum(curriculum);
     }
 
+    /**
+     * 과외 수정 메서드 (로컬)
+     *
+     * @param lessonId           과외 식별자
+     * @param postLessonInfoEdit 과외 수정 정보
+     * @param memberId           회원 식별자
+     * @param profileImagge      회원 프로필 이미지
+     */
     public void updateLesson(Long lessonId,
-                             PostEditLesson postEditLesson,
+                             PostLessonInfoEdit postLessonInfoEdit,
                              Long memberId,
-                             MultipartFile file) {
+                             MultipartFile profileImage) throws Exception {
         Member findMember = memberDbService.ifExistsReturnMember(memberId);
         Lesson updateLesson = lessonDbService.ifExistsReturnLesson(lessonId);
+//        if (!Objects.equals(updateLesson.getMemberId(), findMember)) {
+//            throw new BusinessLogicException(ExceptionCode.UNAUTHORIZED_FOR_UPDATE);
+//        }
+
+
+        List<Long> languageList = postLessonInfoEdit.getLanguages();
+        List<LessonLanguage> lessonLanguages = lessonDbService.makeLanguageList(languageList);
+
+        List<Long> addressList = postLessonInfoEdit.getAddresses(); // 전달되어온 지역목록
+        List<LessonAddress> lessonAddresses = lessonDbService.makeAddressList(addressList);
+
+        updateLesson.editLessonInfo(postLessonInfoEdit.getTitle(),
+        postLessonInfoEdit.getCompany(),
+        postLessonInfoEdit.getCareer(),
+        postLessonInfoEdit.getCareer(),
+        lessonAddresses,
+        lessonLanguages);
+
+        UploadFile uploadFile = fileHandler.uploadFile(profileImage);
+        ProfileImage editProfileImage = ProfileImage.builder()
+                .originFileName(uploadFile.getOriginFileName())
+                .fileName(uploadFile.getFileName())
+                .filePath(uploadFile.getFilePath())
+                .fileSize(uploadFile.getFileSize())
+                .build();
+        updateLesson.addProfileImage(editProfileImage);
+        lessonDbService.saveLesson(updateLesson);
     }
 }

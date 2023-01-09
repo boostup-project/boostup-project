@@ -103,6 +103,11 @@ public class FileHandler {
     public UploadFile uploadFile(MultipartFile multipartFile) throws  IOException {
         String fileName = createFileName(multipartFile.getOriginalFilename());
         String path = "images";
+        File file = new File(path);
+        //디렉터리가 존재하지 않을 경우
+        if (!file.exists()) {
+            file.mkdir();
+        }
         return UploadFile.builder()
                 .originFileName(multipartFile.getOriginalFilename())
                 .fileName(fileName)

@@ -1,6 +1,7 @@
 package com.codueon.boostUp.domain.lesson.entity;
 
 import com.codueon.boostUp.domain.lesson.dto.PostLesson;
+import com.codueon.boostUp.domain.lesson.dto.PostLessonInfoEdit;
 import lombok.*;
 
 import javax.persistence.*;
@@ -71,5 +72,18 @@ public class Lesson {
     public void addLessonAddress(LessonAddress lessonAddress) {
         if (lessonAddress.getLesson() != this) lessonAddress.addLesson(this);
         this.lessonAddresses.add(lessonAddress);
+    }
+    public void editLessonInfo(String title,
+                               String company,
+                               Integer career,
+                               Integer cost,
+                               List<LessonAddress> lessonAddresses,
+                               List<LessonLanguage> lessonLanguages) {
+        this.title = title;
+        this.company = company;
+        this.career = career;
+        this.cost = cost;
+        this.lessonAddresses = lessonAddresses;
+        this.lessonLanguages = lessonLanguages;
     }
 }
