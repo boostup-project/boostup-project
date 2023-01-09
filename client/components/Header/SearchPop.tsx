@@ -1,6 +1,6 @@
 import { useForm, Controller } from "react-hook-form";
 import { langDict, addDict } from "../reuse/dict";
-import AuthBtn from "../reuse/AuthBtn";
+import AuthBtn from "../reuse/btn/AuthBtn";
 import { useState, useMemo } from "react";
 import Select from "react-select";
 
