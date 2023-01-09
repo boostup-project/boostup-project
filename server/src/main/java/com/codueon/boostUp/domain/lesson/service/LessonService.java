@@ -1,27 +1,19 @@
 package com.codueon.boostUp.domain.lesson.service;
 
 import com.codueon.boostUp.domain.lesson.dto.PostLesson;
-import com.codueon.boostUp.domain.lesson.dto.PostLessonDetailEdit;
 import com.codueon.boostUp.domain.lesson.dto.PostLessonInfoEdit;
 import com.codueon.boostUp.domain.lesson.entity.*;
 import com.codueon.boostUp.domain.member.entity.Member;
 import com.codueon.boostUp.domain.member.service.MemberDbService;
-import com.codueon.boostUp.global.exception.BusinessLogicException;
-import com.codueon.boostUp.global.exception.ExceptionCode;
 import com.codueon.boostUp.global.file.FileHandler;
 import com.codueon.boostUp.global.file.UploadFile;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
-import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
-import org.springframework.util.CollectionUtils;
 import org.springframework.web.multipart.MultipartFile;
-
 import javax.transaction.Transactional;
-import java.io.File;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
+
 
 @Service
 @RequiredArgsConstructor
@@ -59,6 +51,7 @@ public class LessonService {
      * @return Lesson
      * @author Quartz614
      */
+
     @SneakyThrows
     private Lesson saveLessonAndReturnLesson(PostLesson postLesson,
                                              Member member,
@@ -85,6 +78,7 @@ public class LessonService {
      * @param careerImage 경력 사진
      * @author Quartz614
      */
+
     @SneakyThrows
     private void saveLessonInfo(Lesson savedLesson,
                                 PostLesson postLesson,
@@ -102,6 +96,7 @@ public class LessonService {
      * @param postLesson  과외 등록 정보
      * @author Quartz614
      */
+
     private void saveCurriculum(Lesson savedLesson, PostLesson postLesson) {
         Curriculum curriculum = Curriculum.builder()
                 .lessonId(savedLesson.getId())
@@ -112,14 +107,15 @@ public class LessonService {
     }
 
     /**
-     * 과외 수정 메서드 (로컬)
+     * 과외 요약정보 수정 메서드 (로컬)
      *
      * @param lessonId           과외 식별자
      * @param postLessonInfoEdit 과외 수정 정보
      * @param memberId           회원 식별자
-     * @param profileImagge      회원 프로필 이미지
+     * @param profileImage      회원 프로필 이미지
      */
-    public void updateLesson(Long lessonId,
+
+    public void updateLessonInfo(Long lessonId,
                              PostLessonInfoEdit postLessonInfoEdit,
                              Long memberId,
                              MultipartFile profileImage) throws Exception {
@@ -129,19 +125,14 @@ public class LessonService {
 //            throw new BusinessLogicException(ExceptionCode.UNAUTHORIZED_FOR_UPDATE);
 //        }
 
+        updateLesson.editLessonInfo(postLessonInfoEdit);
 
         List<Long> languageList = postLessonInfoEdit.getLanguages();
-        List<LessonLanguage> lessonLanguages = lessonDbService.makeLanguageList(languageList);
 
-        List<Long> addressList = postLessonInfoEdit.getAddresses(); // 전달되어온 지역목록
-        List<LessonAddress> lessonAddresses = lessonDbService.makeAddressList(addressList);
+        List<Long> addressList = postLessonInfoEdit.getAddresses();
 
-        updateLesson.editLessonInfo(postLessonInfoEdit.getTitle(),
-        postLessonInfoEdit.getCompany(),
-        postLessonInfoEdit.getCareer(),
-        postLessonInfoEdit.getCareer(),
-        lessonAddresses,
-        lessonLanguages);
+        lessonDbService.addLanguageList(languageList, updateLesson);
+        lessonDbService.addAddressList(addressList, updateLesson);
 
         UploadFile uploadFile = fileHandler.uploadFile(profileImage);
         ProfileImage editProfileImage = ProfileImage.builder()
