@@ -7,40 +7,46 @@ import com.codueon.boostUp.global.exception.ExceptionCode;
 import com.codueon.boostUp.global.file.UploadFile;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
-
-import static com.codueon.boostUp.domain.lesson.entity.QLessonInfo.lessonInfo;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
 @RequiredArgsConstructor
 public class LessonDbService {
-     private final LessonRepository lessonRepository;
-     private final LessonInfoRepository lessonInfoRepository;
-     private final LanguageRepository languageRepository;
-     private final AddressRepository addressRepository;
-     private final CurriculumRepository curriculumRepository;
+    private final LessonRepository lessonRepository;
+    private final LessonInfoRepository lessonInfoRepository;
+    private final LanguageRepository languageRepository;
+    private final AddressRepository addressRepository;
+    private final CurriculumRepository curriculumRepository;
 
     /*--------------------------------------- DB Create 메서드 --------------------------------------*/
 
     /**
      * 요약 정보 프로필 사진 저장 메서드(과외 요약 저장 프로세스 - 1)
+     *
      * @param profileImage 프로필 사진 정보
-     * @param lesson 과외 요약 정보
+     * @param lesson       과외 요약 정보
      * @author Quartz614
      */
-    public void saveProfileImage(ProfileImage profileImage, Lesson lesson) {
-        lesson.addProfileImage(profileImage);
+    public void saveProfileImage(List<MultipartFile> profileImage, Lesson lesson) {
+        lesson.addProfileImage((ProfileImage) profileImage);
+    }
+
+    public void saveLesson(Lesson lesson) {
+        lessonRepository.save(lesson);
     }
 
     /**
      * 과외 요약 정보 사용 언어 저장 메서드(과외 요약 저장 프로세스 - 2)
+     *
      * @param languageList 사용 언어 정보 리스트
-     * @param lesson 과외 요약 정보
+     * @param lesson       과외 요약 정보
      * @author Quartz614
      */
     public void addLanguageList(List<Long> languageList, Lesson lesson) {
@@ -57,8 +63,9 @@ public class LessonDbService {
 
     /**
      * 과외 요약 정보 가능 지역 저장 메서드(과외 요약 저장 프로세스 - 3)
+     *
      * @param addressList 가능 지역 정보 리스트
-     * @param lesson 과외 요약 정보
+     * @param lesson      과외 요약 정보
      * @author Quartz614
      */
     public void addAddressList(List<Long> addressList, Lesson lesson) {
@@ -75,6 +82,7 @@ public class LessonDbService {
 
     /**
      * 과외 요약 정보 저장 메서드(과외 요약 저장 프로세스 - 4)
+     *
      * @param lesson 과외 요약 정보
      * @return Lesson
      * @author Quartz614
@@ -85,8 +93,9 @@ public class LessonDbService {
 
     /**
      * 과외 상세 정보 경력 사진 저장 메서드(과외 상세 저장 프로세스 - 1)
+     *
      * @param careerImages 경력 사진 정보 리스트
-     * @param lessonInfo 과외 상세 정보
+     * @param lessonInfo   과외 상세 정보
      * @author Quartz614
      */
     public void saveCareerImage(List<UploadFile> careerImages, LessonInfo lessonInfo) {
@@ -103,6 +112,7 @@ public class LessonDbService {
 
     /**
      * 과외 상세 정보 저장 메서드(과외 상세 저장 프로세스 - 2)
+     *
      * @param lessonInfo 과외 상세 정보
      * @author Quartz614
      */
@@ -112,6 +122,7 @@ public class LessonDbService {
 
     /**
      * 과외 커리큘럼 정보 저장 메서드
+     *
      * @param curriculum 커리큘럼 정보
      * @author Quartz614
      */
@@ -123,6 +134,7 @@ public class LessonDbService {
 
     /**
      * 사용 언어 정보 조회 메서드
+     *
      * @param languageId 사용 언어 식별자
      * @return Language
      * @author Quartz614
@@ -134,6 +146,7 @@ public class LessonDbService {
 
     /**
      * 주소 정보 조회 메서드
+     *
      * @param addressId 주소 식별자
      * @return Address
      * @author Quartz614
@@ -145,6 +158,7 @@ public class LessonDbService {
 
     /**
      * 과외 요약 정보 조회 메서드
+     *
      * @param lessonId 과외 식별자
      * @return Lesson
      * @author Quartz614
@@ -167,6 +181,7 @@ public class LessonDbService {
 
     /**
      * 과외 상세 정보 조회 메서드
+     *
      * @param lessonId 과외 식별자
      * @return LessonInfo
      * @author mozzi327
@@ -178,6 +193,7 @@ public class LessonDbService {
 
     /**
      * 과외 커리큘럼 정보 조회 메서드
+     *
      * @param lessonId 과외 식별자
      * @return Curriculum
      * @author mozzi327
@@ -189,7 +205,29 @@ public class LessonDbService {
 
     /*--------------------------------------- DB Update 메서드 --------------------------------------*/
 
+    public List<LessonLanguage> makeLanguageList(List<Long> languageList) {
+        return languageList.stream().map(
+                s -> {
+                    Language language = findIfExistLanguage(s);
+                    return LessonLanguage.builder()
+                            .languages(language)
+                            .build();
 
+                }
+        ).collect(Collectors.toList());
+    }
+
+    public List<LessonAddress> makeAddressList(List<Long> addressList) {
+        return addressList.stream().map(
+                s -> {
+                    Address address = findIfExistAddress(s);
+                    return LessonAddress.builder()
+                            .address(address)
+                            .build();
+
+                }
+        ).collect(Collectors.toList());
+    }
 
 
 
@@ -203,7 +241,7 @@ public class LessonDbService {
         lessonRepository.delete(lesson);
     }
 
-
-
-
+    public void delete(Long lessonId) {
+        lessonRepository.deleteById(lessonId);
+    }
 }
