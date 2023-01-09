@@ -1,4 +1,4 @@
-import AuthBtn from "components/reuse/AuthBtn";
+import AuthBtn from "components/reuse/btn/AuthBtn";
 import { ErrorMessage } from "@hookform/error-message";
 import { Dispatch, useState, SetStateAction } from "react";
 import { useForm } from "react-hook-form";

@@ -1,4 +1,4 @@
-import AuthContainer from "components/reuse/AuthContainer";
+import AuthContainer from "components/reuse/container/AuthContainer";
 import ResetPwAuth from "components/auth/ResetPwAuth";
 import ResetPwSet from "components/auth/ResetPwSet";
 import { useState } from "react";
