@@ -205,6 +205,12 @@ public class LessonDbService {
 
     /*--------------------------------------- DB Update 메서드 --------------------------------------*/
 
+    /**
+     * 언어 목록 생성 메서드
+     * @param languageList 언어 목록
+     * @return Language 언어
+     * @author Quartz614
+     */
     public List<LessonLanguage> makeLanguageList(List<Long> languageList) {
         return languageList.stream().map(
                 s -> {
@@ -217,6 +223,12 @@ public class LessonDbService {
         ).collect(Collectors.toList());
     }
 
+    /**
+     * 주소 목록 생성 메서드
+     * @param addressList 주소 목록
+     * @return Address 주소
+     * @author Quartz614
+     */
     public List<LessonAddress> makeAddressList(List<Long> addressList) {
         return addressList.stream().map(
                 s -> {
@@ -229,6 +241,12 @@ public class LessonDbService {
         ).collect(Collectors.toList());
     }
 
+    /**
+     * 경력 이미지 수정 메서드
+     * @param careerImages 경력 이미지
+     * @param lessonInfo 과외 상세 정보
+     * @author Quartz614
+     */
     public void editCareerImage(List<UploadFile> careerImages, LessonInfo lessonInfo) {
         careerImages.forEach(careerImage -> {
             CareerImage createCareerImage = CareerImage.builder()
@@ -239,6 +257,15 @@ public class LessonDbService {
                     .build();
             lessonInfo.addCareerImage(createCareerImage);
         });
+    }
+
+    /**
+     * 커리큘럼 수정 메서드
+     * @param curriculum 커리큘럼
+     * @author Quartz614
+     */
+    public void editCurriculum(Curriculum curriculum) {
+        curriculumRepository.save(curriculum);
     }
 
     /*--------------------------------------- DB Delete 메서드 --------------------------------------*/
