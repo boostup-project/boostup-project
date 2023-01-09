@@ -1,6 +1,7 @@
 package com.codueon.boostUp.domain.lesson.entity;
 
 import com.codueon.boostUp.domain.lesson.dto.PostLesson;
+import com.codueon.boostUp.domain.lesson.dto.PostLessonDetailEdit;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -25,7 +26,7 @@ public class LessonInfo {
     private String favoriteLocation;
     private String personality;
     private String costs;
-    @OneToMany(mappedBy = "lessonInfo", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "lessonInfo", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CareerImage> careerImages = new ArrayList<>();
 
     @Builder
@@ -59,5 +60,14 @@ public class LessonInfo {
                 .personality(postLesson.getPersonality())
                 .costs(postLesson.getDetailCost())
                 .build();
+    }
+
+    public void editLessonDetail(PostLessonDetailEdit postLessonDetailEdit) {
+        this.introduction = postLessonDetailEdit.getIntroduction();
+        this.companies = postLessonDetailEdit.getDetailCompany();
+        this.costs = postLessonDetailEdit.getDetailCost();
+        this.personality = postLessonDetailEdit.getPersonality();
+        this.favoriteLocation = postLessonDetailEdit.getDetailLoacation();
+        this.careerImages.clear();
     }
 }

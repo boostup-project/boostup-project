@@ -9,14 +9,14 @@ import lombok.NoArgsConstructor;
 public class PostLessonDetailEdit {
     private String introduction;
     private String detailCompany;
-    private Integer detailCost;
+    private String detailCost;
     private String personality;
     private String detailLoacation;
 
     @Builder
     public PostLessonDetailEdit(String introduction,
                                 String detailCompany,
-                                Integer detailCost,
+                                String detailCost,
                                 String personality,
                                 String detailLoacation) {
         this.introduction = introduction;
