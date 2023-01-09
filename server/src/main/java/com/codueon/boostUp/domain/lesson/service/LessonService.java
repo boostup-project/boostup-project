@@ -117,18 +117,33 @@ public class LessonService {
      */
 
 
-    public void updateLesson(Long lessonId,
-                             PostLessonInfoEdit postLessonInfoEdit,
-                             Long memberId,
-                             MultipartFile profileImage) throws Exception {
+    public void updateLessonInfo(Long lessonId,
+                                 PostLessonInfoEdit postLessonInfoEdit,
+                                 Long memberId,
+                                 MultipartFile profileImage) throws Exception {
         Member findMember = memberDbService.ifExistsReturnMember(memberId);
         Lesson updateLesson = lessonDbService.ifExistsReturnLesson(lessonId);
 //        if (!Objects.equals(updateLesson.getMemberId(), findMember)) {
 //            throw new BusinessLogicException(ExceptionCode.UNAUTHORIZED_FOR_UPDATE);
 //        }
 
+        updateLesson.editLessonInfo(postLessonInfoEdit);
 
- "refactor: 과외 요약 정보 수정 구현 완료"
+        List<Long> languageList = postLessonInfoEdit.getLanguages();
 
+        List<Long> addressList = postLessonInfoEdit.getAddresses();
+
+        lessonDbService.addLanguageList(languageList, updateLesson);
+        lessonDbService.addAddressList(addressList, updateLesson);
+
+        UploadFile uploadFile = fileHandler.uploadFile(profileImage);
+        ProfileImage editProfileImage = ProfileImage.builder()
+                .originFileName(uploadFile.getOriginFileName())
+                .fileName(uploadFile.getFileName())
+                .filePath(uploadFile.getFilePath())
+                .fileSize(uploadFile.getFileSize())
+                .build();
+        updateLesson.addProfileImage(editProfileImage);
+        lessonDbService.saveLesson(updateLesson);
     }
 }
