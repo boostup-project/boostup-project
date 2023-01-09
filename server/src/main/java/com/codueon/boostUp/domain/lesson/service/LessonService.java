@@ -15,6 +15,7 @@ import javax.transaction.Transactional;
 import java.util.List;
 
 
+
 @Service
 @RequiredArgsConstructor
 public class LessonService {
@@ -115,7 +116,8 @@ public class LessonService {
      * @param profileImage      회원 프로필 이미지
      */
 
-    public void updateLessonInfo(Long lessonId,
+
+    public void updateLesson(Long lessonId,
                              PostLessonInfoEdit postLessonInfoEdit,
                              Long memberId,
                              MultipartFile profileImage) throws Exception {
@@ -125,23 +127,8 @@ public class LessonService {
 //            throw new BusinessLogicException(ExceptionCode.UNAUTHORIZED_FOR_UPDATE);
 //        }
 
-        updateLesson.editLessonInfo(postLessonInfoEdit);
 
-        List<Long> languageList = postLessonInfoEdit.getLanguages();
+ "refactor: 과외 요약 정보 수정 구현 완료"
 
-        List<Long> addressList = postLessonInfoEdit.getAddresses();
-
-        lessonDbService.addLanguageList(languageList, updateLesson);
-        lessonDbService.addAddressList(addressList, updateLesson);
-
-        UploadFile uploadFile = fileHandler.uploadFile(profileImage);
-        ProfileImage editProfileImage = ProfileImage.builder()
-                .originFileName(uploadFile.getOriginFileName())
-                .fileName(uploadFile.getFileName())
-                .filePath(uploadFile.getFilePath())
-                .fileSize(uploadFile.getFileSize())
-                .build();
-        updateLesson.addProfileImage(editProfileImage);
-        lessonDbService.saveLesson(updateLesson);
     }
 }

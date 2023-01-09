@@ -19,6 +19,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 import static com.codueon.boostUp.domain.suggest.entity.Suggest.SuggestStatus.END_OF_LESSON;
 import static com.codueon.boostUp.domain.suggest.utils.PayConstants.ORDER_APPROVED;
 import static com.codueon.boostUp.domain.suggest.utils.SuggestConstants.*;
@@ -43,7 +45,7 @@ public class SuggestService {
     @Transactional
     public void createSuggest(PostSuggest post, Long lessonId, Long memberId) {
 
-//        Lesson findLesson = lessonDbService.ifExistsReturnLesson(lessonId);
+        Lesson findLesson = lessonDbService.ifExistsReturnLesson(lessonId);
 
 //        if(memberId.equals(findLesson.getMemberId())) {
 //            throw new BusinessLogicException(ExceptionCode.TUTOR_CANNOT_RESERVATION);
@@ -53,7 +55,7 @@ public class SuggestService {
                 .days(post.getDays())
                 .languages(post.getLanguages())
                 .requests(post.getRequests())
-                .lessonId(lessonId)
+                .lessonId(findLesson.getId())
                 .memberId(memberId)
                 .build();
 
@@ -167,6 +169,11 @@ public class SuggestService {
         Suggest findSuggest = suggestDbService.ifExistsReturnSuggest(suggestId);
         Member findMember = memberDbService.ifExistsReturnMember(memberId);
         Lesson findLesson = lessonDbService.ifExistsReturnLesson(findSuggest.getLessonId());
+
+        Optional<PaymentInfo> findPaymentInfo = suggestDbService.isPaymentInfo(suggestId);
+        if (findPaymentInfo.isPresent()) {
+            suggestDbService.deletePaymentInfo(findPaymentInfo.get());
+        }
 
         KakaoPayHeader headers = feignService.setHeaders();
         ReadyToPaymentInfo params = feignService.setReadyParams(requestUrl, findSuggest, findMember, findLesson);

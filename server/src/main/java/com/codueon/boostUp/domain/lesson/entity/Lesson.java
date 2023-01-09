@@ -73,6 +73,7 @@ public class Lesson {
         if (lessonAddress.getLesson() != this) lessonAddress.addLesson(this);
         this.lessonAddresses.add(lessonAddress);
     }
+
     public void editLessonInfo(PostLessonInfoEdit postLessonInfoEdit) {
         this.title = postLessonInfoEdit.getTitle();
         this.company = postLessonInfoEdit.getCompany();
@@ -80,5 +81,6 @@ public class Lesson {
         this.cost = postLessonInfoEdit.getCost();
         this.lessonAddresses.clear();
         this.lessonLanguages.clear();
+
     }
 }
