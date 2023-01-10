@@ -97,7 +97,7 @@ public class LessonService {
         Lesson lesson = Lesson.toEntity(postLesson, member.getName(), member.getId());
 
         UploadFile uploadFile = fileHandler.uploadFile(profileImage);
-        ProfileImage createProfileImage = ProfileImage.toEntity(profileImage, uploadFile.getFilePath());
+        ProfileImage createProfileImage = ProfileImage.toEntity(uploadFile, uploadFile.getFilePath());
 
         createProfileImage.addLesson(lesson);
         lesson.addProfileImage(createProfileImage);
@@ -125,7 +125,7 @@ public class LessonService {
 
         String dir = "profileImage";
         UploadFile uploadFile = awsS3Service.uploadfile(profileImage, dir);
-        ProfileImage createProfileImage = ProfileImage.toEntity(profileImage, uploadFile.getFilePath());
+        ProfileImage createProfileImage = ProfileImage.toEntity(uploadFile, uploadFile.getFilePath());
 
         createProfileImage.addLesson(lesson);
         lesson.addProfileImage(createProfileImage);
@@ -229,6 +229,47 @@ public class LessonService {
         lessonDbService.saveLesson(updateLesson);
     }
 
+    /**
+     * 과외 요약 정보 수정 메서드 (S3)
+     *
+     * @param lessonId 과외 식별자
+     * @param postLessonInfoEdit 수정 과외 요약정보
+     * @param memberId 회원 식별자
+     * @param profileImage 회원 프로필 이미지
+     * @author Quartz614
+     */
+    @SneakyThrows
+    public void updateLessonInfoS3(Long lessonId,
+                                 PostLessonInfoEdit postLessonInfoEdit,
+                                 Long memberId,
+                                 MultipartFile profileImage) {
+        Member findMember = memberDbService.ifExistsReturnMember(memberId);
+        Lesson updateLesson = lessonDbService.ifExistsReturnLesson(lessonId);
+//        if (!Objects.equals(updateLesson.getMemberId(), findMember)) {
+//            throw new BusinessLogicException(ExceptionCode.UNAUTHORIZED_FOR_UPDATE);
+//        }
+        String dir = "profileImage";
+        updateLesson.editLessonInfo(postLessonInfoEdit);
+        ProfileImage profileImage1 = updateLesson.getProfileImage();
+
+        awsS3Service.delete(profileImage1.getFileName(),dir);
+
+        List<Long> languageList = postLessonInfoEdit.getLanguages();
+        List<Long> addressList = postLessonInfoEdit.getAddresses();
+
+        lessonDbService.addLanguageList(languageList, updateLesson);
+        lessonDbService.addAddressList(addressList, updateLesson);
+
+        UploadFile uploadFile = awsS3Service.uploadfile(profileImage, dir);
+        ProfileImage editProfileImage = ProfileImage.builder()
+                .originFileName(uploadFile.getOriginFileName())
+                .fileName(uploadFile.getFileName())
+                .filePath(uploadFile.getFilePath())
+                .fileSize(uploadFile.getFileSize())
+                .build();
+        updateLesson.addProfileImage(editProfileImage);
+        lessonDbService.saveLesson(updateLesson);
+    }
     /**
      * 과외 상세 정보 수정 메서드(로컬)
      * @param lessonId 과외 식별자

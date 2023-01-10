@@ -55,9 +55,11 @@ public class LessonController {
                                        @RequestPart(value = "data") PostLessonInfoEdit postLessonInfoEdit,
                                        @RequestPart(value = "profileImage") MultipartFile profileImage) {
         Long memberId = 1L;
+        /** 로컬 환경 */
+//       lessonService.updateLessonInfo(lessonId, postLessonInfoEdit, memberId, profileImage);
 
-       lessonService.updateLessonInfo(lessonId, postLessonInfoEdit, memberId, profileImage);
-
+        /** S3 환경 */
+        lessonService.updateLessonInfoS3(lessonId, postLessonInfoEdit, memberId, profileImage);
         return ResponseEntity.ok().build();
     }
 
