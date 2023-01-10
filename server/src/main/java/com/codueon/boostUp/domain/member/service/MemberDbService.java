@@ -1,6 +1,7 @@
 package com.codueon.boostUp.domain.member.service;
 
 import com.codueon.boostUp.domain.member.dto.PostAttemptFindPassword;
+import com.codueon.boostUp.domain.member.dto.PostChangePassword;
 import com.codueon.boostUp.domain.member.entity.Member;
 import com.codueon.boostUp.domain.member.exception.AuthException;
 import com.codueon.boostUp.domain.member.repository.MemberRepository;
@@ -109,5 +110,36 @@ public class MemberDbService {
         boolean isRightMember = memberRepository
                 .existsMemberByNameAndEmail(isRightUser.getName(), isRightUser.getEmail());
         if (!isRightMember) throw new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND);
+    }
+
+    /**
+     * 사용자 비밀번호 변경 메서드
+     * @param changePassword 변경할 비밀번호 정보
+     * @author mozzi327
+     */
+    public void changingPassword(PostChangePassword changePassword) {
+        Member findMember = ifExistsMemberByEmail(changePassword.getEmail());
+        findMember.editNewPassword(encodingPassword(changePassword.getPassword()));
+        saveMember(findMember);
+    }
+
+    /**
+     * 이메일 중복 여부 조회 메서드
+     * @param email 이메일 정보
+     * @author mozzi327
+     */
+    public void checkExistEmail(String email) {
+        if(memberRepository.existsByEmail(email))
+            throw new BusinessLogicException(ExceptionCode.EMAIL_ALREADY_EXIST);
+    }
+
+    /**
+     * 닉네임 중복 여부 조회 메서드
+     * @param name 닉네임 정보
+     * @author mozzi327
+     */
+    public void checkExistName(String name) {
+        if (memberRepository.existsByName(name))
+            throw new BusinessLogicException(ExceptionCode.NICKNAME_ALREADY_EXIST);
     }
 }

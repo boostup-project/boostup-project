@@ -19,7 +19,7 @@ public class MemberImage {
     private String filePath;
     private Long fileSize;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "MEMBER_ID")
     private Member member;
 
