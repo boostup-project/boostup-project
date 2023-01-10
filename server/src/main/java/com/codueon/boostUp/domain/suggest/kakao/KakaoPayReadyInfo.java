@@ -1,8 +1,9 @@
-package com.codueon.boostUp.domain.suggest.pay;
+package com.codueon.boostUp.domain.suggest.kakao;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,9 +11,11 @@ import lombok.NoArgsConstructor;
 import java.util.Date;
 
 @Getter
+@Builder
 @NoArgsConstructor
+@AllArgsConstructor
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-public class PayReadyInfo {
+public class KakaoPayReadyInfo {
 
     @JsonProperty("partner_order_id")
     private String partnerOrderId;
@@ -41,24 +44,4 @@ public class PayReadyInfo {
     @JsonProperty("created_at")
     private Date createdAt;
 
-    @Builder
-    public PayReadyInfo(String partnerOrderId,
-                        String partnerUserId,
-                        String itemName,
-                        Integer quantity,
-                        Integer totalAmount,
-                        Integer taxFreeAmount,
-                        String tid,
-                        String nextRedirectPcUrl,
-                        Date createdAt) {
-        this.partnerOrderId = partnerOrderId;
-        this.partnerUserId = partnerUserId;
-        this.itemName = itemName;
-        this.quantity = quantity;
-        this.totalAmount = totalAmount;
-        this.taxFreeAmount = taxFreeAmount;
-        this.tid = tid;
-        this.nextRedirectPcUrl = nextRedirectPcUrl;
-        this.createdAt = createdAt;
-    }
 }

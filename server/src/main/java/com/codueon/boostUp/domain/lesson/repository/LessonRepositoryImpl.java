@@ -211,7 +211,7 @@ public class LessonRepositoryImpl implements CustomLessonRepository {
             builder.and(lessonLanguage.languages.id.eq(postSearchLesson.getLanguage()));
 
         if (postSearchLesson.getName() != null)
-            builder.and(lesson.name.eq(postSearchLesson.getName()));
+            builder.and(lesson.name.contains(postSearchLesson.getName()));
 
         if (postSearchLesson.getCareer() != null)
             builder.and(lesson.career.goe(postSearchLesson.getCareer()));

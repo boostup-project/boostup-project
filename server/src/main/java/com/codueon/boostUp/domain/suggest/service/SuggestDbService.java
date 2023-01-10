@@ -1,6 +1,7 @@
 package com.codueon.boostUp.domain.suggest.service;
 
 import com.codueon.boostUp.domain.suggest.dto.GetStudentSuggest;
+import com.codueon.boostUp.domain.suggest.dto.GetSuggestInfo;
 import com.codueon.boostUp.domain.suggest.dto.GetTutorSuggest;
 import com.codueon.boostUp.domain.suggest.entity.PaymentInfo;
 import com.codueon.boostUp.domain.suggest.entity.Reason;
@@ -15,6 +16,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -126,4 +128,13 @@ public class SuggestDbService {
         return suggestRepository.getStudentSuggestsOnMyPage(memberId, pageable);
     }
 
+    /**
+     * 과외에 대한 과외 신청 내역 전체 조회 메서드
+     * @param lessonId 과외 식별자
+     * @return Lesson
+     * @author Quartz614
+     */
+    public List<Suggest> findAllSuggestForLesson(Long lessonId) {
+        return suggestRepository.findAllById(lessonId);
+    }
 }

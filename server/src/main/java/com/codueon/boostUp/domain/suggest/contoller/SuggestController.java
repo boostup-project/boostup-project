@@ -33,7 +33,7 @@ public class SuggestController {
      * @return ResponseEntity
      * @author LeeGoh
      */
-    @PostMapping("/lesson/{lesson-id}/suggest")
+    @PostMapping("/suggest/lesson/{lesson-id}")
     public ResponseEntity<?> createSuggest(@PathVariable("lesson-id") Long lessonId,
                                       @RequestBody @Valid PostSuggest post) {
 
@@ -49,7 +49,7 @@ public class SuggestController {
      * @return ResponseEntity
      * @author LeeGoh
      */
-    @PostMapping("/lesson/suggest/{suggest-id}/accept")
+    @PostMapping("/suggest/{suggest-id}/accept")
     public ResponseEntity acceptSuggest(@PathVariable("suggest-id") Long suggestId,
                                         @RequestBody PostPaymentUrl post) {
 
@@ -65,7 +65,7 @@ public class SuggestController {
      * @return ResponseEntity
      * @author LeeGoh
      */
-    @PostMapping("/lesson/suggest/{suggest-id}/decline")
+    @PostMapping("/suggest/{suggest-id}/decline")
     public ResponseEntity declineSuggest(@PathVariable("suggest-id") Long suggestId,
                                          @RequestBody PostReason postReason) {
 
@@ -80,7 +80,7 @@ public class SuggestController {
      * @return ResponseEntity
      * @author LeeGoh
      */
-    @GetMapping("/lesson/suggest/{suggest-id}/suggest-info")
+    @GetMapping("/suggest/{suggest-id}/suggest-info")
     public ResponseEntity getSuggestInfo(@PathVariable("suggest-id") Long suggestId) {
 
         Long memberId = 1L;
@@ -88,13 +88,13 @@ public class SuggestController {
     }
 
     /**
-     * 신청 프로세스 4 결제 URL 요청 컨트롤러 메서드
+     * 신청 프로세스 4-1 결제 URL 요청 컨트롤러 메서드 Kakao
      * @param suggestId 신청 식별자
      * @return Message
      * @author LeeGoh
      */
-    @GetMapping("/lesson/suggest/{suggest-id}/payment")
-    public ResponseEntity<Message<?>> orderPayment(@PathVariable("suggest-id") Long suggestId,
+    @GetMapping("/suggest/{suggest-id}/kakao/payment")
+    public ResponseEntity<Message<?>> orderKakaoPayment(@PathVariable("suggest-id") Long suggestId,
                                        HttpServletRequest request) {
 
         Long memberId = 1L;
@@ -105,40 +105,83 @@ public class SuggestController {
     }
 
     /**
-     * 신청 프로세스 5 결제 성공 컨트롤러 메서드
+     * 신청 프로세스 4-2 결제 URL 요청 컨트롤러 메서드 Toss
+     * @param suggestId 신청 식별자
+     * @return Message
+     * @author LeeGoh
+     */
+    @GetMapping("/suggest/{suggest-id}/toss/payment/{payment-id}")
+    public ResponseEntity<Message<?>> orderTossPayment(@PathVariable("suggest-id") Long suggestId,
+                                                       @PathVariable("payment-id") int paymentId,
+                                                       HttpServletRequest request) {
+
+        Long memberId = 1L;
+        String requestUrl = request.getRequestURL().toString().replace(request.getRequestURI(), "");
+        Message<?> message = suggestService.getTossPayUrl(suggestId, requestUrl, paymentId);
+        if (message.getData() == null) suggestService.getFailedPayMessage();
+        return ResponseEntity.ok().body(message);
+    }
+
+    /**
+     * 신청 프로세스 5-1 결제 성공 컨트롤러 메서드 Kakao
      * @param suggestId 신청 식별자
      * @param pgToken Payment Gateway Token
      * @return Message
      * @author LeeGoh
      */
-    @GetMapping("/api/suggest/{suggest-id}/completed")
-    public ResponseEntity<Message<?>> successPayment(@PathVariable("suggest-id") Long suggestId,
-                                                     @RequestParam("pg_token") String pgToken) {
+    @GetMapping("/api/suggest/{suggest-id}/kakao/success")
+    public ResponseEntity<Message<?>> successKakaoPayment(@PathVariable("suggest-id") Long suggestId,
+                                                          @RequestParam("pg_token") String pgToken) {
 
-        Message<?> message = suggestService.getSuccessPaymentInfo(suggestId, pgToken);
+        Message<?> message = suggestService.getSuccessKakaoPaymentInfo(suggestId, pgToken);
         if (message.getData() == null) suggestService.getFailedPayMessage();
         return ResponseEntity.ok().build();
     }
 
     /**
-     * 신청 프로세스 6 결제 취소 컨트롤러 메서드
+     * 신청 프로세스 5-2 결제 성공 컨트롤러 메서드 Toss
+     * @param suggestId 신청 식별자
+     * @return Message
+     * @author LeeGoh
+     */
+    @GetMapping("/api/suggest/{suggest-id}/toss/success")
+    public ResponseEntity<Message<?>> successTossPayment(@PathVariable("suggest-id") Long suggestId) {
+
+        Message<?> message = suggestService.getSuccessTossPaymentInfo(suggestId);
+        if (message.getData() == null) suggestService.getFailedPayMessage();
+        return ResponseEntity.ok().build();
+    }
+
+    /**
+     * 신청 프로세스 6 결제 취소 컨트롤러 메서드 Kakao
      * @param suggestId 신청 식별자
      * @return String
      * @author LeeGoh
      */
-    @GetMapping("/api/suggest/{suggest-id}/cancel")
-    public ResponseEntity<String> cancelPayment(@PathVariable("suggest-id") Long suggestId) {
+    @GetMapping("/api/suggest/{suggest-id}/kakao/cancellation")
+    public ResponseEntity<String> cancelKakaoPayment(@PathVariable("suggest-id") Long suggestId) {
         return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(CANCELED_PAY_MESSAGE);
     }
 
     /**
-     * 신청 프로세스 7 결제 실패 컨트롤러 메서드
+     * 신청 프로세스 7-1 결제 실패 컨트롤러 메서드 Kakao
      * @param suggestId 신청 식별자
      * @return String
      * @author LeeGoh
      */
-    @GetMapping("/api/suggest/{suggest-id}/fail")
-    public ResponseEntity<String> failedPayment(@PathVariable("suggest-id") Long suggestId) {
+    @GetMapping("/api/suggest/{suggest-id}/kakao/failure")
+    public ResponseEntity<String> failedKakaoPayment(@PathVariable("suggest-id") Long suggestId) {
+        return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(FAILED_PAY_MESSAGE);
+    }
+
+    /**
+     * 신청 프로세스 7-2 결제 실패 컨트롤러 메서드 Toss
+     * @param suggestId 신청 식별자
+     * @return String
+     * @author LeeGoh
+     */
+    @GetMapping("/api/suggest/{suggest-id}/toss/failure")
+    public ResponseEntity<String> failedTossPayment(@PathVariable("suggest-id") Long suggestId) {
         return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(FAILED_PAY_MESSAGE);
     }
 
@@ -148,7 +191,7 @@ public class SuggestController {
      * @return ResponseEntity
      * @author LeeGoh
      */
-    @GetMapping("/lesson/suggest/{suggest-id}/done")
+    @GetMapping("/suggest/{suggest-id}/done")
     public ResponseEntity endOfLesson(@PathVariable("suggest-id") Long suggestId) {
 
         suggestService.setSuggestStatusAndEndTime(suggestId);
@@ -163,10 +206,10 @@ public class SuggestController {
      * @return MultiResponseDto
      * @author LeeGoh
      */
-    @GetMapping("lesson/{lesson-id}/suggest/tutor/tab/{tab-id}")
+    @GetMapping("/suggest/lesson/{lesson-id}/tutor/tab/{tab-id}")
     public ResponseEntity<MultiResponseDto<?>> getTutorSuggest(@PathVariable("lesson-id") Long lessonId,
-                                                                 @PathVariable("tab-id") int tabId,
-                                                                 Pageable pageable) {
+                                                               @PathVariable("tab-id") int tabId,
+                                                               Pageable pageable) {
 
         Long memberId = 1L;
         Page<GetTutorSuggest> suggestions = suggestDbService.getTutorSuggestsOnMyPage(lessonId, memberId, tabId, pageable);
