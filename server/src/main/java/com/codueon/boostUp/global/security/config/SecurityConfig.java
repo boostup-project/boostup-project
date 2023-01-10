@@ -1,8 +1,9 @@
 package com.codueon.boostUp.global.security.config;
 
-import com.codueon.boostUp.global.security.filter.JwtAuthenticationFilter;
+import com.codueon.boostUp.global.security.filter.JwtVerificationFilter;
 import com.codueon.boostUp.global.security.provider.JwtAuthenticationProvider;
 import com.codueon.boostUp.global.security.utils.JwtTokenUtils;
+import com.codueon.boostUp.global.security.utils.RedisUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,6 +15,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.csrf.CsrfFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
@@ -27,6 +29,7 @@ import java.util.Arrays;
 @RequiredArgsConstructor
 public class SecurityConfig {
     private final JwtTokenUtils jwtTokenUtils;
+    private final RedisUtils redisUtils;
     private final JwtAuthenticationProvider jwtAuthenticationProvider;
 
     @Bean
@@ -75,15 +78,19 @@ public class SecurityConfig {
         return source;
     }
 
+    /**
+     * 커스텀 필터 클래스
+     *
+     */
     public class CustomFilterConfig extends AbstractHttpConfigurer<CustomFilterConfig, HttpSecurity> {
         @Override
-        public void configure(HttpSecurity builder) throws Exception {
+        public void configure(HttpSecurity builder) {
             AuthenticationManager authenticationManager = builder.getSharedObject(AuthenticationManager.class);
 
-            JwtAuthenticationFilter jwtAuthenticationFilter = new JwtAuthenticationFilter(authenticationManager, jwtTokenUtils);
+            JwtVerificationFilter jwtVerificationFilter = new JwtVerificationFilter(authenticationManager, jwtTokenUtils, redisUtils);
 
             builder
-                    .addFilter(jwtAuthenticationFilter)
+                    .addFilterBefore(jwtVerificationFilter, UsernamePasswordAuthenticationFilter.class)
                     .authenticationProvider(jwtAuthenticationProvider);
         }
     }
