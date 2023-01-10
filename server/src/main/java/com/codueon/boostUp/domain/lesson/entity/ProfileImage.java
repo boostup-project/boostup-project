@@ -1,5 +1,6 @@
 package com.codueon.boostUp.domain.lesson.entity;
 
+import com.codueon.boostUp.global.file.UploadFile;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -38,12 +39,12 @@ public class ProfileImage {
         this.fileSize = fileSize;
     }
 
-    public static ProfileImage toEntity(MultipartFile profileImage, String filePath) {
+    public static ProfileImage toEntity(UploadFile uploadFile, String filePath) {
         return ProfileImage.builder()
-                .originFileName(profileImage.getOriginalFilename())
-                .fileName(profileImage.getOriginalFilename())
+                .originFileName(uploadFile.getOriginFileName())
+                .fileName(uploadFile.getFileName())
                 .filePath(filePath)
-                .fileSize(profileImage.getSize())
+                .fileSize(uploadFile.getFileSize())
                 .build();
     }
 

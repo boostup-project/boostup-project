@@ -4,6 +4,7 @@ import com.codueon.boostUp.domain.lesson.entity.*;
 import com.codueon.boostUp.domain.lesson.repository.*;
 import com.codueon.boostUp.global.exception.BusinessLogicException;
 import com.codueon.boostUp.global.exception.ExceptionCode;
+import com.codueon.boostUp.global.file.AwsS3Service;
 import com.codueon.boostUp.global.file.UploadFile;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -24,6 +25,7 @@ public class LessonDbService {
     private final LanguageRepository languageRepository;
     private final AddressRepository addressRepository;
     private final CurriculumRepository curriculumRepository;
+    private final AwsS3Service awsS3Service;
 
     /*--------------------------------------- DB Create 메서드 --------------------------------------*/
 
