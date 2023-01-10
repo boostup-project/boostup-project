@@ -1,5 +1,6 @@
 package com.codueon.boostUp.domain.member.controller;
 
+import com.codueon.boostUp.domain.member.dto.PostAttemptFindPassword;
 import com.codueon.boostUp.domain.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -32,5 +33,16 @@ public class MemberController {
     public ResponseEntity deleteMember() {
         // TODO : 시큐리티 적용 시 Authentication 객체 추가 요
         return ResponseEntity.noContent().build();
+    }
+
+    /**
+     * 사용자 본인 확인 컨트롤러 메서드
+     * @param isRightUser 사용자 본인 확인 정보
+     * @author mozzi327
+     */
+    @PostMapping("/find/password")
+    public ResponseEntity postIsRightMember(@RequestBody PostAttemptFindPassword isRightUser) {
+        memberService.isRightMember(isRightUser);
+        return ResponseEntity.ok().build();
     }
 }
