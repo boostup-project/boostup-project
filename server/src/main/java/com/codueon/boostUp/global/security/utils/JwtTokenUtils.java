@@ -40,7 +40,7 @@ public class JwtTokenUtils {
     }
 
     /**
-     * 엑세스 토큰 발급
+     * 엑세스 토큰 발급 메서드
      *
      * @param member
      * @return
@@ -48,6 +48,7 @@ public class JwtTokenUtils {
     public String generateAccessToken(Member member) {
         Map<String, Object> claims = new HashMap<>();
         claims.put("email", member.getEmail());
+        claims.put("roles", member.getRoles());
 
         String subject = member.getEmail();
         Date expiration = getTokenExpiration(getAccessTokenExpirationsMinutes());
@@ -65,7 +66,7 @@ public class JwtTokenUtils {
     }
 
     /**
-     * 리프레시 토큰 발급
+     * 리프레시 토큰 발급 메서드
      *
      * @param member
      * @return
@@ -122,7 +123,7 @@ public class JwtTokenUtils {
     }
 
     /**
-     * 검증 후 JWS 반환
+     * 검증 후 JWS 반환 메서드
      *
      * @param jws
      * @return
@@ -136,6 +137,12 @@ public class JwtTokenUtils {
                 .build().parseClaimsJwt(jws).getBody();
     }
 
+    /**
+     * 엑세스 토큰의 Prefix(Bearer )제거 메서드
+     *
+     * @param accessToken
+     * @return
+     */
     public String parseAccessToken(String accessToken) {
         if(accessToken.startsWith(BEARER))
             return accessToken.split(" ")[1];

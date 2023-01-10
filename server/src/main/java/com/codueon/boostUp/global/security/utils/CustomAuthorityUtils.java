@@ -26,6 +26,13 @@ public class CustomAuthorityUtils {
         return USER_ROLES;
     }
 
+
+    /**
+     * DB에 저장된 Role을 기반으로 권한 정보 생성
+     *
+     * @param roles
+     * @return
+     */
     public List<GrantedAuthority> createAuthorities(List<String> roles) {
         List<GrantedAuthority> authorities = roles.stream()
                 .map(role -> new SimpleGrantedAuthority("ROLE_" + role))
@@ -33,6 +40,12 @@ public class CustomAuthorityUtils {
         return authorities;
     }
 
+    /**
+     * 전달받은 사용자 이메일로 유저 권한 정보 생성
+     *
+     * @param email
+     * @return
+     */
     public List<String> createRoles(String email) {
         if(email.equals(adminMailAddress)) {
             return ADMIN_ROLES_STRING;
