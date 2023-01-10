@@ -17,6 +17,7 @@ import com.codueon.boostUp.domain.suggest.entity.Suggest;
 import com.codueon.boostUp.domain.suggest.service.SuggestDbService;
 import com.codueon.boostUp.global.exception.BusinessLogicException;
 import com.codueon.boostUp.global.exception.ExceptionCode;
+import com.codueon.boostUp.global.file.AwsS3Service;
 import com.codueon.boostUp.global.file.FileHandler;
 import com.codueon.boostUp.global.file.UploadFile;
 import lombok.RequiredArgsConstructor;
@@ -33,6 +34,7 @@ import java.util.List;
 public class LessonService {
     private final LessonDbService lessonDbService;
     private final FileHandler fileHandler;
+    private final AwsS3Service awsS3Service;
     private final MemberDbService memberDbService;
     private final SuggestDbService suggestDbService;
     private final ReviewService reviewService;
@@ -40,7 +42,7 @@ public class LessonService {
     private final LessonInfoRepository lessonInfoRepository;
 
     /**
-     * 과외 등록 메서드
+     * 과외 등록 메서드 (Local)
      *
      * @param postLesson   과외 등록 정보
      * @param memberId     사용자 식별자
@@ -60,7 +62,27 @@ public class LessonService {
     }
 
     /**
-     * Lesson을 저장하고 객체를 리턴하는 메서드
+     * 과외 등록 메서드 (S3)
+     *
+     * @param postLesson   과외 등록 정보
+     * @param memberId     사용자 식별자
+     * @param profileImage 프로필 사진
+     * @param careerImage  경력 사진
+     * @author Quartz614
+     */
+    @Transactional
+    public void createLessonS3(PostLesson postLesson,
+                             Long memberId,
+                             MultipartFile profileImage,
+                             List<MultipartFile> careerImage) {
+        Member findMember = memberDbService.ifExistsReturnMember(memberId);
+        Lesson savedLesson = saveLessonAndReturnLessonS3(postLesson, findMember, profileImage);
+        saveLessonInfoS3(savedLesson, postLesson, careerImage);
+        saveCurriculum(savedLesson, postLesson);
+    }
+
+    /**
+     * Lesson을 저장하고 객체를 리턴하는 메서드 (Local)
      *
      * @param postLesson   과외 등록 정보
      * @param member       사용자 식별자
@@ -87,7 +109,35 @@ public class LessonService {
     }
 
     /**
-     * 과외 디테일 정보 저장 메서드
+     * Lesson을 저장하고 객체를 리턴하는 메서드 (S3)
+     *
+     * @param postLesson   과외 등록 정보
+     * @param member       사용자 식별자
+     * @param profileImage 프로필 사진
+     * @return Lesson
+     * @author Quartz614
+     */
+    @SneakyThrows
+    private Lesson saveLessonAndReturnLessonS3(PostLesson postLesson,
+                                             Member member,
+                                             MultipartFile profileImage) {
+        Lesson lesson = Lesson.toEntity(postLesson, member.getName(), member.getId());
+
+        String dir = "profileImage";
+        UploadFile uploadFile = awsS3Service.uploadfile(profileImage, dir);
+        ProfileImage createProfileImage = ProfileImage.toEntity(profileImage, uploadFile.getFilePath());
+
+        createProfileImage.addLesson(lesson);
+        lesson.addProfileImage(createProfileImage);
+
+        lessonDbService.addLanguageList(postLesson.getLanguages(), lesson);
+        lessonDbService.addAddressList(postLesson.getAddress(), lesson);
+
+        return lessonDbService.returnSavedLesson(lesson);
+    }
+
+    /**
+     * 과외 디테일 정보 저장 메서드 (Local)
      *
      * @param savedLesson 저장 후 조회된 요약 정보
      * @param postLesson  과외 등록 정보
@@ -100,6 +150,25 @@ public class LessonService {
                                 List<MultipartFile> careerImage) {
         LessonInfo lessonInfo = LessonInfo.toEntity(savedLesson.getId(), postLesson);
         List<UploadFile> careerImages = fileHandler.parseUploadFileInfo(careerImage);
+        lessonDbService.saveCareerImage(careerImages, lessonInfo);
+        lessonDbService.saveLessonInfo(lessonInfo);
+    }
+
+    /**
+     * 과외 디테일 정보 저장 메서드 (S3)
+     *
+     * @param savedLesson 저장 후 조회된 요약 정보
+     * @param postLesson  과외 등록 정보
+     * @param careerImage 경력 사진
+     * @author Quartz614
+     */
+    @SneakyThrows
+    private void saveLessonInfoS3(Lesson savedLesson,
+                                PostLesson postLesson,
+                                List<MultipartFile> careerImage) {
+        LessonInfo lessonInfo = LessonInfo.toEntity(savedLesson.getId(), postLesson);
+        String dir = "careerImage";
+        List<UploadFile> careerImages = awsS3Service.uploadFileList(careerImage, dir);
         lessonDbService.saveCareerImage(careerImages, lessonInfo);
         lessonDbService.saveLessonInfo(lessonInfo);
     }

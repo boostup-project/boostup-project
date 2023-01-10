@@ -36,7 +36,11 @@ public class LessonController {
                                         @RequestPart(value = "profileImage") MultipartFile profileImage,
                                         @RequestPart(value = "careerImage") List<MultipartFile> careerImage) throws Exception {
         Long memberId = 1L;
-        lessonService.createLesson(postLesson, memberId, profileImage, careerImage);
+        /** 로컬 환경 */
+//        lessonService.createLesson(postLesson, memberId, profileImage, careerImage);
+
+        /** S3 환경 */
+        lessonService.createLessonS3(postLesson, memberId, profileImage, careerImage);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
@@ -55,7 +59,8 @@ public class LessonController {
                                        @RequestPart(value = "data") PostLessonInfoEdit postLessonInfoEdit,
                                        @RequestPart(value = "profileImage") MultipartFile profileImage) {
         Long memberId = 1L;
-        lessonService.updateLessonInfo(lessonId, postLessonInfoEdit, memberId, profileImage);
+
+       lessonService.updateLessonInfo(lessonId, postLessonInfoEdit, memberId, profileImage);
 
         return ResponseEntity.ok().build();
     }
@@ -91,7 +96,10 @@ public class LessonController {
     public ResponseEntity updateCurriculum(@PathVariable("lesson-id") Long lessonId,
                                            @RequestBody PatchLessonCurriculum patchLessonCurriculum) {
         Long memberId = 1L;
+        //** 로컬 환경 */
         lessonService.updateCurriculum(lessonId, patchLessonCurriculum, memberId);
+
+        /** S3 환경 */
 
         return ResponseEntity.ok().build();
     }
