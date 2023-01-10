@@ -1,7 +1,7 @@
 package com.codueon.boostUp.domain.suggest.entity;
 
-import com.codueon.boostUp.domain.suggest.pay.ReadyToKakaoPaymentInfo;
-import com.codueon.boostUp.domain.suggest.pay.ReadyToTossPaymentInfo;
+import com.codueon.boostUp.domain.suggest.kakao.ReadyToKakaoPaymentInfo;
+import com.codueon.boostUp.domain.suggest.toss.ReadyToTossPaymentInfo;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -57,6 +57,8 @@ public class PaymentInfo {
 
     private String successUrl;
 
+    private String paymentKey;
+
     /* -------------------- */
 
     @OneToOne
@@ -65,6 +67,10 @@ public class PaymentInfo {
 
     public void setSuggest(Suggest suggest) {
         this.suggest = suggest;
+    }
+
+    public void setPaymentKey(String paymentKey) {
+        this.paymentKey = paymentKey;
     }
 
     @Builder
