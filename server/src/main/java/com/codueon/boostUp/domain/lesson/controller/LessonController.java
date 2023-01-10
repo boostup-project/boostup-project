@@ -1,19 +1,17 @@
 package com.codueon.boostUp.domain.lesson.controller;
 
-import com.codueon.boostUp.domain.lesson.dto.*;
-import com.codueon.boostUp.domain.lesson.entity.ProfileImage;
-import com.codueon.boostUp.domain.lesson.service.LessonDbService;
+import com.codueon.boostUp.domain.lesson.dto.PatchLessonCurriculum;
+import com.codueon.boostUp.domain.lesson.dto.PostLesson;
+import com.codueon.boostUp.domain.lesson.dto.PostLessonDetailEdit;
+import com.codueon.boostUp.domain.lesson.dto.PostLessonInfoEdit;
 import com.codueon.boostUp.domain.lesson.service.LessonService;
-import com.codueon.boostUp.global.file.FileHandler;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -23,7 +21,6 @@ public class LessonController {
 
     /**
      * 과외 등록 컨트롤러
-     *
      * @param postLesson 과외 등록
      * @param profileImage 프로필 이미지
      * @param careerImage 경력 이미지
@@ -31,7 +28,7 @@ public class LessonController {
      * @throws Exception
      * @author Quartz614
      */
-    @PostMapping(value = "/lesson/regist")
+    @PostMapping(value = "/lesson/registration")
     public ResponseEntity<?> postLesson(@RequestPart(value = "data") PostLesson postLesson,
                                         @RequestPart(value = "profileImage") MultipartFile profileImage,
                                         @RequestPart(value = "careerImage") List<MultipartFile> careerImage) throws Exception {
@@ -46,7 +43,6 @@ public class LessonController {
 
     /**
      * 과외 요약 정보 수정 컨트롤러
-     *
      * @param lessonId 과외 식별자
      * @param postLessonInfoEdit 수정 과외 요약 정보
      * @param profileImage 프로필 이미지
@@ -54,7 +50,7 @@ public class LessonController {
      * @author Quatz614
      */
     @SneakyThrows
-    @PostMapping("/lesson/{lesson-id}/edit")
+    @PostMapping("/lesson/{lesson-id}/modification")
     public ResponseEntity updateLesson(@PathVariable("lesson-id") Long lessonId,
                                        @RequestPart(value = "data") PostLessonInfoEdit postLessonInfoEdit,
                                        @RequestPart(value = "profileImage") MultipartFile profileImage) {
@@ -67,7 +63,6 @@ public class LessonController {
 
     /**
      * 과외 상세 정보 수정 컨트롤러
-     *
      * @param lessonId 과외 식별자
      * @param postLessonDetailEdit 수정 과외 상세 정보
      * @param careerImage 경력 이미지
@@ -75,7 +70,7 @@ public class LessonController {
      * @author Quartz614
      */
     @SneakyThrows
-    @PostMapping("/lesson/{lesson-id}/detailInfo/edit")
+    @PostMapping("/lesson/{lesson-id}/detailInfo/modification")
     public ResponseEntity updateLessonDetail(@PathVariable("lesson-id") Long lessonId,
                                              @RequestPart(value = "data") PostLessonDetailEdit postLessonDetailEdit,
                                              @RequestPart(value = "careerImage") List<MultipartFile> careerImage) {
@@ -92,7 +87,7 @@ public class LessonController {
      * @return ResponseEntity
      * @author Quartz614
      */
-    @PatchMapping("/lesson/{lesson-id}/curriculum/edit")
+    @PatchMapping("/lesson/{lesson-id}/curriculum/modification")
     public ResponseEntity updateCurriculum(@PathVariable("lesson-id") Long lessonId,
                                            @RequestBody PatchLessonCurriculum patchLessonCurriculum) {
         Long memberId = 1L;
