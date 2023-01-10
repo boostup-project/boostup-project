@@ -18,7 +18,6 @@ public enum ExceptionCode {
     CHATROOM_NOT_FOUND(504, "존재하지 않는 채팅방입니다."),
     RESERVATION_NOT_FOUND(504, "존재하지 않는 예약입니다."),
 
-
     // 인증 인가
     INVALID_ACCESS(403, "유효하지 않은 접근입니다."),
     INVALID_MEMBER(403, "회원 정보를 다시 확인하세요."),
