@@ -1,5 +1,6 @@
 package com.codueon.boostUp.domain.member.service;
 
+import com.codueon.boostUp.domain.member.dto.PostAttemptFindPassword;
 import com.codueon.boostUp.domain.member.entity.Member;
 import com.codueon.boostUp.domain.member.exception.AuthException;
 import com.codueon.boostUp.domain.member.repository.MemberRepository;
@@ -97,5 +98,16 @@ public class MemberDbService {
         if(!passwordEncoder.matches(password, findMember.getPassword())) {
             throw new AuthException(ExceptionCode.INVALID_MEMBER);
         }
+    }
+
+    /**
+     * 사용자 본인 확인 DB 조회 메서드
+     * @param isRightUser 사용자 본인 확인 정보
+     * @author mozzi327
+     */
+    public void isValidMember(PostAttemptFindPassword isRightUser) {
+        boolean isRightMember = memberRepository
+                .existsMemberByNameAndEmail(isRightUser.getName(), isRightUser.getEmail());
+        if (!isRightMember) throw new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND);
     }
 }
