@@ -1,9 +1,12 @@
 package com.codueon.boostUp.domain.suggest.contoller;
 
+import com.codueon.boostUp.domain.lesson.entity.Lesson;
+import com.codueon.boostUp.domain.lesson.entity.ProfileImage;
 import com.codueon.boostUp.domain.member.entity.Member;
 import com.codueon.boostUp.domain.suggest.entity.Suggest;
 import com.codueon.boostUp.domain.suggest.service.SuggestDbService;
 import com.codueon.boostUp.domain.suggest.service.SuggestService;
+import com.codueon.boostUp.domain.utils.DataForTest;
 import com.codueon.boostUp.global.exception.GlobalAdvice;
 import com.codueon.boostUp.global.webhook.SendErrorToDiscord;
 import com.google.gson.Gson;
@@ -15,8 +18,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
-
-import java.util.List;
 
 @WithMockUser
 @AutoConfigureMockMvc
@@ -42,27 +43,20 @@ class SuggestControllerTest {
     @MockBean
     protected SendErrorToDiscord sendErrorToDiscord;
 
+    protected DataForTest data = new DataForTest();
+
     protected Member member;
     protected Suggest suggest;
+    protected Lesson lesson;
+    protected ProfileImage profileImage;
 
     @BeforeEach
     void setUp() throws Exception {
 
-        member = Member.builder()
-                .id(1L)
-                .name("김길동")
-                .email("gddong@gmail.com")
-                .roles(List.of("USER"))
-                .build();
-
-        suggest = Suggest.builder()
-                .id(1L)
-                .lessonId(1L)
-                .memberId(1L)
-                .days("월, 수, 금")
-                .languages("Java")
-                .requests("누워서 수업 들어도 되나요?")
-                .build();
+        member = data.getMember1();
+        suggest = data.getSuggest1();
+        lesson = data.getLesson1();
+        profileImage = data.getProfileImage();
 
     }
 }
