@@ -14,23 +14,28 @@ import org.springframework.web.multipart.MultipartFile;
 public class MemberController {
     private final MemberService memberService;
 
+    /**
+     * 회원가입 컨트롤러 메서드
+     * @param postMember 회원가입 정보
+     * @author LimJaeMinZ
+     */
     @PostMapping("/join")
     public ResponseEntity postMember(@RequestBody PostMember postMember) {
         memberService.createMember(postMember);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    @PostMapping("/profile")
-    public ResponseEntity postProfileImage(@RequestBody PatchMember patchMember,
-                                           @RequestPart(value = "file") MultipartFile file) {
+    /**
+     * 회원 수정 컨트롤러 메서드
+     * @param patchMember 회원 수정 정보
+     * @param memberImage 회원 사진 정보
+     * @author mozzi327
+     */
+    @PostMapping("/modification")
+    public ResponseEntity postEditMemberProfile(@RequestBody PatchMember patchMember,
+                                           @RequestPart(value = "file") MultipartFile memberImage) {
         // TODO : 시큐리티 적용 시 Authentication 객체 추가 요
         return ResponseEntity.ok().build();
-    }
-
-    @DeleteMapping
-    public ResponseEntity deleteMember() {
-        // TODO : 시큐리티 적용 시 Authentication 객체 추가 요
-        return ResponseEntity.noContent().build();
     }
 
     /**
@@ -87,5 +92,11 @@ public class MemberController {
     public ResponseEntity postChangePassword(@RequestBody PostChangePassword changePassword) {
         memberService.changePassword(changePassword);
         return ResponseEntity.ok().build();
+    }
+
+    @DeleteMapping
+    public ResponseEntity deleteMember() {
+        // TODO : 시큐리티 적용 시 Authentication 객체 추가 요
+        return ResponseEntity.noContent().build();
     }
 }

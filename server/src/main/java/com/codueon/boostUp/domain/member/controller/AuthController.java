@@ -8,11 +8,12 @@ import org.springframework.web.bind.annotation.*;
 import com.codueon.boostUp.domain.member.dto.PostLogin;
 
 @RestController
-@RequestMapping("/auth")
+@RequestMapping("/member")
 @RequiredArgsConstructor
 public class AuthController {
 
     private final AuthService authService;
+
     @PostMapping("/login")
     public ResponseEntity postLoginMember(@RequestBody PostLogin login) {
         TokenDto.Response response = authService.loginMember(login);
