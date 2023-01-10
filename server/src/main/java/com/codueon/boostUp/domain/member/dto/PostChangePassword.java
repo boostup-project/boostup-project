@@ -6,13 +6,13 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class PostFindPassword {
-    private String name;
+public class PostChangePassword {
     private String email;
+    private String password;
 
     @Builder
-    public PostFindPassword(String name, String email) {
-        this.name = name;
+    public PostChangePassword(String email, String password) {
         this.email = email;
+        this.password = password;
     }
 }
