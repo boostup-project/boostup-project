@@ -23,7 +23,13 @@ public class JwtAuthenticationProvider implements AuthenticationProvider {
     private final JwtTokenUtils jwtTokenUtils;
     private final CustomAuthorityUtils authorityUtils;
 
-
+    /**
+     * JwtAuthenticationToken 발급 메서드
+     *
+     * @param authentication the authentication request object.
+     * @return
+     * @throws AuthenticationException
+     */
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
         JwtAuthenticationToken jwtToken = (JwtAuthenticationToken) authentication;
@@ -36,6 +42,12 @@ public class JwtAuthenticationProvider implements AuthenticationProvider {
         return new JwtAuthenticationToken(authorities, email, null);
     }
 
+    /**
+     * 토큰 타입이 일치하는지 검증하는 메서드
+     *
+     * @param authentication
+     * @return
+     */
     @Override
     public boolean supports(Class<?> authentication) {
         return JwtAuthenticationToken.class.isAssignableFrom(authentication);

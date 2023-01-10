@@ -43,6 +43,7 @@ public class Member extends Auditable {
                   String name,
                   String address,
                   String company,
+                  AccountStatus accountStatus,
                   List<String> roles) {
         this.id = id;
         this.email = email;
@@ -50,6 +51,7 @@ public class Member extends Auditable {
         this.name = name;
         this.address = address;
         this.company = company;
+        this.accountStatus = accountStatus;
         this.roles = roles;
     }
 

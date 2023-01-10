@@ -2,17 +2,22 @@ package com.codueon.boostUp.domain.member.service;
 
 import com.codueon.boostUp.domain.member.dto.PostAttemptFindPassword;
 import com.codueon.boostUp.domain.member.dto.PostMember;
+import com.codueon.boostUp.domain.member.entity.AccountStatus;
 import com.codueon.boostUp.domain.member.entity.Member;
+import com.codueon.boostUp.global.security.utils.CustomAuthorityUtils;
 import com.codueon.boostUp.domain.member.repository.MemberRepository;
 import com.codueon.boostUp.global.exception.BusinessLogicException;
 import com.codueon.boostUp.global.exception.ExceptionCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class MemberService {
     private final MemberDbService memberDbService;
+    private final CustomAuthorityUtils authorityUtils;
     private final MemberRepository memberRepository;
 
     /**
@@ -25,10 +30,14 @@ public class MemberService {
         memberDbService.verifyName(postMember.getName());
         memberDbService.verifyEmail(postMember.getEmail());
 
+        List<String> roles = authorityUtils.createRoles(postMember.getEmail());
+
         Member member = Member.builder()
                 .email(postMember.getEmail())
                 .password(memberDbService.encodingPassword(postMember.getPassword()))
                 .name(postMember.getName())
+                .accountStatus(AccountStatus.COMMON_MEMBER)
+                .roles(roles)
                 .build();
 
         memberDbService.saveMember(member);

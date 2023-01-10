@@ -3,6 +3,7 @@ package com.codueon.boostUp.global.security.filter;
 import com.codueon.boostUp.global.security.token.JwtAuthenticationToken;
 import com.codueon.boostUp.global.security.utils.CustomAuthorityUtils;
 import com.codueon.boostUp.global.security.utils.JwtTokenUtils;
+import com.codueon.boostUp.global.security.utils.RedisUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
@@ -16,13 +17,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+import static com.codueon.boostUp.global.security.utils.AuthConstants.AUTHORIZATION;
+import static com.codueon.boostUp.global.security.utils.AuthConstants.BEARER;
+
 @RequiredArgsConstructor
 public class JwtVerificationFilter extends OncePerRequestFilter {
     private final AuthenticationManager authenticationManager;
-    private static final String AUTHORIZATION = "authorization";
-    private static final String BEARER = "Bearer";
     private final JwtTokenUtils jwtTokenUtils;
-    private final CustomAuthorityUtils authorityUtils;
+    private final RedisUtils redisUtils;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request,
