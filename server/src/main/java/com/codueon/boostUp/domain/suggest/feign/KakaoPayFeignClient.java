@@ -1,9 +1,9 @@
 package com.codueon.boostUp.domain.suggest.feign;
 
-import com.codueon.boostUp.domain.suggest.pay.KakaoPayReadyInfo;
-import com.codueon.boostUp.domain.suggest.pay.KakaoPaySuccessInfo;
-import com.codueon.boostUp.domain.suggest.pay.ReadyToKakaoPaymentInfo;
-import com.codueon.boostUp.domain.suggest.pay.RequestForKakaoPaymentInfo;
+import com.codueon.boostUp.domain.suggest.kakao.KakaoPayReadyInfo;
+import com.codueon.boostUp.domain.suggest.kakao.KakaoPaySuccessInfo;
+import com.codueon.boostUp.domain.suggest.kakao.ReadyToKakaoPaymentInfo;
+import com.codueon.boostUp.domain.suggest.kakao.RequestForKakaoPaymentInfo;
 import com.codueon.boostUp.domain.suggest.utils.PayConstants;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.cloud.openfeign.SpringQueryMap;
