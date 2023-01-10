@@ -33,7 +33,7 @@ public class Member extends Auditable {
     @Enumerated(value = EnumType.STRING)
     private AccountStatus accountStatus = AccountStatus.COMMON_MEMBER;
 
-    @OneToOne(mappedBy = "member", cascade = CascadeType.REMOVE)
+    @OneToOne(mappedBy = "member", cascade = CascadeType.REMOVE, orphanRemoval = true)
     private MemberImage memberImage;
 
     @Builder
@@ -62,5 +62,9 @@ public class Member extends Auditable {
     public void addMemberImage(MemberImage memberImage) {
         if (memberImage.getMember() != this) memberImage.setMember(this);
         this.memberImage = memberImage;
+    }
+
+    public void editNewPassword(String password) {
+        this.password = password;
     }
 }
