@@ -1,23 +1,68 @@
 import SmallBtn from "components/reuse/btn/SmallBtn";
+import { useEffect, useState } from "react";
+// import "../../styles/markdown.css"
+
+import "@uiw/react-md-editor/markdown-editor.css";
+import "@uiw/react-markdown-preview/markdown.css";
+import { bold, italic } from "@uiw/react-md-editor/lib/commands/"
+import dynamic from "next/dynamic";
+import useWindowSize from "hooks/useWindowSize";
+
+const MDEditor = dynamic(() => 
+  import("@uiw/react-md-editor"), {
+  ssr: false,
+});
+
+
 
 const Curriculum = () => {
+  const [value, setValue] = useState<string>("");
+  const [toolbar, setToolbar] = useState<boolean>(true);
+  
+  const screenWidth = useWindowSize();
+
+  const handleChangeValue = (e: any) => {
+    setValue(e);
+  };
+
   return (
     <>
       <div className="flex flex-col justify-center items-center w-full h-fit">
-        <div className="w-fit h-fit font-SCDream5 text-md text-pointColor">
-          등록할 과외의 진행방식에 대한 자세한 정보를 입력하세요
+        <div className="w-fit h-fit font-SCDream5 desktop:text-sm tablet:text-sm text-[13.5px] text-pointColor">
+          과외 진행방식에 대한 자세한 정보를 입력하세요
         </div>
-        <div className="w-fit h-fit font-SCDream4 text-xs text-textColor mt-2">
-          회당 시간, 수업구성, 개발환경 및 요구하는 수준 등을 적어주면 좋습니다.
+        <div className="flex tablet:flex-row flex-col w-fit h-fit justify-center items-center">
+          <div className="w-fit h-fit font-SCDream4 text-[12px] text-textColor mt-2">
+            회당 시간, 수업구성, 개발환경 및 요구하는 수준 등을
+          </div>
+          <div className="w-fit h-fit font-SCDream4 text-[12px] text-textColor mt-2">
+            적어주면 좋습니다.
+          </div>
         </div>
       </div>
 
       <div className="w-full h-fit flex flex-row justify-start items-center font-SCDream5 text-md text-textColor mt-10">
         진행방식
       </div>
-      <div className="w-full min-h-[500px] h-fit flex flex-row justify-center items-center rounded-xl border border-borderColor mt-3">
-        hello
-      </div>
+      {screenWidth > 764 ? (
+        <MDEditor
+          height={400}
+          value={value}
+          onChange={handleChangeValue}
+          preview="live"
+          commands={[bold, italic]}
+          className="flex flex-col w-full h-full mt-5"
+        />
+      ) : (
+        <MDEditor
+          height={400}
+          value={value}
+          onChange={handleChangeValue}
+          preview="edit"
+          commands={[bold, italic]}
+          className="flex flex-col w-full h-full mt-5"
+        />
+      )}
       <div className="flex flex-row justify-center items-center w-full h-fit mt-10">
         <SmallBtn>취 소</SmallBtn>
         <SmallBtn css="ml-5">등 록</SmallBtn>
