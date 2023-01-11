@@ -54,7 +54,7 @@ const Additional = () => {
         </div>
         <div></div>
         <textarea
-          className="w-full h-20 border border-borderColor outline-pointColor rounded-xl font-SCDream2 text-xs text-textColor placeholder:text-center placeholder:leading-loose break-all tablet:text-sm tablet:h-24"
+          className="w-full h-20 border border-borderColor outline-pointColor rounded-xl font-SCDream2 text-xs text-textColor placeholder:text-center placeholder:translate-y-[110%] placeholder:leading-loose break-all tablet:text-sm tablet:h-24"
           placeholder="재직중인 회사 또는 재학중인 학교를 입력하세요"
         />
       </label>
