@@ -13,9 +13,15 @@ interface Additional {
 }
 
 const Additional = () => {
-  const { register, handleSubmit, watch } = useForm<Additional>({
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors },
+  } = useForm<Additional>({
     mode: "onBlur",
   });
+  // 이미지 담는 배열
   const [previewImages, setPreviewImages] = useState<string[]>([]);
 
   // 미리보기 이미지 렌더링함수, any 이외의 type 찾기 부족
@@ -54,8 +60,12 @@ const Additional = () => {
         <input
           className="w-full h-8 border border-borderColor outline-pointColor rounded-xl font-SCDream2 text-xs text-textColor placeholder:text-center mt-2 tablet:text-sm tablet:h-12"
           placeholder="본인에 대한 한줄 소개를 입력하세요"
+          {...register("introduction", { required: "입력 필요" })}
         />
       </label>
+      <p className="text-xs text-red-500 mt-1 tablet:text-sm">
+        {errors?.introduction?.message}
+      </p>
       <label className="w-4/5 mt-6">
         <div className="flex">
           <div>재직 회사 / 학력</div>
@@ -63,10 +73,14 @@ const Additional = () => {
         </div>
         <div></div>
         <textarea
-          className="w-full h-20 border border-borderColor outline-pointColor rounded-xl font-SCDream2 text-xs text-textColor placeholder:text-center placeholder:translate-y-[110%] placeholder:leading-loose break-all tablet:text-sm tablet:h-24"
+          className="w-full h-20 border px-0.5 border-borderColor outline-pointColor rounded-xl font-SCDream2 text-xs text-textColor placeholder:text-center placeholder:translate-y-[110%] placeholder:leading-loose break-all tablet:text-sm tablet:h-24"
           placeholder="재직중인 회사 또는 재학중인 학교를 입력하세요"
+          {...register("detailCompany", { required: "입력 필요" })}
         />
       </label>
+      <p className="text-xs text-red-500 mt-1 tablet:text-sm">
+        {errors?.detailCompany?.message}
+      </p>
       <label className="w-4/5 mt-6">
         <div className="flex">
           <div>장소 세부사항</div>
@@ -75,8 +89,12 @@ const Additional = () => {
         <input
           className="w-full h-8 border border-borderColor outline-pointColor rounded-xl font-SCDream2 text-xs text-textColor placeholder:text-center mt-2 tablet:text-sm tablet:h-12"
           placeholder="ex)화이트보드가 사용 가능한 스터디룸"
+          {...register("detailLocation", { required: "입력 필요" })}
         />
       </label>
+      <p className="text-xs text-red-500 mt-1 tablet:text-sm">
+        {errors?.detailLocation?.message}
+      </p>
       <label className="w-4/5 mt-6">
         <div className="flex">
           <div>성격</div>
@@ -85,8 +103,12 @@ const Additional = () => {
         <input
           className="w-full h-8 border border-borderColor outline-pointColor rounded-xl font-SCDream2 text-xs text-textColor placeholder:text-center tablet:text-sm tablet:h-12"
           placeholder="본인에 대한 성격을 입력하세요"
+          {...register("personality", { required: "입력 필요" })}
         />
       </label>
+      <p className="text-xs text-red-500 mt-1 tablet:text-sm">
+        {errors?.personality?.message}
+      </p>
       <label className="w-4/5 mt-6">
         <div className="flex">
           <div>수업료</div>
@@ -95,8 +117,12 @@ const Additional = () => {
         <input
           className="w-full h-8 border border-borderColor outline-pointColor rounded-xl font-SCDream2 text-xs text-textColor placeholder:text-center tablet:text-sm tablet:h-12"
           placeholder="수업료에 대한 자세한 내용을 입력하세요"
+          {...register("detailCost", { required: "입력 필요" })}
         />
       </label>
+      <p className="text-xs text-red-500 mt-1 tablet:text-sm">
+        {errors?.detailCost?.message}
+      </p>
       <div className="w-4/5 mt-6">
         <div className="flex">
           <div>참고사진(최대 3개)</div>
