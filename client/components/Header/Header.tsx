@@ -27,8 +27,6 @@ const Header = () => {
     console.log(data);
   };
 
-  console.log("seek", seek);
-
   return (
     <>
       <header className="bg-bgColor font-SCDream5 w-full mt-4 sticky top-0 z-[1] h-[63px] tablet:h-[69px] desktop:w-[1256px] desktop:h-[87px] desktop:mt-0">
