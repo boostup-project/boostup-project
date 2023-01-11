@@ -89,35 +89,27 @@ const Additional = () => {
       <div className="w-4/5 mt-6">
         <div className="flex">
           <div>참고사진(최대 3개)</div>
-          {previeImages.length >= 1 && <div>추가하기</div>}
+          {previeImages.length >= 1 && <label htmlFor="refImg">추가하기</label>}
         </div>
         <div className="w-full border border-borderColor outline-pointColor rounded-xl font-SCDream2 text-xs text-textColor placeholder:text-center mt-2">
-          {previeImages.length > 2 ? (
+          {previeImages.length > 0 ? (
             previeImages.map((el, idx) => (
-              <div key={idx}>
-                <img className="w-[100px] h-[100px]" src={el} />
-                <span className={`${idx}`} onClick={e => deleteImg(e)}>
+              <div key={idx} className="relative h-fit w-fit">
+                <img
+                  className="w-[100px] h-[100px] rounded-xl relative"
+                  src={el}
+                />
+                <span
+                  id={`${idx}`}
+                  className="absolute top-0 right-1 text-red-500 text-lg"
+                  onClick={e => deleteImg(e)}
+                >
                   X
                 </span>
               </div>
             ))
           ) : (
             <div>
-              {previeImages.map((el, idx) => (
-                <div key={idx} className="relative h-fit w-fit">
-                  <img
-                    className="w-[100px] h-[100px] rounded-xl relative"
-                    src={el}
-                  />
-                  <span
-                    id={`${idx}`}
-                    className="absolute top-0 right-1 text-red-500 text-lg"
-                    onClick={e => deleteImg(e)}
-                  >
-                    X
-                  </span>
-                </div>
-              ))}
               <label
                 className="flex flex-col justify-center items-center text-modalImgTxt"
                 htmlFor="refImg"
