@@ -43,7 +43,7 @@ const Additional = () => {
           <span className="text-pointColor">*</span>
         </div>
         <input
-          className="w-full h-8 border border-borderColor outline-pointColor rounded-xl font-SCDream2 text-xs text-textColor placeholder:text-center mt-2 tablet:text-sm"
+          className="w-full h-8 border border-borderColor outline-pointColor rounded-xl font-SCDream2 text-xs text-textColor placeholder:text-center mt-2 tablet:text-sm tablet:h-12"
           placeholder="본인에 대한 한줄 소개를 입력하세요"
         />
       </label>
@@ -54,7 +54,7 @@ const Additional = () => {
         </div>
         <div></div>
         <textarea
-          className="w-full h-20 border border-borderColor outline-pointColor rounded-xl font-SCDream2 text-xs text-textColor placeholder:text-center placeholder:leading-loose break-all tablet:text-sm"
+          className="w-full h-20 border border-borderColor outline-pointColor rounded-xl font-SCDream2 text-xs text-textColor placeholder:text-center placeholder:leading-loose break-all tablet:text-sm tablet:h-24"
           placeholder="재직중인 회사 또는 재학중인 학교를 입력하세요"
         />
       </label>
@@ -64,7 +64,7 @@ const Additional = () => {
           <span className="text-pointColor">*</span>
         </div>
         <input
-          className="w-full h-8 border border-borderColor outline-pointColor rounded-xl font-SCDream2 text-xs text-textColor placeholder:text-center mt-2 tablet:text-sm"
+          className="w-full h-8 border border-borderColor outline-pointColor rounded-xl font-SCDream2 text-xs text-textColor placeholder:text-center mt-2 tablet:text-sm tablet:h-12"
           placeholder="ex)화이트보드가 사용 가능한 스터디룸"
         />
       </label>
@@ -74,7 +74,7 @@ const Additional = () => {
           <span className="text-pointColor">*</span>
         </div>
         <input
-          className="w-full h-8 border border-borderColor outline-pointColor rounded-xl font-SCDream2 text-xs text-textColor placeholder:text-center tablet:text-sm"
+          className="w-full h-8 border border-borderColor outline-pointColor rounded-xl font-SCDream2 text-xs text-textColor placeholder:text-center tablet:text-sm tablet:h-12"
           placeholder="본인에 대한 성격을 입력하세요"
         />
       </label>
@@ -84,7 +84,7 @@ const Additional = () => {
           <span className="text-pointColor">*</span>
         </div>
         <input
-          className="w-full h-8 border border-borderColor outline-pointColor rounded-xl font-SCDream2 text-xs text-textColor placeholder:text-center tablet:text-sm"
+          className="w-full h-8 border border-borderColor outline-pointColor rounded-xl font-SCDream2 text-xs text-textColor placeholder:text-center tablet:text-sm tablet:h-12"
           placeholder="수업료에 대한 자세한 내용을 입력하세요"
         />
       </label>
