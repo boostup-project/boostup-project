@@ -3,6 +3,7 @@ import DefaultImg from "assets/icon/DefaultImg";
 import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { ValueContainerProps } from "react-select";
+import AuthBtn from "./reuse/btn/AuthBtn";
 
 const Additional = () => {
   const { register, handleSubmit, watch } = useForm();
@@ -20,6 +21,7 @@ const Additional = () => {
   /** 제출 테스트 코드 **/
   const testSubmit = (data: any) => {
     console.log(data);
+    console.log(previeImages);
   };
 
   /** 이미지 삭제 함수(배열에서 해당 ID값 이미지 삭제) **/
@@ -32,7 +34,7 @@ const Additional = () => {
 
   return (
     <form
-      className="placeholder:text-center w-full flex flex-col items-center text-sm"
+      className="placeholder:text-center w-full flex flex-col items-center text-sm tablet:text-base"
       onSubmit={handleSubmit(testSubmit)}
     >
       <label className="w-4/5 mt-6">
@@ -41,7 +43,7 @@ const Additional = () => {
           <span className="text-pointColor">*</span>
         </div>
         <input
-          className="w-full h-8 border border-borderColor outline-pointColor rounded-xl font-SCDream2 text-xs text-textColor placeholder:text-center mt-2"
+          className="w-full h-8 border border-borderColor outline-pointColor rounded-xl font-SCDream2 text-xs text-textColor placeholder:text-center mt-2 tablet:text-sm"
           placeholder="본인에 대한 한줄 소개를 입력하세요"
         />
       </label>
@@ -52,7 +54,7 @@ const Additional = () => {
         </div>
         <div></div>
         <textarea
-          className="w-full h-20 border border-borderColor outline-pointColor rounded-xl font-SCDream2 text-xs text-textColor placeholder:text-center placeholder:leading-loose break-all"
+          className="w-full h-20 border border-borderColor outline-pointColor rounded-xl font-SCDream2 text-xs text-textColor placeholder:text-center placeholder:leading-loose break-all tablet:text-sm"
           placeholder="재직중인 회사 또는 재학중인 학교를 입력하세요"
         />
       </label>
@@ -62,7 +64,7 @@ const Additional = () => {
           <span className="text-pointColor">*</span>
         </div>
         <input
-          className="w-full h-8 border border-borderColor outline-pointColor rounded-xl font-SCDream2 text-xs text-textColor placeholder:text-center mt-2"
+          className="w-full h-8 border border-borderColor outline-pointColor rounded-xl font-SCDream2 text-xs text-textColor placeholder:text-center mt-2 tablet:text-sm"
           placeholder="ex)화이트보드가 사용 가능한 스터디룸"
         />
       </label>
@@ -72,7 +74,7 @@ const Additional = () => {
           <span className="text-pointColor">*</span>
         </div>
         <input
-          className="w-full h-8 border border-borderColor outline-pointColor rounded-xl font-SCDream2 text-xs text-textColor placeholder:text-center"
+          className="w-full h-8 border border-borderColor outline-pointColor rounded-xl font-SCDream2 text-xs text-textColor placeholder:text-center tablet:text-sm"
           placeholder="본인에 대한 성격을 입력하세요"
         />
       </label>
@@ -82,26 +84,22 @@ const Additional = () => {
           <span className="text-pointColor">*</span>
         </div>
         <input
-          className="w-full h-8 border border-borderColor outline-pointColor rounded-xl font-SCDream2 text-xs text-textColor placeholder:text-center"
+          className="w-full h-8 border border-borderColor outline-pointColor rounded-xl font-SCDream2 text-xs text-textColor placeholder:text-center tablet:text-sm"
           placeholder="수업료에 대한 자세한 내용을 입력하세요"
         />
       </label>
       <div className="w-4/5 mt-6">
         <div className="flex">
           <div>참고사진(최대 3개)</div>
-          {previeImages.length >= 1 && <label htmlFor="refImg">추가하기</label>}
         </div>
-        <div className="w-full border border-borderColor outline-pointColor rounded-xl font-SCDream2 text-xs text-textColor placeholder:text-center mt-2">
+        <div className="w-full py-1.5 border flex justify-center items-center border-borderColor outline-pointColor rounded-xl font-SCDream2 text-xs text-textColor placeholder:text-center mt-2 tablet:text-sm">
           {previeImages.length > 0 ? (
             previeImages.map((el, idx) => (
-              <div key={idx} className="relative h-fit w-fit">
-                <img
-                  className="w-[100px] h-[100px] rounded-xl relative"
-                  src={el}
-                />
+              <div key={idx} className="relative w-1/4 pr-1">
+                <img className="aspect-square rounded-xl relative" src={el} />
                 <span
                   id={`${idx}`}
-                  className="absolute top-0 right-1 text-red-500 text-lg"
+                  className="absolute top-0 right-2 text-red-500 text-lg"
                   onClick={e => deleteImg(e)}
                 >
                   X
@@ -127,8 +125,28 @@ const Additional = () => {
             </div>
           )}
         </div>
+        {previeImages.length >= 1 && previeImages.length <= 2 && (
+          <div className="w-full">
+            <label
+              className="flex justify-center items-center"
+              htmlFor="refImg"
+            >
+              <span
+                className={`font-SCDream4 w-1/4 py-2 bg-pointColor rounded-xl text-white flex justify-center`}
+              >
+                추가하기
+              </span>
+            </label>
+            <input
+              className="hidden"
+              id="refImg"
+              type="file"
+              accept="image/*"
+              {...register("image")}
+            />
+          </div>
+        )}
       </div>
-
       <button>테스트 버튼</button>
     </form>
   );
