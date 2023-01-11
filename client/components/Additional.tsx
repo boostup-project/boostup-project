@@ -126,7 +126,7 @@ const Additional = () => {
           )}
         </div>
         {previeImages.length >= 1 && previeImages.length <= 2 && (
-          <div className="w-full">
+          <div className="w-full mt-2">
             <label
               className="flex justify-center items-center"
               htmlFor="refImg"
