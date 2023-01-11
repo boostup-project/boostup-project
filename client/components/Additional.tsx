@@ -6,23 +6,30 @@ import { ValueContainerProps } from "react-select";
 
 const Additional = () => {
   const { register, handleSubmit, watch } = useForm();
-  const [imagePreview, setImagePreview] = useState<any[]>([]);
+  const [previeImages, setPreviewImages] = useState<any[]>([]);
+
+  /** 미리보기 이미지 렌더링함수 **/
   const image = watch("image");
   useEffect(() => {
     if (image && image.length > 0) {
       const file = image[0];
-      setImagePreview([...imagePreview, URL.createObjectURL(file)]);
+      setPreviewImages([...previeImages, URL.createObjectURL(file)]);
     }
   }, [image]);
+
+  /** 제출 테스트 코드 **/
   const testSubmit = (data: any) => {
     console.log(data);
   };
+
+  /** 이미지 삭제 함수(배열에서 해당 ID값 이미지 삭제) **/
   const deleteImg = (e: any) => {
-    setImagePreview(
-      imagePreview.filter((el, idx) => e.target.className !== String(idx)),
+    console.log(e);
+    setPreviewImages(
+      previeImages.filter((image, idx) => e.target.id !== String(idx)),
     );
   };
-  console.log(imagePreview.length);
+
   return (
     <form
       className="placeholder:text-center w-full flex flex-col items-center text-sm"
@@ -82,10 +89,11 @@ const Additional = () => {
       <div className="w-4/5 mt-6">
         <div className="flex">
           <div>참고사진(최대 3개)</div>
+          {previeImages.length >= 1 && <div>추가하기</div>}
         </div>
         <div className="w-full border border-borderColor outline-pointColor rounded-xl font-SCDream2 text-xs text-textColor placeholder:text-center mt-2">
-          {imagePreview.length > 2 ? (
-            imagePreview.map((el, idx) => (
+          {previeImages.length > 2 ? (
+            previeImages.map((el, idx) => (
               <div key={idx}>
                 <img className="w-[100px] h-[100px]" src={el} />
                 <span className={`${idx}`} onClick={e => deleteImg(e)}>
@@ -95,10 +103,17 @@ const Additional = () => {
             ))
           ) : (
             <div>
-              {imagePreview.map((el, idx) => (
-                <div key={idx}>
-                  <img className="w-[100px] h-[100px]" src={el} />
-                  <span className={`${idx}`} onClick={e => deleteImg(e)}>
+              {previeImages.map((el, idx) => (
+                <div key={idx} className="relative h-fit w-fit">
+                  <img
+                    className="w-[100px] h-[100px] rounded-xl relative"
+                    src={el}
+                  />
+                  <span
+                    id={`${idx}`}
+                    className="absolute top-0 right-1 text-red-500 text-lg"
+                    onClick={e => deleteImg(e)}
+                  >
                     X
                   </span>
                 </div>
