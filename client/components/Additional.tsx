@@ -2,33 +2,42 @@ import { modalImgTxt } from "assets/color/color";
 import DefaultImg from "assets/icon/DefaultImg";
 import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { ValueContainerProps } from "react-select";
-import AuthBtn from "./reuse/btn/AuthBtn";
+
+interface Additional {
+  introduction: string;
+  detailCompany: string;
+  detailLocation: string;
+  personality: string;
+  detailCost: string;
+  referenceImage: string[];
+}
 
 const Additional = () => {
-  const { register, handleSubmit, watch } = useForm();
-  const [previeImages, setPreviewImages] = useState<any[]>([]);
+  const { register, handleSubmit, watch } = useForm<Additional>({
+    mode: "onBlur",
+  });
+  const [previewImages, setPreviewImages] = useState<string[]>([]);
 
-  /** 미리보기 이미지 렌더링함수 **/
-  const image = watch("image");
+  // 미리보기 이미지 렌더링함수, any 이외의 type 찾기 부족
+  const image = watch("referenceImage");
   useEffect(() => {
     if (image && image.length > 0) {
-      const file = image[0];
-      setPreviewImages([...previeImages, URL.createObjectURL(file)]);
+      const file: any = image[0];
+      setPreviewImages([...previewImages, URL.createObjectURL(file)]);
     }
   }, [image]);
 
   /** 제출 테스트 코드 **/
-  const testSubmit = (data: any) => {
-    console.log(data);
-    console.log(previeImages);
+  const testSubmit = (addInfo: any) => {
+    console.log(addInfo);
+    console.log(previewImages);
   };
 
   /** 이미지 삭제 함수(배열에서 해당 ID값 이미지 삭제) **/
   const deleteImg = (e: any) => {
     console.log(e);
     setPreviewImages(
-      previeImages.filter((image, idx) => e.target.id !== String(idx)),
+      previewImages.filter((image, idx) => e.target.id !== String(idx)),
     );
   };
 
@@ -93,8 +102,8 @@ const Additional = () => {
           <div>참고사진(최대 3개)</div>
         </div>
         <div className="w-full py-1.5 border flex justify-center items-center border-borderColor outline-pointColor rounded-xl font-SCDream2 text-xs text-textColor placeholder:text-center mt-2 tablet:text-sm">
-          {previeImages.length > 0 ? (
-            previeImages.map((el, idx) => (
+          {previewImages.length > 0 ? (
+            previewImages.map((el, idx) => (
               <div key={idx} className="relative w-1/4 pr-1">
                 <img className="aspect-square rounded-xl relative" src={el} />
                 <span
@@ -120,12 +129,12 @@ const Additional = () => {
                 id="refImg"
                 type="file"
                 accept="image/*"
-                {...register("image")}
+                {...register("referenceImage")}
               />
             </div>
           )}
         </div>
-        {previeImages.length >= 1 && previeImages.length <= 2 && (
+        {previewImages.length >= 1 && previewImages.length <= 2 && (
           <div className="w-full mt-2">
             <label
               className="flex justify-center items-center"
@@ -142,7 +151,7 @@ const Additional = () => {
               id="refImg"
               type="file"
               accept="image/*"
-              {...register("image")}
+              {...register("referenceImage")}
             />
           </div>
         )}
