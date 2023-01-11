@@ -1,8 +1,9 @@
 import React from "react";
 import CreateModalContainer from "components/reuse/container/CreateModalContainer";
-import SmallBtn from "components/reuse/btn/SmallBtn";
+// import SmallBtn from "components/reuse/btn/SmallBtn";
 import StepNavWrapper from "components/reuse/container/StepNavWrapper";
 import Additional from "components/Additional";
+import Curriculum from "components/createModal/Curriculum";
 
 const Home = () => {
   return (
@@ -11,7 +12,7 @@ const Home = () => {
         <CreateModalContainer>
           <StepNavWrapper />
           <Additional />
-          <SmallBtn>다음</SmallBtn>
+          <Curriculum />
         </CreateModalContainer>
       </div>
     </>
