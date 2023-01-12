@@ -9,11 +9,11 @@ const Home = () => {
   return (
     <>
       <div className="flex flex-col bg-bgColor items-center justify-center w-full h-screen">
-        {/* <CreateModalContainer>
+        <CreateModalContainer>
           <StepNavWrapper />
           <Additional />
           <Curriculum />
-        </CreateModalContainer> */}
+        </CreateModalContainer>
       </div>
     </>
   );
