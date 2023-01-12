@@ -1,45 +1,47 @@
 import CreateModalContainer from "components/reuse/container/CreateModalContainer";
 import { useForm,Controller } from "react-hook-form";
-import { useState,  useCallback} from "react";
+import { useState } from "react";
 import { ErrorMessage } from "@hookform/error-message";
-import { langDict,addDict } from "../components/reuse/dict"
+import { langDict,addDict } from "../reuse/dict"
 import BasicStep from "components/reuse/step/BasicStep";
 import CurrStep from "components/reuse/step/CurrStep";
 import ExtraStep from "components/reuse/step/ExtraStep";
 import Select from "react-select";
+import SmallBtn from "components/reuse/btn/SmallBtn";
+const BasicInfo = () => {
 
-const basicInfo = () => {
-  const [previewImg, setPreviewImg] = useState<string>('');
-  const [checkedList, setCheckedList] = useState<Array<string>>([]);
+  const [previewImg, setPreviewImg] = useState<string>('');;
+  const [checkedList, setCheckedList] = useState([]);
   const [title, setTitle] = useState<string>('')
   const [currentWork, setCurrentWork] = useState<string>('')
   const [carrer, setCareer] = useState<string>('')
-  
+
+  const [selectedOptions, setSelectedOptions] = useState('');
+
   const [tuition, setTuition] = useState('')
   
   const langArr = Object.keys(langDict);
   const addArr = Object.keys(addDict);
 
-    const { control, register, handleSubmit, formState: {errors}} = useForm({mode : "onBlur"});
-    
-    const onCheckedItem = (checked: boolean, item: string) =>(event:any)=> {
-            if (checked) {
-                setCheckedList([...checkedList, item]);
-            } else if (!checked) {
-                setCheckedList(checkedList.filter((el) => el !== item));
-                console.log(checkedList)
-            } }
-        
-    const processImg = (file:any) => {
-          return new Promise((res, rej) => {
-            const reader = new FileReader();
-            reader.readAsDataURL(file);
-            reader.onload = (e:any) => res(e.target.result);
-            reader.onerror = (err) => rej(err);
-          });
-      };
-        
-      const insertImg = (e:any) => {
+
+  const { control, register, handleSubmit, watch, formState: {errors}} = useForm({mode : "onBlur"});
+  //체크된 항목 관리
+  const onCheckedElement = (checked:boolean, item:string) =>{
+      if(checked){
+        setCheckedList([...checkedList, item]);
+ 
+      }else if(!checked){
+        setCheckedList(checkedList.filter(el => el !== item));
+
+      }
+      if(checkedList.length > 2){
+        setCheckedList(checkedList.filter(el =>el !== item));
+        event.target.checked = false;
+      }
+    };
+
+  //미리보기 이미지 생성
+  const insertImg = (e:any) => {
           let reader = new FileReader()
 
             if(e.target.files[0]) {
@@ -53,11 +55,21 @@ const basicInfo = () => {
             }          
             }
           }
+  const deleteImg = () => {
+    setPreviewImg('');
+      }
 
+      //Address값 관리
+     const handleAddress = (data) =>{
+      setSelectedOptions(data)
+     }
+
+      //타이틀 값 관리
        const handleTitle = (e:any) =>{
             setTitle(e.target.value)
+            console.log(selectOnline)
         }
-
+      //현재회사, 학교 값 관리
         const handleCurrentWork =(e:any) =>{
           setCurrentWork(e.target.value);
         }
@@ -90,12 +102,22 @@ const basicInfo = () => {
                         <label
                             className="flex flex-col w-full h-32 border-borderColor rounded-xl hover:bg-gray-100 hover:border-gray-300">
                             <div className="relative flex flex-col h-fit  items-center justify-center rounded-xl  pt-7">
-                                <img id="preview" className="absolute inset-0 w-full h-32 object-contain" src = {previewImg.length ? previewImg : null}/>
-                                <svg xmlns="http://www.w3.org/2000/svg" className="w-12 h-12 text-gray-400 group-hover:text-gray-600" viewBox="0 0 20 20" fill="currentColor">
-                                    <path fill-rule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clip-rule="evenodd" />
-                                </svg>
+                                {previewImg.length ? (<>                            
+                                <img id="preview" className="absolute inset-0 w-full h-32 object-contain" src = {previewImg}/> 
+                                <button                                  
+                                    className="absolute top-1 right-3  text-red-500 text-lg"
+                                    onClick={deleteImg}
+                                  >
+                                  삭제
+                                  </button>
+                                </>) : 
+                                  <>
+                                  <svg xmlns="http://www.w3.org/2000/svg" className="w-12 h-12 text-gray-400 group-hover:text-gray-600" viewBox="0 0 20 20" fill="currentColor">
+                                  <path fill-rule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clip-rule="evenodd" />
+                              </svg>
                                 <p className="rounded-xl pt-1 text-sm h-fit tracking-wider text-gray-400 group-hover:text-gray-600">
-                                    Select a photo</p>
+                                    Select a photo</p> </>   
+                              }                              
                             </div>
                             <input type="file" className="opacity-0 rounded-xl" accept="image/jpeg,.txt" onChange={(e) => insertImg(e)}/>
                         </label>
@@ -134,9 +156,9 @@ const basicInfo = () => {
                     <label className='checkboxLabel' key={idx}>
                       <input
                         type='checkbox'
-                        id={el}
+                        value={el}
                         onChange={(e) => {
-                          onCheckedItem(e.target.checked, e.target.id);
+                          onCheckedElement(e.target.checked, e.target.value);
                         }}
                       />
                         {el}
@@ -152,10 +174,9 @@ const basicInfo = () => {
                     <label className='checkboxLabel' key={idx}>
                       <input
                         type='checkbox'
-                        id={el}
+                        value={el}
                         onChange={(e) => {
-                          onCheckedItem(e.target.checked, e.target.id);
-                          console.log(checkedList)
+                          onCheckedElement(e.target.checked, e.target.value);
                         }}
                       />
                         {el}
@@ -223,41 +244,18 @@ const basicInfo = () => {
             <div className="w-5/12 text-center flex flex-col items-stretch">
               <div>구</div>
               <div className="w-full h-fit items-stretch rounded-xl mt-5">
-                <Controller
-                  name="language"
-                  render={({ field }) => (
-                    <Select
-                      {...field}
-                      placeholder={<div>구 선택</div>}
-                      styles={{
-                        control: (baseStyles, state) => ({
-                          ...baseStyles,
-                          borderRadius: "12px",
-                          fontSize: "14px",
-                          fontFamily: "SCDream2",
-                          borderColor: "#A8A7A7",
-                          borderWidth: "1px",
-                        }),
-                        menu: base => ({
-                          ...base,
-                          fontFamily: "SCDream2",
-                          fontSize: "14px",
-                        }),
-                      }}
-                      options={[
-                        ...addArr.map((el, idx) => ({
-                          value: addDict[el],
-                          label: el,
-                          key: idx,
-                        })),
-                      ]}
-                    />
-                  )}
-                  control={control}
-                  defaultValue=""
+                <Select
+                  options={addArr}
+                  placeholder="Select color"
+                  value={selectedOptions}
+                  onChange={handleAddress}
+                  isSearchable={true}
+                  isMulti
                 />
               </div>
             </div>
+            <div className="dropdown-container">
+      </div>
           </div>
         </label>
 
@@ -284,8 +282,12 @@ const basicInfo = () => {
                    </div>}}/>
 
             </form>
+            <div className="flex flex-row justify-center items-center w-full h-fit mt-10">
+        <SmallBtn>취 소</SmallBtn>
+        <SmallBtn css="ml-5">등 록</SmallBtn>
+      </div>
         </CreateModalContainer>
     </>
     )}
 
-export default basicInfo;
+export default BasicInfo;
