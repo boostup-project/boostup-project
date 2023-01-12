@@ -336,7 +336,7 @@ public class LessonService {
     }
 
     /**
-     * 과외 삭제 메서드
+     * 과외 삭제 메서드 (로컬)
      * @param memberId 회원 식별자
      * @param lessonId 과외 식별자
      * @author Quartz614
@@ -363,6 +363,42 @@ public class LessonService {
         }
         lessonDbService.deleteLesson(findLesson);
         lessonDbService.deleteLessonInfo(findLessonInfo);
+        lessonDbService.deleteCurriculum(findCurriculum);
+    }
+
+    /**
+     * 과외 삭제 메서드 (S3)
+     * @param memberId 회원 식별자
+     * @param lessonId 과외 식별자
+     * @author Quartz614
+     */
+    @Transactional
+    public void deleteLessonS3(Long memberId, Long lessonId) {
+        Member findMember = memberDbService.ifExistsReturnMember(memberId);
+        Lesson findLesson = lessonDbService.ifExistsReturnLesson(lessonId);
+        LessonInfo findLessonInfo = lessonDbService.ifExsitsReturnLessonInfo(lessonId);
+        Curriculum findCurriculum = lessonDbService.ifExsistsReturnCurriculum(lessonId);
+        List<Suggest> findSuggest = suggestDbService.findAllSuggestForLesson(lessonId);
+
+        reviewService.removeAllByReviews(lessonId);
+        bookmarkRepository.deleteByLessonId(lessonId);
+
+        for (Suggest suggest : findSuggest) {
+            if (suggest.getStatus().equals(Suggest.SuggestStatus.ACCEPT_IN_PROGRESS)) {
+                throw new BusinessLogicException(ExceptionCode.NOT_ACCEPT_SUGGEST);
+            } else if (suggest.getStatus().equals(Suggest.SuggestStatus.DURING_LESSON)) {
+                throw new BusinessLogicException(ExceptionCode.NOT_PAY_SUCCESS);
+            } else if (suggest.getStatus().equals(Suggest.SuggestStatus.PAY_IN_PROGRESS)) {
+                throw new BusinessLogicException(ExceptionCode.NOT_PAY_SUCCESS);
+            }
+        }
+        
+        String dir = "profileImage";
+        String dir1 = "careerImage";
+        lessonDbService.deleteLesson(findLesson);
+        lessonDbService.deleteLessonInfo(findLessonInfo);
+        awsS3Service.delete(findLesson.getProfileImage().getFileName(),dir);
+        findLessonInfo.getCareerImages().forEach(careerImage -> awsS3Service.delete(careerImage.getFileName(), dir1));
         lessonDbService.deleteCurriculum(findCurriculum);
     }
 }
