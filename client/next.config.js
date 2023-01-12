@@ -4,6 +4,9 @@ const removeImports = require("next-remove-imports")();
 const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
+  images:{
+    loader: 'static'
+  },
   // images: {
   //   loader: "akamai",
   //   path: "/",
