@@ -1,4 +1,4 @@
-package com.codueon.boostUp.global.util;
+package com.codueon.boostUp.global.utils;
 
 import lombok.Getter;
 import lombok.Setter;

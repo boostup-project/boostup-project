@@ -1,5 +1,7 @@
 package com.codueon.boostUp.domain.member.controller;
 
+import com.codueon.boostUp.domain.dto.PostEmail;
+import com.codueon.boostUp.domain.dto.PostPassword;
 import com.codueon.boostUp.domain.member.dto.*;
 import com.codueon.boostUp.domain.member.service.MemberService;
 import lombok.RequiredArgsConstructor;

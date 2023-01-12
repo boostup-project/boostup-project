@@ -17,6 +17,7 @@ public enum ExceptionCode {
     CHAT_NOT_FOUND(504, "존재하지 않는 메시지입니다."),
     CHATROOM_NOT_FOUND(504, "존재하지 않는 채팅방입니다."),
     RESERVATION_NOT_FOUND(504, "존재하지 않는 예약입니다."),
+    UNAUTHORIZED_FOR_UPDATE(403, "수정 권한이 없습니다."),
 
     // 인증 인가
     INVALID_ACCESS(403, "유효하지 않은 접근입니다."),
@@ -40,6 +41,11 @@ public enum ExceptionCode {
     TUTOR_CANNOT_BOOKMARK(504, "과외 선생님은 자신의 과외 북마크를 등록할 수 없습니다."),
     TUTOR_CANNOT_REVIEW(504, "과외 선생님은 자기 과외 리뷰를 남길 수 없습니다."),
 
+    // 인증 코드
+    INVALID_EMAIL_CODE(403, "유효하지 않은 인증 코드입니다."),
+    ALREADY_EXPIRED_EMAIL_CODE(403, "인증 코드가 만료되었습니다."),
+
+
     // TODO: 과외 신청 - 결제 관련
     NOT_ACCEPT_SUGGEST(504, "과외 수락 상태가 아닙니다."),
     NOT_PAY_SUCCESS(504, "결제 완료 상태가 아닙니다."),
@@ -48,8 +54,7 @@ public enum ExceptionCode {
     REVIEW_ONLY_ONE(504, "리뷰는 한 번만 가능합니다."),
 
     // 이미지 관련
-    NO_IMAGE(504, "이미지가 비어있습니다."),
-    UNAUTHORIZED_FOR_UPDATE(403, "수정 권한이 없습니다.");
+    NO_IMAGE(504, "이미지가 비어있습니다.");
 
     @Getter
     private final int status;
