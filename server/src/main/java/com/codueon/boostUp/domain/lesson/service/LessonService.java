@@ -367,7 +367,7 @@ public class LessonService {
     }
 
     /**
-     * 과외 삭제 메서드 (로컬)
+     * 과외 삭제 메서드 (S3)
      * @param memberId 회원 식별자
      * @param lessonId 과외 식별자
      * @author Quartz614
@@ -392,6 +392,7 @@ public class LessonService {
                 throw new BusinessLogicException(ExceptionCode.NOT_PAY_SUCCESS);
             }
         }
+        
         String dir = "profileImage";
         String dir1 = "careerImage";
         lessonDbService.deleteLesson(findLesson);
