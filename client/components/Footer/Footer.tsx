@@ -15,13 +15,13 @@ const devAlias: string[] = Object.keys(devAdds);
 
 const Footer = () => {
   return (
-    <footer className="bg-textColor w-full h-28 text-white font-SCDream5">
-      <div>
-        <div className="text-xl">코듀온</div>
+    <footer className="bg-textColor w-full h-28 text-white font-SCDream5 px-1 py-1 flex flex-col justify-evenly tablet:flex-row tablet:items-center tablet:h-[281px]">
+      <div className="tablet:flex tablet:flex-col tablet:h-1/2 tablet:justify-around">
+        <div className="text-base tablet:text-2xl">(주)코듀온</div>
         <div>
           {devAlias.map((alias, i) => (
             <a
-              className="text-base"
+              className="text-xs mr-3 tablet:text-base desktop:hover:underline"
               target="_blank"
               rel="noopener noreferrer"
               key={i}
@@ -31,10 +31,21 @@ const Footer = () => {
             </a>
           ))}
         </div>
-        <div>사업자 등록 번호</div>
+        <div className="text-xs tablet:text-base">
+          사업자 등록 번호: 012 - 34 - 56789
+        </div>
       </div>
-      <div>
-        <div>고객센터</div>
+      <div className="flex items-center tablet:w-2/5 tablet:h-1/3 tablet:justify-evenly desktop:w-1/4">
+        <div className="grow text-base tablet:text-2xl">고객센터</div>
+        <a
+          className="grow text-xs tablet:text-base desktop:hover:underline"
+          target="_blank"
+          rel="noopener noreferrer"
+          href="https://forms.gle/Gd9A1mYKKR6eqQ1x5"
+        >
+          구글폼 링크
+        </a>
+        <div className="grow text-xs tablet:text-base">tel: 02-345-6789</div>
       </div>
     </footer>
   );
