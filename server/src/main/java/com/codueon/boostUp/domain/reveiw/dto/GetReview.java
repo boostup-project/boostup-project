@@ -1,7 +1,6 @@
 package com.codueon.boostUp.domain.reveiw.dto;
 
 import com.codueon.boostUp.domain.reveiw.entity.Review;
-import com.codueon.boostUp.global.util.Auditable;
 import com.querydsl.core.annotations.QueryProjection;
 import lombok.Builder;
 import lombok.Getter;

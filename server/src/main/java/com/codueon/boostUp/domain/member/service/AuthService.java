@@ -5,7 +5,7 @@ import com.codueon.boostUp.domain.member.dto.PostLogin;
 import com.codueon.boostUp.domain.member.dto.TokenDto;
 import com.codueon.boostUp.domain.member.entity.Member;
 import com.codueon.boostUp.global.security.utils.JwtTokenUtils;
-import com.codueon.boostUp.global.security.utils.RedisUtils;
+import com.codueon.boostUp.global.utils.RedisUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;

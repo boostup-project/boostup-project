@@ -1,7 +1,7 @@
 package com.codueon.boostUp.domain.reveiw.entity;
 
 import com.codueon.boostUp.domain.reveiw.dto.PatchReview;
-import com.codueon.boostUp.global.util.Auditable;
+import com.codueon.boostUp.global.utils.Auditable;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
