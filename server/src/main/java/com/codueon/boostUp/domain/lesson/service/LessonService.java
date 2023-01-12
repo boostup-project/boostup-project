@@ -271,7 +271,7 @@ public class LessonService {
         lessonDbService.saveLesson(updateLesson);
     }
     /**
-     * 과외 상세 정보 수정 메서드(로컬)
+     * 과외 상세 정보 수정 메서드 (로컬)
      * @param lessonId 과외 식별자
      * @param postLessonDetailEdit 수정 과외 상세정보
      * @param memberId 회원 식별자
@@ -287,6 +287,33 @@ public class LessonService {
         LessonInfo updateLessonDetail = lessonDbService.ifExsitsReturnLessonInfo(lessonId);
         updateLessonDetail.editLessonDetail(postLessonDetailEdit);
         List<UploadFile> uploadFileList = fileHandler.parseUploadFileInfo(careerImage);
+        lessonDbService.editCareerImage(uploadFileList, updateLessonDetail);
+        lessonDbService.saveLessonInfo(updateLessonDetail);
+    }
+
+    /**
+     * 과외 상세 정보 수정 메서드 (S3)
+     * @param lessonId 과외 식별자
+     * @param postLessonDetailEdit 수정 과외 상세정보
+     * @param memberId 회원 식별자
+     * @param careerImage 경력 이미지
+     * @author Quartz614
+     */
+    @SneakyThrows
+    public void updateLessonDetailS3(Long lessonId,
+                                   PostLessonDetailEdit postLessonDetailEdit,
+                                   Long memberId,
+                                   List<MultipartFile> careerImage) {
+        Member findMember = memberDbService.ifExistsReturnMember(memberId);
+        LessonInfo updateLessonDetail = lessonDbService.ifExsitsReturnLessonInfo(lessonId);
+        //        if (!Objects.equals(updateLessonDetail.getMemberId(), findMember)) {
+//            throw new BusinessLogicException(ExceptionCode.UNAUTHORIZED_FOR_UPDATE);
+//        }
+        String dir = "careerImage";
+        updateLessonDetail.getCareerImages().forEach(careerImage1 -> awsS3Service.delete(careerImage1.getFileName(), dir));
+        updateLessonDetail.editLessonDetail(postLessonDetailEdit);
+
+        List<UploadFile> uploadFileList = awsS3Service.uploadFileList(careerImage, dir);
         lessonDbService.editCareerImage(uploadFileList, updateLessonDetail);
         lessonDbService.saveLessonInfo(updateLessonDetail);
     }
