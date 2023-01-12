@@ -56,7 +56,7 @@ public class LessonController {
                                        @RequestPart(value = "profileImage") MultipartFile profileImage) {
         Long memberId = 1L;
         /** 로컬 환경 */
-//       lessonService.updateLessonInfo(lessonId, postLessonInfoEdit, memberId, profileImage);
+//        lessonService.updateLessonInfo(lessonId, postLessonInfoEdit, memberId, profileImage);
 
         /** S3 환경 */
         lessonService.updateLessonInfoS3(lessonId, postLessonInfoEdit, memberId, profileImage);
@@ -77,7 +77,11 @@ public class LessonController {
                                              @RequestPart(value = "data") PostLessonDetailEdit postLessonDetailEdit,
                                              @RequestPart(value = "careerImage") List<MultipartFile> careerImage) {
         Long memberId = 1L;
-        lessonService.updateLessonDetail(lessonId, postLessonDetailEdit, memberId, careerImage);
+        /** 로컬 환경 */
+//        lessonService.updateLessonDetail(lessonId, postLessonDetailEdit, memberId, careerImage);
+
+        /** S3 환경 */
+        lessonService.updateLessonDetailS3(lessonId, postLessonDetailEdit, memberId, careerImage);
 
         return ResponseEntity.ok().build();
     }
