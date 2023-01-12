@@ -1,9 +1,8 @@
 package com.codueon.boostUp.global.security.filter;
 
 import com.codueon.boostUp.global.security.token.JwtAuthenticationToken;
-import com.codueon.boostUp.global.security.utils.CustomAuthorityUtils;
 import com.codueon.boostUp.global.security.utils.JwtTokenUtils;
-import com.codueon.boostUp.global.security.utils.RedisUtils;
+import com.codueon.boostUp.global.utils.RedisUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;

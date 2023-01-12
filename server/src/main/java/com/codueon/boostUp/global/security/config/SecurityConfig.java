@@ -3,7 +3,7 @@ package com.codueon.boostUp.global.security.config;
 import com.codueon.boostUp.global.security.filter.JwtVerificationFilter;
 import com.codueon.boostUp.global.security.provider.JwtAuthenticationProvider;
 import com.codueon.boostUp.global.security.utils.JwtTokenUtils;
-import com.codueon.boostUp.global.security.utils.RedisUtils;
+import com.codueon.boostUp.global.utils.RedisUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -22,8 +22,6 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.CorsUtils;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CharacterEncodingFilter;
-
-import java.util.Arrays;
 
 @Configuration
 @EnableWebSecurity
