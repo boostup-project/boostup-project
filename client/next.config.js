@@ -5,7 +5,8 @@ const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
   images:{
-    loader: 'static'
+    loader: 'imgix',
+    path: '/',
   },
   // images: {
   //   loader: "akamai",
