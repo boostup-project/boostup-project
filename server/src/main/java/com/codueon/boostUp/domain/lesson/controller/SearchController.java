@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
+@RequestMapping("/lesson")
 @RequiredArgsConstructor
 public class SearchController {
     // TODO : Notice! 해당 서비스는 LessonController 와 합쳐질 예정입니다.
@@ -21,7 +22,7 @@ public class SearchController {
      * @return Page(GetMainPageLesson)
      * @author mozzi327
      */
-    @GetMapping("/home")
+    @GetMapping
     public ResponseEntity<?> getMainPageLessonInfos(Pageable pageable) {
         // TODO : 시큐리티 적용 시 Authentication 객체 추가 요
         Long memberId = 1L;
@@ -66,7 +67,7 @@ public class SearchController {
      * @return GetLesson
      * @author mozzi327
      */
-    @GetMapping("/lesson/tutor")
+    @GetMapping("/tutor")
     public ResponseEntity<?> getMyPageMyClassInfo() {
         // TODO : 시큐리티 적용 시 Authentication 객체 추가 요
         Long memberId = 1L; // 임시 하드 코딩
@@ -80,7 +81,7 @@ public class SearchController {
      * @return GetLesson
      * @author mozzi327
      */
-    @GetMapping("/lesson/{lesson-id}")
+    @GetMapping("/{lesson-id}")
     public ResponseEntity<?> getLesson(@PathVariable("lesson-id") Long lessonId) {
         GetLesson response = searchService.getDetailLesson(lessonId);
         return ResponseEntity.ok().body(response);
@@ -92,7 +93,7 @@ public class SearchController {
      * @return GetLessonInfo
      * @author mozzi327
      */
-    @GetMapping("/lesson/{lesson-id}/detailInfo")
+    @GetMapping("/{lesson-id}/detailInfo")
     public ResponseEntity<?> getLessonInfo(@PathVariable("lesson-id") Long lessonId) {
         GetLessonInfo response = searchService.getDetailLessonInfo(lessonId);
         return ResponseEntity.ok().body(response);
@@ -104,7 +105,7 @@ public class SearchController {
      * @return GetLessonCurriculum
      * @author mozzi327
      */
-    @GetMapping("/lesson/{lesson-id}/curriculum")
+    @GetMapping("/{lesson-id}/curriculum")
     public ResponseEntity<?> getCurriculum(@PathVariable("lesson-id") Long lessonId) {
         GetLessonCurriculum response = searchService.getDetailLessonCurriculum(lessonId);
         return ResponseEntity.ok().body(response);
