@@ -36,7 +36,7 @@ const Header = () => {
               <Exit fill={textColor} />
             </div>
           </div>
-          <div className="w-1/6 h-full flex justify-center items-center desktop:justify-none desktop:items-end">
+          <div className="w-1/6 h-full flex justify-center items-center desktop:justify-start desktop:items-end">
             <Image
               className="w-[57.91px] h-[30px] tablet:w-[142px] tablet:h-[69px] desktop:w-[142px] desktop:h-[72px]"
               src={Logo}
