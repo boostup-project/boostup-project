@@ -97,10 +97,7 @@ public class LessonController {
     public ResponseEntity updateCurriculum(@PathVariable("lesson-id") Long lessonId,
                                            @RequestBody PatchLessonCurriculum patchLessonCurriculum) {
         Long memberId = 1L;
-        //** 로컬 환경 */
         lessonService.updateCurriculum(lessonId, patchLessonCurriculum, memberId);
-
-        /** S3 환경 */
 
         return ResponseEntity.ok().build();
     }
@@ -114,7 +111,11 @@ public class LessonController {
     @DeleteMapping(value = "/lesson/{lesson-id}")
     public ResponseEntity deleteLesson(@PathVariable("lesson-id") Long lessonId) {
         Long memberId = 1L;
-        lessonService.deleteLesson(memberId, lessonId);
+        /** 로컬 환경 */
+//        lessonService.deleteLesson(memberId, lessonId);
+
+        /** S3 환경 */
+        lessonService.deleteLessonS3(memberId, lessonId);
 
         return ResponseEntity.noContent().build();
     }
