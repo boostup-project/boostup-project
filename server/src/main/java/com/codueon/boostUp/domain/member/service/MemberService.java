@@ -1,14 +1,15 @@
 package com.codueon.boostUp.domain.member.service;
 
 import com.codueon.boostUp.domain.member.dto.PostAttemptFindPassword;
-import com.codueon.boostUp.domain.member.dto.PostChangePassword;
+import com.codueon.boostUp.domain.member.dto.PostPasswordInLoginPage;
 import com.codueon.boostUp.domain.member.dto.PostMember;
+import com.codueon.boostUp.domain.member.dto.PostPasswordInMyPage;
 import com.codueon.boostUp.domain.member.entity.AccountStatus;
 import com.codueon.boostUp.domain.member.entity.Member;
-import com.codueon.boostUp.global.security.utils.CustomAuthorityUtils;
-import com.codueon.boostUp.domain.member.repository.MemberRepository;
 import com.codueon.boostUp.global.exception.BusinessLogicException;
 import com.codueon.boostUp.global.exception.ExceptionCode;
+import com.codueon.boostUp.global.security.utils.CustomAuthorityUtils;
+import com.codueon.boostUp.domain.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -45,21 +46,12 @@ public class MemberService {
     }
 
     /**
-     * 사용자 본인 확인 조회 메서드
-     * @param isRightMember 사용자 본인 확인 정보
-     * @author mozzi327
-     */
-    public void isRightMember(PostAttemptFindPassword isRightMember) {
-        memberDbService.isValidMember(isRightMember);
-    }
-
-    /**
-     * password 변경 메서드
+     * password 변경 메서드(로그인페이지)
      * @param changePassword 비밀번호 변경 정보
      * @author mozzi327
      */
-    public void changePassword(PostChangePassword changePassword) {
-        memberDbService.changingPassword(changePassword);
+    public void changePasswordInLoginPage(PostPasswordInLoginPage changePassword) {
+        memberDbService.changingPasswordInLoginPage(changePassword);
     }
 
     /**
@@ -68,7 +60,8 @@ public class MemberService {
      * @author mozzi327
      */
     public void checkIsOverLappedEmail(String email) {
-        memberDbService.checkExistEmail(email);
+        if(memberDbService.checkExistEmail(email))
+            throw new BusinessLogicException(ExceptionCode.EMAIL_ALREADY_EXIST);
     }
 
     /**
@@ -89,5 +82,17 @@ public class MemberService {
     public void checkIsRightPassword(String password, Long memberId) {
         Member findMember = memberDbService.ifExistsReturnMember(memberId);
         memberDbService.isValidPassword(findMember, password);
+    }
+
+    /**
+     * 비밀번호 변경 메서드(마이페이지)
+     * @param memberId 사용자 식별자
+     * @param changePassword 비밀번호 변경 정보
+     * @author mozzi327
+     */
+    public void changePasswordInMyPage(Long memberId, PostPasswordInMyPage changePassword) {
+        Member findMember = memberDbService.ifExistsReturnMember(memberId);
+        findMember.editNewPassword(memberDbService.encodingPassword(changePassword.getChangePassword()));
+        memberDbService.saveMember(findMember);
     }
 }

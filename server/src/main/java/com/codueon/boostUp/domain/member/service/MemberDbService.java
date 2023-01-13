@@ -1,12 +1,13 @@
 package com.codueon.boostUp.domain.member.service;
 
 import com.codueon.boostUp.domain.member.dto.PostAttemptFindPassword;
-import com.codueon.boostUp.domain.member.dto.PostChangePassword;
+import com.codueon.boostUp.domain.member.dto.PostPasswordInLoginPage;
 import com.codueon.boostUp.domain.member.entity.Member;
 import com.codueon.boostUp.domain.member.exception.AuthException;
 import com.codueon.boostUp.domain.member.repository.MemberRepository;
 import com.codueon.boostUp.global.exception.BusinessLogicException;
 import com.codueon.boostUp.global.exception.ExceptionCode;
+import com.codueon.boostUp.global.utils.RedisUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -18,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class MemberDbService {
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
+    private final RedisUtils redisUtils;
 
     /**
      * 사용자 정보 조회 메서드
@@ -102,24 +104,15 @@ public class MemberDbService {
     }
 
     /**
-     * 사용자 본인 확인 DB 조회 메서드
-     * @param isRightUser 사용자 본인 확인 정보
-     * @author mozzi327
-     */
-    public void isValidMember(PostAttemptFindPassword isRightUser) {
-        boolean isRightMember = memberRepository
-                .existsMemberByNameAndEmail(isRightUser.getName(), isRightUser.getEmail());
-        if (!isRightMember) throw new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND);
-    }
-
-    /**
      * 사용자 비밀번호 변경 메서드
      * @param changePassword 변경할 비밀번호 정보
      * @author mozzi327
      */
-    public void changingPassword(PostChangePassword changePassword) {
+    public void changingPasswordInLoginPage(PostPasswordInLoginPage changePassword) {
+        if (redisUtils.getEmailAuthorizationCode(changePassword.getEmail()) == null)
+            throw new AuthException(ExceptionCode.INVALID_EMAIL_CODE);
         Member findMember = ifExistsMemberByEmail(changePassword.getEmail());
-        findMember.editNewPassword(encodingPassword(changePassword.getPassword()));
+        findMember.editNewPassword(encodingPassword(changePassword.getChangePassword()));
         saveMember(findMember);
     }
 
@@ -128,9 +121,8 @@ public class MemberDbService {
      * @param email 이메일 정보
      * @author mozzi327
      */
-    public void checkExistEmail(String email) {
-        if(memberRepository.existsByEmail(email))
-            throw new BusinessLogicException(ExceptionCode.EMAIL_ALREADY_EXIST);
+    public boolean checkExistEmail(String email) {
+        return memberRepository.existsByEmail(email);
     }
 
     /**

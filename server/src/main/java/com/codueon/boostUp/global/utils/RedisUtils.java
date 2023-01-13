@@ -41,7 +41,7 @@ public class RedisUtils {
      */
     public void setEmailAuthorizationCode(String key, String code) {
         redisEmailTemplate.setValueSerializer(new Jackson2JsonRedisSerializer<>(code.getClass()));
-        String codeKey = makeCodeKey(key);
+        String codeKey = makeCodeKeyForAuthorization(key);
         redisEmailTemplate.opsForValue().set(codeKey, code, 5 * 60L, TimeUnit.SECONDS);
     }
 
@@ -53,7 +53,7 @@ public class RedisUtils {
      */
     public String getEmailAuthorizationCode(String key) {
         ValueOperations<String, String> stringValueOperations = redisEmailTemplate.opsForValue();
-        String codeKey = makeCodeKey(key);
+        String codeKey = makeCodeKeyForAuthorization(key);
         Optional<String> emailCode = Optional.ofNullable(stringValueOperations.get(codeKey));
         return emailCode.orElseThrow(() -> new AuthException(ExceptionCode.ALREADY_EXPIRED_EMAIL_CODE));
     }
@@ -64,7 +64,7 @@ public class RedisUtils {
      * @author mozzi327
      */
     public void deleteEmailCode(String key) {
-        String codeKey = makeCodeKey(key);
+        String codeKey = makeCodeKeyForAuthorization(key);
         redisEmailTemplate.delete(codeKey);
     }
 
@@ -74,7 +74,7 @@ public class RedisUtils {
      * @return String(codeKey)
      * @author mozzi327
      */
-    private String makeCodeKey(String key) {
+    private String makeCodeKeyForAuthorization(String key) {
         return "EmailCode " + key;
     }
 
@@ -87,5 +87,4 @@ public class RedisUtils {
     public Object getData(String key) {
         return redisTemplate.opsForValue().get(key);
     }
-
 }
