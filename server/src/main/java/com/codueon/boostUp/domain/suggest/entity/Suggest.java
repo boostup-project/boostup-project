@@ -38,6 +38,8 @@ public class Suggest {
 
     private LocalDateTime endTime;
 
+    private String paymentMethod;
+
     @OneToOne(mappedBy = "suggest", cascade = CascadeType.REMOVE)
     private PaymentInfo paymentInfo;
 
@@ -51,6 +53,10 @@ public class Suggest {
 
     public void setTotalCost(Integer totalCost) {
         this.totalCost = totalCost;
+    }
+
+    public void setPaymentMethod(String paymentMethod) {
+        this.paymentMethod = paymentMethod;
     }
 
     @Builder

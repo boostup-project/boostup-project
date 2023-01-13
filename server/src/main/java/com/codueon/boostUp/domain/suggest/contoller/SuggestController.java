@@ -81,10 +81,10 @@ public class SuggestController {
      * @author LeeGoh
      */
     @GetMapping("/suggest/{suggest-id}/suggest-info")
-    public ResponseEntity getSuggestInfo(@PathVariable("suggest-id") Long suggestId) {
+    public ResponseEntity getPaymentInfo(@PathVariable("suggest-id") Long suggestId) {
 
         Long memberId = 1L;
-        return ResponseEntity.ok(suggestService.getSuggestInfo(suggestId, memberId));
+        return ResponseEntity.ok(suggestService.getPaymentInfo(suggestId, memberId));
     }
 
     /**
@@ -196,6 +196,19 @@ public class SuggestController {
 
         suggestService.setSuggestStatusAndEndTime(suggestId);
         return ResponseEntity.ok().build();
+    }
+
+    /**
+     * 결제 영수증 조회 컨트롤러 메서드
+     * @param suggestId 신청 식별자
+     * @return ResponseEntity
+     * @author LeeGoh
+     */
+    @GetMapping("/suggest/{suggest-id}/receipt")
+    public ResponseEntity getPaymentReceipt(@PathVariable("suggest-id") Long suggestId) {
+
+        Long memberId = 1L;
+        return ResponseEntity.ok(suggestService.getPaymentReceipt(suggestId, memberId));
     }
 
     /**
