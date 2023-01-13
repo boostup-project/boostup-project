@@ -21,7 +21,7 @@ const Carouselcomp = () => {
   };
   return (
     <>
-      <div className="w-full desktop:w-3/4 desktop:min-w-[1000px] h-[250px]  mt-5 rounded-xl">
+      <div className="w-full desktop:w-3/4 desktop:min-w-[1000px] h-[250px]  mt-7 rounded-xl">
         {/* <Image src={"/images/temp_image.png"}  width={250} height={100} alt="photo1" priority={true} /> */}
         <Slider {...settings} className="w-full h-full">
           <div className="flex items-center justify-center w-full h-[250px] bg-slate-400 rounded-xl"></div>
