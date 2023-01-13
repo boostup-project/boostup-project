@@ -13,7 +13,7 @@ const postAuthPw = async ({ name, email }: Props) => {
 
   console.log(data);
   // return await axios.post(`/auth/find/password`, data, {
-  return await axios.post(`/member/find/password`, data, {
+  return await axios.post(`/member/password/find`, data, {
     baseURL: process.env.NEXT_PUBLIC_API_URL,
   });
 };
