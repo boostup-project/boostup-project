@@ -113,3 +113,16 @@ html, body, div, span, applet, object, iframe,
   font-family: "SCDream9";
   src: url("../public/fonts/SCDream9.otf");
 }
+
+
+.slick-dots {
+  top : 210px;
+}
+
+.slick-dots li button {
+    color: #7e6330;
+}
+
+.slick-dots li button:before {
+    color: orange;
+}

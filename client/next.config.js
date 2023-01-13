@@ -9,8 +9,7 @@ const nextConfig = {
   //     path: '/',
   //   },
   images: {
-    loader: "akamai",
-    path: "/",
+    unoptimized: true,
   },
 };
 

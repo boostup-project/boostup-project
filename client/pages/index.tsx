@@ -4,6 +4,8 @@ import CreateModalContainer from "components/reuse/container/CreateModalContaine
 import StepNavWrapper from "components/reuse/container/StepNavWrapper";
 import Additional from "components/Additional";
 import Curriculum from "components/createModal/Curriculum";
+import BasicInfo from "components/createModal/BasicInfo";
+import Carouselcomp from "components/carousel/Carouselcomp";
 
 const Home = () => {
   return (
@@ -12,8 +14,10 @@ const Home = () => {
         <CreateModalContainer>
           <StepNavWrapper />
           <Additional />
+          <BasicInfo />
           <Curriculum />
         </CreateModalContainer>
+        <Carouselcomp />
       </div>
     </>
   );
