@@ -3,11 +3,10 @@ import { useRecoilState } from "recoil";
 import { logUser } from "atoms";
 import { SubmitHandler } from "react-hook-form";
 import { textColor } from "assets/color/color";
+import { IconExit, IconMagnify } from "assets/icon/";
+import { SearchPop } from "./SearchPop";
 import Image from "next/image";
 import Logo from "../../public/images/logo.png";
-import IconExit from "assets/icon/IconExit";
-import IconMagnify from "assets/icon/IconMagnify";
-import { SearchPop } from "./SearchPop";
 import Link from "next/link";
 
 interface SearchData {
