@@ -10,14 +10,14 @@ import Carouselcomp from "components/carousel/Carouselcomp";
 const Home = () => {
   return (
     <>
-      <div className="flex flex-col bg-bgColor items-center justify-center w-full h-screen">
+      <div className="flex flex-col bg-bgColor items-center justify-start w-full h-screen">
+        <Carouselcomp />
         <CreateModalContainer>
           <StepNavWrapper />
           <Additional />
           <BasicInfo />
           <Curriculum />
         </CreateModalContainer>
-        <Carouselcomp />
       </div>
     </>
   );
