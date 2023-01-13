@@ -18,7 +18,7 @@
       <td align="center"><a href="https://github.com/skynotlimit"><img src="https://user-images.githubusercontent.com/96826217/208035141-339ad699-3832-43be-b271-4ce62c1d18e9.jpg" width="400px;" alt=""/><br /><sub><b>
 정하늘</b></sub></a><br /><a href="https://github.com/boostup-project/boostup-project/commits?author=skynotlimit" title="Documentation">📖</a> <a href="https://github.com/boostup-project/boostup-project/pulls?q=is%3Apr+author%3Askynotlimit" title="Pull Requests">🏡</a></td>
       <td align="center"><a href="https://github.com/hun0613"><img src="https://user-images.githubusercontent.com/96826217/208045253-b965dd66-1409-4886-b92a-28de96ca7a0c.png" width="400px;" alt=""/><br /><sub><b>박성훈</b></sub></a><br /><a href="https://github.com/boostup-project/boostup-project/commits?author=hun0613" title="Documentation">📖</a> <a href="https://github.com/boostup-project/boostup-project/pulls?q=is%3Apr+author%3Ahun0613" title="Pull Requests">🏡</a></td>
-       <td align="center"><a href="https://github.com/roin09"><img src="https://user-images.githubusercontent.com/96826217/208049822-676e9127-fe7b-4e25-af34-8e84d69ee1d0.jpg" width="400px;" alt=""/><br /><sub><b>김다혜</b></sub></a><br /><a href="https://github.com/boostup-project/boostup-project/commits?author=roin09" title="Documentation">📖</a> <a href="https://github.com/boostup-project/boostup-project/pulls?q=is%3Apr+author%3Aroin09" title="Pull Requests">🏡</a></td>
+       
     </tr>
   </tbody>
 </table>
