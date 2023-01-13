@@ -10,7 +10,7 @@ import java.util.stream.Collectors;
 
 @Getter
 @NoArgsConstructor
-public class GetSuggestInfo {
+public class GetPaymentInfo {
 
     private String title;
 
@@ -32,10 +32,10 @@ public class GetSuggestInfo {
 
 
     @Builder
-    public GetSuggestInfo(Lesson lesson,
+    public GetPaymentInfo(Lesson lesson,
                           Integer totalCost,
-                          Integer quantity
-                          ) {
+                          Integer quantity ) {
+
         this.title = lesson.getTitle();
         this.name = lesson.getName();
         this.languages = lesson.getLessonLanguages().stream()
@@ -49,5 +49,6 @@ public class GetSuggestInfo {
         this.cost = lesson.getCost();
         this.totalCost = totalCost;
         this.quantity = quantity;
+
     }
 }

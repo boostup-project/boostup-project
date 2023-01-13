@@ -4,7 +4,8 @@ import com.codueon.boostUp.domain.lesson.entity.Lesson;
 import com.codueon.boostUp.domain.lesson.service.LessonDbService;
 import com.codueon.boostUp.domain.member.entity.Member;
 import com.codueon.boostUp.domain.member.service.MemberDbService;
-import com.codueon.boostUp.domain.suggest.dto.GetSuggestInfo;
+import com.codueon.boostUp.domain.suggest.dto.GetPaymentInfo;
+import com.codueon.boostUp.domain.suggest.dto.GetPaymentReceipt;
 import com.codueon.boostUp.domain.suggest.dto.PostReason;
 import com.codueon.boostUp.domain.suggest.dto.PostSuggest;
 import com.codueon.boostUp.domain.suggest.entity.PaymentInfo;
@@ -20,7 +21,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import static com.codueon.boostUp.domain.suggest.entity.Suggest.SuggestStatus.END_OF_LESSON;
+import static com.codueon.boostUp.domain.suggest.entity.Suggest.SuggestStatus.*;
 import static com.codueon.boostUp.domain.suggest.utils.PayConstants.ORDER_APPROVED;
 import static com.codueon.boostUp.domain.suggest.utils.SuggestConstants.*;
 
@@ -58,7 +59,7 @@ public class SuggestService {
                 .memberId(memberId)
                 .build();
 
-        suggest.setStatus(Suggest.SuggestStatus.ACCEPT_IN_PROGRESS);
+        suggest.setStatus(ACCEPT_IN_PROGRESS);
 
         suggestDbService.saveSuggest(suggest);
     }
@@ -77,7 +78,7 @@ public class SuggestService {
         Lesson findLesson = lessonDbService.ifExistsReturnLesson(findSuggest.getLessonId());
 
         if (!memberId.equals(findLesson.getMemberId()) ||
-                !findSuggest.getStatus().equals(Suggest.SuggestStatus.ACCEPT_IN_PROGRESS)) {
+                !findSuggest.getStatus().equals(ACCEPT_IN_PROGRESS)) {
             throw new BusinessLogicException(ExceptionCode.INVALID_ACCESS);
         }
 
@@ -107,7 +108,7 @@ public class SuggestService {
             throw new BusinessLogicException(ExceptionCode.INVALID_ACCESS);
         }
 
-        if (!findSuggest.getStatus().equals(Suggest.SuggestStatus.ACCEPT_IN_PROGRESS) &&
+        if (!findSuggest.getStatus().equals(ACCEPT_IN_PROGRESS) &&
                 !findSuggest.getStatus().equals(Suggest.SuggestStatus.PAY_IN_PROGRESS)) {
             throw new BusinessLogicException(ExceptionCode.INVALID_ACCESS);
         }
@@ -120,6 +121,7 @@ public class SuggestService {
      * @param suggestId 신청 식별자
      * @param memberId 사용자 식별자
      * @param postReason 거절 사유
+     * @author LeeGoh
      */
     public void declineSuggest(Long suggestId, Long memberId, PostReason postReason) {
 
@@ -127,7 +129,7 @@ public class SuggestService {
         Lesson findLesson = lessonDbService.ifExistsReturnLesson(findSuggest.getLessonId());
 
         if (!memberId.equals(findLesson.getMemberId()) ||
-                !findSuggest.getStatus().equals(Suggest.SuggestStatus.ACCEPT_IN_PROGRESS)) {
+                !findSuggest.getStatus().equals(ACCEPT_IN_PROGRESS)) {
             throw new BusinessLogicException(ExceptionCode.INVALID_ACCESS);
         }
 
@@ -142,21 +144,48 @@ public class SuggestService {
      * 결제 페이지 요청 메서드
      * @param suggestId 신청 식별자
      * @param memberId 사용자 식별자
-     * @return GetSuggestInfo
+     * @return GetPaymentInfo
+     * @author LeeGoh
      */
-    public GetSuggestInfo getSuggestInfo(Long suggestId, Long memberId) {
+    public GetPaymentInfo getPaymentInfo(Long suggestId, Long memberId) {
 
         Suggest findSuggest = suggestDbService.ifExistsReturnSuggest(suggestId);
-        Lesson findLesson = lessonDbService.ifExistsReturnLesson(findSuggest.getLessonId());
-        PaymentInfo findPaymentInfo = suggestDbService.ifExistsReturnPaymentInfo(suggestId);
 
         if (!memberId.equals(findSuggest.getMemberId()) ||
-            findSuggest.getStatus().equals(Suggest.SuggestStatus.ACCEPT_IN_PROGRESS)) {
+                !findSuggest.getStatus().equals(PAY_IN_PROGRESS)) {
             throw new BusinessLogicException(ExceptionCode.INVALID_ACCESS);
         }
 
-        return new GetSuggestInfo(findLesson, findSuggest.getTotalCost(), findPaymentInfo.getQuantity());
+        Lesson findLesson = lessonDbService.ifExistsReturnLesson(findSuggest.getLessonId());
+        PaymentInfo findPaymentInfo = suggestDbService.ifExistsReturnPaymentInfo(suggestId);
+
+        return new GetPaymentInfo(findLesson, findSuggest.getTotalCost(), findPaymentInfo.getQuantity());
     }
+
+    /**
+     * 결제 영수증 요청 메서드
+     * @param suggestId 신청 식별자
+     * @param memberId 사용자 식별자
+     * @return GetPaymentReceipt
+     * @author LeeGoh
+     */
+    public GetPaymentReceipt getPaymentReceipt(Long suggestId, Long memberId) {
+
+        Suggest findSuggest = suggestDbService.ifExistsReturnSuggest(suggestId);
+
+        if (!memberId.equals(findSuggest.getMemberId()) ||
+            findSuggest.getStatus().equals(ACCEPT_IN_PROGRESS) || findSuggest.getStatus().equals(PAY_IN_PROGRESS)) {
+            throw new BusinessLogicException(ExceptionCode.INVALID_ACCESS);
+        }
+
+        Lesson findLesson = lessonDbService.ifExistsReturnLesson(findSuggest.getLessonId());
+        PaymentInfo findPaymentInfo = suggestDbService.ifExistsReturnPaymentInfo(suggestId);
+
+        return new GetPaymentReceipt(
+                findLesson, findSuggest.getTotalCost(), findPaymentInfo.getQuantity(), findSuggest.getPaymentMethod());
+    }
+
+    /*---------- 결제 로직 ----------*/
 
     /**
      * Kakao 결제 URL 요청 메서드
@@ -174,6 +203,10 @@ public class SuggestService {
         Lesson findLesson = lessonDbService.ifExistsReturnLesson(findSuggest.getLessonId());
         PaymentInfo findPaymentInfo = suggestDbService.ifExistsReturnPaymentInfo(suggestId);
 
+        if (!findSuggest.getStatus().equals(PAY_IN_PROGRESS)) {
+            throw new BusinessLogicException(ExceptionCode.INVALID_ACCESS);
+        }
+
         KakaoPayHeader headers = feignService.setKakaoHeaders();
         ReadyToKakaoPaymentInfo params =
                 feignService.setReadyParams(requestUrl, findSuggest, findMember, findLesson, findPaymentInfo);
@@ -181,6 +214,7 @@ public class SuggestService {
         KakaoPayReadyInfo payReadyInfo = feignService.getPayReadyInfo(headers, params);
 
         findPaymentInfo.setKakaoPaymentInfo(params, payReadyInfo.getTid());
+        findPaymentInfo.setPayNumber(0);
         suggestDbService.savePayment(findPaymentInfo);
 
         return Message.builder()
@@ -205,6 +239,10 @@ public class SuggestService {
         Lesson findLesson = lessonDbService.ifExistsReturnLesson(findSuggest.getLessonId());
         PaymentInfo findPaymentInfo = suggestDbService.ifExistsReturnPaymentInfo(suggestId);
 
+        if (!findSuggest.getStatus().equals(PAY_IN_PROGRESS)) {
+            throw new BusinessLogicException(ExceptionCode.INVALID_ACCESS);
+        }
+
         String method = "";
         switch (paymentId) {
             case 2: method = "휴대폰";
@@ -221,6 +259,7 @@ public class SuggestService {
         TossPayReadyInfo tossPayReadyInfo = feignService.getTossPayReadyInfo(headers, body);
 
         findPaymentInfo.setTossPaymentInfo(body);
+        findPaymentInfo.setPayNumber(paymentId);
         findPaymentInfo.setPaymentKey(tossPayReadyInfo.getPaymentKey());
         suggestDbService.savePayment(findPaymentInfo);
 
@@ -261,6 +300,7 @@ public class SuggestService {
         KakaoPaySuccessInfo kakaoPaySuccessInfo = feignService.getSuccessKakaoResponse(headers, params);
 
         kakaoPaySuccessInfo.setOrderStatus(ORDER_APPROVED);
+        findSuggest.setPaymentMethod("카카오페이");
         findSuggest.setStatus(Suggest.SuggestStatus.DURING_LESSON);
         suggestDbService.saveSuggest(findSuggest);
         suggestDbService.savePayment(findPaymentInfo);
@@ -288,6 +328,14 @@ public class SuggestService {
         RequestForTossPaymentInfo body = feignService.setRequestBody(findPaymentInfo);
 
         TossPaySuccessInfo tossPaySuccessInfo = feignService.getSuccessTossResponse(headers, body);
+
+        switch (findPaymentInfo.getPayNumber()) {
+            case 2: findSuggest.setPaymentMethod("토스페이 휴대폰");
+                break;
+            case 3: findSuggest.setPaymentMethod("토스페이 계좌이체");
+                break;
+            default: findSuggest.setPaymentMethod("토스페이 카드");
+        }
 
         tossPaySuccessInfo.setOrderStatus(ORDER_APPROVED);
         findSuggest.setStatus(Suggest.SuggestStatus.DURING_LESSON);
