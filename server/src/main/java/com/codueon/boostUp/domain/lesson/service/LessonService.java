@@ -1,18 +1,13 @@
 package com.codueon.boostUp.domain.lesson.service;
 
 import com.codueon.boostUp.domain.bookmark.repository.BookmarkRepository;
-import com.codueon.boostUp.domain.bookmark.service.BookmarkService;
-import com.codueon.boostUp.domain.lesson.dto.PatchLessonCurriculum;
-import com.codueon.boostUp.domain.lesson.dto.PostLesson;
-import com.codueon.boostUp.domain.lesson.dto.PostLessonDetailEdit;
-import com.codueon.boostUp.domain.lesson.dto.PostLessonInfoEdit;
+import com.codueon.boostUp.domain.lesson.dto.*;
 import com.codueon.boostUp.domain.lesson.entity.*;
 import com.codueon.boostUp.domain.lesson.repository.LessonInfoRepository;
+import com.codueon.boostUp.domain.lesson.repository.LessonRepository;
 import com.codueon.boostUp.domain.member.entity.Member;
 import com.codueon.boostUp.domain.member.service.MemberDbService;
-import com.codueon.boostUp.domain.reveiw.entity.Review;
 import com.codueon.boostUp.domain.reveiw.service.ReviewService;
-import com.codueon.boostUp.domain.suggest.dto.GetSuggestInfo;
 import com.codueon.boostUp.domain.suggest.entity.Suggest;
 import com.codueon.boostUp.domain.suggest.service.SuggestDbService;
 import com.codueon.boostUp.global.exception.BusinessLogicException;
@@ -22,6 +17,8 @@ import com.codueon.boostUp.global.file.FileHandler;
 import com.codueon.boostUp.global.file.UploadFile;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import javax.transaction.Transactional;
@@ -39,7 +36,7 @@ public class LessonService {
     private final SuggestDbService suggestDbService;
     private final ReviewService reviewService;
     private final BookmarkRepository bookmarkRepository;
-    private final LessonInfoRepository lessonInfoRepository;
+    private final LessonRepository lessonRepository;
 
     /**
      * 과외 등록 메서드 (Local)
@@ -400,5 +397,110 @@ public class LessonService {
         awsS3Service.delete(findLesson.getProfileImage().getFileName(),dir);
         findLessonInfo.getCareerImages().forEach(careerImage -> awsS3Service.delete(careerImage.getFileName(), dir1));
         lessonDbService.deleteCurriculum(findCurriculum);
+    }
+
+    /**
+     * 마이페이지 등록한 과외 조회 메서드
+     * @param memberId 사용자 식별자
+     * @return lessonUrl 과외 Url
+     * @author Quartz614
+     */
+    public String getLessonMypage(Long memberId) {
+        Lesson findLesson = lessonDbService.ifExistsReturnLessonByMemberId(memberId);
+        String lessonUrl = "http://localhost:3000/lesson/" + findLesson.getId();
+        return lessonUrl;
+    }
+
+    /**
+     * 메인페이지 조회 메서드
+     * @param memberId 사용자 식별자
+     * @param pageable 페이지 정보
+     * @return Page(GetMainPageLesson)
+     * @author mozzi327
+     */
+    public Page<GetMainPageLesson> getMainPageLessons(Long memberId, Pageable pageable) {
+        if (memberId == null) return lessonRepository.getMainPageLessons(pageable);
+        return lessonRepository.getMainPageLessonsAndBookmarkInfo(memberId, pageable);
+    }
+
+    /**
+     * 메인페이지 상세 검색 메서드
+     * @param memberId 사용자 식별자
+     * @param postSearchLesson 상세 검색 정보
+     * @param pageable 페이지 정보
+     * @return Page(GetMainPageLesson)
+     * @author mozzi327
+     */
+    public Page<GetMainPageLesson> getDetailSearchLessons(Long memberId,
+                                                          PostSearchLesson postSearchLesson,
+                                                          Pageable pageable) {
+        if (memberId != null) return lessonRepository.getDetailSearchMainPageLessonAndGetBookmarkInfo(memberId, postSearchLesson, pageable);
+        return lessonRepository.getDetailSearchMainPageLesson(postSearchLesson, pageable);
+    }
+
+    /**
+     * 메인페이지 언어 별 과외 조회 메서드
+     * @param languageId 사용 언어 식별자
+     * @param pageable 페이지 정보
+     * @return Page(GetMainPageLesson)
+     * @author mozzi327
+     */
+    public Page<GetMainPageLesson> getMainPageLessonsAboutLanguage(Long memberId,
+                                                                   Long languageId,
+                                                                   Pageable pageable) {
+        if (memberId != null) return lessonRepository.getMainPageLessonByLanguageAndBookmarkInfo(memberId, languageId, pageable);
+        return lessonRepository.getMainPageLessonByLanguage(languageId, pageable);
+    }
+
+    /**
+     * 과외 상세페이지 요약 정보 조회 메서드
+     * @param lessonId 과외 식별자
+     * @return GetLesson
+     * @author mozzi327
+     */
+    public GetLesson getDetailLesson(Long lessonId) {
+        Lesson findLesson = lessonDbService.ifExistsReturnLesson(lessonId);
+        return GetLesson.builder()
+                .lesson(findLesson)
+                .build();
+    }
+
+    /**
+     * 과외 상세페이지 상세 정보 조회 메서드
+     * @param lessonId 과외 식별자
+     * @return GetLessonInfo
+     * @author mozzi327
+     */
+    public GetLessonInfo getDetailLessonInfo(Long lessonId) {
+        LessonInfo lessonInfo = lessonDbService.ifExsitsReturnLessonInfo(lessonId);
+        return GetLessonInfo.builder()
+                .lessonInfo(lessonInfo)
+                .build();
+    }
+
+    /**
+     * 과외 상세페이지 커리큘럼 정보 조회 메서드
+     * @param lessonId 과외 식별자
+     * @return GetLessonCurriculum
+     * @author mozzi327
+     */
+    public GetLessonCurriculum getDetailLessonCurriculum(Long lessonId) {
+        Curriculum findCurriculum = lessonDbService.ifExsistsReturnCurriculum(lessonId);
+        return GetLessonCurriculum.builder()
+                .curriculum(findCurriculum.getCurriculum())
+                .build();
+    }
+
+    /**
+     * 선생님 자신의 과외 요약 정보를 조회하는 메서드
+     * @param memberId 사용자 식별자
+     * @return GetLesson
+     * @author mozzi327
+     */
+    public GetTutorLesson getMyLesson(Long memberId) {
+        Lesson findLesson = lessonDbService.ifExistsReturnLessonByMemberId(memberId);
+        return GetTutorLesson.builder()
+                .lesson(findLesson)
+                .build();
     }
 }

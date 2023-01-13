@@ -1,10 +1,8 @@
 package com.codueon.boostUp.domain.lesson.controller;
 
-import com.codueon.boostUp.domain.bookmark.entity.Bookmark;
 import com.codueon.boostUp.domain.lesson.dto.GetMainPageLesson;
 import com.codueon.boostUp.domain.lesson.entity.*;
 import com.codueon.boostUp.domain.lesson.service.LessonDbService;
-import com.codueon.boostUp.domain.lesson.service.SearchService;
 import com.codueon.boostUp.domain.member.entity.Member;
 import com.codueon.boostUp.domain.utils.DataForTest;
 import com.codueon.boostUp.global.webhook.SendErrorToDiscord;
