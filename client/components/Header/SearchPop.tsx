@@ -38,7 +38,7 @@ export const SearchPop = ({ onSubmit, absolute }: Props) => {
           <div className="text-textColor text-center">경력</div>
           <input
             className="desktop:w-8/12 w-5/6 h-fit p-2 border  border-borderColor outline-pointColor rounded-xl font-SCDream2 text-sm text-textColor placeholder:text-center mt-5"
-            type="text"
+            type="number"
             placeholder="원하는 과외쌤의 경력을 숫자로 입력하세요"
             {...register("carrer")}
           />
@@ -137,7 +137,7 @@ export const SearchPop = ({ onSubmit, absolute }: Props) => {
               <span>최소금액</span>
               <input
                 className="w-full h-fit p-2 border  border-borderColor outline-pointColor rounded-xl font-SCDream2 text-sm text-textColor placeholder:text-center mt-5"
-                type="text"
+                type="number"
                 placeholder="최소금액"
                 {...register("startCost")}
               />
@@ -149,7 +149,7 @@ export const SearchPop = ({ onSubmit, absolute }: Props) => {
               <span>최대금액</span>
               <input
                 className="w-full h-fit p-2 border  border-borderColor outline-pointColor rounded-xl font-SCDream2 text-sm text-textColor placeholder:text-center mt-4"
-                type="text"
+                type="number"
                 placeholder="최대금액"
                 {...register("endCost")}
               />
