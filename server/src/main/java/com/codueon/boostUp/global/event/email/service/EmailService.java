@@ -1,7 +1,9 @@
 package com.codueon.boostUp.global.event.email.service;
 
+import com.codueon.boostUp.domain.member.service.MemberDbService;
 import com.codueon.boostUp.global.event.email.dto.PostEmailCode;
 import com.codueon.boostUp.domain.member.exception.AuthException;
+import com.codueon.boostUp.global.exception.BusinessLogicException;
 import com.codueon.boostUp.global.exception.ExceptionCode;
 import com.codueon.boostUp.global.utils.RedisUtils;
 import lombok.RequiredArgsConstructor;
@@ -11,6 +13,7 @@ import org.springframework.mail.MailException;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.mail.Message;
 import javax.mail.internet.InternetAddress;
@@ -20,10 +23,12 @@ import java.util.Random;
 @Service
 @RequiredArgsConstructor
 public class EmailService {
-    @Value("${mail.gmail-admin-id}")
-    private String adminAddress;
     private final JavaMailSender emailSender;
     private final RedisUtils redisUtils;
+    private final MemberDbService memberDbService;
+
+    @Value("${mail.gmail-admin-id}")
+    private String adminAddress;
 
     /**
      * Email 인증코드 전송 메서드
@@ -48,10 +53,14 @@ public class EmailService {
      * @param emailCode 이메일 코드 인증 정보
      * @author mozzi327
      */
+    @Transactional
     public void isRightEmailAuthorizationCode(PostEmailCode emailCode) {
+        if (!memberDbService.checkExistEmail(emailCode.getEmail()))
+            throw new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND);
         String findEmailCode = redisUtils.getEmailAuthorizationCode(emailCode.getEmail());
         if(!findEmailCode.equals(emailCode.getEmailCode())) throw new AuthException(ExceptionCode.INVALID_EMAIL_CODE);
         redisUtils.deleteEmailCode(emailCode.getEmail());
+        redisUtils.setEmailAuthorizationCode(emailCode.getEmail(), findEmailCode);
     }
 
     /**
