@@ -11,7 +11,7 @@ import SmallBtn from "components/reuse/btn/SmallBtn";
 const BasicInfo = () => {
 
   const [previewImg, setPreviewImg] = useState<string>('');;
-  const [checkedList, setCheckedList] = useState([]);
+  const [checkedList, setCheckedList] = useState<string[]>([]);
   const [title, setTitle] = useState<string>('')
   const [currentWork, setCurrentWork] = useState<string>('')
   const [carrer, setCareer] = useState<string>('')
@@ -26,7 +26,7 @@ const BasicInfo = () => {
 
   const { control, register, handleSubmit, watch, formState: {errors}} = useForm({mode : "onBlur"});
   //체크된 항목 관리
-  const onCheckedElement = (checked:boolean, item:string) =>{
+  const onCheckedElement = (checked:boolean, item:string, event:any) =>{
       if(checked){
         setCheckedList([...checkedList, item]);
  
@@ -46,10 +46,12 @@ const BasicInfo = () => {
 
             if(e.target.files[0]) {
               reader.readAsDataURL(e.target.files[0])
+              
             }          
             reader.onloadend = () => {
-              const previewImgUrl = reader.result;
+              const previewImgUrl = reader.result as string;
               
+
            if(previewImgUrl) {
                 setPreviewImg(previewImgUrl);
             }          
@@ -59,15 +61,15 @@ const BasicInfo = () => {
     setPreviewImg('');
       }
 
-      //Address값 관리
-     const handleAddress = (data) =>{
+      //선택한 Address값 관리
+     const handleAddress = (data:any) =>{
       setSelectedOptions(data)
      }
 
       //타이틀 값 관리
        const handleTitle = (e:any) =>{
             setTitle(e.target.value)
-            console.log(selectOnline)
+            console.log(selectedOptions, checkedList)
         }
       //현재회사, 학교 값 관리
         const handleCurrentWork =(e:any) =>{
@@ -102,7 +104,7 @@ const BasicInfo = () => {
                         <label
                             className="flex flex-col w-full h-32 border-borderColor rounded-xl hover:bg-gray-100 hover:border-gray-300">
                             <div className="relative flex flex-col h-fit  items-center justify-center rounded-xl  pt-7">
-                                {previewImg.length ? (<>                            
+                                {previewImg ? (<>                            
                                 <img id="preview" className="absolute inset-0 w-full h-32 object-contain" src = {previewImg}/> 
                                 <button                                  
                                     className="absolute top-1 right-3  text-red-500 text-lg"
@@ -133,8 +135,8 @@ const BasicInfo = () => {
                 {...register("email", {
                     required: "필수로 입력해야되는 값입니다.",
                     onChange: handleTitle,
-                    pattern: {
-                        value:/\b[\w\.-]+@[\w\.-]+\.\w{2,4}\b/gi,
+                    minLength: {
+                      value: 3,
                         message: "타이틀을 입력하세요",
                     },
                 })}
@@ -158,7 +160,7 @@ const BasicInfo = () => {
                         type='checkbox'
                         value={el}
                         onChange={(e) => {
-                          onCheckedElement(e.target.checked, e.target.value);
+                          onCheckedElement(e.target.checked, e.target.value, e);
                         }}
                       />
                         {el}
@@ -176,7 +178,7 @@ const BasicInfo = () => {
                         type='checkbox'
                         value={el}
                         onChange={(e) => {
-                          onCheckedElement(e.target.checked, e.target.value);
+                          onCheckedElement(e.target.checked, e.target.value, e);
                         }}
                       />
                         {el}
@@ -196,8 +198,8 @@ const BasicInfo = () => {
                 {...register("currentWork", {
                     required: "필수로 입력해야되는 값입니다.",
                     onChange: handleCurrentWork,
-                    pattern: {
-                        value:/\b[\w\.-]+@[\w\.-]+\.\w{2,4}\b/gi,
+                    minLength: {
+                      value: 3,
                         message: "재직 회사/학교를 입력하세요",
                     },
                 })}
@@ -218,8 +220,8 @@ const BasicInfo = () => {
                 {...register("carrer", {
                     required: "필수로 입력해야되는 값입니다.",
                     onChange: handleCarrer,
-                    pattern: {
-                        value:/\b[\w\.-]+@[\w\.-]+\.\w{2,4}\b/gi,
+                    minLength: {
+                      value: 3,
                         message: "경력을 입력하세요",
                     },
                 })}
@@ -244,13 +246,43 @@ const BasicInfo = () => {
             <div className="w-5/12 text-center flex flex-col items-stretch">
               <div>구</div>
               <div className="w-full h-fit items-stretch rounded-xl mt-5">
-                <Select
-                  options={addArr}
-                  placeholder="Select color"
-                  value={selectedOptions}
-                  onChange={handleAddress}
-                  isSearchable={true}
-                  isMulti
+              <Controller
+                  name="language"
+                  render={({ field }) => (
+                    <Select
+                      {...field}
+                      placeholder={<div>구 선택</div>}
+                      styles={{
+                        control: (baseStyles, state) => ({
+                
+                          ...baseStyles,
+                          width : "250px",
+                          borderRadius: "12px",
+                          fontSize: "14px",
+                          fontFamily: "SCDream2",
+                          borderColor: "#A8A7A7",
+                          borderWidth: "1px",
+                        }),
+                        menu: base => ({
+                          ...base,
+                          fontFamily: "SCDream2",
+                          fontSize: "14px",
+                        }),
+                      }}
+                      isMulti
+                      options={[
+                        ...addArr.map((el, idx) => ({
+                          value: addDict[el].toString(),
+                          label: el.toString(),
+                          key: idx.toString(),
+                        })),
+                      ]}
+                      value ={selectedOptions}
+                      onChange={handleAddress}
+                    />
+                  )}
+                  control={control}
+                  defaultValue=""
                 />
               </div>
             </div>
@@ -269,8 +301,8 @@ const BasicInfo = () => {
               {...register("tuition", {
                  required: "필수로 입력해야되는 값입니다.",
                  onChange: handleTuition,
-                 pattern: {
-                 value:/\^\d.*/gi,
+                 minLength: {
+                  value: 4,
                  message: "수업료를 입력하세요",
                   },
               })}
