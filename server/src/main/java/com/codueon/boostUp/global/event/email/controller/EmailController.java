@@ -2,7 +2,7 @@ package com.codueon.boostUp.global.event.email.controller;
 
 import com.codueon.boostUp.global.event.email.dto.PostEmailCode;
 import com.codueon.boostUp.global.event.email.service.EmailService;
-import com.codueon.boostUp.domain.dto.PostEmail;
+import com.codueon.boostUp.domain.member.dto.PostEmail;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;

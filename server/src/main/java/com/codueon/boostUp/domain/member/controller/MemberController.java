@@ -1,7 +1,7 @@
 package com.codueon.boostUp.domain.member.controller;
 
-import com.codueon.boostUp.domain.dto.PostEmail;
-import com.codueon.boostUp.domain.dto.PostPassword;
+import com.codueon.boostUp.domain.member.dto.PostEmail;
+import com.codueon.boostUp.domain.member.dto.PostPassword;
 import com.codueon.boostUp.domain.member.dto.*;
 import com.codueon.boostUp.domain.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
@@ -75,24 +75,26 @@ public class MemberController {
     }
 
     /**
-     * 사용자 본인 확인 컨트롤러 메서드
-     * @param isRightUser 사용자 본인 확인 정보
-     * @author mozzi327
-     */
-    @PostMapping("/password/find")
-    public ResponseEntity postIsRightMember(@RequestBody PostAttemptFindPassword isRightUser) {
-        memberService.isRightMember(isRightUser);
-        return ResponseEntity.ok().build();
-    }
-
-    /**
-     * 본인 확인 성공 시 비밀번호 변경 컨트롤러 메서드
+     * 비밀번호 변경 컨트롤러 메서드(로그인페이지)
      * @param changePassword 비밀번호 변경 정보
      * @author mozzi327
      */
     @PostMapping("/password/resetting")
-    public ResponseEntity postChangePassword(@RequestBody PostChangePassword changePassword) {
-        memberService.changePassword(changePassword);
+    public ResponseEntity postChangePasswordInLoginPage(@RequestBody PostPasswordInLoginPage changePassword) {
+        memberService.changePasswordInLoginPage(changePassword);
+        return ResponseEntity.ok().build();
+    }
+
+    /**
+     * 비밀번호 변경 컨트롤러 메서드(마이페이지)
+     * @param changePassword 비밀번호 변경 정보
+     * @return
+     * @author mozzi327
+     */
+    @PostMapping("/password/resetting/my-page")
+    public ResponseEntity postChangePasswordInMyPage(@RequestBody PostPasswordInMyPage changePassword) {
+        Long memberId = 1L;
+        memberService.changePasswordInMyPage(memberId, changePassword);
         return ResponseEntity.ok().build();
     }
 
