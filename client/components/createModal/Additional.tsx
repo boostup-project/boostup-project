@@ -1,5 +1,5 @@
 import { modalImgTxt } from "assets/color/color";
-import IconImg from "assets/icon/IconImg";
+import { IconImg } from "assets/icon/";
 import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 
