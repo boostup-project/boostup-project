@@ -1,17 +1,24 @@
 package com.codueon.boostUp.domain.member.service;
 
-import com.codueon.boostUp.domain.member.dto.PostAttemptFindPassword;
-import com.codueon.boostUp.domain.member.dto.PostPasswordInLoginPage;
 import com.codueon.boostUp.domain.member.dto.PostMember;
+import com.codueon.boostUp.domain.member.dto.PostName;
+import com.codueon.boostUp.domain.member.dto.PostPasswordInLoginPage;
 import com.codueon.boostUp.domain.member.dto.PostPasswordInMyPage;
 import com.codueon.boostUp.domain.member.entity.AccountStatus;
 import com.codueon.boostUp.domain.member.entity.Member;
+import com.codueon.boostUp.domain.member.entity.MemberImage;
+import com.codueon.boostUp.domain.member.repository.MemberRepository;
 import com.codueon.boostUp.global.exception.BusinessLogicException;
 import com.codueon.boostUp.global.exception.ExceptionCode;
+import com.codueon.boostUp.global.file.AwsS3Service;
+import com.codueon.boostUp.global.file.FileHandler;
+import com.codueon.boostUp.global.file.UploadFile;
 import com.codueon.boostUp.global.security.utils.CustomAuthorityUtils;
-import com.codueon.boostUp.domain.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -21,6 +28,12 @@ public class MemberService {
     private final MemberDbService memberDbService;
     private final CustomAuthorityUtils authorityUtils;
     private final MemberRepository memberRepository;
+    private final FileHandler fileHandler;
+    private final AwsS3Service awsS3Service;
+
+
+    @Value("${default.image.address}")
+    private String defaultImageAddress;
 
     /**
      * 회원가입 메서드
@@ -41,6 +54,11 @@ public class MemberService {
                 .accountStatus(AccountStatus.COMMON_MEMBER)
                 .roles(roles)
                 .build();
+
+        MemberImage memberImageS3 = MemberImage.builder()
+                .filePath(defaultImageAddress)
+                .build();
+        member.addMemberImage(memberImageS3);
 
         memberDbService.saveMember(member);
     }
@@ -93,6 +111,32 @@ public class MemberService {
     public void changePasswordInMyPage(Long memberId, PostPasswordInMyPage changePassword) {
         Member findMember = memberDbService.ifExistsReturnMember(memberId);
         findMember.editNewPassword(memberDbService.encodingPassword(changePassword.getChangePassword()));
+        memberDbService.saveMember(findMember);
+    }
+
+    @SneakyThrows
+    public void changeMemberInfo(PostName name, MultipartFile file, Long memberId) {
+
+        if (file.isEmpty() && name.getName().isEmpty()) return;
+
+        Member findMember = memberDbService.ifExistsReturnMember(memberId);
+        UploadFile uploadFile = fileHandler.uploadFile(file);
+
+//        String dir = "memberImage";
+//        UploadFile uploadFile = awsS3Service.uploadfile(file, dir);
+
+        if (!file.isEmpty()) {
+            MemberImage memberImage = MemberImage.builder()
+                    .filePath(uploadFile.getFilePath())
+                    .fileName(uploadFile.getFileName())
+                    .fileSize(uploadFile.getFileSize())
+                    .originFileName(uploadFile.getOriginFileName())
+                    .build();
+            findMember.addMemberImage(memberImage);
+        }
+
+        if (!name.getName().isEmpty()) findMember.setName(name.getName());
+
         memberDbService.saveMember(findMember);
     }
 }
