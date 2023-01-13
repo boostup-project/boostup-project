@@ -4,7 +4,7 @@ interface Props {
   fill?: string;
 }
 
-const Exit = ({ width, heigth, fill }: Props) => {
+const IconExit = ({ width, heigth, fill }: Props) => {
   return (
     <svg
       width={width}
@@ -20,4 +20,4 @@ const Exit = ({ width, heigth, fill }: Props) => {
     </svg>
   );
 };
-export default Exit;
+export default IconExit;

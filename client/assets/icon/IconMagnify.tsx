@@ -3,7 +3,7 @@ interface Props {
   heigth?: string;
   fill?: string;
 }
-const Magnify = ({ width, heigth, fill }: Props) => {
+const IconMagnify = ({ width, heigth, fill }: Props) => {
   return (
     <svg
       width={width}
@@ -19,4 +19,4 @@ const Magnify = ({ width, heigth, fill }: Props) => {
     </svg>
   );
 };
-export default Magnify;
+export default IconMagnify;

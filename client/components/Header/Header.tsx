@@ -5,8 +5,8 @@ import { SubmitHandler } from "react-hook-form";
 import { textColor } from "assets/color/color";
 import Image from "next/image";
 import Logo from "../../public/images/logo.png";
-import Exit from "assets/icon/Exit";
-import Magnify from "assets/icon/Magnify";
+import IconExit from "assets/icon/IconExit";
+import IconMagnify from "assets/icon/IconMagnify";
 import { SearchPop } from "./SearchPop";
 import Link from "next/link";
 
@@ -33,7 +33,7 @@ const Header = () => {
         <nav className="w-full h-full flex tablet:justify-center tablet:items-center desktop:justify-between">
           <div className="w-1/2 flex justify-start items-center ml-4 tablet:h-[40px] desktop:hidden">
             <div className="w-[18px] tablet:w-[34.5px]">
-              <Exit fill={textColor} />
+              <IconExit fill={textColor} />
             </div>
           </div>
           <div className="w-1/6 h-full flex justify-center items-center desktop:justify-start desktop:items-end">
@@ -46,7 +46,7 @@ const Header = () => {
               className="w-[18px] tablet:w-[34.5px]"
               onClick={e => setSeek(!seek)}
             >
-              <Magnify fill={textColor} />
+              <IconMagnify fill={textColor} />
             </div>
           </div>
           <div className="relative hidden desktop:flex desktop:items-end desktop:w-6/12 h-full">

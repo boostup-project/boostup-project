@@ -4,7 +4,7 @@ interface Props {
   fill?: string;
 }
 /** OPTION: color값에 hex 코드, width 및 height은 px값 입력 **/
-const DefaultImg = ({ width, heigth, fill }: Props) => {
+const IconImg = ({ width, heigth, fill }: Props) => {
   return (
     <svg
       width={width}
@@ -21,4 +21,4 @@ const DefaultImg = ({ width, heigth, fill }: Props) => {
   );
 };
 
-export default DefaultImg;
+export default IconImg;

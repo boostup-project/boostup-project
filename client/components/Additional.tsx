@@ -1,5 +1,5 @@
 import { modalImgTxt } from "assets/color/color";
-import DefaultImg from "assets/icon/DefaultImg";
+import IconImg from "assets/icon/IconImg";
 import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 
@@ -147,7 +147,7 @@ const Additional = () => {
                 className="flex flex-col justify-center items-center text-modalImgTxt"
                 htmlFor="refImg"
               >
-                <DefaultImg width="69px" heigth="62px" fill={modalImgTxt} />
+                <IconImg width="69px" heigth="62px" fill={modalImgTxt} />
                 <div>클릭하여 사진을 첨부하세요</div>
               </label>
               <input
