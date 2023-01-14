@@ -63,8 +63,6 @@ public class DataForTest {
                 .name("김길동")
                 .email("gddong@gmail.com")
                 .password("ghdrlfehd1!")
-                .address("대한민국 청와대")
-                .company("안우아한 형제들")
                 .roles(List.of("USER"))
                 .build();
         member.addMemberImage(getMemberImage());
@@ -77,8 +75,6 @@ public class DataForTest {
                 .name("조길동")
                 .email("jddong@gmail.com")
                 .password("ghdrlfehd1!")
-                .address("대한민국 청와대")
-                .company("코코넛 엔터프라이즈")
                 .roles(List.of("USER"))
                 .build();
         member.addMemberImage(getMemberImage());

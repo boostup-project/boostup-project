@@ -14,7 +14,7 @@ import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuild
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-public class GetDetailPageLessonTest extends SearchControllerTest {
+public class GetDetailPageLessonTest extends LessonControllerTest {
 
     @Test
     @DisplayName("과외 상세페이지 요약 정보 조회 테스트")
@@ -24,7 +24,7 @@ public class GetDetailPageLessonTest extends SearchControllerTest {
                 .lesson(lesson)
                 .build();
 
-        given(searchService.getDetailLesson(Mockito.anyLong())).willReturn(getLesson);
+        given(lessonService.getDetailLesson(Mockito.anyLong())).willReturn(getLesson);
 
         ResultActions actions =
                 mockMvc.perform(
@@ -58,7 +58,7 @@ public class GetDetailPageLessonTest extends SearchControllerTest {
                 .lessonInfo(lessonInfo)
                 .build();
 
-        given(searchService.getDetailLessonInfo(Mockito.anyLong())).willReturn(getLessonInfo);
+        given(lessonService.getDetailLessonInfo(Mockito.anyLong())).willReturn(getLessonInfo);
 
         ResultActions actions =
                 mockMvc.perform(get("/lesson/{lesson-id}/detailInfo", lesson.getId())
@@ -82,7 +82,7 @@ public class GetDetailPageLessonTest extends SearchControllerTest {
                 .curriculum(curriculum.getCurriculum())
                 .build();
 
-        given(searchService.getDetailLessonCurriculum(Mockito.anyLong())).willReturn(getLessonCurriculum);
+        given(lessonService.getDetailLessonCurriculum(Mockito.anyLong())).willReturn(getLessonCurriculum);
 
         ResultActions actions =
                 mockMvc.perform(get("/lesson/{lesson-id}/curriculum", lesson.getId())
