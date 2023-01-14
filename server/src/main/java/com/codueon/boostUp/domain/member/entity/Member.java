@@ -1,12 +1,9 @@
 package com.codueon.boostUp.domain.member.entity;
 
-import javax.persistence.*;
-
 import com.codueon.boostUp.global.utils.Auditable;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
+
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,9 +17,9 @@ public class Member extends Auditable {
     private Long id;
     private String email;
     private String password;
+
+    @Setter
     private String name;
-    private String address;
-    private String company;
 
     @ElementCollection(fetch = FetchType.EAGER)
     private List<String> roles = new ArrayList<>();
@@ -33,7 +30,7 @@ public class Member extends Auditable {
     @Enumerated(value = EnumType.STRING)
     private AccountStatus accountStatus = AccountStatus.COMMON_MEMBER;
 
-    @OneToOne(mappedBy = "member", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    @OneToOne(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
     private MemberImage memberImage;
 
     @Builder
@@ -41,16 +38,12 @@ public class Member extends Auditable {
                   String email,
                   String password,
                   String name,
-                  String address,
-                  String company,
                   AccountStatus accountStatus,
                   List<String> roles) {
         this.id = id;
         this.email = email;
         this.password = password;
         this.name = name;
-        this.address = address;
-        this.company = company;
         this.accountStatus = accountStatus;
         this.roles = roles;
     }

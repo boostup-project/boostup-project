@@ -28,15 +28,17 @@ public class MemberController {
     }
 
     /**
-     * 회원 수정 컨트롤러 메서드
-     * @param patchMember 회원 수정 정보
-     * @param memberImage 회원 사진 정보
-     * @author mozzi327
+     * 회원 정보 수정 컨트롤러 메서드
+     * @param name 닉네임 정보
+     * @param file 프로필 이미지 정보
+     * @author LeeGoh
      */
     @PostMapping("/modification")
-    public ResponseEntity postEditMemberProfile(@RequestBody PatchMember patchMember,
-                                           @RequestPart(value = "file") MultipartFile memberImage) {
-        // TODO : 시큐리티 적용 시 Authentication 객체 추가 요
+    public ResponseEntity postChangeMemberInfoInMyPage(@RequestPart(value = "data") PostName name,
+                                                       @RequestPart(value = "profileImage") MultipartFile file ) {
+
+        Long memberId = 1L;
+        memberService.changeMemberInfo(name, file, memberId);
         return ResponseEntity.ok().build();
     }
 
