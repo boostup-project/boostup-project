@@ -2,7 +2,6 @@ package com.codueon.boostUp.global.file;
 
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
-import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import lombok.RequiredArgsConstructor;
@@ -61,6 +60,7 @@ public class AwsS3Service {
         });
         return fileList;
     }
+
     public UploadFile uploadfile(MultipartFile multipartFile, String dir) throws IOException {
         String fileName = createFileName(multipartFile.getOriginalFilename());
 
@@ -76,9 +76,11 @@ public class AwsS3Service {
                 .fileSize(multipartFile.getSize())
                 .build();
     }
+
     private String createFileName(String fileName) {
         return UUID.randomUUID().toString().concat(getFileExtension(fileName));
     }
+
     private String getFileExtension(String fileName) {
         try {
             return fileName.substring(fileName.lastIndexOf("."));
@@ -86,6 +88,7 @@ public class AwsS3Service {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "잘못된 형식의 파일(" + fileName + ")");
         }
     }
+
     public void delete(String fileName, String dir) {
         String key = dir + "/" + fileName;
         amazonS3Client.deleteObject(bucket, key);

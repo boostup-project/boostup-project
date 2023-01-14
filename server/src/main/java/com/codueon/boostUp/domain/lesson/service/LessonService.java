@@ -2,8 +2,14 @@ package com.codueon.boostUp.domain.lesson.service;
 
 import com.codueon.boostUp.domain.bookmark.repository.BookmarkRepository;
 import com.codueon.boostUp.domain.lesson.dto.*;
-import com.codueon.boostUp.domain.lesson.entity.*;
-import com.codueon.boostUp.domain.lesson.repository.LessonInfoRepository;
+import com.codueon.boostUp.domain.lesson.dto.PatchLessonCurriculum;
+import com.codueon.boostUp.domain.lesson.dto.PostLesson;
+import com.codueon.boostUp.domain.lesson.dto.PostLessonDetailEdit;
+import com.codueon.boostUp.domain.lesson.dto.PostLessonInfoEdit;
+import com.codueon.boostUp.domain.lesson.entity.Curriculum;
+import com.codueon.boostUp.domain.lesson.entity.Lesson;
+import com.codueon.boostUp.domain.lesson.entity.LessonInfo;
+import com.codueon.boostUp.domain.lesson.entity.ProfileImage;
 import com.codueon.boostUp.domain.lesson.repository.LessonRepository;
 import com.codueon.boostUp.domain.member.entity.Member;
 import com.codueon.boostUp.domain.member.service.MemberDbService;
@@ -21,6 +27,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+
 import javax.transaction.Transactional;
 import java.util.List;
 
@@ -200,8 +207,10 @@ public class LessonService {
                                  PostLessonInfoEdit postLessonInfoEdit,
                                  Long memberId,
                                  MultipartFile profileImage) {
+
         Member findMember = memberDbService.ifExistsReturnMember(memberId);
         Lesson updateLesson = lessonDbService.ifExistsReturnLesson(lessonId);
+
 //        if (!Objects.equals(updateLesson.getMemberId(), findMember)) {
 //            throw new BusinessLogicException(ExceptionCode.UNAUTHORIZED_FOR_UPDATE);
 //        }
