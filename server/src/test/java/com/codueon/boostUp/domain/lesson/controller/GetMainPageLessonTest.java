@@ -15,7 +15,7 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-public class GetMainPageLessonTest extends SearchControllerTest {
+public class GetMainPageLessonTest extends LessonControllerTest {
 
     @Test
     @DisplayName("메인페이지 과외 상세 검색 테스트")
@@ -30,11 +30,11 @@ public class GetMainPageLessonTest extends SearchControllerTest {
 
         String content = gson.toJson(postSearchLesson);
 
-        given(searchService.getDetailSearchLessons(Mockito.anyLong(), Mockito.any(PostSearchLesson.class), Mockito.any(Pageable.class)))
+        given(lessonService.getDetailSearchLessons(Mockito.anyLong(), Mockito.any(PostSearchLesson.class), Mockito.any(Pageable.class)))
                 .willReturn(new PageImpl<>(mainPageResponse));
 
         ResultActions actions =
-                mockMvc.perform(post("/search")
+                mockMvc.perform(post("/lesson/search")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
                         .with(csrf())
@@ -87,11 +87,11 @@ public class GetMainPageLessonTest extends SearchControllerTest {
 
         String content = gson.toJson(postSearchLesson);
 
-        given(searchService.getDetailSearchLessons(Mockito.anyLong(), Mockito.any(PostSearchLesson.class), Mockito.any(Pageable.class)))
+        given(lessonService.getDetailSearchLessons(Mockito.anyLong(), Mockito.any(PostSearchLesson.class), Mockito.any(Pageable.class)))
                 .willReturn(new PageImpl<>(mainPageResponse2));
 
         ResultActions actions =
-                mockMvc.perform(post("/search")
+                mockMvc.perform(post("/lesson/search")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
                         .with(csrf())
@@ -135,11 +135,11 @@ public class GetMainPageLessonTest extends SearchControllerTest {
     @DisplayName("메인페이지 과외 전체 조회 테스트")
     void getMainPageLessonInfoTest1() throws Exception {
 
-        given(searchService.getMainPageLessons(Mockito.anyLong(), Mockito.any(Pageable.class)))
+        given(lessonService.getMainPageLessons(Mockito.anyLong(), Mockito.any(Pageable.class)))
                 .willReturn(new PageImpl<>(mainPageResponse));
 
         ResultActions actions =
-                mockMvc.perform(get("/home")
+                mockMvc.perform(get("/lesson")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
                 );
@@ -181,11 +181,11 @@ public class GetMainPageLessonTest extends SearchControllerTest {
     @DisplayName("메인페이지 과외 전체 조회 테스트 (로그인 시)")
     void getMainPageLessonInfoTest2() throws Exception {
 
-        given(searchService.getMainPageLessons(Mockito.anyLong(), Mockito.any(Pageable.class)))
+        given(lessonService.getMainPageLessons(Mockito.anyLong(), Mockito.any(Pageable.class)))
                 .willReturn(new PageImpl<>(mainPageResponse2));
 
         ResultActions actions =
-                mockMvc.perform(get("/home")
+                mockMvc.perform(get("/lesson")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
                 );
@@ -228,11 +228,11 @@ public class GetMainPageLessonTest extends SearchControllerTest {
     void getMainPageForLanguageTest() throws Exception {
         Long languageId = 1L;
 
-        given(searchService.getMainPageLessonsAboutLanguage(Mockito.anyLong(), Mockito.anyLong(), Mockito.any(Pageable.class)))
+        given(lessonService.getMainPageLessonsAboutLanguage(Mockito.anyLong(), Mockito.anyLong(), Mockito.any(Pageable.class)))
                 .willReturn(new PageImpl<>(mainPageResponse));
 
         ResultActions actions =
-                mockMvc.perform(get("/language/{language-id}", languageId)
+                mockMvc.perform(get("/lesson/language/{language-id}", languageId)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
                 );
@@ -275,11 +275,11 @@ public class GetMainPageLessonTest extends SearchControllerTest {
     void getMainPageForLanguageTest2() throws Exception {
         Long languageId = 1L;
 
-        given(searchService.getMainPageLessonsAboutLanguage(Mockito.anyLong(), Mockito.anyLong(), Mockito.any(Pageable.class)))
+        given(lessonService.getMainPageLessonsAboutLanguage(Mockito.anyLong(), Mockito.anyLong(), Mockito.any(Pageable.class)))
                 .willReturn(new PageImpl<>(mainPageResponse2));
 
         ResultActions actions =
-                mockMvc.perform(get("/language/{language-id}", languageId)
+                mockMvc.perform(get("/lesson/language/{language-id}", languageId)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
                 );

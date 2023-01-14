@@ -3,6 +3,7 @@ package com.codueon.boostUp.domain.lesson.controller;
 import com.codueon.boostUp.domain.lesson.dto.GetMainPageLesson;
 import com.codueon.boostUp.domain.lesson.entity.*;
 import com.codueon.boostUp.domain.lesson.service.LessonDbService;
+import com.codueon.boostUp.domain.lesson.service.LessonService;
 import com.codueon.boostUp.domain.member.entity.Member;
 import com.codueon.boostUp.domain.utils.DataForTest;
 import com.codueon.boostUp.global.webhook.SendErrorToDiscord;
@@ -22,8 +23,8 @@ import java.util.stream.Collectors;
 @WithMockUser
 @AutoConfigureWebMvc
 @MockBean(JpaMetamodelMappingContext.class)
-@WebMvcTest(controllers = {SearchController.class})
-public class SearchControllerTest {
+@WebMvcTest(controllers = {LessonController.class})
+public class LessonControllerTest {
 
     @Autowired
     protected Gson gson;
@@ -32,7 +33,7 @@ public class SearchControllerTest {
     protected MockMvc mockMvc;
 
     @MockBean
-    protected SearchService searchService;
+    protected LessonService lessonService;
 
     @MockBean
     protected LessonDbService lessonDbService;
