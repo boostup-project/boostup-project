@@ -18,6 +18,7 @@ const Carouselcomp = () => {
     centerMode: false,
     slidesToShow: 1,
     slidesToScroll: 1,
+    arrows: false,
   };
   return (
     <>
