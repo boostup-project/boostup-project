@@ -15,8 +15,8 @@ const devAlias: string[] = Object.keys(devAdds);
 
 const Footer = () => {
   return (
-    <div className="w-full bg-textColor flex justify-center items-center">
-      <footer className="bg-textColor w-full h-28 text-white font-SCDream5 px-1 py-1 flex flex-col justify-between tablet:flex-row tablet:items-center tablet:h-[281px] desktop:w-3/4 desktop:min-w-[1000px]">
+    <footer className="w-full bg-textColor flex justify-center items-center">
+      <div className="bg-textColor w-full h-28 text-white font-SCDream5 px-1 py-1 flex flex-col justify-between tablet:flex-row tablet:items-center tablet:h-[281px] desktop:w-3/4 desktop:min-w-[1000px]">
         <div className="tablet:flex tablet:flex-col tablet:h-1/2 tablet:justify-around">
           <div className="text-base tablet:text-2xl">(주)코듀온</div>
           <div>
@@ -52,8 +52,8 @@ const Footer = () => {
             tel: 02-345-6789
           </div>
         </div>
-      </footer>
-    </div>
+      </div>
+    </footer>
   );
 };
 

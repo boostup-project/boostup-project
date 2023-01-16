@@ -1,5 +1,5 @@
 import { modalImgTxt } from "assets/color/color";
-import DefaultImg from "assets/icon/DefaultImg";
+import { IconImg } from "assets/icon/";
 import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 
@@ -58,7 +58,7 @@ const Additional = () => {
           <span className="text-pointColor">*</span>
         </div>
         <input
-          className="w-full h-8 border border-borderColor outline-pointColor rounded-xl font-SCDream2 text-xs text-textColor placeholder:text-center mt-2 tablet:text-sm tablet:h-12"
+          className="w-full h-8 px-2 border border-borderColor outline-pointColor rounded-xl font-SCDream2 text-xs text-textColor placeholder:text-center  mt-2 tablet:text-sm tablet:h-12"
           placeholder="본인에 대한 한줄 소개를 입력하세요"
           {...register("introduction", { required: "입력 필요" })}
         />
@@ -73,7 +73,7 @@ const Additional = () => {
         </div>
         <div></div>
         <textarea
-          className="w-full h-20 border px-0.5 border-borderColor outline-pointColor rounded-xl font-SCDream2 text-xs text-textColor placeholder:text-center placeholder:translate-y-[110%] placeholder:leading-loose break-all tablet:text-sm tablet:h-24"
+          className="w-full h-20 p-2 border border-borderColor outline-pointColor rounded-xl font-SCDream2 text-xs text-textColor placeholder:text-center placeholder:translate-y-[110%] placeholder:leading-loose break-all tablet:text-sm tablet:h-24"
           placeholder="재직중인 회사 또는 재학중인 학교를 입력하세요"
           {...register("detailCompany", { required: "입력 필요" })}
         />
@@ -87,7 +87,7 @@ const Additional = () => {
           <span className="text-pointColor">*</span>
         </div>
         <input
-          className="w-full h-8 border border-borderColor outline-pointColor rounded-xl font-SCDream2 text-xs text-textColor placeholder:text-center mt-2 tablet:text-sm tablet:h-12"
+          className="w-full h-8 px-2 border border-borderColor outline-pointColor rounded-xl font-SCDream2 text-xs text-textColor placeholder:text-center mt-2 tablet:text-sm tablet:h-12"
           placeholder="ex)화이트보드가 사용 가능한 스터디룸"
           {...register("detailLocation", { required: "입력 필요" })}
         />
@@ -101,7 +101,7 @@ const Additional = () => {
           <span className="text-pointColor">*</span>
         </div>
         <input
-          className="w-full h-8 border border-borderColor outline-pointColor rounded-xl font-SCDream2 text-xs text-textColor placeholder:text-center tablet:text-sm tablet:h-12"
+          className="w-full h-8 px-2 border border-borderColor outline-pointColor rounded-xl font-SCDream2 text-xs text-textColor placeholder:text-center tablet:text-sm tablet:h-12"
           placeholder="본인에 대한 성격을 입력하세요"
           {...register("personality", { required: "입력 필요" })}
         />
@@ -115,7 +115,7 @@ const Additional = () => {
           <span className="text-pointColor">*</span>
         </div>
         <input
-          className="w-full h-8 border border-borderColor outline-pointColor rounded-xl font-SCDream2 text-xs text-textColor placeholder:text-center tablet:text-sm tablet:h-12"
+          className="w-full h-8 px-2 border border-borderColor outline-pointColor rounded-xl font-SCDream2 text-xs text-textColor placeholder:text-center tablet:text-sm tablet:h-12"
           placeholder="수업료에 대한 자세한 내용을 입력하세요"
           {...register("detailCost", { required: "입력 필요" })}
         />
@@ -147,7 +147,7 @@ const Additional = () => {
                 className="flex flex-col justify-center items-center text-modalImgTxt"
                 htmlFor="refImg"
               >
-                <DefaultImg width="69px" heigth="62px" fill={modalImgTxt} />
+                <IconImg width="69px" heigth="62px" fill={modalImgTxt} />
                 <div>클릭하여 사진을 첨부하세요</div>
               </label>
               <input
