@@ -82,7 +82,10 @@ public class SuggestService {
             throw new BusinessLogicException(ExceptionCode.INVALID_ACCESS);
         }
 
-        PaymentInfo paymentInfo = PaymentInfo.builder().quantity(quantity).build();
+        PaymentInfo paymentInfo = PaymentInfo.builder()
+                .quantity(quantity)
+                .build();
+        paymentInfo.setQuantityCount(quantity);
         paymentInfo.setSuggest(findSuggest);
         suggestDbService.savePayment(paymentInfo);
 
@@ -103,8 +106,9 @@ public class SuggestService {
     public void cancelSuggest(Long suggestId, Long memberId) {
 
         Suggest findSuggest = suggestDbService.ifExistsReturnSuggest(suggestId);
+        Lesson findLesson = lessonDbService.ifExistsReturnLesson(findSuggest.getLessonId());
 
-        if (!memberId.equals(findSuggest.getMemberId())) {
+        if (!memberId.equals(findLesson.getMemberId())) {
             throw new BusinessLogicException(ExceptionCode.INVALID_ACCESS);
         }
 
@@ -367,7 +371,107 @@ public class SuggestService {
 
     }
 
+    /**
+     * Kakao 환불 메서드
+     * @param suggestId 신청 식별자
+     * @param memberId 회원 식별자
+     * @author LeeGoh
+     */
+    public void refundKakaoPayment(Long suggestId, Long memberId) {
 
+        Suggest findSuggest = suggestDbService.ifExistsReturnSuggest(suggestId);
 
+        if (!findSuggest.getStatus().equals(DURING_LESSON)) {
+            throw new BusinessLogicException(ExceptionCode.INVALID_ACCESS);
+        }
+
+    }
+
+    /**
+     * Toss 환불 메서드
+     * @param suggestId 신청 식별자
+     * @param memberId 회원 식별자
+     * @author LeeGoh
+     */
+    public void refundTossPayment(Long suggestId, Long memberId) {
+
+        Suggest findSuggest = suggestDbService.ifExistsReturnSuggest(suggestId);
+
+        if (!findSuggest.getStatus().equals(DURING_LESSON)) {
+            throw new BusinessLogicException(ExceptionCode.INVALID_ACCESS);
+        }
+
+    }
+
+    /*---------- 출석부 로직 ----------*/
+
+    /**
+     * 출석 인정 메서드
+     * @param suggestId 신청 식별자
+     * @param memberId 회원 식별자
+     * @return Integer
+     * @author LeeGoh
+     */
+    public Integer teacherChecksAttendance(Long suggestId, Long memberId) {
+
+        Suggest findSuggest = suggestDbService.ifExistsReturnSuggest(suggestId);
+        Lesson findLesson = lessonDbService.ifExistsReturnLesson(findSuggest.getLessonId());
+
+        if (!findLesson.getMemberId().equals(memberId) ||
+            !findSuggest.getStatus().equals(DURING_LESSON) ) {
+            throw new BusinessLogicException(ExceptionCode.INVALID_ACCESS);
+        }
+
+        PaymentInfo findPaymentInfo = suggestDbService.ifExistsReturnPaymentInfo(suggestId);
+        suggestDbService.checkQuantityCount(findPaymentInfo);
+
+        return findPaymentInfo.getQuantityCount();
+
+    }
+
+    /**
+     * 출석 인정 취소 메서드
+     * @param suggestId 신청 식별자
+     * @param memberId 회원 식별자
+     * @return Integer
+      @author LeeGoh
+     */
+    public Integer teacherCancelAttendance(Long suggestId, Long memberId) {
+
+        Suggest findSuggest = suggestDbService.ifExistsReturnSuggest(suggestId);
+        Lesson findLesson = lessonDbService.ifExistsReturnLesson(findSuggest.getLessonId());
+
+        if (!findLesson.getMemberId().equals(memberId) ||
+            !findSuggest.getStatus().equals(DURING_LESSON) ) {
+            throw new BusinessLogicException(ExceptionCode.INVALID_ACCESS);
+        }
+
+        PaymentInfo findPaymentInfo = suggestDbService.ifExistsReturnPaymentInfo(suggestId);
+        suggestDbService.cancelQuantityCount(findPaymentInfo);
+
+        return findPaymentInfo.getQuantityCount();
+
+    }
+
+    /**
+     * 출석부 조회 메서드
+     * @param suggestId 신청 식별자
+     * @param memberId 회원 식별자
+     * @return Integer
+      @author LeeGoh
+     */
+    public Integer getLessonAttendance(Long suggestId, Long memberId) {
+
+        Suggest findSuggest = suggestDbService.ifExistsReturnSuggest(suggestId);
+
+        if (!findSuggest.getStatus().equals(DURING_LESSON) ||
+            !findSuggest.getMemberId().equals(memberId)) {
+            throw new BusinessLogicException(ExceptionCode.INVALID_ACCESS);
+        }
+
+        PaymentInfo findPaymentInfo = suggestDbService.ifExistsReturnPaymentInfo(suggestId);
+        return findPaymentInfo.getQuantityCount();
+
+    }
 
 }

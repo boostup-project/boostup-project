@@ -116,4 +116,32 @@ public class SuggestDbService {
     public List<Suggest> findAllSuggestForLesson(Long lessonId) {
         return suggestRepository.findAllById(lessonId);
     }
+
+    /**
+     * 출석 인정(출석 횟수 차감) 메서드
+     * @param paymentInfo 결제 정보
+     * @return PaymentInfo
+     * @author LeeGoh
+     */
+    public PaymentInfo checkQuantityCount(PaymentInfo paymentInfo) {
+        paymentInfo.reduceQuantityCount();
+        if (paymentInfo.getQuantityCount() < 0) {
+            throw new BusinessLogicException(ExceptionCode.INVALID_ACCESS);
+        }
+        return paymentInfoRepository.save(paymentInfo);
+    }
+
+    /**
+     * 출석 인정 취소(출석 횟수 증가) 메서드
+     * @param paymentInfo
+     * @return PaymentInfo
+     * @author LeeGoh
+     */
+    public PaymentInfo cancelQuantityCount(PaymentInfo paymentInfo) {
+        if (paymentInfo.getQuantityCount() >= paymentInfo.getQuantity()) {
+            throw new BusinessLogicException(ExceptionCode.INVALID_ACCESS);
+        }
+        paymentInfo.addQuantityCount();
+        return paymentInfoRepository.save(paymentInfo);
+    }
 }
