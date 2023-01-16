@@ -58,12 +58,20 @@ const Header = () => {
             </div>
             {seek && <SearchPop onSubmit={onSubmit} absolute={true} />}
           </div>
-          <div className="w-1/6 h-full hidden desktop:flex desktop:flex-row-reverse desktop:items-end">
-            <div className="desktop:flex desktop:h-[50px] desktop:justify-end">
+          <div className="w-1/5 h-full hidden desktop:flex desktop:flex-row-reverse desktop:items-end">
+            <div className="w-full pt-2 desktop:flex desktop:h-[50px] desktop:justify-end text-sm">
               {log ? (
                 <>
-                  <div className="mr-8">마이페이지</div>
-                  <div onClick={e => setLog(!log)}>로그아웃</div>
+                  <div className="min-w-fit mr-8 py-1">마이페이지</div>
+                  <div
+                    className="min-w-fit mr-8 py-1"
+                    onClick={e => setLog(!log)}
+                  >
+                    로그아웃
+                  </div>
+                  <div className="min-w-fit w-1/4 h-fit p-1 rounded-md bg-pointColor text-white text-center">
+                    과외등록
+                  </div>
                 </>
               ) : (
                 <>
