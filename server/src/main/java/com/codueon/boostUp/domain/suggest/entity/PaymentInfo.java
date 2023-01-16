@@ -21,6 +21,8 @@ public class PaymentInfo {
 
     private Integer quantity;
 
+    private Integer quantityCount;
+
     /* ---------- 카카오 ---------- */
 
     private String cid;
@@ -73,6 +75,10 @@ public class PaymentInfo {
         this.paymentKey = paymentKey;
     }
 
+    public void setQuantityCount(Integer quantityCount) {
+        this.quantityCount = quantityCount;
+    }
+
     @Builder
     public PaymentInfo(Integer quantity) {
         this.quantity = quantity;
@@ -99,5 +105,13 @@ public class PaymentInfo {
         this.orderId = body.getOrderId();
         this.orderName = body.getOrderName();
         this.successUrl = body.getSuccessUrl();
+    }
+
+    public void addQuantityCount() {
+        quantityCount++;
+    }
+
+    public void reduceQuantityCount() {
+        quantityCount--;
     }
 }
