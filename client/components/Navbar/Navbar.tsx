@@ -19,7 +19,7 @@ const navContents = [
     link: "/",
   },
   {
-    type: "div",
+    type: "Write",
     image: <IconPlus />,
   },
   {
@@ -28,7 +28,7 @@ const navContents = [
     link: "/",
   },
   {
-    type: "div",
+    type: "Filter",
     image: <IconCode />,
   },
 ];
@@ -39,12 +39,19 @@ const Navbar = () => {
       {navContents.map((content, i) => (
         <div className="w-1/5 flex justify-center items-center">
           {content.type === "Link" ? (
-            <div className="w-6">
+            <div key={i} className="w-7">
               <Link href={content.link!}>{content.image}</Link>
             </div>
+          ) : content.type === "Write" ? (
+            <div
+              key={i}
+              className="w-12 h-12 rounded-3xl bg-pointColor flex justify-center items-center"
+            >
+              <div className="w-5">{content.image}</div>
+            </div>
           ) : (
-            <div className="w-6">
-              <div className="bg-pointColor">{content.image}</div>
+            <div key={i} className="w-7">
+              <div>{content.image}</div>
             </div>
           )}
         </div>
