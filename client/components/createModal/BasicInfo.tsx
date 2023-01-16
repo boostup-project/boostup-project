@@ -17,7 +17,7 @@ const BasicInfo = () => {
 
   const [selectedOptions, setSelectedOptions] = useState('');
 
-  const [tuition, setTuition] = useState("");
+  const [cost, setCost] = useState("");
 
   const langArr = Object.keys(langDict);
   const addArr = Object.keys(addDict);
@@ -88,8 +88,8 @@ const BasicInfo = () => {
   const handleCarrer = (e: any) => {
     setCareer(e.target.value);
   };
-  const handleTuition = (e: any) => {
-    setTuition(e.target.value);
+  const handleCost = (e: any) => {
+    setCost(e.target.value);
   };
   const onSubmit = (e: any) => {
     console.log("Success Submit!");
@@ -365,12 +365,12 @@ const BasicInfo = () => {
           </div>
           <input
             type="text"
-            value={tuition}
+            value={cost}
             placeholder="회 당 수업료를 입력하세요"
             className="w-full h-fit p-2 border border-borderColor outline-pointColor rounded-xl font-SCDream4 text-[11px] text-textColor tablet:text-sm"
-            {...register("tuition", {
+            {...register("cost", {
               required: "필수로 입력해야되는 값입니다.",
-              onChange: handleTuition,
+              onChange: handleCost,
               minLength: {
                 value: 2,
                 message: "수업료를 입력하세요",
@@ -379,7 +379,7 @@ const BasicInfo = () => {
           />
           <ErrorMessage
             errors={errors}
-            name="tuition"
+            name="cost"
             render={({ message }) => {
               return (
                 <div className="w-full h-fit flex flex-col justify-center items-start font-SCDream3 text-negativeMessage text-xs mt-1">
