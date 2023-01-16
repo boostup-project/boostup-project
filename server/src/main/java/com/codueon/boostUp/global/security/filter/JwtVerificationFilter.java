@@ -29,14 +29,24 @@ public class JwtVerificationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
-        String accessToken = request.getHeader(AUTHORIZATION);
+        // 1. Request Header 에서 JWT 토큰 추출
+        String accessToken = resolveToken((HttpServletRequest) request);
 
-        if(StringUtils.hasText(accessToken) && accessToken.startsWith(BEARER)) {
-            accessToken = jwtTokenUtils.parseAccessToken(accessToken);
+        if(accessToken != null) {
             Authentication authentication = new JwtAuthenticationToken(accessToken);
             Authentication authenticatedToken = authenticationManager.authenticate(authentication);
             SecurityContextHolder.getContext().setAuthentication(authenticatedToken);
         }
         doFilter(request, response, filterChain);
     }
+
+    // Request Header 에서 토큰 정보 추출
+    private String resolveToken(HttpServletRequest request) {
+        String bearerToken = request.getHeader(AUTHORIZATION);
+        if (StringUtils.hasText(bearerToken) && bearerToken.startsWith(BEARER)) {
+            return jwtTokenUtils.parseAccessToken(bearerToken);
+        }
+        return null;
+    }
 }
+
