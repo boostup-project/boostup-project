@@ -3,12 +3,14 @@ package com.codueon.boostUp.domain.lesson.controller;
 import com.codueon.boostUp.domain.dto.MultiResponseDto;
 import com.codueon.boostUp.domain.lesson.dto.*;
 import com.codueon.boostUp.domain.lesson.service.LessonService;
+import com.codueon.boostUp.global.security.token.JwtAuthenticationToken;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -32,10 +34,12 @@ public class LessonController {
     @PostMapping(value = "/registration")
     public ResponseEntity<?> postLesson(@RequestPart(value = "data") PostLesson postLesson,
                                         @RequestPart(value = "profileImage") MultipartFile profileImage,
-                                        @RequestPart(value = "careerImage") List<MultipartFile> careerImage) throws Exception {
-        Long memberId = 1L;
+                                        @RequestPart(value = "careerImage") List<MultipartFile> careerImage,
+                                        Authentication authentication) throws Exception {
+        JwtAuthenticationToken token = (JwtAuthenticationToken) authentication;
+
         /** 로컬 환경 */
-        lessonService.createLesson(postLesson, memberId, profileImage, careerImage);
+        lessonService.createLesson(postLesson, token.getId(), profileImage, careerImage);
 
         /** S3 환경 */
 //        lessonService.createLessonS3(postLesson, memberId, profileImage, careerImage);

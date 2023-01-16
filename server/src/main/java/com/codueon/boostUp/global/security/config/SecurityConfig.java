@@ -7,6 +7,7 @@ import com.codueon.boostUp.global.utils.RedisUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -58,7 +59,8 @@ public class SecurityConfig {
                 .antMatchers("/h2/**").permitAll()
                 .antMatchers("/auth/**").permitAll()
                 .antMatchers("/member/**").permitAll()
-                .antMatchers("/lesson/**").permitAll()
+                //.antMatchers("/lesson/**").permitAll()
+                .antMatchers(HttpMethod.POST, "/lesson/registration").hasAuthority("ROLE_USER")
                 .antMatchers("/suggest/**").permitAll()
                 .antMatchers("/api/**").permitAll()
                 .anyRequest().permitAll();
@@ -69,6 +71,7 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
+        configuration.addAllowedOrigin("http://localhost:8080");
         configuration.addAllowedOrigin("http://localhost:3000");
         configuration.addAllowedOrigin("http://codeuon.s3-website.ap-northeast-2.amazonaws.com");
         configuration.addAllowedOrigin("https://d12vhbt0xdnnpo.cloudfront.net");
