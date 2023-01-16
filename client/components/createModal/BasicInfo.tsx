@@ -12,7 +12,7 @@ const BasicInfo = () => {
   const [previewImg, setPreviewImg] = useState<string>("");
   const [checkedList, setCheckedList] = useState<string[]>([]);
   const [title, setTitle] = useState<string>("");
-  const [currentWork, setCurrentWork] = useState<string>("");
+  const [company, setCompany] = useState<string>("");
   const [carrer, setCareer] = useState<string>("");
 
   const [selectedOptions, setSelectedOptions] = useState('');
@@ -82,8 +82,8 @@ const BasicInfo = () => {
     console.log(selectedOptions, checkedList);
   };
   //현재회사, 학교 값 관리
-  const handleCurrentWork = (e: any) => {
-    setCurrentWork(e.target.value);
+  const handleCompany = (e: any) => {
+    setCompany(e.target.value);
   };
   const handleCarrer = (e: any) => {
     setCareer(e.target.value);
@@ -252,12 +252,12 @@ const BasicInfo = () => {
           </div>
           <input
             type="text"
-            value={currentWork}
+            value={company}
             placeholder="현재 회사 또는 학교를 입력하세요"
             className="w-full h-fit p-2 border border-borderColor outline-pointColor rounded-xl font-SCDream4 text-[11px] text-textColor tablet:text-sm"
             {...register("currentWork", {
               required: "필수로 입력해야되는 값입니다.",
-              onChange: handleCurrentWork,
+              onChange: handleCompany,
               minLength: {
                 value: 2,
                 message: "재직 회사/학교를 입력하세요",
