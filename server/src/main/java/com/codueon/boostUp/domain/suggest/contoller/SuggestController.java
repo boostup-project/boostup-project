@@ -199,6 +199,71 @@ public class SuggestController {
     }
 
     /**
+     * 신청 프로세스 9-1 환불 컨트롤러 메서드 Kakao
+     * @param suggestId 신청 식별자
+     * @author LeeGoh
+     */
+    @GetMapping("/suggest/{suggest-id}/kakao/refund")
+    public ResponseEntity refundKakaoPayment(@PathVariable("suggest-id") Long suggestId) {
+
+        Long memberId = 1L;
+        suggestService.refundKakaoPayment(suggestId, memberId);
+        return ResponseEntity.ok().build();
+    }
+
+    /**
+     * 신청 프로세스 9-2 환불 컨트롤러 메서드 Toss
+     * @param suggestId 신청 식별자
+     * @author LeeGoh
+     */
+    @GetMapping("/suggest/{suggest-id}/toss/refund")
+    public ResponseEntity refundTossPayment(@PathVariable("suggest-id") Long suggestId) {
+
+        Long memberId = 1L;
+        suggestService.refundTossPayment(suggestId, memberId);
+        return ResponseEntity.ok().build();
+    }
+
+    /**
+     * 출석부 1 출석부 조회 컨트롤러 메서드
+     * @param suggestId 신청 식별자
+     * @author LeeGoh
+     */
+    @GetMapping("suggest/{suggest-id}/attendance")
+    public ResponseEntity<Integer> getLessonAttendance(@PathVariable("suggest-id") Long suggestId) {
+
+        Long memberId = 1L;
+        Integer quantityCount = suggestService.getLessonAttendance(suggestId, memberId);
+        return ResponseEntity.ok().body(quantityCount);
+    }
+
+    /**
+     * 출석부 2 출석 인정(출석 횟수 차감) 컨트롤러 메서드
+     * @param suggestId 신청 식별자
+     * @author LeeGoh
+     */
+    @GetMapping("suggest/{suggest-id}/attendance/check")
+    public ResponseEntity<Integer> lessonAttendanceCheck(@PathVariable("suggest-id") Long suggestId) {
+
+        Long memberId = 1L;
+        Integer quantityCount = suggestService.teacherChecksAttendance(suggestId, memberId);
+        return ResponseEntity.ok().body(quantityCount);
+    }
+
+    /**
+     * 출석부 3 출석 인정 취소(출석 횟수 증가) 컨트롤러 메서드
+     * @param suggestId 신청 식별자
+     * @author LeeGoh
+     */
+    @GetMapping("suggest/{suggest-id}/attendance/cancel")
+    public ResponseEntity<Integer> lessonAttendanceCancel(@PathVariable("suggest-id") Long suggestId) {
+
+        Long memberId = 1L;
+        Integer quantityCount = suggestService.teacherCancelAttendance(suggestId, memberId);
+        return ResponseEntity.ok().body(quantityCount);
+    }
+
+    /**
      * 결제 영수증 조회 컨트롤러 메서드
      * @param suggestId 신청 식별자
      * @return ResponseEntity
