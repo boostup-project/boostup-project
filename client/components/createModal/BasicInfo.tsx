@@ -62,9 +62,17 @@ const BasicInfo = () => {
   };
 
   //선택한 Address값 관리
+   const options : any = [
+    ...addArr.map((el, idx) => ({
+      value: addDict[el],
+      label: el,
+      key: idx,
+    })),
+  ] 
+
   const handleAddress = (data: any) => {
-    if(selectedOptions.length <3){
-      setSelectedOptions(data);
+   if (selectedOptions.length < 3){
+      setSelectedOptions(data)
     }
   };
 
@@ -102,7 +110,7 @@ const BasicInfo = () => {
           더 자세한 내용은 다음 단계에서 작성해주세요
         </div>
         <form onSubmit={handleSubmit(onSubmit)}>
-          <div className="flex flex-row justify-start items-start w-full h-fit font-SCDream5 text-sm text-textColor mt-4 mb-2">
+          <div className="flex flex-row justify-start items-start w-full h-fit font-SCDream6 text-sm text-textColor mt-4 mb-2">
             프로필 사진 <div className="text-pointColor">*</div>
           </div>
           <div className="flex items-center justify-center w-full h-fit border mb-3">
@@ -116,7 +124,7 @@ const BasicInfo = () => {
                       src={previewImg}
                     />
                     <button
-                      className="absolute top-1 right-3  text-red-500 text-lg"
+                      className="absolute top-1 right-3  text-red-500 text-sm"
                       onClick={deleteImg}
                     >
                       삭제
@@ -151,7 +159,7 @@ const BasicInfo = () => {
             </label>
           </div>
 
-          <div className="flex flex-row justify-start items-start w-full h-fit font-SCDream5 text-sm text-textColor mt-4 mb-2">
+          <div className="flex flex-row justify-start items-start w-full h-fit font-SCDream6 text-sm text-textColor mt-6 mb-2">
             타이틀 <div className="text-pointColor">*</div>
           </div>
           <input
@@ -180,7 +188,7 @@ const BasicInfo = () => {
             }}
           />
 
-          <div className="flex flex-row justify-start items-start w-full h-fit font-SCDream5 text-sm text-textColor mt-4 mb-2">
+          <div className="flex flex-row justify-start items-start w-full h-fit font-SCDream6 text-sm text-textColor mt-6 mb-4">
             가능언어 <div className="text-pointColor">*</div>{" "}
             <div className="text-pointColor text-xs">
               3개까지 선택가능합니다
@@ -192,7 +200,7 @@ const BasicInfo = () => {
               {langArr.map((el: string, idx: number) => {
                 if (idx < 4) {
                   return (
-                    <div className="w-full h-fit flex flex-col font-SCDream4">
+                    <div className="w-full h-fit flex flex-col font-SCDream4 mb-2">
                       <label className="checkboxLabel" key={idx}>
                         <input
                           type="checkbox"
@@ -239,7 +247,7 @@ const BasicInfo = () => {
             </div>
           </>
 
-          <div className="flex flex-row justify-start items-start w-full h-fit font-SCDream5 text-sm text-textColor mt-4 mb-2">
+          <div className="flex flex-row justify-start items-start w-full h-fit font-SCDream6 text-sm text-textColor mt-6 mb-2">
             재직 회사/학교 <div className="text-pointColor">*</div>
           </div>
           <input
@@ -268,7 +276,7 @@ const BasicInfo = () => {
             }}
           />
 
-          <div className="flex flex-row justify-start items-start w-full h-fit font-SCDream5 text-sm text-textColor mt-4 mb-2">
+          <div className="flex flex-row justify-start items-start w-full h-fit font-SCDream6 text-sm text-textColor mt-6 mb-2">
             경력 <div className="text-pointColor">*</div>
           </div>
           <input
@@ -298,18 +306,21 @@ const BasicInfo = () => {
           />
 
           <label className="w-full flex flex-col items-start mt-5">
-            <div className="flex flex-row justify-start items-stretch w-full h-fit font-SCDream5 text-sm text-textColor my-2">
+            <div className="flex flex-row justify-start items-stretch w-full h-fit font-SCDream6 text-sm text-textColor mt-6 mb-2">
               과외가능지역 <div className="text-pointColor">*</div>
+              <div className="text-pointColor text-xs">
+              3개까지 선택가능합니다
+            </div>
             </div>
 
             <div className="desktop:w-8/12 w-5/6 flex justify-between items-stretch">
-              <div className="w-5/12 text-center flex flex-col even:items-end">
+              <div className="w-4/12 text-center flex flex-col even:items-end">
                 <div>시,도</div>
                 <div className="w-full h-fit p-2 border border-borderColor outline-pointColor rounded-xl font-SCDream2 text-sm text-textColor bg-white text-center mt-5">
                   <span>서울특별시</span>
                 </div>
               </div>
-              <div className="w-5/12 text-center flex flex-col items-stretch">
+              <div className="w-7/12 text-center flex flex-col items-stretch">
                 <div>구</div>
                 <div className="w-full h-fit items-stretch rounded-xl mt-5">
                   <Controller
@@ -321,7 +332,7 @@ const BasicInfo = () => {
                         styles={{
                           control: (baseStyles, state) => ({
                             ...baseStyles,
-                            width: "250px",
+                            width: "280px",
                             borderRadius: "12px",
                             fontSize: "14px",
                             fontFamily: "SCDream2",
@@ -334,16 +345,10 @@ const BasicInfo = () => {
                             fontSize: "14px",
                           }),
                         }}
-                        isMulti
-                        options={[
-                          ...addArr.map((el, idx) => ({
-                            value: addDict[el].toString(),
-                            label: el.toString(),
-                            key: idx.toString(),
-                          })),
-                        ]}
+                        options ={options}
                         value={selectedOptions}
                         onChange={handleAddress}
+                        isMulti
                       />
                     )}
                     control={control}
@@ -355,7 +360,7 @@ const BasicInfo = () => {
             </div>
           </label>
 
-          <div className="flex flex-row justify-start items-start w-full h-fit font-SCDream5 text-sm text-textColor mt-4 mb-2">
+          <div className="flex flex-row justify-start items-start w-full h-fit font-SCDream6 text-sm text-textColor mt-6 mb-2">
             수업료<div className="text-pointColor">*</div>
           </div>
           <input
