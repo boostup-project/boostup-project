@@ -21,8 +21,6 @@ public class PaymentInfo {
 
     private Integer quantity;
 
-    private Integer payNumber;
-
     /* ---------- 카카오 ---------- */
 
     private String cid;
@@ -73,10 +71,6 @@ public class PaymentInfo {
 
     public void setPaymentKey(String paymentKey) {
         this.paymentKey = paymentKey;
-    }
-
-    public void setPayNumber(Integer payNumber) {
-        this.payNumber = payNumber;
     }
 
     @Builder
