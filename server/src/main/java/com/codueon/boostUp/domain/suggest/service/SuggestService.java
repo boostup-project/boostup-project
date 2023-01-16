@@ -199,13 +199,14 @@ public class SuggestService {
     public Message getKaKapPayUrl(Long suggestId, Long memberId, String requestUrl) {
 
         Suggest findSuggest = suggestDbService.ifExistsReturnSuggest(suggestId);
-        Member findMember = memberDbService.ifExistsReturnMember(memberId);
-        Lesson findLesson = lessonDbService.ifExistsReturnLesson(findSuggest.getLessonId());
-        PaymentInfo findPaymentInfo = suggestDbService.ifExistsReturnPaymentInfo(suggestId);
 
         if (!findSuggest.getStatus().equals(PAY_IN_PROGRESS)) {
             throw new BusinessLogicException(ExceptionCode.INVALID_ACCESS);
         }
+
+        Member findMember = memberDbService.ifExistsReturnMember(memberId);
+        Lesson findLesson = lessonDbService.ifExistsReturnLesson(findSuggest.getLessonId());
+        PaymentInfo findPaymentInfo = suggestDbService.ifExistsReturnPaymentInfo(suggestId);
 
         KakaoPayHeader headers = feignService.setKakaoHeaders();
         ReadyToKakaoPaymentInfo params =
@@ -214,7 +215,6 @@ public class SuggestService {
         KakaoPayReadyInfo payReadyInfo = feignService.getPayReadyInfo(headers, params);
 
         findPaymentInfo.setKakaoPaymentInfo(params, payReadyInfo.getTid());
-        findPaymentInfo.setPayNumber(0);
         suggestDbService.savePayment(findPaymentInfo);
 
         return Message.builder()
@@ -236,12 +236,13 @@ public class SuggestService {
     public Message getTossPayUrl(Long suggestId, String requestUrl, int paymentId) {
 
         Suggest findSuggest = suggestDbService.ifExistsReturnSuggest(suggestId);
-        Lesson findLesson = lessonDbService.ifExistsReturnLesson(findSuggest.getLessonId());
-        PaymentInfo findPaymentInfo = suggestDbService.ifExistsReturnPaymentInfo(suggestId);
 
         if (!findSuggest.getStatus().equals(PAY_IN_PROGRESS)) {
             throw new BusinessLogicException(ExceptionCode.INVALID_ACCESS);
         }
+
+        Lesson findLesson = lessonDbService.ifExistsReturnLesson(findSuggest.getLessonId());
+        PaymentInfo findPaymentInfo = suggestDbService.ifExistsReturnPaymentInfo(suggestId);
 
         String method = "";
         switch (paymentId) {
@@ -259,7 +260,6 @@ public class SuggestService {
         TossPayReadyInfo tossPayReadyInfo = feignService.getTossPayReadyInfo(headers, body);
 
         findPaymentInfo.setTossPaymentInfo(body);
-        findPaymentInfo.setPayNumber(paymentId);
         findPaymentInfo.setPaymentKey(tossPayReadyInfo.getPaymentKey());
         suggestDbService.savePayment(findPaymentInfo);
 
@@ -303,7 +303,6 @@ public class SuggestService {
         findSuggest.setPaymentMethod("카카오페이");
         findSuggest.setStatus(Suggest.SuggestStatus.DURING_LESSON);
         suggestDbService.saveSuggest(findSuggest);
-        suggestDbService.savePayment(findPaymentInfo);
 
         return Message.builder()
                 .data(kakaoPaySuccessInfo)
@@ -329,10 +328,10 @@ public class SuggestService {
 
         TossPaySuccessInfo tossPaySuccessInfo = feignService.getSuccessTossResponse(headers, body);
 
-        switch (findPaymentInfo.getPayNumber()) {
-            case 2: findSuggest.setPaymentMethod("토스페이 휴대폰");
+        switch (tossPaySuccessInfo.getMethod()) {
+            case "휴대폰": findSuggest.setPaymentMethod("토스페이 휴대폰");
                 break;
-            case 3: findSuggest.setPaymentMethod("토스페이 계좌이체");
+            case "계좌이체": findSuggest.setPaymentMethod("토스페이 계좌이체");
                 break;
             default: findSuggest.setPaymentMethod("토스페이 카드");
         }
@@ -340,7 +339,6 @@ public class SuggestService {
         tossPaySuccessInfo.setOrderStatus(ORDER_APPROVED);
         findSuggest.setStatus(Suggest.SuggestStatus.DURING_LESSON);
         suggestDbService.saveSuggest(findSuggest);
-        suggestDbService.savePayment(findPaymentInfo);
 
         return Message.builder()
                 .data(tossPaySuccessInfo)
@@ -357,6 +355,10 @@ public class SuggestService {
     public void setSuggestStatusAndEndTime(Long suggestId) {
 
         Suggest findSuggest = suggestDbService.ifExistsReturnSuggest(suggestId);
+
+        if (!findSuggest.getStatus().equals(DURING_LESSON)) {
+            throw new BusinessLogicException(ExceptionCode.INVALID_ACCESS);
+        }
 
         findSuggest.setStatus(END_OF_LESSON);
         findSuggest.setEndTime();
