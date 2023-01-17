@@ -230,11 +230,10 @@ public class SuggestController {
      * @author LeeGoh
      */
     @GetMapping("suggest/{suggest-id}/attendance")
-    public ResponseEntity<Integer> getLessonAttendance(@PathVariable("suggest-id") Long suggestId) {
+    public ResponseEntity getLessonAttendance(@PathVariable("suggest-id") Long suggestId) {
 
         Long memberId = 1L;
-        Integer quantityCount = suggestService.getLessonAttendance(suggestId, memberId);
-        return ResponseEntity.ok().body(quantityCount);
+        return ResponseEntity.ok(suggestService.getLessonAttendance(suggestId, memberId));
     }
 
     /**

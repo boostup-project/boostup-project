@@ -4,10 +4,7 @@ import com.codueon.boostUp.domain.lesson.entity.Lesson;
 import com.codueon.boostUp.domain.lesson.service.LessonDbService;
 import com.codueon.boostUp.domain.member.entity.Member;
 import com.codueon.boostUp.domain.member.service.MemberDbService;
-import com.codueon.boostUp.domain.suggest.dto.GetPaymentInfo;
-import com.codueon.boostUp.domain.suggest.dto.GetPaymentReceipt;
-import com.codueon.boostUp.domain.suggest.dto.PostReason;
-import com.codueon.boostUp.domain.suggest.dto.PostSuggest;
+import com.codueon.boostUp.domain.suggest.dto.*;
 import com.codueon.boostUp.domain.suggest.entity.PaymentInfo;
 import com.codueon.boostUp.domain.suggest.entity.Reason;
 import com.codueon.boostUp.domain.suggest.entity.Suggest;
@@ -85,7 +82,7 @@ public class SuggestService {
         PaymentInfo paymentInfo = PaymentInfo.builder()
                 .quantity(quantity)
                 .build();
-        paymentInfo.setQuantityCount(quantity);
+        paymentInfo.setQuantityCount(0);
         paymentInfo.setSuggest(findSuggest);
         suggestDbService.savePayment(paymentInfo);
 
@@ -460,7 +457,7 @@ public class SuggestService {
      * @return Integer
       @author LeeGoh
      */
-    public Integer getLessonAttendance(Long suggestId, Long memberId) {
+    public GetLessonAttendance getLessonAttendance(Long suggestId, Long memberId) {
 
         Suggest findSuggest = suggestDbService.ifExistsReturnSuggest(suggestId);
 
@@ -470,7 +467,16 @@ public class SuggestService {
         }
 
         PaymentInfo findPaymentInfo = suggestDbService.ifExistsReturnPaymentInfo(suggestId);
-        return findPaymentInfo.getQuantityCount();
+
+        Integer quantity = findPaymentInfo.getQuantity();
+        Integer quantityCount = findPaymentInfo.getQuantityCount();
+
+
+        return GetLessonAttendance.builder()
+                .quantity(quantity)
+                .quantityCount(quantityCount)
+                .progress((int)((double)quantityCount/(double)quantity * 100))
+                .build();
 
     }
 
