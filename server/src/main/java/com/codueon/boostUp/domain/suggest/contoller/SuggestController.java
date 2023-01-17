@@ -230,7 +230,7 @@ public class SuggestController {
      * @param suggestId 신청 식별자
      * @author LeeGoh
      */
-    @GetMapping("suggest/{suggest-id}/attendance")
+    @GetMapping("/suggest/{suggest-id}/attendance")
     public ResponseEntity getLessonAttendance(@PathVariable("suggest-id") Long suggestId) {
 
         Long memberId = 1L;
@@ -242,7 +242,7 @@ public class SuggestController {
      * @param suggestId 신청 식별자
      * @author LeeGoh
      */
-    @GetMapping("suggest/{suggest-id}/attendance/check")
+    @GetMapping("/suggest/{suggest-id}/attendance/check")
     public ResponseEntity<Integer> lessonAttendanceCheck(@PathVariable("suggest-id") Long suggestId) {
 
         Long memberId = 1L;
@@ -255,7 +255,7 @@ public class SuggestController {
      * @param suggestId 신청 식별자
      * @author LeeGoh
      */
-    @GetMapping("suggest/{suggest-id}/attendance/cancel")
+    @GetMapping("/suggest/{suggest-id}/attendance/cancel")
     public ResponseEntity<Integer> lessonAttendanceCancel(@PathVariable("suggest-id") Long suggestId) {
 
         Long memberId = 1L;
