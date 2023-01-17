@@ -34,12 +34,12 @@ public class LessonController {
     @PostMapping(value = "/registration")
     public ResponseEntity<?> postLesson(@RequestPart(value = "data") PostLesson postLesson,
                                         @RequestPart(value = "profileImage") MultipartFile profileImage,
-                                        @RequestPart(value = "careerImage") List<MultipartFile> careerImage,
-                                        Authentication authentication) throws Exception {
-        JwtAuthenticationToken token = (JwtAuthenticationToken) authentication;
+                                        @RequestPart(value = "careerImage") List<MultipartFile> careerImage){
+
+        Long memberId = 1L;
 
         /** 로컬 환경 */
-        lessonService.createLesson(postLesson, token.getId(), profileImage, careerImage);
+        lessonService.createLesson(postLesson, memberId, profileImage, careerImage);
 
         /** S3 환경 */
 //        lessonService.createLessonS3(postLesson, memberId, profileImage, careerImage);
