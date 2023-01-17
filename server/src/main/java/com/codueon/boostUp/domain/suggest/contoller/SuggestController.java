@@ -194,7 +194,8 @@ public class SuggestController {
     @GetMapping("/suggest/{suggest-id}/done")
     public ResponseEntity endOfLesson(@PathVariable("suggest-id") Long suggestId) {
 
-        suggestService.setSuggestStatusAndEndTime(suggestId);
+        Long memberId = 1L;
+        suggestService.setSuggestStatusAndEndTime(suggestId, memberId);
         return ResponseEntity.ok().build();
     }
 
@@ -217,11 +218,11 @@ public class SuggestController {
      * @author LeeGoh
      */
     @GetMapping("/suggest/{suggest-id}/toss/refund")
-    public ResponseEntity refundTossPayment(@PathVariable("suggest-id") Long suggestId) {
+    public ResponseEntity<Message> refundTossPayment(@PathVariable("suggest-id") Long suggestId) {
 
         Long memberId = 1L;
-        suggestService.refundTossPayment(suggestId, memberId);
-        return ResponseEntity.ok().build();
+        Message message = suggestService.refundTossPayment(suggestId, memberId);
+        return ResponseEntity.ok().body(message);
     }
 
     /**

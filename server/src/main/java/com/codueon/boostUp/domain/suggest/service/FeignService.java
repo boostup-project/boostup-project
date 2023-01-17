@@ -194,6 +194,28 @@ public class FeignService {
     }
 
     /**
+     * Toss 환불 정보 바디 입력 메서드
+     * @param paymentInfo 결제 정보
+     * @return CancelToTossPaymentInfo
+     * @author LeeGoh
+     */
+    public CancelToTossPaymentInfo setCancelBody(PaymentInfo paymentInfo) {
+
+        Integer count = paymentInfo.getQuantity() - paymentInfo.getQuantityCount();
+        Integer amount = paymentInfo.getAmount();
+
+        if (paymentInfo.getQuantityCount() > 0) {
+            return CancelToTossPaymentInfo.builder()
+                    .cancelReason("고객이 취소를 원함")
+                    .cancelAmount(count * amount)
+                    .build();
+        } else return CancelToTossPaymentInfo.builder()
+                .cancelReason("고객이 취소를 원함")
+                .build();
+
+    }
+
+    /**
      * Kakao 결제 완료 후 신청 정보 요청 메서드
      * @param headers KakaoPayHeader
      * @param params RequestForKakaoPaymentInfo
@@ -231,6 +253,31 @@ public class FeignService {
                     .successForPayment(
                             headers.getAdminKey(),
                             headers.getContentType(),
+                            body
+                    );
+        } catch (RestClientException e) {
+            log.error(e.getMessage());
+        }
+        return null;
+
+    }
+
+    /**
+     * Toss 환불 완료 후 환불 정보 요청 메서드
+     * @param headers TossPayHeader
+     * @param paymentKey paymentKey
+     * @param body CancelToTossPaymentInfo
+     * @return TossPayCancelInfo
+     * @author LeeGoh
+     */
+    public TossPayCancelInfo getCancelPaymentResponse(TossPayHeader headers, String paymentKey, CancelToTossPaymentInfo body) {
+
+        try {
+            return tossPayFeignClient
+                    .cancelPayment(
+                            headers.getAdminKey(),
+                            headers.getContentType(),
+                            paymentKey,
                             body
                     );
         } catch (RestClientException e) {

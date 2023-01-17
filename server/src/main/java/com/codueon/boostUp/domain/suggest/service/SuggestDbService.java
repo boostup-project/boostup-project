@@ -1,5 +1,6 @@
 package com.codueon.boostUp.domain.suggest.service;
 
+import com.codueon.boostUp.domain.lesson.entity.Lesson;
 import com.codueon.boostUp.domain.suggest.dto.GetStudentSuggest;
 import com.codueon.boostUp.domain.suggest.dto.GetTutorSuggest;
 import com.codueon.boostUp.domain.suggest.entity.PaymentInfo;
@@ -16,6 +17,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+
+import static com.codueon.boostUp.domain.suggest.entity.Suggest.SuggestStatus.*;
 
 @Service
 @RequiredArgsConstructor
@@ -143,5 +146,40 @@ public class SuggestDbService {
             throw new BusinessLogicException(ExceptionCode.INVALID_ACCESS);
         }
         return paymentInfoRepository.save(paymentInfo);
+    }
+
+    /**
+     * 예외처리 - Suggest memberId, status 비교
+     * @param suggest 신청 정보
+     * @param memberId 회원 식별자
+     * @author LeeGoh
+     */
+    public void suggestGetMemberIdAndStatusIsDuringLesson(Suggest suggest, Long memberId) {
+        if (!suggest.getStatus().equals(DURING_LESSON) ||
+                !suggest.getMemberId().equals(memberId)) {
+            throw new BusinessLogicException(ExceptionCode.INVALID_ACCESS);
+        }
+    }
+
+    /**
+     * 예외처리 - Lesson memberId, Suggest status 비교
+     * @param suggest 신청 정보
+     * @param lesson 과외 정보
+     * @param memberId 회원 식별자
+     * @author LeeGoh
+     */
+    public void lessonGetMemberIdAndStatusIsDuringLesson(Suggest suggest, Lesson lesson, Long memberId) {
+        if (!lesson.getMemberId().equals(memberId) ||
+                !suggest.getStatus().equals(DURING_LESSON) ) {
+            throw new BusinessLogicException(ExceptionCode.INVALID_ACCESS);
+        }
+    }
+
+    public void suggestGetMemberIdAndStatusIsNotInProgress(Suggest suggest, Long memberId) {
+        if (suggest.getStatus().equals(ACCEPT_IN_PROGRESS) ||
+                suggest.getStatus().equals(PAY_IN_PROGRESS) ||
+                !suggest.getMemberId().equals(memberId)) {
+            throw new BusinessLogicException(ExceptionCode.INVALID_ACCESS);
+        }
     }
 }
