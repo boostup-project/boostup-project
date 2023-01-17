@@ -63,6 +63,7 @@ public class SecurityConfig {
                 .antMatchers(HttpMethod.POST, "/lesson/registration").hasAuthority("ROLE_USER")
                 .antMatchers("/suggest/**").permitAll()
                 .antMatchers("/api/**").permitAll()
+                .antMatchers("/ws-connect/**").permitAll()
                 .anyRequest().permitAll();
 
         return http.build();
@@ -73,6 +74,8 @@ public class SecurityConfig {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.addAllowedOrigin("http://localhost:8080");
         configuration.addAllowedOrigin("http://localhost:3000");
+        configuration.addAllowedOrigin("http://localhost:8080");
+        configuration.addAllowedOrigin("ws://localhost:8080");
         configuration.addAllowedOrigin("http://codeuon.s3-website.ap-northeast-2.amazonaws.com");
         configuration.addAllowedOrigin("https://d12vhbt0xdnnpo.cloudfront.net");
         configuration.addAllowedHeader("*");

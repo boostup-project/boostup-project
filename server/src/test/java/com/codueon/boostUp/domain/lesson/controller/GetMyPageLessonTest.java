@@ -14,6 +14,22 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 public class GetMyPageLessonTest extends LessonControllerTest {
 
+//package com.codueon.boostUp.domain.lesson.controller;
+//
+//import com.codueon.boostUp.domain.lesson.dto.GetTutorLesson;
+//import org.junit.jupiter.api.DisplayName;
+//import org.junit.jupiter.api.Test;
+//import org.mockito.Mockito;
+//import org.springframework.http.MediaType;
+//import org.springframework.test.web.servlet.ResultActions;
+//
+//import static org.mockito.BDDMockito.given;
+//import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
+//import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+//import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+//
+//public class GetMyPageLessonTest extends SearchControllerTest {
+//
 //    @Test
 //    @DisplayName("마이페이지 선생님 자기 과외 정보 조회 테스트")
 //    void getMyPageMyClassInfoTest() throws Exception {
