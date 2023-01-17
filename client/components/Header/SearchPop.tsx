@@ -86,7 +86,6 @@ export const SearchPop = ({ onSubmit, absolute }: Props) => {
                     />
                   )}
                   control={control}
-                  defaultValue=""
                 />
               </div>
             </div>
