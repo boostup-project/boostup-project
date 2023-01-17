@@ -82,7 +82,8 @@ public class Suggest {
         ACCEPT_IN_PROGRESS(1, "수락 대기 중"),
         PAY_IN_PROGRESS(2, "결제 대기 중"), // 결제 취소, 결제 실패 포함
         DURING_LESSON(3, "과외 중"), // == 결제 완료
-        END_OF_LESSON(4, "과외 종료");
+        END_OF_LESSON(4, "과외 종료"),
+        REFUND_PAYMENT(5, "환불 완료");
 
         @Getter
         private int stepNumber;

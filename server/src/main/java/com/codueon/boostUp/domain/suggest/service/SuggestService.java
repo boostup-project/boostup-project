@@ -20,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import static com.codueon.boostUp.domain.suggest.entity.Suggest.SuggestStatus.*;
 import static com.codueon.boostUp.domain.suggest.utils.PayConstants.ORDER_APPROVED;
+import static com.codueon.boostUp.domain.suggest.utils.PayConstants.REFUND_APPROVED;
 import static com.codueon.boostUp.domain.suggest.utils.SuggestConstants.*;
 
 @Slf4j
@@ -41,7 +42,6 @@ public class SuggestService {
      */
     @Transactional
     public void createSuggest(PostSuggest post, Long lessonId, Long memberId) {
-
         Lesson findLesson = lessonDbService.ifExistsReturnLesson(lessonId);
 
 //        if(memberId.equals(findLesson.getMemberId())) {
@@ -57,7 +57,6 @@ public class SuggestService {
                 .build();
 
         suggest.setStatus(ACCEPT_IN_PROGRESS);
-
         suggestDbService.saveSuggest(suggest);
     }
 
@@ -70,12 +69,11 @@ public class SuggestService {
      */
     @Transactional
     public void acceptSuggest(Long suggestId, Long memberId, Integer quantity) {
-
         Suggest findSuggest = suggestDbService.ifExistsReturnSuggest(suggestId);
         Lesson findLesson = lessonDbService.ifExistsReturnLesson(findSuggest.getLessonId());
 
         if (!memberId.equals(findLesson.getMemberId()) ||
-                !findSuggest.getStatus().equals(ACCEPT_IN_PROGRESS)) {
+            !findSuggest.getStatus().equals(ACCEPT_IN_PROGRESS)) {
             throw new BusinessLogicException(ExceptionCode.INVALID_ACCESS);
         }
 
@@ -89,9 +87,7 @@ public class SuggestService {
         findSuggest.setStartTime();
         findSuggest.setTotalCost(findLesson.getCost() * paymentInfo.getQuantity());
         findSuggest.setStatus(Suggest.SuggestStatus.PAY_IN_PROGRESS);
-
         suggestDbService.saveSuggest(findSuggest);
-
     }
 
     /**
@@ -101,7 +97,6 @@ public class SuggestService {
      * @author LeeGoh
      */
     public void cancelSuggest(Long suggestId, Long memberId) {
-
         Suggest findSuggest = suggestDbService.ifExistsReturnSuggest(suggestId);
         Lesson findLesson = lessonDbService.ifExistsReturnLesson(findSuggest.getLessonId());
 
@@ -110,7 +105,7 @@ public class SuggestService {
         }
 
         if (!findSuggest.getStatus().equals(ACCEPT_IN_PROGRESS) &&
-                !findSuggest.getStatus().equals(Suggest.SuggestStatus.PAY_IN_PROGRESS)) {
+            !findSuggest.getStatus().equals(Suggest.SuggestStatus.PAY_IN_PROGRESS)) {
             throw new BusinessLogicException(ExceptionCode.INVALID_ACCESS);
         }
 
@@ -125,12 +120,11 @@ public class SuggestService {
      * @author LeeGoh
      */
     public void declineSuggest(Long suggestId, Long memberId, PostReason postReason) {
-
         Suggest findSuggest = suggestDbService.ifExistsReturnSuggest(suggestId);
         Lesson findLesson = lessonDbService.ifExistsReturnLesson(findSuggest.getLessonId());
 
         if (!memberId.equals(findLesson.getMemberId()) ||
-                !findSuggest.getStatus().equals(ACCEPT_IN_PROGRESS)) {
+            !findSuggest.getStatus().equals(ACCEPT_IN_PROGRESS)) {
             throw new BusinessLogicException(ExceptionCode.INVALID_ACCESS);
         }
 
@@ -138,7 +132,6 @@ public class SuggestService {
         suggestDbService.saveReason(reason);
 
         suggestDbService.deleteSuggest(findSuggest);
-
     }
 
     /**
@@ -149,11 +142,10 @@ public class SuggestService {
      * @author LeeGoh
      */
     public GetPaymentInfo getPaymentInfo(Long suggestId, Long memberId) {
-
         Suggest findSuggest = suggestDbService.ifExistsReturnSuggest(suggestId);
 
         if (!memberId.equals(findSuggest.getMemberId()) ||
-                !findSuggest.getStatus().equals(PAY_IN_PROGRESS)) {
+            !findSuggest.getStatus().equals(PAY_IN_PROGRESS)) {
             throw new BusinessLogicException(ExceptionCode.INVALID_ACCESS);
         }
 
@@ -171,13 +163,8 @@ public class SuggestService {
      * @author LeeGoh
      */
     public GetPaymentReceipt getPaymentReceipt(Long suggestId, Long memberId) {
-
         Suggest findSuggest = suggestDbService.ifExistsReturnSuggest(suggestId);
-
-        if (!memberId.equals(findSuggest.getMemberId()) ||
-            findSuggest.getStatus().equals(ACCEPT_IN_PROGRESS) || findSuggest.getStatus().equals(PAY_IN_PROGRESS)) {
-            throw new BusinessLogicException(ExceptionCode.INVALID_ACCESS);
-        }
+        suggestDbService.suggestGetMemberIdAndStatusIsNotInProgress(findSuggest, memberId);
 
         Lesson findLesson = lessonDbService.ifExistsReturnLesson(findSuggest.getLessonId());
         PaymentInfo findPaymentInfo = suggestDbService.ifExistsReturnPaymentInfo(suggestId);
@@ -198,7 +185,6 @@ public class SuggestService {
      */
     @Transactional
     public Message getKaKapPayUrl(Long suggestId, Long memberId, String requestUrl) {
-
         Suggest findSuggest = suggestDbService.ifExistsReturnSuggest(suggestId);
 
         if (!findSuggest.getStatus().equals(PAY_IN_PROGRESS)) {
@@ -222,7 +208,6 @@ public class SuggestService {
                 .data(payReadyInfo.getNextRedirectPcUrl())
                 .message(KAKAO_PAY_URI_MSG)
                 .build();
-
     }
 
     /**
@@ -235,7 +220,6 @@ public class SuggestService {
      */
     @Transactional
     public Message getTossPayUrl(Long suggestId, String requestUrl, int paymentId) {
-
         Suggest findSuggest = suggestDbService.ifExistsReturnSuggest(suggestId);
 
         if (!findSuggest.getStatus().equals(PAY_IN_PROGRESS)) {
@@ -268,7 +252,6 @@ public class SuggestService {
                 .data(tossPayReadyInfo.getCheckout().getUrl())
                 .message(TOSS_PAY_URI_MSG)
                 .build();
-
     }
 
     /**
@@ -291,7 +274,6 @@ public class SuggestService {
      */
     @Transactional
     public Message getSuccessKakaoPaymentInfo(Long suggestId, String pgToken) {
-
         Suggest findSuggest = suggestDbService.ifExistsReturnSuggest(suggestId);
         PaymentInfo findPaymentInfo = suggestDbService.ifExistsReturnPaymentInfo(suggestId);
 
@@ -309,7 +291,6 @@ public class SuggestService {
                 .data(kakaoPaySuccessInfo)
                 .message(INFO_URI_MSG)
                 .build();
-
     }
 
     /**
@@ -320,7 +301,6 @@ public class SuggestService {
      */
     @Transactional
     public Message getSuccessTossPaymentInfo(Long suggestId) {
-
         Suggest findSuggest = suggestDbService.ifExistsReturnSuggest(suggestId);
         PaymentInfo findPaymentInfo = suggestDbService.ifExistsReturnPaymentInfo(suggestId);
 
@@ -345,7 +325,6 @@ public class SuggestService {
                 .data(tossPaySuccessInfo)
                 .message(INFO_URI_MSG)
                 .build();
-
     }
 
     /**
@@ -353,19 +332,18 @@ public class SuggestService {
      * @param suggestId 신청 식별자
      * @author LeeGoh
      */
-    public void setSuggestStatusAndEndTime(Long suggestId) {
-
+    public void setSuggestStatusAndEndTime(Long suggestId, Long memberId) {
         Suggest findSuggest = suggestDbService.ifExistsReturnSuggest(suggestId);
+        Lesson findLesson = lessonDbService.ifExistsReturnLesson(findSuggest.getLessonId());
 
-        if (!findSuggest.getStatus().equals(DURING_LESSON)) {
+        if (!findSuggest.getStatus().equals(DURING_LESSON) ||
+            !findLesson.getMemberId().equals(memberId)) {
             throw new BusinessLogicException(ExceptionCode.INVALID_ACCESS);
         }
 
         findSuggest.setStatus(END_OF_LESSON);
         findSuggest.setEndTime();
-
         suggestDbService.saveSuggest(findSuggest);
-
     }
 
     /**
@@ -375,13 +353,8 @@ public class SuggestService {
      * @author LeeGoh
      */
     public void refundKakaoPayment(Long suggestId, Long memberId) {
-
         Suggest findSuggest = suggestDbService.ifExistsReturnSuggest(suggestId);
-
-        if (!findSuggest.getStatus().equals(DURING_LESSON)) {
-            throw new BusinessLogicException(ExceptionCode.INVALID_ACCESS);
-        }
-
+        suggestDbService.suggestGetMemberIdAndStatusIsDuringLesson(findSuggest, memberId);
     }
 
     /**
@@ -390,14 +363,30 @@ public class SuggestService {
      * @param memberId 회원 식별자
      * @author LeeGoh
      */
-    public void refundTossPayment(Long suggestId, Long memberId) {
-
+    public Message refundTossPayment(Long suggestId, Long memberId) {
         Suggest findSuggest = suggestDbService.ifExistsReturnSuggest(suggestId);
+        suggestDbService.suggestGetMemberIdAndStatusIsDuringLesson(findSuggest, memberId);
+        PaymentInfo findPaymentInfo = suggestDbService.ifExistsReturnPaymentInfo(suggestId);
 
-        if (!findSuggest.getStatus().equals(DURING_LESSON)) {
+        if (findPaymentInfo.getQuantity() == findPaymentInfo.getQuantityCount()) {
             throw new BusinessLogicException(ExceptionCode.INVALID_ACCESS);
         }
 
+        TossPayHeader headers = feignService.setTossHeaders();
+        CancelToTossPaymentInfo body = feignService.setCancelBody(findPaymentInfo);
+
+        TossPayCancelInfo cancelInfo =
+                feignService.getCancelPaymentResponse(headers, findPaymentInfo.getPaymentKey(), body);
+
+        cancelInfo.setOrderStatus(REFUND_APPROVED);
+        findSuggest.setStatus(REFUND_PAYMENT);
+        findSuggest.setEndTime();
+        suggestDbService.saveSuggest(findSuggest);
+
+        return Message.builder()
+                .data(cancelInfo)
+                .message(CANCELED_PAY_MESSAGE)
+                .build();
     }
 
     /*---------- 출석부 로직 ----------*/
@@ -410,20 +399,14 @@ public class SuggestService {
      * @author LeeGoh
      */
     public Integer teacherChecksAttendance(Long suggestId, Long memberId) {
-
         Suggest findSuggest = suggestDbService.ifExistsReturnSuggest(suggestId);
         Lesson findLesson = lessonDbService.ifExistsReturnLesson(findSuggest.getLessonId());
-
-        if (!findLesson.getMemberId().equals(memberId) ||
-            !findSuggest.getStatus().equals(DURING_LESSON) ) {
-            throw new BusinessLogicException(ExceptionCode.INVALID_ACCESS);
-        }
+        suggestDbService.lessonGetMemberIdAndStatusIsDuringLesson(findSuggest, findLesson, memberId);
 
         PaymentInfo findPaymentInfo = suggestDbService.ifExistsReturnPaymentInfo(suggestId);
         suggestDbService.checkQuantityCount(findPaymentInfo);
 
         return findPaymentInfo.getQuantityCount();
-
     }
 
     /**
@@ -434,20 +417,14 @@ public class SuggestService {
       @author LeeGoh
      */
     public Integer teacherCancelAttendance(Long suggestId, Long memberId) {
-
         Suggest findSuggest = suggestDbService.ifExistsReturnSuggest(suggestId);
         Lesson findLesson = lessonDbService.ifExistsReturnLesson(findSuggest.getLessonId());
-
-        if (!findLesson.getMemberId().equals(memberId) ||
-            !findSuggest.getStatus().equals(DURING_LESSON) ) {
-            throw new BusinessLogicException(ExceptionCode.INVALID_ACCESS);
-        }
+        suggestDbService.lessonGetMemberIdAndStatusIsDuringLesson(findSuggest, findLesson, memberId);
 
         PaymentInfo findPaymentInfo = suggestDbService.ifExistsReturnPaymentInfo(suggestId);
         suggestDbService.cancelQuantityCount(findPaymentInfo);
 
         return findPaymentInfo.getQuantityCount();
-
     }
 
     /**
@@ -458,26 +435,18 @@ public class SuggestService {
       @author LeeGoh
      */
     public GetLessonAttendance getLessonAttendance(Long suggestId, Long memberId) {
-
         Suggest findSuggest = suggestDbService.ifExistsReturnSuggest(suggestId);
-
-        if (!findSuggest.getStatus().equals(DURING_LESSON) ||
-            !findSuggest.getMemberId().equals(memberId)) {
-            throw new BusinessLogicException(ExceptionCode.INVALID_ACCESS);
-        }
-
+        suggestDbService.suggestGetMemberIdAndStatusIsNotInProgress(findSuggest, memberId);
         PaymentInfo findPaymentInfo = suggestDbService.ifExistsReturnPaymentInfo(suggestId);
 
         Integer quantity = findPaymentInfo.getQuantity();
         Integer quantityCount = findPaymentInfo.getQuantityCount();
-
 
         return GetLessonAttendance.builder()
                 .quantity(quantity)
                 .quantityCount(quantityCount)
                 .progress((int)((double)quantityCount/(double)quantity * 100))
                 .build();
-
     }
 
 }
