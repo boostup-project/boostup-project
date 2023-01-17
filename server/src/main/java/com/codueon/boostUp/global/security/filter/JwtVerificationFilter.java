@@ -31,7 +31,7 @@ public class JwtVerificationFilter extends OncePerRequestFilter {
                                     FilterChain filterChain) throws ServletException, IOException {
         // 1. Request Header 에서 JWT 토큰 추출
         String accessToken = resolveToken((HttpServletRequest) request);
-
+        //String isLogout = redisUtils.isBlackList(accessToken);
         if(accessToken != null) {
             Authentication authentication = new JwtAuthenticationToken(accessToken);
             Authentication authenticatedToken = authenticationManager.authenticate(authentication);

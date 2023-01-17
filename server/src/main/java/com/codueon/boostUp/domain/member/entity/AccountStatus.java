@@ -1,9 +1,21 @@
 package com.codueon.boostUp.domain.member.entity;
 
+import lombok.Getter;
+
 import static com.codueon.boostUp.domain.member.utils.OAuthConstant.*;
 
 public enum AccountStatus {
-    COMMON_MEMBER, KAKAO_MEMBER, GOOGLE_MEMBER, NAVER_MEMBER;
+    COMMON_MEMBER("common"),
+    KAKAO_MEMBER("kakao"),
+    GOOGLE_MEMBER("google"),
+    NAVER_MEMBER("naver");
+
+    @Getter
+    private final String provider;
+
+    AccountStatus(String provider) {
+        this.provider = provider;
+    }
 
     public static AccountStatus whatIsProvider(String provider) {
         switch (provider) {

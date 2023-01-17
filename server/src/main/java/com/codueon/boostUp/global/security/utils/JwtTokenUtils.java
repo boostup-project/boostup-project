@@ -46,9 +46,9 @@ public class JwtTokenUtils {
 
     /**
      * 엑세스 토큰 발급 메서드
-     *
      * @param member
      * @return
+     * @author LimJaeminZ
      */
     public String generateAccessToken(Member member) {
         Map<String, Object> claims = new HashMap<>();
@@ -73,9 +73,9 @@ public class JwtTokenUtils {
 
     /**
      * 리프레시 토큰 발급 메서드
-     *
      * @param member
      * @return
+     * @author LimJaeminZ
      */
     public String generateRefreshToken(Member member) {
         String subject = member.getEmail();
@@ -94,7 +94,6 @@ public class JwtTokenUtils {
 
     /**
      * 서버 환경변수 시크릿 키를 인코딩하여 변환해주는 메서드
-     *
      * @param secretKey 시크릿 키
      * @return 인코딩된 시크릿 키
      * @author LimJaeminZ
@@ -105,9 +104,9 @@ public class JwtTokenUtils {
 
     /**
      * base64로 인코딩 된 key -> Key 객체 변환 메서드
-     *
      * @param base64EncodedSecretKey base64로 인코딩 된 key
      * @return Key
+     * @author LimJaeminZ
      */
     private Key getKeyFromBase64EncodedKey(String base64EncodedSecretKey) {
         byte[] keyBytes = Decoders.BASE64.decode(base64EncodedSecretKey);
@@ -118,9 +117,9 @@ public class JwtTokenUtils {
 
     /**
      * 토큰 만료시간 반환 메서드
-     *
      * @param expirationMinutes 서버 저장 엑세서 토큰 만료 시간
      * @return Date
+     * @author LimJaeminZ
      */
     public Date getTokenExpiration(int expirationMinutes) {
         Calendar calendar = Calendar.getInstance();
@@ -129,10 +128,30 @@ public class JwtTokenUtils {
     }
 
     /**
+     * 엑세스 토큰 만료 시간 계산
+     * @param accessToken
+     * @return
+     * @author LimJaeminZ
+     */
+    public Long getExpiration(String accessToken) {
+        Key key = getKeyFromBase64EncodedKey(encodeBase64SecretKey(secretKey));
+
+        Date expiration = Jwts.parserBuilder()
+                .setSigningKey(key)
+                .build()
+                .parseClaimsJws(accessToken)
+                .getBody()
+                .getExpiration();
+        // 현재 시간
+        Long now = new Date().getTime();
+        return (expiration.getTime() - now);
+    }
+
+    /**
      * 검증 후 JWS 반환 메서드
-     *
      * @param jws
      * @return
+     * @author LimJaeminZ
      */
     public Map<String, Object> getClaims(String jws) {
         String base64EncodedSecretKey = encodeBase64SecretKey(getSecretKey());
@@ -145,9 +164,9 @@ public class JwtTokenUtils {
 
     /**
      * 엑세스 토큰의 Prefix(Bearer )제거 메서드
-     *
      * @param accessToken
      * @return
+     * @author LimJaeminZ
      */
     public String parseAccessToken(String accessToken) {
         if(accessToken.startsWith(BEARER))
@@ -157,9 +176,9 @@ public class JwtTokenUtils {
 
     /**
      * 토큰 정보를 검증하는 메서드
-     *
      * @param token 토큰 정보
      * @return boolean
+     * @author LimJaeminZ
      */
     public boolean validateToken(String token) {
         String base64EncodedSecretKey = encodeBase64SecretKey(getSecretKey());
@@ -170,7 +189,7 @@ public class JwtTokenUtils {
                     .setSigningKey(key)
                     .build()
                     .parseClaimsJws(token);
-            return false;
+            return true;
         } catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e) {
             log.info("Invalid JWT Token", e);
         } catch (ExpiredJwtException e) {

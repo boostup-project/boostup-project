@@ -16,27 +16,72 @@ import java.util.concurrent.TimeUnit;
 @Component
 @RequiredArgsConstructor
 public class RedisUtils {
-    private final RedisTemplate<String, Object> redisTemplate;
+    private final RedisTemplate<String, String> redisTemplate;
     private final StringRedisTemplate redisEmailTemplate;
-    private final RedisTemplate<String, Object> redisBlackListTemplate;
+
 
     /**
      * redis에 key-value 저장
-     *
-     * @param key
-     * @param o
-     * @param minutes
+     * @param key refreshToken
+     * @param o String(key)
+     * @param minutes 만료시간
+     * @author LimJaeminZ
      */
-    public void setData(String key, Object o, int minutes) {
+
+    public void setData(String key, String provider, String o, int minutes) {
         redisTemplate.setValueSerializer(new Jackson2JsonRedisSerializer<>(o.getClass()));
-        redisTemplate.opsForValue().set(key, o, minutes, TimeUnit.MINUTES);
+        String refreshKey = provider + "RT : " + key;
+        redisTemplate.opsForValue().set(refreshKey, o, minutes, TimeUnit.MINUTES);
+    }
+    /**
+     * redis에서 key에 대한 value 값 return
+     * @param key
+     * @return
+     * @author LimJaeminZ
+     */
+    public Object getData(String key, String provider) {
+        String refreshKey = provider + "RT : " + key;
+        return redisTemplate.opsForValue().get(refreshKey);
+    }
+
+    /**
+     * redis에서 key에 대한 value 값 delete
+     * @param key
+     * @param provider
+     * @author LimJaeminZ
+     */
+    public void deleteData(String key, String provider) {
+        String refreshKey = provider + "RT : " + key;
+        redisTemplate.delete(refreshKey);
+    }
+
+    /**
+     * redis 로그아웃 처리
+     * @param key refreshToken
+     * @param o
+     * @param setTime 만료시간(분)
+     * @author LimJaeminZ
+     */
+    public void setBlackList(String key, String o, Long setTime) {
+        ValueOperations<String, String> valueOperations = redisTemplate.opsForValue();
+        valueOperations.set(key, o, setTime, TimeUnit.MILLISECONDS);
+    }
+
+    /**
+     * accessToken 블랙리스트 여부
+     * @param key
+     * @return
+     * @author LimJaeminZ
+     */
+    public String isBlackList(String key) {
+        ValueOperations<String, String> valueOperations = redisTemplate.opsForValue();
+        return valueOperations.get(key);
     }
 
     /**
      * Redis 이메일 인증 코드 저장 메서드
      * @param key 이메일
      * @param code 인증 코드
-     * @param minutes 만료 시간(5분)
      * @author mozzi327
      */
     public void setEmailAuthorizationCode(String key, String code) {
@@ -76,15 +121,5 @@ public class RedisUtils {
      */
     private String makeCodeKeyForAuthorization(String key) {
         return "EmailCode " + key;
-    }
-
-    /**
-     * redis에서 key에 대한 value 값 return
-     *
-     * @param key
-     * @return
-     */
-    public Object getData(String key) {
-        return redisTemplate.opsForValue().get(key);
     }
 }
