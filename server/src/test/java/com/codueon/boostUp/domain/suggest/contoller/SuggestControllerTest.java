@@ -3,6 +3,7 @@ package com.codueon.boostUp.domain.suggest.contoller;
 import com.codueon.boostUp.domain.lesson.entity.Lesson;
 import com.codueon.boostUp.domain.lesson.entity.ProfileImage;
 import com.codueon.boostUp.domain.member.entity.Member;
+import com.codueon.boostUp.domain.suggest.entity.PaymentInfo;
 import com.codueon.boostUp.domain.suggest.entity.Suggest;
 import com.codueon.boostUp.domain.suggest.service.SuggestDbService;
 import com.codueon.boostUp.domain.suggest.service.SuggestService;
@@ -49,14 +50,17 @@ class SuggestControllerTest {
     protected Suggest suggest;
     protected Lesson lesson;
     protected ProfileImage profileImage;
+    protected PaymentInfo paymentInfo;
 
     @BeforeEach
     void setUp() throws Exception {
-
         member = data.getMember1();
         suggest = data.getSuggest1();
         lesson = data.getLesson1();
         profileImage = data.getProfileImage();
-
+        paymentInfo = PaymentInfo.builder()
+                .quantity(5)
+                .build();
+        paymentInfo.setQuantityCount(3);
     }
 }
