@@ -63,7 +63,7 @@ public class SuggestGetTest extends SuggestControllerTest{
     @DisplayName("GET 신청 프로세스 8 과외 종료")
     void endOfLesson() throws Exception {
 
-        doNothing().when(suggestService).setSuggestStatusAndEndTime(suggest.getId());
+        doNothing().when(suggestService).setSuggestStatusAndEndTime(suggest.getId(), member.getId());
 
         ResultActions actions =
                 mockMvc.perform(
