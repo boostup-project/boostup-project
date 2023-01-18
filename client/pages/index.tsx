@@ -7,6 +7,7 @@ import Additional from "components/createModal/Additional";
 import Curriculum from "components/createModal/Curriculum";
 import Carouselcomp from "components/carousel/Carouselcomp";
 import LanguageFilter from "components/filter/LanguageFilter";
+import MoblieLanguageFilter from "components/filter/MobileLanguageFilter";
 
 const Home = () => {
   return (
@@ -14,6 +15,7 @@ const Home = () => {
       <div className="flex flex-col bg-bgColor items-center justify-start w-full h-screen">
         <Carouselcomp />
         <LanguageFilter />
+        <MoblieLanguageFilter />
         {/* <CreateModalContainer>
           <StepNavWrapper />
           <Additional />
