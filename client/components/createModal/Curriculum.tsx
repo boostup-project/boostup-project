@@ -1,26 +1,30 @@
 import SmallBtn from "components/reuse/btn/SmallBtn";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 // import "../../styles/markdown.css"
 
 import "@uiw/react-md-editor/markdown-editor.css";
 import "@uiw/react-markdown-preview/markdown.css";
-import { bold, italic } from "@uiw/react-md-editor/lib/commands/"
+import { bold, italic } from "@uiw/react-md-editor/lib/commands/";
 import dynamic from "next/dynamic";
 import useWindowSize from "hooks/useWindowSize";
+import { currSave, inputStep } from "atoms/main/mainAtom";
+import { useRecoilState } from "recoil";
 
-const MDEditor = dynamic(() => 
-  import("@uiw/react-md-editor"), {
+const MDEditor = dynamic(() => import("@uiw/react-md-editor"), {
   ssr: false,
 });
 
-
-
 const Curriculum = () => {
   const [value, setValue] = useState<string>("");
-  const [toolbar, setToolbar] = useState<boolean>(true);
-  
+  const [step, setStep] = useRecoilState(inputStep);
+  const [curr, setCurr] = useRecoilState(currSave);
+  // const [toolbar, setToolbar] = useState<boolean>(true);
+
   const screenWidth = useWindowSize();
 
+  const toBack = (e: React.MouseEvent<HTMLButtonElement>) => {
+    setStep(step - 1);
+  };
   const handleChangeValue = (e: any) => {
     setValue(e);
   };
@@ -64,7 +68,7 @@ const Curriculum = () => {
         />
       )}
       <div className="flex flex-row justify-center items-center w-full h-fit mt-10">
-        <SmallBtn>취 소</SmallBtn>
+        <SmallBtn onClick={toBack}>이전</SmallBtn>
         <SmallBtn css="ml-5">등 록</SmallBtn>
       </div>
     </>

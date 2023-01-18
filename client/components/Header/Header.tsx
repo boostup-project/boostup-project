@@ -8,6 +8,8 @@ import { SearchPop } from "./SearchPop";
 import Image from "next/image";
 import Logo from "../../public/images/logo.png";
 import Link from "next/link";
+import { isWriteModal } from "atoms/main/mainAtom";
+import WriteModal from "components/createModal/WriteModal";
 
 interface SearchData {
   name: string;
@@ -21,14 +23,19 @@ interface SearchData {
 const Header = () => {
   const [log, setLog] = useRecoilState(logUser);
   const [seek, setSeek] = useState(false);
+  const [isWrite, setIsWrite] = useRecoilState(isWriteModal);
 
   const onSubmit: SubmitHandler<SearchData> = data => {
     console.log(data);
   };
 
+  const toWrite = (e: React.MouseEvent<HTMLDivElement>) => {
+    setIsWrite(prev => !prev);
+  };
+
   return (
     <>
-      <header className="bg-bgColor font-SCDream5 w-full mt-4 fixed top-0 z-[1] h-[63px] tablet:h-[69px] desktop:w-3/4 desktop:min-w-[1000px] desktop:h-[87px] desktop:mt-0">
+      <header className="bg-bgColor font-SCDream5 w-full pt-4 fixed top-0 z-[1] h-[63px] tablet:h-[69px] desktop:w-3/4 desktop:min-w-[1000px] desktop:h-[87px] desktop:mt-0">
         <nav className="w-full h-full flex tablet:justify-center tablet:items-center desktop:justify-between">
           <div className="w-1/2 flex justify-start items-center ml-4 tablet:h-[40px] desktop:hidden">
             <div className="w-[18px] tablet:w-[34.5px]">
@@ -69,7 +76,10 @@ const Header = () => {
                   >
                     로그아웃
                   </div>
-                  <div className="min-w-fit w-1/4 h-fit p-1 rounded-md bg-pointColor text-white text-center">
+                  <div
+                    onClick={toWrite}
+                    className="min-w-fit w-1/4 h-fit p-1 rounded-md bg-pointColor text-white text-center"
+                  >
                     과외등록
                   </div>
                 </>
@@ -92,6 +102,7 @@ const Header = () => {
           <SearchPop onSubmit={onSubmit} absolute={false} />
         </div>
       )}
+      {isWrite && <WriteModal />}
     </>
   );
 };

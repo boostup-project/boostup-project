@@ -24,7 +24,7 @@ module.exports = {
         pointColor: "#0A65F2",
         modalImgTxt: "#A9C8FA",
         borderColor: "#A8A7A7",
-        modalBgColor: "#CCCCCC",
+        modalBgColor: "rgba(204, 204, 204, 0.73)",
         javascript: "#0A83F2",
         python: "#6ED5F6",
         java: "#92B7FF",
