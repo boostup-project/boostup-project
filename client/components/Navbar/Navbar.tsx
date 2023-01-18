@@ -63,14 +63,15 @@ const Navbar = () => {
                 <Link href={content.link!}>{content.image}</Link>
               </div>
             ) : content.type === "Write" ? (
-              <div className="w-12 h-12 rounded-3xl bg-pointColor flex justify-center items-center">
-                <div onClick={e => toWrite(e)} className="w-5">
-                  {content.image}
-                </div>
+              <div
+                className="w-12 h-12 rounded-3xl bg-pointColor flex justify-center items-center"
+                onClick={e => toWrite(e)}
+              >
+                <div className="w-5">{content.image}</div>
               </div>
             ) : (
-              <div className="w-7">
-                <div onClick={handleModalClick}>{content.image}</div>
+              <div className="w-7" onClick={handleModalClick}>
+                <div>{content.image}</div>
               </div>
             )}
           </div>
