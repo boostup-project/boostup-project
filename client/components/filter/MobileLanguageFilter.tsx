@@ -2,11 +2,21 @@ import { filterModal } from "atoms/main/mainAtom";
 import { useRecoilState } from "recoil";
 import { detailLangDict } from "components/reuse/dict";
 import Image from "next/image";
+import { useEffect, useState } from "react";
+import useGetFilteredBoard from "hooks/board/useGetFilteredBoard";
 
 const MoblieLanguageFilter = () => {
   const [modal, setModal] = useRecoilState(filterModal);
+  const [langId, setLangId] = useState<number>(0);
+  const { refetch } = useGetFilteredBoard(langId);
 
-  // 하단 Navbar의 필터 버튼 클릭시 10~16줄 코드를 넣어주시면 됩니다!
+  useEffect(() => {
+    if (langId !== 0) {
+      refetch();
+    }
+  }, [langId]);
+
+  // 하단 Navbar의 필터 버튼 클릭시 20~26줄 코드를 넣어주시면 됩니다!
   const handleModalClick = () => {
     if (modal === 0) {
       setModal(48);
@@ -15,6 +25,9 @@ const MoblieLanguageFilter = () => {
     }
   };
 
+  const handleFilterClick = (languageId: number) => {
+    setLangId(languageId);
+  };
   return (
     <>
       {/* 테스트용으로 확인이 끝난뒤에 삭제 예정입니다 */}
@@ -37,6 +50,7 @@ const MoblieLanguageFilter = () => {
               <div
                 key={el.id}
                 className="desktop:w-[100px] desktop:h-[100px] w-[50px] h-[50px] desktop:my-0 my-3"
+                onClick={() => handleFilterClick(el.id)}
               >
                 <Image
                   width={100}
