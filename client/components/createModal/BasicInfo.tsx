@@ -15,7 +15,7 @@ const BasicInfo = () => {
   const [company, setCompany] = useState<string>("");
   const [carrer, setCareer] = useState<string>("");
 
-  const [selectedOptions, setSelectedOptions] = useState('');
+  const [selectedOptions, setSelectedOptions] = useState("");
 
   const [cost, setCost] = useState("");
 
@@ -26,7 +26,6 @@ const BasicInfo = () => {
     control,
     register,
     handleSubmit,
-    watch,
     formState: { errors },
   } = useForm({ mode: "onBlur" });
   //체크된 항목 관리
@@ -62,24 +61,23 @@ const BasicInfo = () => {
   };
 
   //선택한 Address값 관리
-   const options : any = [
+  const options: any = [
     ...addArr.map((el, idx) => ({
       value: addDict[el],
       label: el,
       key: idx,
     })),
-  ] 
+  ];
 
   const handleAddress = (data: any) => {
-   if (selectedOptions.length < 3){
-      setSelectedOptions(data)
+    if (selectedOptions.length < 3) {
+      setSelectedOptions(data);
     }
   };
 
   //타이틀 값 관리
   const handleTitle = (e: any) => {
     setTitle(e.target.value);
-    console.log(selectedOptions, checkedList);
   };
   //현재회사, 학교 값 관리
   const handleCompany = (e: any) => {
@@ -221,7 +219,7 @@ const BasicInfo = () => {
               })}
             </div>
 
-            <div className="w-[400px] list h-fit flex flex-row items-start mt-3">
+            <div className="w-full list h-fit flex flex-row items-start mt-3">
               {langArr.map((el: string, idx: number) => {
                 if (idx > 3) {
                   return (
@@ -309,18 +307,18 @@ const BasicInfo = () => {
             <div className="flex flex-row justify-start items-stretch w-full h-fit font-SCDream6 text-sm text-textColor mt-6 mb-2">
               과외가능지역 <div className="text-pointColor">*</div>
               <div className="text-pointColor text-xs">
-              3개까지 선택가능합니다
-            </div>
+                3개까지 선택가능합니다
+              </div>
             </div>
 
             <div className="desktop:w-8/12 w-5/6 flex justify-between items-stretch">
-              <div className="w-4/12 text-center flex flex-col even:items-end">
+              <div className="w-5/12 text-center flex flex-col even:items-end">
                 <div>시,도</div>
                 <div className="w-full h-fit p-2 border border-borderColor outline-pointColor rounded-xl font-SCDream2 text-sm text-textColor bg-white text-center mt-5">
                   <span>서울특별시</span>
                 </div>
               </div>
-              <div className="w-7/12 text-center flex flex-col items-stretch">
+              <div className="w-6/12 text-center flex flex-col items-stretch">
                 <div>구</div>
                 <div className="w-full h-fit items-stretch rounded-xl mt-5">
                   <Controller
@@ -345,7 +343,7 @@ const BasicInfo = () => {
                             fontSize: "14px",
                           }),
                         }}
-                        options ={options}
+                        options={options}
                         value={selectedOptions}
                         onChange={handleAddress}
                         isMulti

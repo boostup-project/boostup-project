@@ -58,7 +58,7 @@ const Additional = () => {
           <span className="text-pointColor">*</span>
         </div>
         <input
-          className="w-full h-8 px-2 border border-borderColor outline-pointColor rounded-xl font-SCDream2 text-xs text-textColor placeholder:text-center  mt-2 tablet:text-sm tablet:h-12"
+          className="w-full h-8 px-2 border border-borderColor outline-pointColor rounded-xl font-SCDream2 text-xs text-textColor placeholder:text-center  mt-2 :text-sm tablet:h-12"
           placeholder="본인에 대한 한줄 소개를 입력하세요"
           {...register("introduction", { required: "입력 필요" })}
         />
