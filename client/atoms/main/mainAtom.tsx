@@ -25,4 +25,11 @@ const currSave = atom({
   default: "",
 });
 
-export { inputStep, baseSave, isWriteModal, addSave, currSave };
+const filterModal = atom({
+  // Modal ON : "30"
+  // Modal OFF :"32"
+  key: "filterModal",
+  default: 48,
+});
+
+export { inputStep, baseSave, isWriteModal, addSave, currSave, filterModal };

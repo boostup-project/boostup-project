@@ -42,5 +42,8 @@ module.exports = {
       tablet: "764px",
     },
   },
-  plugins: [],
+  plugins: [require("tailwind-scrollbar"), require("tailwind-scrollbar-hide")],
+  variants: {
+    scrollbar: ["rounded"],
+  },
 };

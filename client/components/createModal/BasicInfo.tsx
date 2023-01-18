@@ -2,7 +2,6 @@ import Select from "react-select";
 import SmallBtn from "components/reuse/btn/SmallBtn";
 import { useState } from "react";
 import { useForm, Controller } from "react-hook-form";
-import { ErrorMessage } from "@hookform/error-message";
 import { langDict, addDict } from "../reuse/dict";
 import { IconImg } from "assets/icon";
 import { modalImgTxt } from "assets/color/color";
@@ -26,7 +25,7 @@ const BasicInfo = () => {
   const [step, setStep] = useRecoilState(inputStep);
   const [base, setBase] = useRecoilState<BasicInfo>(baseSave);
   const setIsWrite = useSetRecoilState(isWriteModal);
-  const [optionErr, setOptionErr] = useState<>({
+  const [optionErr, setOptionErr] = useState({
     imgErr: "",
     checkErr: "",
     selectErr: "",
