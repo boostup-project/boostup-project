@@ -200,29 +200,28 @@ public class SuggestController {
     }
 
     /**
-     * 신청 프로세스 9-1 환불 컨트롤러 메서드 Kakao
+     * 신청 프로세스 9 환불 컨트롤러 메서드
      * @param suggestId 신청 식별자
      * @author LeeGoh
      */
-    @GetMapping("/suggest/{suggest-id}/kakao/refund")
-    public ResponseEntity refundKakaoPayment(@PathVariable("suggest-id") Long suggestId) {
+    @GetMapping("/suggest/{suggest-id}/refund")
+    public ResponseEntity<Message> refundPayment(@PathVariable("suggest-id") Long suggestId) {
 
         Long memberId = 1L;
-        suggestService.refundKakaoPayment(suggestId, memberId);
-        return ResponseEntity.ok().build();
+        Message message = suggestService.refundPaymentKakaoOrToss(suggestId, memberId);
+        return ResponseEntity.ok().body(message);
     }
 
     /**
-     * 신청 프로세스 9-2 환불 컨트롤러 메서드 Toss
+     * 환불 조회 컨트롤러 메서드
      * @param suggestId 신청 식별자
      * @author LeeGoh
      */
-    @GetMapping("/suggest/{suggest-id}/toss/refund")
-    public ResponseEntity<Message> refundTossPayment(@PathVariable("suggest-id") Long suggestId) {
+    @GetMapping("/suggest/{suggest-id}/refund/info")
+    public ResponseEntity getRefundPaymentInfo(@PathVariable("suggest-id") Long suggestId) {
 
         Long memberId = 1L;
-        Message message = suggestService.refundTossPayment(suggestId, memberId);
-        return ResponseEntity.ok().body(message);
+        return ResponseEntity.ok().body(suggestService.getRefundPaymentInfo(suggestId, memberId));
     }
 
     /**

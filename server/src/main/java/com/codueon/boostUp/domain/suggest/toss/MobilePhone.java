@@ -10,10 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class MobilePhone {
-
     private String customerMobilePhone;
-
     private String settlementStatus;
-
     private String receiptUrl;
 }

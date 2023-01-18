@@ -9,18 +9,8 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ReadyToTossPaymentInfo {
-
-    private Integer amount;
-
-    private String failUrl;
-
-    private String method;
-
+public class RequestForTossPayInfo {
+    private String paymentKey;
     private String orderId;
-
-    private String orderName;
-
-    private String successUrl;
-
+    private Integer amount;
 }

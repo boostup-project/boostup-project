@@ -82,8 +82,8 @@ public class FeignService {
      * @return ReadyToKakaoPaymentInfo
      * @author LeeGoh
      */
-    public ReadyToKakaoPaymentInfo setReadyParams(String requestUrl, Suggest suggest, Member member, Lesson lesson, PaymentInfo paymentInfo) {
-        return ReadyToKakaoPaymentInfo.builder()
+    public ReadyToKakaoPayInfo setReadyParams(String requestUrl, Suggest suggest, Member member, Lesson lesson, PaymentInfo paymentInfo) {
+        return ReadyToKakaoPayInfo.builder()
                 .cid(cid)
                 .approval_url(requestUrl + paymentProcessUri + "/" + suggest.getId() + "/kakao/success")
                 .cancel_url(requestUrl + paymentProcessUri + "/" + suggest.getId() + "/kakao/cancellation")
@@ -107,8 +107,8 @@ public class FeignService {
      * @return ReadyToTossPaymentInfo
      * @author LeeGoh
      */
-    public ReadyToTossPaymentInfo setReadyTossParams(String requestUrl, Suggest suggest, Lesson lesson, PaymentInfo paymentInfo, String method) {
-        return ReadyToTossPaymentInfo.builder()
+    public ReadyToTossPayInfo setReadyTossParams(String requestUrl, Suggest suggest, Lesson lesson, PaymentInfo paymentInfo, String method) {
+        return ReadyToTossPayInfo.builder()
                 .successUrl(requestUrl + paymentProcessUri + "/" + suggest.getId() + "/toss/success")
                 .failUrl(requestUrl + paymentProcessUri + "/" + suggest.getId() + "/toss/failure")
                 .amount(paymentInfo.getQuantity() * lesson.getCost())
@@ -126,7 +126,7 @@ public class FeignService {
      * @author LeeGoh
      */
     public KakaoPayReadyInfo getPayReadyInfo(KakaoPayHeader headers,
-                                             ReadyToKakaoPaymentInfo params) {
+                                             ReadyToKakaoPayInfo params) {
         try {
             return kakaoFeignClient.readyForPayment(
                     headers.getAdminKey(),
@@ -148,7 +148,7 @@ public class FeignService {
      * @author LeeGoh
      */
     public TossPayReadyInfo getTossPayReadyInfo(TossPayHeader headers,
-                                                ReadyToTossPaymentInfo body) {
+                                                ReadyToTossPayInfo body) {
         try {
             return tossPayFeignClient.readyForTossPayment(
                     headers.getAdminKey(),
@@ -168,8 +168,8 @@ public class FeignService {
      * @return RequestForKakaoPaymentInfo
      * @author LeeGoh
      */
-    public RequestForKakaoPaymentInfo setRequestParams(String pgToken, PaymentInfo paymentInfo) {
-        return RequestForKakaoPaymentInfo.builder()
+    public RequestForKakaoPayInfo setRequestParams(String pgToken, PaymentInfo paymentInfo) {
+        return RequestForKakaoPayInfo.builder()
                 .cid(paymentInfo.getCid())
                 .tid(paymentInfo.getTid())
                 .partner_order_id(paymentInfo.getPartnerOrderId())
@@ -185,11 +185,23 @@ public class FeignService {
      * @return RequestForTossPaymentInfo
      * @author LeeGoh
      */
-    public RequestForTossPaymentInfo setRequestBody(PaymentInfo paymentInfo) {
-        return RequestForTossPaymentInfo.builder()
+    public RequestForTossPayInfo setRequestBody(PaymentInfo paymentInfo) {
+        return RequestForTossPayInfo.builder()
                 .paymentKey(paymentInfo.getPaymentKey())
                 .amount(paymentInfo.getAmount())
                 .orderId(paymentInfo.getOrderId())
+                .build();
+    }
+
+    public RequestForKakaoPayCancelInfo setRequestCancelParams(PaymentInfo paymentInfo) {
+        Integer count = paymentInfo.getQuantity() - paymentInfo.getQuantityCount();
+        Integer amount = paymentInfo.getTotalAmount() / paymentInfo.getQuantity();
+
+        return RequestForKakaoPayCancelInfo.builder()
+                .tid(paymentInfo.getTid())
+                .cid(paymentInfo.getCid())
+                .cancel_amount(count * amount)
+                .cancel_tax_free_amount(1000)
                 .build();
     }
 
@@ -199,17 +211,17 @@ public class FeignService {
      * @return CancelToTossPaymentInfo
      * @author LeeGoh
      */
-    public CancelToTossPaymentInfo setCancelBody(PaymentInfo paymentInfo) {
+    public RequestForTossPayCancelInfo setCancelBody(PaymentInfo paymentInfo) {
 
         Integer count = paymentInfo.getQuantity() - paymentInfo.getQuantityCount();
         Integer amount = paymentInfo.getAmount();
 
         if (paymentInfo.getQuantityCount() > 0) {
-            return CancelToTossPaymentInfo.builder()
+            return RequestForTossPayCancelInfo.builder()
                     .cancelReason("고객이 취소를 원함")
                     .cancelAmount(count * amount)
                     .build();
-        } else return CancelToTossPaymentInfo.builder()
+        } else return RequestForTossPayCancelInfo.builder()
                 .cancelReason("고객이 취소를 원함")
                 .build();
 
@@ -222,7 +234,7 @@ public class FeignService {
      * @return KakaoPaySuccessInfo
      * @author LeeGoh
      */
-    public KakaoPaySuccessInfo getSuccessKakaoResponse(KakaoPayHeader headers, RequestForKakaoPaymentInfo params) {
+    public KakaoPaySuccessInfo getSuccessKakaoResponse(KakaoPayHeader headers, RequestForKakaoPayInfo params) {
 
         try {
             return kakaoFeignClient
@@ -246,7 +258,7 @@ public class FeignService {
      * @return TossPaySuccessInfo
      * @author LeeGoh
      */
-    public TossPaySuccessInfo getSuccessTossResponse(TossPayHeader headers, RequestForTossPaymentInfo body) {
+    public TossPaySuccessInfo getSuccessTossResponse(TossPayHeader headers, RequestForTossPayInfo body) {
 
         try {
             return tossPayFeignClient
@@ -254,6 +266,23 @@ public class FeignService {
                             headers.getAdminKey(),
                             headers.getContentType(),
                             body
+                    );
+        } catch (RestClientException e) {
+            log.error(e.getMessage());
+        }
+        return null;
+
+    }
+
+    public KakaoPayCancelInfo getCancelKakaoPaymentResponse(KakaoPayHeader headers, RequestForKakaoPayCancelInfo params) {
+
+        try {
+            return kakaoFeignClient
+                    .cancelForPayment(
+                            headers.getAdminKey(),
+                            headers.getAccept(),
+                            headers.getContentType(),
+                            params
                     );
         } catch (RestClientException e) {
             log.error(e.getMessage());
@@ -270,7 +299,7 @@ public class FeignService {
      * @return TossPayCancelInfo
      * @author LeeGoh
      */
-    public TossPayCancelInfo getCancelPaymentResponse(TossPayHeader headers, String paymentKey, CancelToTossPaymentInfo body) {
+    public TossPayCancelInfo getCancelTossPaymentResponse(TossPayHeader headers, String paymentKey, RequestForTossPayCancelInfo body) {
 
         try {
             return tossPayFeignClient
