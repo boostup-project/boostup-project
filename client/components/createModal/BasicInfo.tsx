@@ -13,8 +13,6 @@ interface BasicInfo {
 }
 const BasicInfo = () => {
   const [previewImg, setPreviewImg] = useState<string>("");
-  const [checkedList, setCheckedList] = useState<string[]>([]);
-  const [selectedOptions, setSelectedOptions] = useState("");
   const [step, setStep] = useRecoilState(inputStep);
   const [base, setBase] = useRecoilState<BasicInfo>(baseSave);
   const setIsWrite = useSetRecoilState(isWriteModal);
@@ -36,19 +34,6 @@ const BasicInfo = () => {
     formState: { errors },
   } = useForm<BasicInfo>({ mode: "onBlur" });
 
-  /**체크된 항목 관리 **/
-  const onCheckedElement = (checked: boolean, item: string, event: any) => {
-    if (checked) {
-      setCheckedList([...checkedList, item]);
-    } else if (!checked) {
-      setCheckedList(checkedList.filter(el => el !== item));
-    }
-    if (checkedList.length > 2) {
-      setCheckedList(checkedList.filter(el => el !== item));
-      event.target.checked = false;
-    }
-  };
-
   /** 미리보기 이미지 생성**/
   const insertImg = (e: any) => {
     let reader = new FileReader();
@@ -66,11 +51,6 @@ const BasicInfo = () => {
   };
   const deleteImg = () => {
     setPreviewImg("");
-  };
-
-  /**선택한 Address값 관리 **/
-  const handleAddress = (data: any) => {
-    setSelectedOptions(data);
   };
 
   // 넘어가기 전에 잡자
