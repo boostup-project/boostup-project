@@ -75,3 +75,47 @@ export const langDict: LangDict = {
   "C#": 7,
   Swift: 8,
 };
+
+
+export const detailLangDict = [
+  {
+    id: 1,
+    name: "javaScript",
+    img: "/images/javascript.png",
+  },
+  {
+    id: 2,
+    name: "python",
+    img: "/images/python.png",
+  },
+  {
+    id: 3,
+    name: "go",
+    img: "/images/go.png",
+  },
+  {
+    id: 4,
+    name: "java",
+    img: "/images/java.png",
+  },
+  {
+    id: 5,
+    name: "kotlin",
+    img: "/images/kotlin.png",
+  },
+  {
+    id: 6,
+    name: "php",
+    img: "/images/php.png",
+  },
+  {
+    id: 7,
+    name: "C#",
+    img: "/images/C.png",
+  },
+  {
+    id: 8,
+    name: "swift",
+    img: "/images/swift.png",
+  },
+];
