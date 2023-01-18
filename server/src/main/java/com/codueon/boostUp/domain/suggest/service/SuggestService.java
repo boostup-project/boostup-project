@@ -382,7 +382,7 @@ public class SuggestService {
                 feignService.getCancelKakaoPaymentResponse(headers, params);
 
         cancelInfo.setOrderStatus(REFUND_APPROVED);
-        suggest.setStatus(REFUND_PAYMENT);
+        // suggest.setStatus(REFUND_PAYMENT);
         suggest.setEndTime();
         suggestDbService.saveSuggest(suggest);
 
@@ -406,7 +406,7 @@ public class SuggestService {
                 feignService.getCancelTossPaymentResponse(headers, paymentInfo.getPaymentKey(), body);
 
         cancelInfo.setOrderStatus(REFUND_APPROVED);
-        suggest.setStatus(REFUND_PAYMENT);
+        // suggest.setStatus(REFUND_PAYMENT);
         suggest.setEndTime();
         suggestDbService.saveSuggest(suggest);
 
