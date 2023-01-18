@@ -56,13 +56,13 @@ export const SearchPop = ({ onSubmit, absolute }: Props) => {
               <div>구</div>
               <div className="w-full h-fit rounded-xl mt-5">
                 <Controller
-                  name="language"
+                  name="address"
                   render={({ field }) => (
                     <Select
                       {...field}
                       placeholder={<div>구 선택</div>}
                       styles={{
-                        control: (baseStyles, state) => ({
+                        control: baseStyles => ({
                           ...baseStyles,
                           borderRadius: "12px",
                           fontSize: "14px",
@@ -95,7 +95,7 @@ export const SearchPop = ({ onSubmit, absolute }: Props) => {
           <div className="w-full text-textColor text-center">개발언어</div>
           <div className="w-full h-fit rounded-xl mt-5">
             <Controller
-              name="address"
+              name="language"
               render={({ field }) => (
                 <Select
                   {...field}
