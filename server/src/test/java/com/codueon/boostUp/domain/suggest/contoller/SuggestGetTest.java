@@ -1,9 +1,6 @@
 package com.codueon.boostUp.domain.suggest.contoller;
 
-import com.codueon.boostUp.domain.suggest.dto.GetPaymentReceipt;
-import com.codueon.boostUp.domain.suggest.dto.GetStudentSuggest;
-import com.codueon.boostUp.domain.suggest.dto.GetPaymentInfo;
-import com.codueon.boostUp.domain.suggest.dto.GetTutorSuggest;
+import com.codueon.boostUp.domain.suggest.dto.*;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -65,6 +62,9 @@ public class SuggestGetTest extends SuggestControllerTest{
 
         doNothing().when(suggestService).setSuggestStatusAndEndTime(suggest.getId(), member.getId());
 
+        doNothing().when(suggestService).setSuggestStatusAndEndTime(Mockito.anyLong(), Mockito.anyLong());
+
+
         ResultActions actions =
                 mockMvc.perform(
                         get("/suggest/{suggest-id}/done", suggest.getId())
@@ -75,9 +75,66 @@ public class SuggestGetTest extends SuggestControllerTest{
     }
 
     @Test
+    @DisplayName("GET 출석부 1 출석부 조회")
+    void getLessonAttendance() throws Exception {
+        GetLessonAttendance response = GetLessonAttendance.builder()
+                .quantity(5)
+                .quantityCount(1)
+                .progress(20)
+                .build();
+
+        given(suggestService.getLessonAttendance(Mockito.anyLong(), Mockito.anyLong()))
+                .willReturn(response);
+
+        ResultActions actions =
+                mockMvc.perform(
+                        get("/suggest/{suggest-id}/attendance", suggest.getId())
+                );
+
+        actions.andExpect(status().isOk())
+                .andExpect(jsonPath("$.quantity").value(response.getQuantity()))
+                .andExpect(jsonPath("$.quantityCount").value(response.getQuantityCount()))
+                .andExpect(jsonPath("$.progress").value(response.getProgress()))
+                .andReturn();
+    }
+
+    @Test
+    @DisplayName("GET 출석부 2 출석 인정")
+    void lessonAttendanceCheck() throws Exception {
+        Integer quantityCount = 5;
+
+        given(suggestService.teacherChecksAttendance(Mockito.anyLong(), Mockito.anyLong()))
+                .willReturn(quantityCount);
+
+        ResultActions actions =
+                mockMvc.perform(
+                        get("/suggest/{suggest-id}/attendance/check", suggest.getId())
+                );
+
+        actions.andExpect(status().isOk())
+                .andReturn();
+    }
+
+    @Test
+    @DisplayName("GET 출석부 3 출석 인정 취소")
+    void lessonAttendanceCancel() throws Exception {
+        Integer quantityCount = 5;
+
+        given(suggestService.teacherCancelAttendance(Mockito.anyLong(), Mockito.anyLong()))
+                .willReturn(quantityCount);
+
+        ResultActions actions =
+                mockMvc.perform(
+                        get("/suggest/{suggest-id}/receipt", suggest.getId())
+                );
+
+        actions.andExpect(status().isOk())
+                .andReturn();
+    }
+
+    @Test
     @DisplayName("GET 결제 영수증 조회")
     void getPaymentReceipt() throws Exception {
-
         Integer totalCost = 50000;
         Integer quantity = 5;
         String paymentMethod = "카카오페이";
@@ -108,13 +165,11 @@ public class SuggestGetTest extends SuggestControllerTest{
                 .andExpect(jsonPath("$.address[1]").value("강동구"))
                 .andExpect(jsonPath("$.address[2]").value("강북구"))
                 .andReturn();
-
     }
 
     @Test
     @DisplayName("GET 마이페이지 신청 내역 조회 - 선생님용")
     void getTutorSuggest() throws Exception{
-
         int tabId = 1;
 
         List<GetTutorSuggest> suggestList = new ArrayList<>();
@@ -139,13 +194,11 @@ public class SuggestGetTest extends SuggestControllerTest{
                 .andExpect(jsonPath("$.data[0].startTime").value(suggestList.get(0).getStartTime()))
                 .andExpect(jsonPath("$.data[0].endTime").value(suggestList.get(0).getEndTime()))
                 .andReturn();
-
     }
 
     @Test
     @DisplayName("GET 마이페이지 신청 내역 조회 - 학생용")
     void getStudentSuggest() throws Exception{
-
         lesson.addProfileImage(profileImage);
 
         List<GetStudentSuggest> suggestList = new ArrayList<>();

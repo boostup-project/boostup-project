@@ -11,6 +11,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class TossPayCancelInfo {
 
+    private Cancels cancels;
+
     private Integer totalAmount;
 
     private String paymentKey;

@@ -18,7 +18,6 @@ public class SuggestPostTest extends SuggestControllerTest{
     @Test
     @DisplayName("POST 신청 프로세스 1 - 과외 신청")
     void createSuggest() throws Exception{
-
         Long lessonId = 1L;
 
         PostSuggest post = PostSuggest.builder()
@@ -28,7 +27,6 @@ public class SuggestPostTest extends SuggestControllerTest{
                 .build();
 
         String content = gson.toJson(post);
-
         doNothing().when(suggestService).createSuggest(Mockito.any(), Mockito.anyLong(), Mockito.anyLong());
 
         ResultActions actions =
@@ -43,17 +41,14 @@ public class SuggestPostTest extends SuggestControllerTest{
 
         actions.andExpect(status().isCreated())
                 .andReturn();
-
     }
 
     @Test
     @DisplayName("POST 신청 프로세스 2-1 수락하기")
     void acceptSuggest() throws Exception{
-
         Integer quantity = 1;
 
         String content = gson.toJson(quantity);
-
         doNothing().when(suggestService).acceptSuggest(Mockito.anyLong(), Mockito.anyLong(), Mockito.anyInt());
 
         ResultActions actions =
@@ -72,13 +67,11 @@ public class SuggestPostTest extends SuggestControllerTest{
     @Test
     @DisplayName("POST 신청 프로세스 2-2 거절하기")
     void declineSuggest() throws Exception {
-
         PostReason postReason = PostReason.builder()
                 .reason("배울 자세가 안 되어있음 쯧")
                 .build();
 
         String content = gson.toJson(postReason);
-
         doNothing().when(suggestService).declineSuggest(Mockito.anyLong(), Mockito.anyLong(), Mockito.any());
 
         ResultActions actions =

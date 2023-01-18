@@ -2,8 +2,10 @@ package com.codueon.boostUp.domain.member.controller;
 
 import com.codueon.boostUp.domain.member.dto.TokenDto;
 import com.codueon.boostUp.domain.member.service.AuthService;
+import com.codueon.boostUp.global.security.token.JwtAuthenticationToken;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import com.codueon.boostUp.domain.member.dto.PostLogin;
 
@@ -14,6 +16,12 @@ public class AuthController {
 
     private final AuthService authService;
 
+    /**
+     * 사용자 로그인
+     * @param login 로그인 정보
+     * @return ResponseEntity
+     * @author LimJaeminZ
+     */
     @PostMapping("/login")
     public ResponseEntity postLoginMember(@RequestBody PostLogin login) {
         TokenDto.Response response = authService.loginMember(login);
@@ -22,9 +30,19 @@ public class AuthController {
                 .body(response.getResponse());
     }
 
+    /**
+     * 사용자 로그아웃
+     * @param accessToken 엑세스 토큰
+     * @param refreshToken 리프레시 토큰
+     * @param authentication 사용자 인증 정보*
+     * @author LimJaeminZ
+     */
     @DeleteMapping("/logout")
-    public ResponseEntity deleteLoginMember() {
-        // TODO : 시큐리티 적용 시 Authentication 객체 추가 요
+    public ResponseEntity deleteLoginMember(@RequestHeader("authorization") String accessToken,
+                                            @RequestHeader("refreshToken") String refreshToken,
+                                            Authentication authentication) {
+        JwtAuthenticationToken token = (JwtAuthenticationToken) authentication;
+        authService.logoutMember(accessToken, refreshToken, token.getId());
         return ResponseEntity.ok().build();
     }
 

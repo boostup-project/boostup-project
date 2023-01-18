@@ -22,7 +22,6 @@ public class KakaoPaymentTest extends SuggestControllerTest{
     @Test
     @DisplayName("GET 신청 프로세스 4 결제 URL 요청")
     void orderPayment() throws Exception {
-
         KakaoPayReadyInfo payReadyInfo = KakaoPayReadyInfo.builder()
                 .nextRedirectPcUrl("nextRedirectPcUrl")
                 .build();
@@ -42,13 +41,11 @@ public class KakaoPaymentTest extends SuggestControllerTest{
 
         actions.andExpect(status().isOk())
                 .andReturn();
-
     }
 
     @Test
     @DisplayName("GET 신청 프로세스 5 결제 성공")
     void successPayment() throws Exception {
-
         String pgToken = "pgToken";
 
         Date date = new Date(2023, 01, 05, 05, 00);
@@ -92,13 +89,11 @@ public class KakaoPaymentTest extends SuggestControllerTest{
 
         actions.andExpect(status().isOk())
                 .andReturn();
-
     }
 
     @Test
     @DisplayName("GET 신청 프로세스 6 결제 취소")
     void cancelPayment() throws Exception {
-
         String cancelMessage = CANCELED_PAY_MESSAGE;
 
         ResultActions actions =
@@ -108,13 +103,11 @@ public class KakaoPaymentTest extends SuggestControllerTest{
 
         actions.andExpect(status().isOk())
                 .andReturn();
-
     }
 
     @Test
     @DisplayName("GET 신청 프로세스 7 결제 실패")
     void failedPayment() throws Exception {
-
         String failMessage = FAILED_PAY_MESSAGE;
 
         ResultActions actions =
@@ -124,7 +117,6 @@ public class KakaoPaymentTest extends SuggestControllerTest{
 
         actions.andExpect(status().isOk())
                 .andReturn();
-
     }
 
 }

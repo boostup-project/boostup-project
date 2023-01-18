@@ -10,6 +10,7 @@ import org.springframework.test.web.servlet.ResultActions;
 import static com.codueon.boostUp.domain.suggest.utils.SuggestConstants.*;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 public class TossPaymentTest extends SuggestControllerTest{
@@ -17,7 +18,6 @@ public class TossPaymentTest extends SuggestControllerTest{
     @Test
     @DisplayName("GET 신청 프로세스 4-2 Toss 결제 URL 요청")
     void orderPayment() throws Exception {
-
         int paymentId = 1;
 
         Checkout checkout = Checkout.builder()
@@ -42,14 +42,14 @@ public class TossPaymentTest extends SuggestControllerTest{
                 );
 
         actions.andExpect(status().isOk())
+                .andExpect(jsonPath("$.message").value(message.getMessage()))
+                .andExpect(jsonPath("$.data").value(message.getData()))
                 .andReturn();
-
     }
 
     @Test
     @DisplayName("GET 신청 프로세스 5-2 Toss 결제 성공")
     void successTossPayment() throws Exception {
-
         Checkout checkout = Checkout.builder().build();
         TossCard tossCard = TossCard.builder().build();
         Receipt receipt = Receipt.builder().build();
@@ -89,13 +89,11 @@ public class TossPaymentTest extends SuggestControllerTest{
 
         actions.andExpect(status().isOk())
                 .andReturn();
-
     }
 
     @Test
     @DisplayName("GET 신청 프로세스 7-2 Toss 결제 실패")
     void failedTossPayment() throws Exception {
-
         String failMessage = FAILED_PAY_MESSAGE;
 
         ResultActions actions =
@@ -105,7 +103,59 @@ public class TossPaymentTest extends SuggestControllerTest{
 
         actions.andExpect(status().isOk())
                 .andReturn();
+    }
 
+    @Test
+    @DisplayName("GET 신청 프로세스 9-2 Toss 환불")
+    void refundTossPayment() throws Exception {
+        Integer count = 2;
+        Integer amount = 5000;
+
+        CancelToTossPaymentInfo body = CancelToTossPaymentInfo.builder()
+                .cancelReason("고객이 취소를 요청함")
+                .cancelAmount(count * amount)
+                .build();
+
+        Cancels cancels = Cancels.builder().build();
+        Checkout checkout = Checkout.builder().build();
+        TossCard card = TossCard.builder().build();
+        Receipt receipt = Receipt.builder().build();
+        MobilePhone mobilePhone = MobilePhone.builder().build();
+        Transfer transfer = Transfer.builder().build();
+
+        TossPayCancelInfo cancelInfo = TossPayCancelInfo.builder()
+                .cancels(cancels)
+                .totalAmount(count * amount)
+                .paymentKey("paymentKey")
+                .lastTransactionKey("lastTransactionKey")
+                .method("method")
+                .orderId("orderId")
+                .orderName("orderName")
+                .checkout(checkout)
+                .mId("mId")
+                .requestedAt("requestedAt")
+                .approvedAt("approvedAt")
+                .card(card)
+                .receipt(receipt)
+                .mobilePhone(mobilePhone)
+                .transfer(transfer)
+                .build();
+
+        Message message = Message.builder()
+                .data(cancelInfo)
+                .message(CANCELED_PAY_MESSAGE)
+                .build();
+
+        given(suggestService.refundTossPayment(Mockito.anyLong(), Mockito.anyLong()))
+                .willReturn(message);
+
+        ResultActions actions =
+                mockMvc.perform(
+                        get("/suggest/{suggest-id}/toss/refund", suggest.getId())
+                );
+
+        actions.andExpect(status().isOk())
+                .andReturn();
     }
 
 }
