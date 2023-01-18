@@ -67,7 +67,7 @@ public class LessonInfo {
         this.companies = postLessonDetailEdit.getDetailCompany();
         this.costs = postLessonDetailEdit.getDetailCost();
         this.personality = postLessonDetailEdit.getPersonality();
-        this.favoriteLocation = postLessonDetailEdit.getDetailLoacation();
+        this.favoriteLocation = postLessonDetailEdit.getDetailLocation();
         this.careerImages.clear();
     }
 }
