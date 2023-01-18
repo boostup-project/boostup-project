@@ -13,27 +13,15 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 public class KakaoCard {
-
     private String purchaseCorp;
-
     private String purchaseCorpCode;
-
     private String issuerCorp;
-
     private String issuerCorpCode;
-
     private String bin;
-
     private String cardType;
-
     private String installMonth;
-
     private String approvedId;
-
     private String cardMid;
-
     private String interestFreeInstall;
-
     private String cardItemCode;
-
 }

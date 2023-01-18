@@ -175,6 +175,12 @@ public class SuggestDbService {
         }
     }
 
+    /**
+     * 예외처리 - Suggest memberId, Suggest status 두 가지 비교
+     * @param suggest 신청 정보
+     * @param memberId 회원 식별자
+     * @author LeeGoh
+     */
     public void suggestGetMemberIdAndStatusIsNotInProgress(Suggest suggest, Long memberId) {
         if (suggest.getStatus().equals(ACCEPT_IN_PROGRESS) ||
                 suggest.getStatus().equals(PAY_IN_PROGRESS) ||

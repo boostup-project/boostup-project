@@ -1,4 +1,4 @@
-package com.codueon.boostUp.domain.suggest.toss;
+package com.codueon.boostUp.domain.suggest.kakao;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,10 +9,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class CancelToTossPaymentInfo {
-
-    private String cancelReason;
-
-    private Integer cancelAmount;
-
+public class CanceledAmount {
+    private Integer total;
+    private Integer vat;
 }

@@ -196,7 +196,7 @@ public class SuggestService {
         PaymentInfo findPaymentInfo = suggestDbService.ifExistsReturnPaymentInfo(suggestId);
 
         KakaoPayHeader headers = feignService.setKakaoHeaders();
-        ReadyToKakaoPaymentInfo params =
+        ReadyToKakaoPayInfo params =
                 feignService.setReadyParams(requestUrl, findSuggest, findMember, findLesson, findPaymentInfo);
 
         KakaoPayReadyInfo payReadyInfo = feignService.getPayReadyInfo(headers, params);
@@ -239,7 +239,7 @@ public class SuggestService {
         }
 
         TossPayHeader headers = feignService.setTossHeaders();
-        ReadyToTossPaymentInfo body =
+        ReadyToTossPayInfo body =
                 feignService.setReadyTossParams(requestUrl, findSuggest, findLesson, findPaymentInfo, method);
 
         TossPayReadyInfo tossPayReadyInfo = feignService.getTossPayReadyInfo(headers, body);
@@ -278,7 +278,7 @@ public class SuggestService {
         PaymentInfo findPaymentInfo = suggestDbService.ifExistsReturnPaymentInfo(suggestId);
 
         KakaoPayHeader headers = feignService.setKakaoHeaders();
-        RequestForKakaoPaymentInfo params = feignService.setRequestParams(pgToken, findPaymentInfo);
+        RequestForKakaoPayInfo params = feignService.setRequestParams(pgToken, findPaymentInfo);
 
         KakaoPaySuccessInfo kakaoPaySuccessInfo = feignService.getSuccessKakaoResponse(headers, params);
 
@@ -305,7 +305,7 @@ public class SuggestService {
         PaymentInfo findPaymentInfo = suggestDbService.ifExistsReturnPaymentInfo(suggestId);
 
         TossPayHeader headers = feignService.setTossHeaders();
-        RequestForTossPaymentInfo body = feignService.setRequestBody(findPaymentInfo);
+        RequestForTossPayInfo body = feignService.setRequestBody(findPaymentInfo);
 
         TossPaySuccessInfo tossPaySuccessInfo = feignService.getSuccessTossResponse(headers, body);
 
@@ -347,23 +347,13 @@ public class SuggestService {
     }
 
     /**
-     * Kakao 환불 메서드
+     * 환불 메서드 Kakao/Toss
      * @param suggestId 신청 식별자
      * @param memberId 회원 식별자
+     * @return Message
      * @author LeeGoh
      */
-    public void refundKakaoPayment(Long suggestId, Long memberId) {
-        Suggest findSuggest = suggestDbService.ifExistsReturnSuggest(suggestId);
-        suggestDbService.suggestGetMemberIdAndStatusIsDuringLesson(findSuggest, memberId);
-    }
-
-    /**
-     * Toss 환불 메서드
-     * @param suggestId 신청 식별자
-     * @param memberId 회원 식별자
-     * @author LeeGoh
-     */
-    public Message refundTossPayment(Long suggestId, Long memberId) {
+    public Message refundPaymentKakaoOrToss(Long suggestId, Long memberId) {
         Suggest findSuggest = suggestDbService.ifExistsReturnSuggest(suggestId);
         suggestDbService.suggestGetMemberIdAndStatusIsDuringLesson(findSuggest, memberId);
         PaymentInfo findPaymentInfo = suggestDbService.ifExistsReturnPaymentInfo(suggestId);
@@ -372,20 +362,81 @@ public class SuggestService {
             throw new BusinessLogicException(ExceptionCode.INVALID_ACCESS);
         }
 
-        TossPayHeader headers = feignService.setTossHeaders();
-        CancelToTossPaymentInfo body = feignService.setCancelBody(findPaymentInfo);
+        switch (findSuggest.getPaymentMethod()) {
+            case "카카오페이": return refundKakaoPayment(findSuggest, findPaymentInfo);
+            default: return refundTossPayment(findSuggest, findPaymentInfo);
+        }
+    }
 
-        TossPayCancelInfo cancelInfo =
-                feignService.getCancelPaymentResponse(headers, findPaymentInfo.getPaymentKey(), body);
+    /**
+     * Kakao 환불 메서드
+     * @param suggest 신청 정보
+     * @param paymentInfo 결제 정보
+     * @author LeeGoh
+     */
+    public Message refundKakaoPayment(Suggest suggest, PaymentInfo paymentInfo) {
+        KakaoPayHeader headers = feignService.setKakaoHeaders();
+        RequestForKakaoPayCancelInfo params = feignService.setRequestCancelParams(paymentInfo);
+
+        KakaoPayCancelInfo cancelInfo =
+                feignService.getCancelKakaoPaymentResponse(headers, params);
 
         cancelInfo.setOrderStatus(REFUND_APPROVED);
-        findSuggest.setStatus(REFUND_PAYMENT);
-        findSuggest.setEndTime();
-        suggestDbService.saveSuggest(findSuggest);
+        suggest.setStatus(REFUND_PAYMENT);
+        suggest.setEndTime();
+        suggestDbService.saveSuggest(suggest);
 
         return Message.builder()
                 .data(cancelInfo)
                 .message(CANCELED_PAY_MESSAGE)
+                .build();
+    }
+
+    /**
+     * Toss 환불 메서드
+     * @param suggest 신청 정보
+     * @param paymentInfo 결제 정보
+     * @author LeeGoh
+     */
+    public Message refundTossPayment(Suggest suggest, PaymentInfo paymentInfo) {
+        TossPayHeader headers = feignService.setTossHeaders();
+        RequestForTossPayCancelInfo body = feignService.setCancelBody(paymentInfo);
+
+        TossPayCancelInfo cancelInfo =
+                feignService.getCancelTossPaymentResponse(headers, paymentInfo.getPaymentKey(), body);
+
+        cancelInfo.setOrderStatus(REFUND_APPROVED);
+        suggest.setStatus(REFUND_PAYMENT);
+        suggest.setEndTime();
+        suggestDbService.saveSuggest(suggest);
+
+        return Message.builder()
+                .data(cancelInfo)
+                .message(CANCELED_PAY_MESSAGE)
+                .build();
+    }
+
+    /**
+     * 환불 단건 조회 메서드
+     * @param suggestId 신청 식별자
+     * @param memberId 회원 식별자
+     * @return GetRefundPayment
+     * @author LeeGoh
+     */
+    public GetRefundPayment getRefundPaymentInfo(Long suggestId, Long memberId) {
+        Suggest findSuggest = suggestDbService.ifExistsReturnSuggest(suggestId);
+        Lesson findLesson = lessonDbService.ifExistsReturnLesson(findSuggest.getId());
+        PaymentInfo findPaymentInfo = suggestDbService.ifExistsReturnPaymentInfo(suggestId);
+
+        if (!findSuggest.getMemberId().equals(memberId) ||
+            !findSuggest.getStatus().equals(REFUND_PAYMENT)) {
+            throw new BusinessLogicException(ExceptionCode.INVALID_ACCESS);
+        }
+
+        return GetRefundPayment.builder()
+                .suggest(findSuggest)
+                .lesson(findLesson)
+                .paymentInfo(findPaymentInfo)
                 .build();
     }
 

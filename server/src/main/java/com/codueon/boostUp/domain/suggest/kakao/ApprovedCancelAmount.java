@@ -1,4 +1,4 @@
-package com.codueon.boostUp.domain.suggest.toss;
+package com.codueon.boostUp.domain.suggest.kakao;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Checkout {
-    private String url;
+public class ApprovedCancelAmount {
+    private Integer total;
+    private Integer vat;
 }

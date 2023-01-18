@@ -9,6 +9,11 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Checkout {
-    private String url;
+public class ReadyToTossPayInfo {
+    private Integer amount;
+    private String failUrl;
+    private String method;
+    private String orderId;
+    private String orderName;
+    private String successUrl;
 }
