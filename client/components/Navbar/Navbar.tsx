@@ -5,7 +5,7 @@ import {
   IconProfile,
   IconPlus,
 } from "assets/icon/";
-import { isWriteModal } from "atoms/main/mainAtom";
+import { filterModal, isWriteModal } from "atoms/main/mainAtom";
 import WriteModal from "components/createModal/WriteModal";
 import Link from "next/link";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
@@ -38,8 +38,18 @@ const navContents = [
 
 const Navbar = () => {
   const [isWrite, setIsWrite] = useRecoilState(isWriteModal);
+  const [modal, setModal] = useRecoilState(filterModal);
   const toWrite = (e: React.MouseEvent<HTMLDivElement>) => {
     setIsWrite(prev => !prev);
+  };
+
+  // 하단 Navbar의 필터 버튼 클릭시 10~16줄 코드를 넣어주시면 됩니다!
+  const handleModalClick = () => {
+    if (modal === 0) {
+      setModal(48);
+    } else {
+      setModal(0);
+    }
   };
 
   return (
@@ -60,7 +70,7 @@ const Navbar = () => {
               </div>
             ) : (
               <div className="w-7">
-                <div>{content.image}</div>
+                <div onClick={handleModalClick}>{content.image}</div>
               </div>
             )}
           </div>
