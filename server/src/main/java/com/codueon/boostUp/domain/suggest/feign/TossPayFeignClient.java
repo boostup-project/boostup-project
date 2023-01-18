@@ -14,17 +14,17 @@ public interface TossPayFeignClient {
     @PostMapping(value = "/v1/payments", consumes = "application/json")
     TossPayReadyInfo readyForTossPayment(@RequestHeader(PayConstants.AUTHORIZATION) String authorization,
                                          @RequestHeader(value = "Content-Type") String contentType,
-                                         @RequestBody ReadyToTossPaymentInfo body);
+                                         @RequestBody ReadyToTossPayInfo body);
 
     @PostMapping(value = "/v1/payments/confirm", consumes = "application/json")
     TossPaySuccessInfo successForPayment(@RequestHeader(PayConstants.AUTHORIZATION) String authorization,
                                          @RequestHeader(value = "Content-Type") String contentType,
-                                         @RequestBody RequestForTossPaymentInfo body);
+                                         @RequestBody RequestForTossPayInfo body);
 
     @PostMapping(value = "/v1/payments/{paymentKey}/cancel", consumes = "application/json")
     TossPayCancelInfo cancelPayment(@RequestHeader(PayConstants.AUTHORIZATION) String authorization,
                                     @RequestHeader(value = "Content-Type") String contentType,
                                     @PathVariable("paymentKey") String paymentKey,
-                                    @RequestBody CancelToTossPaymentInfo body);
+                                    @RequestBody RequestForTossPayCancelInfo body);
 
 }

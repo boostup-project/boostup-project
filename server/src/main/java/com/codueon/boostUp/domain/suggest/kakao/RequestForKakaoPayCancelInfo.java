@@ -9,18 +9,9 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class RequestForKakaoPaymentInfo {
-
+public class RequestForKakaoPayCancelInfo {
     private String cid;
-
     private String tid;
-
-    private String pg_token;
-
-    private Integer total_amount;
-
-    private String partner_user_id;
-
-    private String partner_order_id;
-
+    private Integer cancel_amount;
+    private Integer cancel_tax_free_amount;
 }

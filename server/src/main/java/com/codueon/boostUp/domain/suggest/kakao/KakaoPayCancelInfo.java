@@ -14,28 +14,27 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-public class KakaoPaySuccessInfo {
+public class KakaoPayCancelInfo {
     private String aid;
     private String tid;
     private String cid;
-    private String sid;
+    private String status;
     private String partnerOrderId;
-    private String partnerUserId;
+    private String partner_userId;
     private String paymentMethodType;
     private Amount amount;
-    private KakaoCard kakaoCard;
+    private ApprovedCancelAmount approvedCancelAmount;
+    private CanceledAmount canceledAmount;
+    private CancelAvailableAmount cancelAvailableAmount;
     private String itemName;
     private String itemCode;
-    private String payload;
     private Integer quantity;
-    private Integer taxFreeAmount;
-    private Integer vatAmount;
     private Date createdAt;
     private Date approvedAt;
+    private Date canceledAt;
     private String orderStatus;
 
     public void setOrderStatus(String orderStatus) {
         this.orderStatus = orderStatus;
     }
-
 }

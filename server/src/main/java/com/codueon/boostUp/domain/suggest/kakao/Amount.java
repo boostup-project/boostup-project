@@ -13,15 +13,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 public class Amount {
-
     private Integer total;
-
     private Integer taxFree;
-
     private Integer vat;
-
     private Integer point;
-
     private Integer discount;
-
 }

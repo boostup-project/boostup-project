@@ -9,12 +9,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class RequestForTossPaymentInfo {
-
-    private String paymentKey;
-
-    private String orderId;
-
-    private Integer amount;
-
+public class RequestForTossPayCancelInfo {
+    private String cancelReason;
+    private Integer cancelAmount;
 }

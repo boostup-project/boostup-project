@@ -10,9 +10,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Transfer {
-
     private String bankCode;
-
     private String settlementStatus;
-
 }

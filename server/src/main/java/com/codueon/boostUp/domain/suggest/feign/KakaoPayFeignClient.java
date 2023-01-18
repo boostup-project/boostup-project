@@ -1,9 +1,6 @@
 package com.codueon.boostUp.domain.suggest.feign;
 
-import com.codueon.boostUp.domain.suggest.kakao.KakaoPayReadyInfo;
-import com.codueon.boostUp.domain.suggest.kakao.KakaoPaySuccessInfo;
-import com.codueon.boostUp.domain.suggest.kakao.ReadyToKakaoPaymentInfo;
-import com.codueon.boostUp.domain.suggest.kakao.RequestForKakaoPaymentInfo;
+import com.codueon.boostUp.domain.suggest.kakao.*;
 import com.codueon.boostUp.domain.suggest.utils.PayConstants;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.cloud.openfeign.SpringQueryMap;
@@ -17,12 +14,18 @@ public interface KakaoPayFeignClient {
     KakaoPayReadyInfo readyForPayment(@RequestHeader(PayConstants.AUTHORIZATION) String authorization,
                                       @RequestHeader(PayConstants.ACCEPT) String accept,
                                       @RequestHeader(PayConstants.CONTENT_TYPE) String contentType,
-                                      @SpringQueryMap ReadyToKakaoPaymentInfo params);
+                                      @SpringQueryMap ReadyToKakaoPayInfo params);
 
     @PostMapping(value = "/v1/payment/approve")
     KakaoPaySuccessInfo successForPayment(
             @RequestHeader(PayConstants.AUTHORIZATION) String authorization,
             @RequestHeader(PayConstants.ACCEPT) String accept,
             @RequestHeader(PayConstants.CONTENT_TYPE) String contentType,
-            @SpringQueryMap RequestForKakaoPaymentInfo query);
+            @SpringQueryMap RequestForKakaoPayInfo query);
+
+    @PostMapping(value = "/v1/payment/cancel")
+    KakaoPayCancelInfo cancelForPayment(@RequestHeader(PayConstants.AUTHORIZATION) String authorization,
+                                        @RequestHeader(PayConstants.ACCEPT) String accept,
+                                        @RequestHeader(PayConstants.CONTENT_TYPE) String contentType,
+                                        @SpringQueryMap RequestForKakaoPayCancelInfo params);
 }

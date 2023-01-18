@@ -10,13 +10,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Cancels {
-
     private String cancelReason;
-
     private Integer cancelAmount;
-
     private String canceledAt;
-
     private String transactionKey;
 
 }

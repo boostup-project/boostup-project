@@ -10,9 +10,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class TossPayHeader {
-
     private String adminKey;
-
     private String contentType;
-
 }
