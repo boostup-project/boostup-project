@@ -11,18 +11,18 @@ public class PostLessonDetailEdit {
     private String detailCompany;
     private String detailCost;
     private String personality;
-    private String detailLoacation;
+    private String detailLocation;
 
     @Builder
     public PostLessonDetailEdit(String introduction,
                                 String detailCompany,
                                 String detailCost,
                                 String personality,
-                                String detailLoacation) {
+                                String detailLocation) {
         this.introduction = introduction;
         this.detailCompany = detailCompany;
         this.detailCost = detailCost;
         this.personality = personality;
-        this.detailLoacation = detailLoacation;
+        this.detailLocation = detailLocation;
     }
 }
