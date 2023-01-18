@@ -1,41 +1,8 @@
 interface AddDict {
   [index: string]: number;
-  강남구: number;
-  강동구: number;
-  강북구: number;
-  강서구: number;
-  관악구: number;
-  광진구: number;
-  구로구: number;
-  금천구: number;
-  노원구: number;
-  도봉구: number;
-  동대문구: number;
-  동작구: number;
-  마포구: number;
-  서대문구: number;
-  서초구: number;
-  성동구: number;
-  성북구: number;
-  송파구: number;
-  양천구: number;
-  영등포구: number;
-  용산구: number;
-  은평구: number;
-  종로구: number;
-  중구: number;
-  중랑구: number;
 }
 interface LangDict {
   [index: string]: number;
-  Javascript: number;
-  Python: number;
-  Go: number;
-  Java: number;
-  Kotlin: number;
-  PHP: number;
-  "C#": number;
-  Swift: number;
 }
 export const addDict: AddDict = {
   강남구: 1,
