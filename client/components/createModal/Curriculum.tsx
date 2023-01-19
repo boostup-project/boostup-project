@@ -7,6 +7,7 @@ import { bold, italic } from "@uiw/react-md-editor/lib/commands/";
 import { Dispatch, SetStateAction } from "react";
 import { SetterOrUpdater } from "recoil";
 import { Info } from "./WriteModal";
+import postWrite from "apis/postWrite";
 
 interface Props {
   basicInfo: Info;
@@ -48,7 +49,6 @@ const Curriculum = ({
       detailLocation,
       introduction,
       personality,
-      referenceImage,
     } = addInfo;
     const profileImage = Array.from(profileImg as any)[0];
     console.log("profile", profileImage);
@@ -69,16 +69,13 @@ const Curriculum = ({
         curriculum: curInfo,
       },
       profileImage,
-      detailPhoto: referenceImage,
     };
     object.append("data", registration.data);
     object.append("profileImage", registration.profileImage);
-    object.append("detailPhoto", registration.detailPhoto);
+
     console.log("register", registration);
-    // console.log("object", object);
-    for (let key of object.entries()) {
-      console.log(`${key}`);
-    }
+    // console.log(object);
+    // postWrite(object);
   };
 
   return (

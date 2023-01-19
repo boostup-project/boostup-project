@@ -12,12 +12,12 @@ interface Additional {
 }
 
 interface Props {
-  addInfo: Info;
+  // addInfo: Info;
   setAddInfo: Dispatch<SetStateAction<Info>>;
   setStep: SetterOrUpdater<number>;
 }
 
-const Additional = ({ addInfo, setAddInfo, setStep }: Props) => {
+const Additional = ({ setAddInfo, setStep }: Props) => {
   const [previewImages, setPreviewImages] = useState<string[]>([]);
   const {
     register,
@@ -29,13 +29,30 @@ const Additional = ({ addInfo, setAddInfo, setStep }: Props) => {
   });
 
   /** 미리보기 이미지 렌더링함수, any 이외의 type 찾기 부족 **/
-  const image = watch("referenceImage");
-  useEffect(() => {
-    if (image && image.length > 0) {
-      const file: any = image[0];
-      setPreviewImages(prev => prev.concat(URL.createObjectURL(file)));
+  // const image = watch("referenceImage");
+  // console.log("image", image);
+  // useEffect(() => {
+  //   if (image && image.length > 0) {
+  //     const file: any = image[0];
+  //     setPreviewImages(prev => prev.concat(URL.createObjectURL(file)));
+  //   }
+  // }, [previewImages]);
+  // console.log(previewImages);
+
+  const insertImg = (e: any) => {
+    let reader = new FileReader();
+
+    if (e.target.files[0]) {
+      reader.readAsDataURL(e.target.files[0]);
     }
-  }, [image]);
+    reader.onloadend = () => {
+      const previewImgUrl = reader.result as string;
+
+      if (previewImgUrl) {
+        setPreviewImages(prev => prev.concat(previewImgUrl));
+      }
+    };
+  };
 
   /** 이미지 삭제 함수(배열에서 해당 ID값 이미지 삭제) **/
   const deleteImg = (e: any) => {
@@ -52,8 +69,7 @@ const Additional = ({ addInfo, setAddInfo, setStep }: Props) => {
   };
 
   /** 이전 페이지 돌아가기 **/
-  const toBack = (addtionalData: Additional) => {
-    setAddInfo(addtionalData);
+  const toBack = () => {
     setStep(prev => prev - 1);
   };
 
@@ -162,24 +178,14 @@ const Additional = ({ addInfo, setAddInfo, setStep }: Props) => {
               ))
             ) : (
               <div>
-                <label
-                  className="flex flex-col justify-center items-center text-modalImgTxt"
-                  htmlFor="refImg"
-                >
+                <label className="flex flex-col justify-center items-center text-modalImgTxt">
                   <IconImg width="69px" heigth="62px" fill={modalImgTxt} />
-                  <div>클릭하여 사진을 첨부하세요</div>
+                  <div>버튼을 눌러 사진을 첨부하세요</div>
                 </label>
-                <input
-                  className="hidden"
-                  multiple
-                  id="refImg"
-                  type="file"
-                  {...register("referenceImage")}
-                />
               </div>
             )}
           </div>
-          {previewImages.length >= 1 && previewImages.length <= 2 && (
+          {previewImages.length >= 0 && previewImages.length <= 2 && (
             <div className="w-full mt-2">
               <label
                 className="flex justify-center items-center"
@@ -193,16 +199,17 @@ const Additional = ({ addInfo, setAddInfo, setStep }: Props) => {
               </label>
               <input
                 className="hidden"
-                multiple
                 id="refImg"
                 type="file"
+                accept="image/*"
                 {...register("referenceImage")}
+                onChange={e => insertImg(e)}
               />
             </div>
           )}
         </div>
         <div className="flex flex-row justify-center items-center w-full h-fit mt-10">
-          <SmallBtn onClick={e => toBack}>이 전</SmallBtn>
+          <SmallBtn onClick={toBack}>이 전</SmallBtn>
           <SmallBtn css="ml-5">다 음</SmallBtn>
         </div>
       </form>
