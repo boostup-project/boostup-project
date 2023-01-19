@@ -177,7 +177,7 @@ public class LessonController {
                                                       Authentication authentication) {
         JwtAuthenticationToken token = (JwtAuthenticationToken) authentication;
         Long memberId = getMemberIdIfExistToken(token);
-        Page<GetMainPageLesson> response = lessonService.getDetailSearchLessons(token.getId(), postSearchLesson, pageable);
+        Page<GetMainPageLesson> response = lessonService.getDetailSearchLessons(memberId, postSearchLesson, pageable);
         return ResponseEntity.ok().body(new MultiResponseDto<>(response));
     }
 
