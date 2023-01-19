@@ -20,7 +20,7 @@ public class KakaoPayCancelInfo {
     private String cid;
     private String status;
     private String partnerOrderId;
-    private String partner_userId;
+    private String partnerUserId;
     private String paymentMethodType;
     private Amount amount;
     private ApprovedCancelAmount approvedCancelAmount;
