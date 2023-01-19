@@ -39,3 +39,31 @@ include::{snippets}/과외 상세 수정/http-request.adoc[]
 
 .request-fields
 include::{snippets}/과외 상세 수정/request-fields.adoc[]
+
+
+=== 과외 커리큘럼 수정
+.curl-request
+include::{snippets}/과외 커리큘럼 수정/curl-request.adoc
+
+.http-request
+include::{snippets}/과외 커리큘럼 수정/http-request.adoc[]
+
+.request-header
+// include::{snippets}/과외 커리큘럼 수정/request-headers.adoc[]
+
+.request-fields
+include::{snippets}/과외 커리큘럼 수정/request-fields.adoc[]
+
+
+=== 과외 삭제
+.curl-request
+include::{snippets}/과외 삭제/curl-request.adoc
+
+.http-request
+include::{snippets}/과외 삭제/http-request.adoc
+
+.request-header
+// include::{snippets}/과외 삭제/request-headers.adoc[]
+
+.path-parameters
+include::{snippets}/과외 삭제/path-parameters.adoc[]
