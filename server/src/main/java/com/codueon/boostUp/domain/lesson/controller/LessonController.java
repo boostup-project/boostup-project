@@ -4,6 +4,7 @@ import com.codueon.boostUp.domain.dto.MultiResponseDto;
 import com.codueon.boostUp.domain.lesson.dto.*;
 import com.codueon.boostUp.domain.lesson.service.LessonService;
 import com.codueon.boostUp.global.security.token.JwtAuthenticationToken;
+import io.jsonwebtoken.Jwt;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.data.domain.Page;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
@@ -33,16 +35,17 @@ public class LessonController {
      */
     @PostMapping(value = "/registration")
     public ResponseEntity<?> postLesson(@RequestPart(value = "data") PostLesson postLesson,
+                                        Authentication authentication,
                                         @RequestPart(value = "profileImage") MultipartFile profileImage,
-                                        @RequestPart(value = "careerImage") List<MultipartFile> careerImage){
+                                        @RequestPart(value = "careerImage") List<MultipartFile> careerImage) {
 
-        Long memberId = 1L;
-
+        JwtAuthenticationToken token = (JwtAuthenticationToken) authentication;
+        Long memberId = getMemberIdIfExistToken(token);
         /** 로컬 환경 */
         lessonService.createLesson(postLesson, memberId, profileImage, careerImage);
 
         /** S3 환경 */
-//        lessonService.createLessonS3(postLesson, memberId, profileImage, careerImage);
+//        lessonService.createLessonS3(postLesson, token.getId(), profileImage, careerImage);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
@@ -58,13 +61,15 @@ public class LessonController {
     @PostMapping("/{lesson-id}/modification")
     public ResponseEntity updateLesson(@PathVariable("lesson-id") Long lessonId,
                                        @RequestPart(value = "data") PostLessonInfoEdit postLessonInfoEdit,
+                                       Authentication authentication,
                                        @RequestPart(value = "profileImage") MultipartFile profileImage) {
-        Long memberId = 1L;
+        JwtAuthenticationToken token = (JwtAuthenticationToken) authentication;
+        Long memberId = getMemberIdIfExistToken(token);
         /** 로컬 환경 */
         lessonService.updateLessonInfo(lessonId, postLessonInfoEdit, memberId, profileImage);
 
         /** S3 환경 */
-//        lessonService.updateLessonInfoS3(lessonId, postLessonInfoEdit, memberId, profileImage);
+//        lessonService.updateLessonInfoS3(lessonId, postLessonInfoEdit, token.getId(), profileImage);
         return ResponseEntity.ok().build();
     }
 
@@ -80,13 +85,15 @@ public class LessonController {
     @PostMapping("/{lesson-id}/detailInfo/modification")
     public ResponseEntity updateLessonDetail(@PathVariable("lesson-id") Long lessonId,
                                              @RequestPart(value = "data") PostLessonDetailEdit postLessonDetailEdit,
+                                             Authentication authentication,
                                              @RequestPart(value = "careerImage") List<MultipartFile> careerImage) {
-        Long memberId = 1L;
+        JwtAuthenticationToken token = (JwtAuthenticationToken) authentication;
+        Long memberId = getMemberIdIfExistToken(token);
         /** 로컬 환경 */
         lessonService.updateLessonDetail(lessonId, postLessonDetailEdit, memberId, careerImage);
 
         /** S3 환경 */
-//        lessonService.updateLessonDetailS3(lessonId, postLessonDetailEdit, memberId, careerImage);
+//        lessonService.updateLessonDetailS3(lessonId, postLessonDetailEdit, token.getId(), careerImage);
 
         return ResponseEntity.ok().build();
     }
@@ -100,8 +107,10 @@ public class LessonController {
      */
     @PatchMapping("/{lesson-id}/curriculum/modification")
     public ResponseEntity updateCurriculum(@PathVariable("lesson-id") Long lessonId,
-                                           @RequestBody PatchLessonCurriculum patchLessonCurriculum) {
-        Long memberId = 1L;
+                                           @RequestBody PatchLessonCurriculum patchLessonCurriculum,
+                                           Authentication authentication) {
+        JwtAuthenticationToken token = (JwtAuthenticationToken) authentication;
+        Long memberId = getMemberIdIfExistToken(token);
         lessonService.updateCurriculum(lessonId, patchLessonCurriculum, memberId);
 
         return ResponseEntity.ok().build();
@@ -114,8 +123,10 @@ public class LessonController {
      * @author Quartz614
      */
     @DeleteMapping(value = "/{lesson-id}")
-    public ResponseEntity deleteLesson(@PathVariable("lesson-id") Long lessonId) {
-        Long memberId = 1L;
+    public ResponseEntity deleteLesson(@PathVariable("lesson-id") Long lessonId,
+                                       Authentication authentication) {
+        JwtAuthenticationToken token = (JwtAuthenticationToken) authentication;
+        Long memberId = getMemberIdIfExistToken(token);
         /** 로컬 환경 */
         lessonService.deleteLesson(memberId, lessonId);
 
@@ -131,8 +142,9 @@ public class LessonController {
      * @author Quartz614
      */
     @GetMapping(value = "/tutor")
-    public ResponseEntity<String> getLessonMypage() {
-        Long memberId = 1L;
+    public ResponseEntity<String> getLessonMypage(Authentication authentication) {
+        JwtAuthenticationToken token = (JwtAuthenticationToken) authentication;
+        Long memberId = getMemberIdIfExistToken(token);
         String response = lessonService.getLessonMypage(memberId);
 
         return ResponseEntity.ok().body(response);
@@ -145,9 +157,10 @@ public class LessonController {
      * @author mozzi327
      */
     @GetMapping
-    public ResponseEntity<?> getMainPageLessonInfos(Pageable pageable) {
-        // TODO : 시큐리티 적용 시 Authentication 객체 추가 요
-        Long memberId = 1L;
+    public ResponseEntity<?> getMainPageLessonInfos(Pageable pageable,
+                                                    Authentication authentication) {
+        JwtAuthenticationToken token = (JwtAuthenticationToken) authentication;
+        Long memberId = getMemberIdIfExistToken(token);
         Page<GetMainPageLesson> response = lessonService.getMainPageLessons(memberId, pageable);
         return ResponseEntity.ok().body(new MultiResponseDto<>(response));
     }
@@ -160,10 +173,11 @@ public class LessonController {
      */
     @PostMapping("/search")
     public ResponseEntity<?> getDetailSearchForLesson(@RequestBody PostSearchLesson postSearchLesson,
-                                                      Pageable pageable) {
-        // TODO : 시큐리티 적용 시 Authentication 객체 추가 요
-        Long memberId = 1L;
-        Page<GetMainPageLesson> response = lessonService.getDetailSearchLessons(memberId, postSearchLesson, pageable);
+                                                      Pageable pageable,
+                                                      Authentication authentication) {
+        JwtAuthenticationToken token = (JwtAuthenticationToken) authentication;
+        Long memberId = getMemberIdIfExistToken(token);
+        Page<GetMainPageLesson> response = lessonService.getDetailSearchLessons(token.getId(), postSearchLesson, pageable);
         return ResponseEntity.ok().body(new MultiResponseDto<>(response));
     }
 
@@ -176,9 +190,10 @@ public class LessonController {
      */
     @GetMapping("/language/{language-id}")
     public ResponseEntity<?> getLessonByLanguage(@PathVariable("language-id") Long languageId,
-                                                 Pageable pageable) {
-        // TODO : 시큐리티 적용 시 Authentication 객체 추가 요
-        Long memberId = 1L;
+                                                 Pageable pageable,
+                                                 Authentication authentication) {
+        JwtAuthenticationToken token = (JwtAuthenticationToken) authentication;
+        Long memberId = getMemberIdIfExistToken(token);
         Page<GetMainPageLesson> response = lessonService.getMainPageLessonsAboutLanguage(memberId, languageId, pageable);
         return ResponseEntity.ok().body(new MultiResponseDto<>(response));
     }
@@ -217,5 +232,9 @@ public class LessonController {
     public ResponseEntity<?> getCurriculum(@PathVariable("lesson-id") Long lessonId) {
         GetLessonCurriculum response = lessonService.getDetailLessonCurriculum(lessonId);
         return ResponseEntity.ok().body(response);
+    }
+    private Long getMemberIdIfExistToken(JwtAuthenticationToken token) {
+        if (token == null) return null;
+        else return token.getId();
     }
 }

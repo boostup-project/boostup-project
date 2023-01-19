@@ -30,7 +30,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
 import java.util.List;
-
+import java.util.Optional;
 
 
 @Service
@@ -291,6 +291,8 @@ public class LessonService {
                                    List<MultipartFile> careerImage) {
         Member findMember = memberDbService.ifExistsReturnMember(memberId);
         LessonInfo updateLessonDetail = lessonDbService.ifExsitsReturnLessonInfo(lessonId);
+
+
         updateLessonDetail.editLessonDetail(postLessonDetailEdit);
         List<UploadFile> uploadFileList = fileHandler.parseUploadFileInfo(careerImage);
         lessonDbService.editCareerImage(uploadFileList, updateLessonDetail);
