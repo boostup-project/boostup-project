@@ -1,38 +1,65 @@
-import { inputStep, isWriteModal } from "atoms/main/mainAtom";
+import ModalBackDrop from "components/reuse/container/ModalBackDrop";
 import StepNavWrapper from "components/reuse/container/StepNavWrapper";
 import CreateModalContainer from "components/reuse/CreateModalContainer";
-import { useEffect } from "react";
-import { useRecoilValue, useSetRecoilState } from "recoil";
 import Additional from "./Additional";
 import BasicInfo from "./BasicInfo";
 import Curriculum from "./Curriculum";
+import { inputStep, isWriteModal } from "atoms/main/mainAtom";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
+import { useState } from "react";
+
+interface ObjectPart {
+  [index: string]: string | string[];
+}
+
+export interface Info {
+  [index: string]: string | string[] | ObjectPart;
+}
 
 const WriteModal = () => {
-  const step = useRecoilValue(inputStep);
+  const [basicInfo, setBasicInfo] = useState<Info>({});
+  const [addInfo, setAddInfo] = useState<Info>({});
+  const [curInfo, setCurInfo] = useState("");
+  const [step, setStep] = useRecoilState(inputStep);
   const setIsWrite = useSetRecoilState(isWriteModal);
-  const toWrite = (e: React.MouseEvent<HTMLDivElement>) => {
+  const toWrite = () => {
     setIsWrite(prev => !prev);
   };
-  useEffect(() => {
-    document.body.style.cssText = `
-    overflow: hidden;
-    width: 100%;`;
-    return () => {
-      document.body.style.cssText = "overflow: unset;";
-    };
-  }, []);
+
+  console.log("basic", basicInfo);
+  console.log("add", addInfo);
+  console.log("cur", curInfo);
+
   return (
-    <div
-      className="fixed z-[999] top-0 left-0 bottom-0 right-0 bg-modalBgColor grid place-items-center"
-      onClick={e => toWrite(e)}
-    >
+    <ModalBackDrop onClick={toWrite}>
       <CreateModalContainer>
         <StepNavWrapper />
-        {step === 1 && <BasicInfo />}
-        {step === 2 && <Additional />}
-        {step === 3 && <Curriculum />}
+        {step === 1 && (
+          <BasicInfo
+            basicInfo={basicInfo}
+            setBasicInfo={setBasicInfo}
+            toWrite={toWrite}
+            setStep={setStep}
+          />
+        )}
+        {step === 2 && (
+          <Additional
+            addInfo={addInfo}
+            setAddInfo={setAddInfo}
+            setStep={setStep}
+          />
+        )}
+        {step === 3 && (
+          <Curriculum
+            basicInfo={basicInfo}
+            addInfo={addInfo}
+            curInfo={curInfo}
+            setCurInfo={setCurInfo}
+            setStep={setStep}
+          />
+        )}
       </CreateModalContainer>
-    </div>
+    </ModalBackDrop>
   );
 };
 export default WriteModal;

@@ -1,21 +1,42 @@
 import Select from "react-select";
 import SmallBtn from "components/reuse/btn/SmallBtn";
-import { useState } from "react";
+import { useState, Dispatch, SetStateAction } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { langDict, addDict } from "../reuse/dict";
 import { IconImg } from "assets/icon";
 import { modalImgTxt } from "assets/color/color";
-import { useRecoilState, useSetRecoilState } from "recoil";
-import { baseSave, inputStep, isWriteModal } from "atoms/main/mainAtom";
+import { SetterOrUpdater, useRecoilState, useSetRecoilState } from "recoil";
+import {
+  addSave,
+  baseSave,
+  inputStep,
+  isWriteModal,
+} from "atoms/main/mainAtom";
+import { Info } from "./WriteModal";
+import { useEffect } from "react";
 
 interface BasicInfo {
-  [index: string]: string | string[] | number;
+  [index: string]: string | string[];
 }
-const BasicInfo = () => {
+
+interface Props {
+  basicInfo: Info;
+  setBasicInfo: Dispatch<SetStateAction<Info>>;
+  toWrite: () => void;
+  setStep: SetterOrUpdater<number>;
+}
+
+const BasicInfo = ({ basicInfo, setBasicInfo, toWrite, setStep }: Props) => {
   const [previewImg, setPreviewImg] = useState<string>("");
-  const [step, setStep] = useRecoilState(inputStep);
-  const [base, setBase] = useRecoilState<BasicInfo>(baseSave);
-  const setIsWrite = useSetRecoilState(isWriteModal);
+  const {
+    control,
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<BasicInfo>({ mode: "onBlur" });
+  // const [step, setStep] = useRecoilState(inputStep);
+  // const [base, setBase] = useRecoilState<BasicInfo>(addSave);
+  // const setIsWrite = useSetRecoilState(isWriteModal);
 
   const langArr = Object.keys(langDict);
   const addArr = Object.keys(addDict);
@@ -26,13 +47,6 @@ const BasicInfo = () => {
       label: el,
     })),
   ];
-
-  const {
-    control,
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<BasicInfo>({ mode: "onBlur" });
 
   /** 미리보기 이미지 생성**/
   const insertImg = (e: any) => {
@@ -53,12 +67,9 @@ const BasicInfo = () => {
     setPreviewImg("");
   };
 
-  // 넘어가기 전에 잡자
-  const onSubmit = (e: BasicInfo) => {
-    console.log(e);
-  };
-  const toWrite = () => {
-    setIsWrite(prev => !prev);
+  const onSubmit = (basicData: BasicInfo) => {
+    setBasicInfo(basicData);
+    setStep(prev => prev + 1);
   };
 
   return (
@@ -107,14 +118,14 @@ const BasicInfo = () => {
               type="file"
               className="opacity-0 rounded-xl"
               accept="image/jpeg,.txt"
-              {...register("profile", { required: "필수 정보입니다" })}
+              {...register("profileImg", { required: "필수 정보입니다" })}
               onChange={e => insertImg(e)}
-              defaultValue={base.profileImage}
+              // defaultValue={basicInfo.profileImage as any}
             />
           </label>
         </div>
         <p className="w-11/12 text-xs text-negativeMessage mt-1 tablet:text-sm desktop:w-4/6">
-          {errors?.profile?.message}
+          {errors?.profileImg?.message}
         </p>
         <div className="w-11/12 flex flex-row justify-start items-start h-fit font-SCDream5 text-sm text-textColor mt-4 mb-2 desktop:w-4/6">
           타이틀 <div className="text-pointColor">*</div>
@@ -124,7 +135,7 @@ const BasicInfo = () => {
           placeholder="타이틀을 입력하세요"
           className="w-11/12 desktop:w-4/6 h-fit p-2 border border-borderColor outline-pointColor rounded-xl font-SCDream4 text-xs text-textColor tablet:text-sm "
           {...register("title", { required: "필수 정보입니다." })}
-          defaultValue={base.title}
+          // defaultValue={basicInfo.title as any}
         />
         <p className="w-11/12 text-xs text-negativeMessage mt-1 tablet:text-sm desktop:w-4/6">
           {errors?.title?.message}
@@ -181,7 +192,7 @@ const BasicInfo = () => {
           placeholder="현재 회사 또는 학교를 입력하세요"
           className="w-11/12 h-fit p-2 border border-borderColor outline-pointColor rounded-xl font-SCDream4 text-[11px] text-textColor tablet:text-sm desktop:w-4/6"
           {...register("company", { required: "필수 정보입니다." })}
-          defaultValue={base.company}
+          // defaultValue={basicInfo.company as any}
         />
         <p className="w-11/12 text-xs text-negativeMessage mt-1 tablet:text-sm desktop:w-4/6">
           {errors?.company?.message}
@@ -196,7 +207,7 @@ const BasicInfo = () => {
           {...register("career", {
             required: "필수 정보입니다.",
           })}
-          defaultValue={base.career}
+          // defaultValue={basicInfo.career as any}
         />
         <p className="w-11/12 text-xs text-negativeMessage mt-1 tablet:text-sm desktop:w-4/6">
           {errors?.career?.message}
@@ -268,7 +279,7 @@ const BasicInfo = () => {
           placeholder="회 당 수업료를 입력하세요"
           className="w-11/12 h-fit p-2 border border-borderColor outline-pointColor rounded-xl font-SCDream4 text-[11px] text-textColor tablet:text-sm desktop:w-4/6"
           {...register("cost", { required: "필수 정보입니다." })}
-          defaultValue={base.cost}
+          // defaultValue={basicInfo.cost as any}
         />
         <p className="w-11/12 text-xs text-negativeMessage mt-1 tablet:text-sm desktop:w-4/6">
           {errors?.cost?.message}
