@@ -6,9 +6,13 @@ import org.mockito.Mockito;
 import org.springframework.test.web.servlet.ResultActions;
 
 import static org.mockito.Mockito.doNothing;
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.delete;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
+
 
 public class SuggestDeleteTest extends SuggestControllerTest{
 
@@ -24,6 +28,10 @@ public class SuggestDeleteTest extends SuggestControllerTest{
                 );
 
         actions.andExpect(status().isNoContent())
-                .andReturn();
+                .andDo(document("신청취소",
+                        pathParameters(
+                                parameterWithName("suggest-id").description("신청 식별자")
+                        )
+                ));
     }
 }

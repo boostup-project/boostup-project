@@ -1,17 +1,26 @@
 package com.codueon.boostUp.domain.suggest.contoller;
 
+import com.codueon.boostUp.domain.suggest.dto.PostPaymentUrl;
 import com.codueon.boostUp.domain.suggest.dto.PostReason;
 import com.codueon.boostUp.domain.suggest.dto.PostSuggest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.http.MediaType;
+import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.test.web.servlet.ResultActions;
 
+import java.util.List;
+
 import static org.mockito.Mockito.doNothing;
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.restdocs.request.RequestDocumentation.*;
+import static org.springframework.restdocs.payload.PayloadDocumentation.*;
+
+
 
 public class SuggestPostTest extends SuggestControllerTest{
 
@@ -40,15 +49,28 @@ public class SuggestPostTest extends SuggestControllerTest{
                 );
 
         actions.andExpect(status().isCreated())
-                .andReturn();
+                .andDo(document("신청1-과외신청",
+                        pathParameters(
+                                parameterWithName("lesson-id").description("과외 식별자")
+                        ),
+                        requestFields(
+                                List.of(
+                                        fieldWithPath("days").type(JsonFieldType.STRING).description("희망 요일"),
+                                        fieldWithPath("languages").type(JsonFieldType.STRING).description("희망 언어"),
+                                        fieldWithPath("requests").type(JsonFieldType.STRING).description("요청 사항")
+                                )
+                        )
+                ));
     }
 
     @Test
     @DisplayName("POST 신청 프로세스 2-1 수락하기")
     void acceptSuggest() throws Exception{
-        Integer quantity = 1;
+        PostPaymentUrl post = PostPaymentUrl.builder()
+                .quantity(1)
+                .build();
 
-        String content = gson.toJson(quantity);
+        String content = gson.toJson(post);
         doNothing().when(suggestService).acceptSuggest(Mockito.anyLong(), Mockito.anyLong(), Mockito.anyInt());
 
         ResultActions actions =
@@ -61,7 +83,14 @@ public class SuggestPostTest extends SuggestControllerTest{
                 );
 
         actions.andExpect(status().isOk())
-                .andReturn();
+                .andDo(document("신청2.1-신청수락",
+                        pathParameters(
+                                parameterWithName("suggest-id").description("신청 식별자")
+                        ),
+                        requestFields(
+                                fieldWithPath("quantity").type(JsonFieldType.NUMBER).description("과외 횟수")
+                        )
+                ));
     }
 
     @Test
@@ -84,7 +113,14 @@ public class SuggestPostTest extends SuggestControllerTest{
                 );
 
         actions.andExpect(status().isNoContent())
-                .andReturn();
+                .andDo(document("신청2.2-신청거절",
+                        pathParameters(
+                                parameterWithName("suggest-id").description("신청 식별자")
+                        ),
+                        requestFields(
+                                fieldWithPath("reason").type(JsonFieldType.STRING).description("거절 사유")
+                        )
+                ));
     }
 
 }

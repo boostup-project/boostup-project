@@ -65,13 +65,17 @@ public class Suggest {
                     String languages,
                     String requests,
                     Long lessonId,
-                    Long memberId ) {
+                    Long memberId,
+                    Integer totalCost,
+                    String paymentMethod) {
         this.id = id;
         this.days = days;
         this.languages = languages;
         this.requests = requests;
         this.lessonId = lessonId;
         this.memberId = memberId;
+        this.totalCost = totalCost;
+        this.paymentMethod = paymentMethod;
     }
 
     public void setStatus(SuggestStatus status) {

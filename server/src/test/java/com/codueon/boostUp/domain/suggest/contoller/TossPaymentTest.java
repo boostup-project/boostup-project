@@ -12,7 +12,11 @@ import java.util.List;
 
 import static com.codueon.boostUp.domain.suggest.utils.SuggestConstants.*;
 import static org.mockito.BDDMockito.given;
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
+import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -47,7 +51,15 @@ public class TossPaymentTest extends SuggestControllerTest{
         actions.andExpect(status().isOk())
                 .andExpect(jsonPath("$.message").value(message.getMessage()))
                 .andExpect(jsonPath("$.data").value(message.getData()))
-                .andReturn();
+                .andDo(document("신청4.2-토스결제요청",
+                        pathParameters(
+                                parameterWithName("suggest-id").description("신청 식별자"),
+                                parameterWithName("payment-id").description("결제 정보 식별자")
+                        ),
+                        responseFields(
+                                messageResponse()
+                        )
+                ));
     }
 
     @Test
@@ -91,7 +103,11 @@ public class TossPaymentTest extends SuggestControllerTest{
                 );
 
         actions.andExpect(status().isOk())
-                .andReturn();
+                .andDo(document("신청5.2-토스결제성공",
+                        pathParameters(
+                                parameterWithName("suggest-id").description("신청 식별자")
+                        )
+                ));
     }
 
     @Test
@@ -105,11 +121,15 @@ public class TossPaymentTest extends SuggestControllerTest{
                 );
 
         actions.andExpect(status().isOk())
-                .andReturn();
+                .andDo(document("신청7.2-토스결제실패",
+                        pathParameters(
+                                parameterWithName("suggest-id").description("신청 식별자")
+                        )
+                ));
     }
 
-//    @Test
-    @DisplayName("GET 신청 프로세스 9 환불")
+    @Test
+    @DisplayName("GET 신청 프로세스 9-2 Toss 환불")
     void refundPaymentKakaoOrToss() throws Exception {
         Integer count = 2;
         Integer amount = 5000;
@@ -149,18 +169,20 @@ public class TossPaymentTest extends SuggestControllerTest{
                 .message(CANCELED_PAY_MESSAGE)
                 .build();
 
-//        given(suggestService.refundTossPayment(suggest, paymentInfo))
-//                .willReturn(message);
         given(suggestService.refundPaymentKakaoOrToss(Mockito.anyLong(), Mockito.anyLong()))
                 .willReturn(message);
 
         ResultActions actions =
                 mockMvc.perform(
-                        get("/suggest/{suggest-id}/toss/refund", suggest.getId())
+                        get("/suggest/{suggest-id}/refund", suggest.getId())
                 );
 
         actions.andExpect(status().isOk())
-                .andReturn();
+                .andDo(document("신청9.2-토스결제환불",
+                        pathParameters(
+                                parameterWithName("suggest-id").description("신청 식별자")
+                        )
+                ));
     }
 
 }
