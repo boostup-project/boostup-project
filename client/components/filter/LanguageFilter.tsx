@@ -1,7 +1,22 @@
 import { detailLangDict } from "../reuse/dict";
 import Image from "next/image";
+import useGetFilteredBoard from "hooks/board/useGetFilteredBoard";
+import { useEffect, useState } from "react";
 
 const LanguageFilter = () => {
+  const [langId, setLangId] = useState<number>(0);
+  const { refetch } = useGetFilteredBoard(langId);
+
+  useEffect(() => {
+    if (langId !== 0) {
+      refetch();
+    }
+  }, [langId]);
+
+  const handleFilterClick = (languageId: number) => {
+    setLangId(languageId);
+  };
+
   return (
     <>
       <div className="desktop:flex hidden w-3/4 min-w-[1000px] min-h-[100px] desktop-h-[100px] h-fit mt-7 rounded-xl flex-row justify-between items-center">
@@ -10,6 +25,7 @@ const LanguageFilter = () => {
             <div
               key={lang.id}
               className="desktop:w-[100px] desktop:h-[100px] w-[50px] h-[50px] desktop:my-0 my-3"
+              onClick={() => handleFilterClick(lang.id)}
             >
               <Image
                 width={100}
