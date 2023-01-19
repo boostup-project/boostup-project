@@ -253,6 +253,8 @@ public class DataForTest {
                 .days("월, 수, 금")
                 .languages("Java")
                 .requests("누워서 수업 들어도 되나요?")
+                .totalCost(200000)
+                .paymentMethod("카카오페이")
                 .build();
     }
 
@@ -264,6 +266,8 @@ public class DataForTest {
                 .days("월, 수, 금")
                 .languages("Javascript")
                 .requests("일어나서 수업 들어도 되나요?")
+                .totalCost(200000)
+                .paymentMethod("카카오페이")
                 .build();
     }
 

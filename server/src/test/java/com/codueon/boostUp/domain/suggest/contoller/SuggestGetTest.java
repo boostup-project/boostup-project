@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.test.web.servlet.ResultActions;
 
 import java.util.ArrayList;
@@ -13,7 +14,12 @@ import java.util.List;
 
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doNothing;
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
+import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
+import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -22,7 +28,6 @@ public class SuggestGetTest extends SuggestControllerTest{
     @Test
     @DisplayName("GET 신청 프로세스 3 결제 페이지 조회")
     void getPaymentInfo() throws Exception {
-
         Integer quantity = 5;
         Integer totalCost = 250000;
 
@@ -53,7 +58,14 @@ public class SuggestGetTest extends SuggestControllerTest{
                 .andExpect(jsonPath("$.address[0]").value("강남구"))
                 .andExpect(jsonPath("$.address[1]").value("강동구"))
                 .andExpect(jsonPath("$.address[2]").value("강북구"))
-                .andReturn();
+                .andDo(document("신청3-결제페이지",
+                        pathParameters(
+                                parameterWithName("suggest-id").description("신청 식별자")
+                        ),
+                        responseFields(
+                                getPaymentInfoResponse()
+                        )
+                ));
     }
 
     @Test
@@ -67,7 +79,56 @@ public class SuggestGetTest extends SuggestControllerTest{
                 );
 
         actions.andExpect(status().isOk())
-                .andReturn();
+                .andDo(document("신청8-과외종료",
+                        pathParameters(
+                                parameterWithName("suggest-id").description("신청 식별자")
+                        )
+                ));
+    }
+
+    @Test
+    @DisplayName("GET 환불 영수증 조회")
+    void getRefundPaymentInfo() throws Exception {
+        suggest.setTotalCost(50000);
+
+        GetRefundPayment response = GetRefundPayment.builder()
+                .suggest(suggest)
+                .lesson(lesson)
+                .paymentInfo(paymentInfo)
+                .build();
+
+        given(suggestService.getRefundPaymentInfo(Mockito.anyLong(), Mockito.anyLong()))
+                .willReturn(response);
+
+        ResultActions actions =
+                mockMvc.perform(
+                        get("/suggest/{suggest-id}/refund/info", suggest.getId())
+                );
+
+        actions.andExpect(status().isOk())
+                .andExpect(jsonPath("$.quantity").value(response.getQuantity()))
+                .andExpect(jsonPath("$.quantityCount").value(response.getQuantityCount()))
+                .andExpect(jsonPath("$.title").value(response.getTitle()))
+                .andExpect(jsonPath("$.name").value(response.getName()))
+                .andExpect(jsonPath("$.company").value(response.getCompany()))
+                .andExpect(jsonPath("$.profileImage").value(response.getProfileImage()))
+                .andExpect(jsonPath("$.cost").value(response.getCost()))
+                .andExpect(jsonPath("$.totalCost").value(response.getTotalCost()))
+                .andExpect(jsonPath("$.languages[0]").value("Java"))
+                .andExpect(jsonPath("$.languages[1]").value("Python"))
+                .andExpect(jsonPath("$.languages[2]").value("Javascript"))
+                .andExpect(jsonPath("$.address[0]").value("강남구"))
+                .andExpect(jsonPath("$.address[1]").value("강동구"))
+                .andExpect(jsonPath("$.address[2]").value("강북구"))
+                .andDo(document("환불영수증조회",
+                        pathParameters(
+                                parameterWithName("suggest-id").description("신청 식별자")
+                        ),
+                        responseFields(
+                                getRefundPaymentInfoResponse()
+                        )
+                ));
+
     }
 
     @Test
@@ -91,7 +152,18 @@ public class SuggestGetTest extends SuggestControllerTest{
                 .andExpect(jsonPath("$.quantity").value(response.getQuantity()))
                 .andExpect(jsonPath("$.quantityCount").value(response.getQuantityCount()))
                 .andExpect(jsonPath("$.progress").value(response.getProgress()))
-                .andReturn();
+                .andDo(document("출석부1-출석조회",
+                        pathParameters(
+                                parameterWithName("suggest-id").description("신청 식별자")
+                        ),
+                        responseFields(
+                                List.of(
+                                        fieldWithPath("quantity").type(JsonFieldType.NUMBER).description("과외 횟수"),
+                                        fieldWithPath("quantityCount").type(JsonFieldType.NUMBER).description("출석 인정 횟수"),
+                                        fieldWithPath("progress").type(JsonFieldType.NUMBER).description("과외 진행률")
+                                )
+                        )
+                ));
     }
 
     @Test
@@ -108,7 +180,11 @@ public class SuggestGetTest extends SuggestControllerTest{
                 );
 
         actions.andExpect(status().isOk())
-                .andReturn();
+                .andDo(document("출석부2-출석인정",
+                        pathParameters(
+                                parameterWithName("suggest-id").description("신청 식별자")
+                        )
+                ));
     }
 
     @Test
@@ -125,7 +201,11 @@ public class SuggestGetTest extends SuggestControllerTest{
                 );
 
         actions.andExpect(status().isOk())
-                .andReturn();
+                .andDo(document("출석부3-출석인정취소",
+                        pathParameters(
+                                parameterWithName("suggest-id").description("신청 식별자")
+                        )
+                ));
     }
 
     @Test
@@ -160,7 +240,14 @@ public class SuggestGetTest extends SuggestControllerTest{
                 .andExpect(jsonPath("$.address[0]").value("강남구"))
                 .andExpect(jsonPath("$.address[1]").value("강동구"))
                 .andExpect(jsonPath("$.address[2]").value("강북구"))
-                .andReturn();
+                .andDo(document("결제영수증조회",
+                        pathParameters(
+                                parameterWithName("suggest-id").description("신청 식별자")
+                        ),
+                        responseFields(
+                                getPaymentReceiptResponse()
+                        )
+                ));
     }
 
     @Test
@@ -189,7 +276,15 @@ public class SuggestGetTest extends SuggestControllerTest{
                 .andExpect(jsonPath("$.data[0].status").value(suggestList.get(0).getStatus()))
                 .andExpect(jsonPath("$.data[0].startTime").value(suggestList.get(0).getStartTime()))
                 .andExpect(jsonPath("$.data[0].endTime").value(suggestList.get(0).getEndTime()))
-                .andReturn();
+                .andDo(document("신청내역조회(강사)",
+                        pathParameters(
+                                parameterWithName("lesson-id").description("과외 식별자"),
+                                parameterWithName("tab-id").description("탭 식별자")
+                        ),
+                        responseFields(
+                                getTutorSuggestResponse()
+                        )
+                ));
     }
 
     @Test
@@ -226,7 +321,11 @@ public class SuggestGetTest extends SuggestControllerTest{
                 .andExpect(jsonPath("$.data[0].address[0]").value("강남구"))
                 .andExpect(jsonPath("$.data[0].address[1]").value("강동구"))
                 .andExpect(jsonPath("$.data[0].address[2]").value("강북구"))
-                .andReturn();
+                .andDo(document("신청내역조회(학생)",
+                        responseFields(
+                                getStudentSuggestResponse()
+                        )
+                ));
     }
 
 }
