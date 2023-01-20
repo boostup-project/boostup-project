@@ -8,7 +8,7 @@ import Curriculum from "components/createModal/Curriculum";
 import Carouselcomp from "components/carousel/Carouselcomp";
 import LanguageFilter from "components/filter/LanguageFilter";
 import MoblieLanguageFilter from "components/filter/MobileLanguageFilter";
-
+import Cards from "./card";
 const Home = () => {
   return (
     <>
@@ -22,6 +22,7 @@ const Home = () => {
           <BasicInfo />
           <Curriculum />
         </CreateModalContainer> */}
+        <Cards></Cards>
       </div>
     </>
   );
