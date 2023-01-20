@@ -125,17 +125,16 @@ public class MemberService {
     }
 
     @SneakyThrows
-    public void changeMemberInfo(PostName name, MultipartFile file, Long memberId) {
+    public String changeMemberInfo(PostName name, MultipartFile file, Long memberId) {
 
-        if (file.isEmpty() && name.getName().isEmpty()) return;
+        if (file.isEmpty() && name.getName().isEmpty()) return null;
 
         Member findMember = memberDbService.ifExistsReturnMember(memberId);
         UploadFile uploadFile = fileHandler.uploadFile(file);
 
-//        String dir = "memberImage";
-//        UploadFile uploadFile = awsS3Service.uploadfile(file, dir);
-
         if (!file.isEmpty()) {
+//            String dir = "memberImage";
+//            UploadFile uploadFile = awsS3Service.uploadfile(file, dir);
             MemberImage memberImage = MemberImage.builder()
                     .filePath(uploadFile.getFilePath())
                     .fileName(uploadFile.getFileName())
@@ -148,5 +147,7 @@ public class MemberService {
         if (!name.getName().isEmpty()) findMember.setName(name.getName());
 
         memberDbService.saveMember(findMember);
+
+        return findMember.getMemberImage().getFilePath();
     }
 }
