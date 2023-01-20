@@ -144,7 +144,7 @@ const Login = () => {
             <div className="w-full h-fit flex flex-col justify-center items-center mt-7">
               <AuthBtn onClick={handleSubmit}>로그인</AuthBtn>
             </div>
-            <div className="w-full h-fit flex flex-row justify-center items-center text-pointColor mt-7">
+            <div className="w-full h-fit flex flex-row justify-center items-center text-[12px] text-pointColor mt-7">
               <Link href="/resetPassword">비밀번호를 잊으셨나요?</Link> /{" "}
               <Link href="/signup"> 아직 회원이 아니신가요?</Link>
             </div>

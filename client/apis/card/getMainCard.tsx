@@ -17,7 +17,7 @@ type Card = {
   title: string;
 };
 export const getStaticProps: GetStaticProps = async context => {
-  const response = await fetch("https://dd27-182-226-233-7.jp.ngrok.io");
+  const response = await fetch("https://d898-182-226-233-7.jp.ngrok.io");
   const card: Card = await response.json();
 
   return {
