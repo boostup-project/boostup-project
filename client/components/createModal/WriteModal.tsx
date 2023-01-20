@@ -34,12 +34,7 @@ const WriteModal = () => {
     <ModalBackDrop onClick={toWrite}>
       <CreateModalContainer>
         <StepNavWrapper />
-        <Additional
-          // addInfo={addInfo}
-          setAddInfo={setAddInfo}
-          setStep={setStep}
-        />
-        {/* {step === 1 && (
+        {step === 1 && (
           <BasicInfo
             basicInfo={basicInfo}
             setBasicInfo={setBasicInfo}
@@ -62,7 +57,7 @@ const WriteModal = () => {
             setCurInfo={setCurInfo}
             setStep={setStep}
           />
-        )} */}
+        )}
       </CreateModalContainer>
     </ModalBackDrop>
   );

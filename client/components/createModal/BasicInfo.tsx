@@ -5,15 +5,8 @@ import { useForm, Controller } from "react-hook-form";
 import { langDict, addDict } from "../reuse/dict";
 import { IconImg } from "assets/icon";
 import { modalImgTxt } from "assets/color/color";
-import { SetterOrUpdater, useRecoilState, useSetRecoilState } from "recoil";
-import {
-  addSave,
-  baseSave,
-  inputStep,
-  isWriteModal,
-} from "atoms/main/mainAtom";
+import { SetterOrUpdater } from "recoil";
 import { Info } from "./WriteModal";
-import { useEffect } from "react";
 
 interface BasicInfo {
   [index: string]: string | string[];
@@ -34,9 +27,6 @@ const BasicInfo = ({ basicInfo, setBasicInfo, toWrite, setStep }: Props) => {
     handleSubmit,
     formState: { errors },
   } = useForm<BasicInfo>({ mode: "onBlur" });
-  // const [step, setStep] = useRecoilState(inputStep);
-  // const [base, setBase] = useRecoilState<BasicInfo>(addSave);
-  // const setIsWrite = useSetRecoilState(isWriteModal);
 
   const langArr = Object.keys(langDict);
   const addArr = Object.keys(addDict);

@@ -1,5 +1,5 @@
 import { modalImgTxt } from "assets/color/color";
-import { useState, useEffect, SetStateAction } from "react";
+import { useState, useRef, SetStateAction } from "react";
 import { useForm } from "react-hook-form";
 import { IconImg } from "assets/icon/";
 import SmallBtn from "components/reuse/btn/SmallBtn";
@@ -12,13 +12,14 @@ interface Additional {
 }
 
 interface Props {
-  // addInfo: Info;
   setAddInfo: Dispatch<SetStateAction<Info>>;
   setStep: SetterOrUpdater<number>;
 }
 
 const Additional = ({ setAddInfo, setStep }: Props) => {
-  const [previewImages, setPreviewImages] = useState<string[]>([]);
+  const [previewImages, setPreviewImages] = useState([]);
+  const [detailImage, setDetailImage] = useState<string[]>([]);
+  const imageInput: any = useRef();
   const {
     register,
     handleSubmit,
@@ -28,42 +29,38 @@ const Additional = ({ setAddInfo, setStep }: Props) => {
     mode: "onBlur",
   });
 
-  /** 미리보기 이미지 렌더링함수, any 이외의 type 찾기 부족 **/
-  // const image = watch("referenceImage");
-  // console.log("image", image);
-  // useEffect(() => {
-  //   if (image && image.length > 0) {
-  //     const file: any = image[0];
-  //     setPreviewImages(prev => prev.concat(URL.createObjectURL(file)));
-  //   }
-  // }, [previewImages]);
-  // console.log(previewImages);
+  const onCickImageUpload = () => {
+    imageInput.current.click();
+  };
+  console.log("detail", detailImage);
 
   const insertImg = (e: any) => {
     let reader = new FileReader();
+    setDetailImage(prev => prev.concat(e.target.files));
 
     if (e.target.files[0]) {
       reader.readAsDataURL(e.target.files[0]);
     }
     reader.onloadend = () => {
-      const previewImgUrl = reader.result as string;
+      const previewImgUrl: any = reader.result;
 
       if (previewImgUrl) {
         setPreviewImages(prev => prev.concat(previewImgUrl));
       }
     };
   };
-
-  /** 이미지 삭제 함수(배열에서 해당 ID값 이미지 삭제) **/
   const deleteImg = (e: any) => {
-    console.log(e);
     setPreviewImages(
       previewImages.filter((image, idx) => e.target.id !== String(idx)),
+    );
+    setDetailImage(
+      detailImage.filter((image, idx) => e.target.id !== String(idx)),
     );
   };
 
   /** 제출 코드 **/
   const testSubmit = (addtionalData: Additional) => {
+    addtionalData.detailImage = detailImage;
     setAddInfo(addtionalData);
     setStep(prev => prev + 1);
   };
@@ -158,51 +155,57 @@ const Additional = ({ setAddInfo, setStep }: Props) => {
         <p className="text-xs text-negativeMessage mt-1 tablet:text-sm">
           {errors?.detailCost?.message}
         </p>
+
         <div className="w-11/12 tablet:w-11/12 desktop:w-4/6 mt-6">
           <div className="flex">
             <div className="font-SCDream5">참고사진(최대 3개)</div>
           </div>
-          <div className="w-full py-1.5 border flex justify-center items-center border-borderColor outline-pointColor rounded-xl font-SCDream4 text-xs text-textColor placeholder:text-center mt-2 tablet:text-sm">
-            {previewImages.length >= 1 ? (
-              previewImages.map((el, idx) => (
-                <div key={idx} className="relative w-1/4 pr-1">
-                  <img className="aspect-square rounded-xl relative" src={el} />
-                  <span
-                    id={`${idx}`}
-                    className="absolute top-0 right-2 text-negativeMessage text-lg"
-                    onClick={e => deleteImg(e)}
-                  >
-                    X
-                  </span>
-                </div>
-              ))
-            ) : (
-              <div>
-                <label className="flex flex-col justify-center items-center text-modalImgTxt">
+          <div className="w-full py-3 border flex border-borderColor outline-pointColor rounded-xl font-SCDream4 text-xs text-textColor placeholder:text-center mt-2 tablet:text-smhover:bg-gray-100">
+            <div className="w-full flex h-fit items-center justify-center">
+              {previewImages.length >= 1 ? (
+                previewImages.map((el, idx) => (
+                  <div key={idx} className="relative w-1/4 pr-1">
+                    <img
+                      className="aspect-square rounded-xl relative"
+                      src={el}
+                    />
+                    <span
+                      id={`${idx}`}
+                      className="absolute top-0 right-2 text-negativeMessage text-lg cursor-pointer"
+                      onClick={e => deleteImg(e)}
+                    >
+                      X
+                    </span>
+                  </div>
+                ))
+              ) : (
+                <div className="w-full flex flex-col justify-center items-center">
                   <IconImg width="69px" heigth="62px" fill={modalImgTxt} />
-                  <div>버튼을 눌러 사진을 첨부하세요</div>
-                </label>
-              </div>
-            )}
+                  <p className="pt-1 text-sm h-fit tracking-wider text-modalImgTxt group-hover:text-gray-600">
+                    추가하기를 눌러 사진을 첨부하세요
+                  </p>
+                </div>
+              )}
+            </div>
           </div>
-          {previewImages.length >= 0 && previewImages.length <= 2 && (
+          {detailImage.length < 3 && (
             <div className="w-full mt-2">
-              <label
-                className="flex justify-center items-center"
-                htmlFor="refImg"
+              <div
+                onClick={onCickImageUpload}
+                className="flex justify-center items-center cursor-pointer"
               >
                 <span
                   className={`font-SCDream4 w-1/4 py-2 bg-pointColor rounded-xl text-white flex justify-center`}
                 >
                   추가하기
                 </span>
-              </label>
+              </div>
               <input
-                className="hidden"
-                id="refImg"
                 type="file"
-                accept="image/*"
+                className="hidden"
+                accept="image/jpeg,.txt"
                 {...register("referenceImage")}
+                ref={imageInput}
                 onChange={e => insertImg(e)}
               />
             </div>

@@ -7,7 +7,6 @@ import { bold, italic } from "@uiw/react-md-editor/lib/commands/";
 import { Dispatch, SetStateAction } from "react";
 import { SetterOrUpdater } from "recoil";
 import { Info } from "./WriteModal";
-import postWrite from "apis/postWrite";
 
 interface Props {
   basicInfo: Info;
