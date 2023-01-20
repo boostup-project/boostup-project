@@ -20,7 +20,6 @@ import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
-@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RequestMapping("/lesson")
 public class LessonController {
     private final LessonService lessonService;
@@ -190,7 +189,7 @@ public class LessonController {
      * @author mozzi327
      */
     @GetMapping("/language/{language-id}")
-    public ResponseEntity<?> getLessonByLanguage(@PathVariable("language-id") Long languageId,
+    public ResponseEntity<?> getLessonByLanguage(@PathVariable("language-id") Integer languageId,
                                                  Pageable pageable,
                                                  Authentication authentication) {
         JwtAuthenticationToken token = (JwtAuthenticationToken) authentication;

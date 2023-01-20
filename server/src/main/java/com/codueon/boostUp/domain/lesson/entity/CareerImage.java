@@ -1,5 +1,6 @@
 package com.codueon.boostUp.domain.lesson.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.*;
 
 import javax.persistence.*;
@@ -17,6 +18,7 @@ public class CareerImage {
     private String filePath;
     private Long fileSize;
 
+    @JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "LESSON_INFO_ID")
     private LessonInfo lessonInfo;

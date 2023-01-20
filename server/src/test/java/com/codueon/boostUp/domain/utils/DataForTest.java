@@ -81,37 +81,15 @@ public class DataForTest {
         return member;
     }
 
-    public List<Address> getAddressList() {
+    public List<Integer> getAddressList() {
         return List.of(
-                Address.builder()
-                        .id(1L)
-                        .address("강남구")
-                        .build(),
-                Address.builder()
-                        .id(2L)
-                        .address("강동구")
-                        .build(),
-                Address.builder()
-                        .id(3L)
-                        .address("강북구")
-                        .build()
+                1, 2, 3
         );
     }
 
-    public List<Language> getLanguageList() {
+    public List<Integer> getLanguageList() {
         return List.of(
-                Language.builder()
-                        .id(1L)
-                        .languages("Java")
-                        .build(),
-                Language.builder()
-                        .id(2L)
-                        .languages("Python")
-                        .build(),
-                Language.builder()
-                        .id(3L)
-                        .languages("Javascript")
-                        .build()
+                1, 2, 3
         );
     }
 
@@ -126,15 +104,15 @@ public class DataForTest {
                 .career(100)
                 .build();
 
-        List<Address> addressList = getAddressList();
-        List<Language> languageList = getLanguageList();
-        addressList.forEach(address ->
+        List<Integer> addressList = getAddressList();
+        List<Integer> languageList = getLanguageList();
+        addressList.forEach(id ->
                 lesson.addLessonAddress(LessonAddress.builder()
-                        .address(address)
+                        .addressId(id)
                         .build()));
-        languageList.forEach(language ->
+        languageList.forEach(id ->
                 lesson.addLessonLanguage(LessonLanguage.builder()
-                        .languages(language)
+                        .languageId(id)
                         .build()));
 
         lesson.addProfileImage(getProfileImage());
@@ -153,15 +131,15 @@ public class DataForTest {
                 .career(100)
                 .build();
 
-        List<Address> addressList = getAddressList();
-        List<Language> languageList = getLanguageList();
-        addressList.forEach(address ->
+        List<Integer> addressList = getAddressList();
+        List<Integer> languageList = getLanguageList();
+        addressList.forEach(id ->
                 lesson.addLessonAddress(LessonAddress.builder()
-                        .address(address)
+                        .addressId(id)
                         .build()));
-        languageList.forEach(language ->
+        languageList.forEach(id ->
                 lesson.addLessonLanguage(LessonLanguage.builder()
-                        .languages(language)
+                        .languageId(id)
                         .build()));
 
         lesson.addProfileImage(getProfileImage());

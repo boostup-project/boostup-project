@@ -75,7 +75,7 @@ public class BookmarkControllerTest {
 
         LessonAddress lessonAddress = LessonAddress.builder()
                 .id(1L)
-                .address(address)
+                .addressId(1)
                 .build();
 
         ProfileImage profileImage = ProfileImage.builder()

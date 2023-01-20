@@ -1,6 +1,7 @@
 package com.codueon.boostUp.domain.lesson.entity;
 
 import com.codueon.boostUp.global.file.UploadFile;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -23,6 +24,7 @@ public class ProfileImage {
     private Long fileSize;
 
     @OneToOne
+    @JsonBackReference
     @JoinColumn(name = "LESSON_ID")
     private Lesson lesson;
 

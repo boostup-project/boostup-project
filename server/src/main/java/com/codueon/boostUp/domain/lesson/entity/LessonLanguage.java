@@ -1,5 +1,6 @@
 package com.codueon.boostUp.domain.lesson.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -16,26 +17,22 @@ public class LessonLanguage {
     @Column(name = "LESSON_LANGUAGE_ID")
     private Long id;
 
+    @JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "LESSON_ID")
     private Lesson lesson;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "LANGUAGE_ID")
-    private Language languages;
+    @Enumerated(EnumType.STRING)
+    private LanguageInfo languageInfo;
 
     @Builder
     public LessonLanguage(Long id,
-                          Language languages) {
+                          Integer languageId) {
         this.id = id;
-        this.languages = languages;
+        this.languageInfo = LanguageInfo.findById(languageId);
     }
 
     public void addLesson(Lesson lesson) {
         this.lesson = lesson;
-    }
-
-    public void addLanguage(Language language) {
-        this.languages = language;
     }
 }

@@ -10,24 +10,24 @@ import java.util.List;
 @NoArgsConstructor
 public class GetSearchLesson {
     private Long lessonId;
-    private List<Long> languages;
+    private List<Integer> languages;
     private String title;
     private Integer cost;
     private String profileImage;
     private String name;
     private String career;
-    private List<Long> address;
+    private List<Integer> address;
     private Boolean isBookmark;
 
     @Builder
     public GetSearchLesson(Long lessonId,
-                           List<Long> languages,
+                           List<Integer> languages,
                            String title,
                            Integer cost,
                            String profileImage,
                            String name,
                            String career,
-                           List<Long> address,
+                           List<Integer> address,
                            Boolean isBookmark) {
         this.lessonId = lessonId;
         this.languages = languages;
