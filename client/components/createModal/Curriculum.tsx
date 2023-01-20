@@ -7,6 +7,8 @@ import { bold, italic } from "@uiw/react-md-editor/lib/commands/";
 import { Dispatch, SetStateAction } from "react";
 import { SetterOrUpdater } from "recoil";
 import { Info } from "./WriteModal";
+import postWrite from "apis/postWrite";
+import { langDict } from "components/reuse/dict";
 
 interface Props {
   basicInfo: Info;
@@ -14,6 +16,10 @@ interface Props {
   curInfo: string;
   setCurInfo: Dispatch<SetStateAction<string>>;
   setStep: SetterOrUpdater<number>;
+}
+
+interface BasicSubmit {
+  [index: string]: any;
 }
 
 const MDEditor = dynamic(() => import("@uiw/react-md-editor"), {
@@ -37,44 +43,63 @@ const Curriculum = ({
   };
 
   const onClick = () => {
-    console.log(basicInfo);
-    console.log(addInfo);
-    console.log(curInfo);
-    const { address, career, company, cost, language, profileImg, title } =
-      basicInfo;
+    const {
+      address,
+      career,
+      company,
+      cost,
+      language,
+      profileImg,
+      title,
+    }: BasicSubmit = basicInfo;
     const {
       detailCompany,
       detailCost,
       detailLocation,
+      detailImage,
       introduction,
       personality,
     } = addInfo;
-    const profileImage = Array.from(profileImg as any)[0];
-    console.log("profile", profileImage);
-    const object = new FormData();
-    const registration: any = {
-      data: {
-        title,
-        language,
-        company,
-        career,
-        address,
-        cost,
-        introduction,
-        detailCompany,
-        detailLocation,
-        personality,
-        detailCost,
-        curriculum: curInfo,
-      },
-      profileImage,
-    };
-    object.append("data", registration.data);
-    object.append("profileImage", registration.profileImage);
+    const proImage = profileImg[0];
+    const parseAddress = address.map((el: any) => el.value);
+    const parseLang = language.map((el: any) => langDict[el]);
 
-    console.log("register", registration);
-    // console.log(object);
-    // postWrite(object);
+    const pre = {
+      title,
+      language: parseLang,
+      company,
+      career: parseInt(career),
+      address: parseAddress,
+      cost: parseInt(cost),
+      introduction,
+      detailCompany,
+      detailLocation,
+      personality,
+      detailCost,
+      curriculum: curInfo,
+    };
+
+    const json = JSON.stringify({
+      title,
+      languages: parseLang,
+      company,
+      career,
+      address: parseAddress,
+      cost,
+      introduction,
+      detailCompany,
+      detailLocation,
+      personality,
+      detailCost,
+      curriculum: curInfo,
+    });
+    const blob = new Blob([json], { type: "application/json" });
+    const formData = new FormData();
+    formData.append("data", blob);
+    formData.append("profileImage", proImage);
+    formData.append("careerImage", proImage);
+
+    postWrite(formData);
   };
 
   return (

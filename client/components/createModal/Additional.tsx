@@ -23,7 +23,6 @@ const Additional = ({ setAddInfo, setStep }: Props) => {
   const {
     register,
     handleSubmit,
-    watch,
     formState: { errors },
   } = useForm<Additional>({
     mode: "onBlur",
@@ -148,6 +147,7 @@ const Additional = ({ setAddInfo, setStep }: Props) => {
           <input
             className="w-full h-8 px-2 border border-borderColor outline-pointColor rounded-xl font-SCDream4 text-xs text-textColor placeholder:text-center tablet:text-sm tablet:h-12"
             placeholder="수업료에 대한 자세한 내용을 입력하세요"
+            type="text"
             {...register("detailCost", { required: "입력 필요" })}
             // defaultValue={add.detailCost}
           />

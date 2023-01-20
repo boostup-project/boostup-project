@@ -191,7 +191,7 @@ const BasicInfo = ({ basicInfo, setBasicInfo, toWrite, setStep }: Props) => {
           경력 <div className="text-pointColor">*</div>
         </div>
         <input
-          type="text"
+          type="number"
           placeholder="경력을 입력하세요"
           className="w-11/12 h-fit p-2 border border-borderColor outline-pointColor rounded-xl font-SCDream4 text-[11px] text-textColor tablet:text-sm desktop:w-4/6"
           {...register("career", {
@@ -265,7 +265,7 @@ const BasicInfo = ({ basicInfo, setBasicInfo, toWrite, setStep }: Props) => {
           수업료<div className="text-pointColor">*</div>
         </div>
         <input
-          type="text"
+          type="number"
           placeholder="회 당 수업료를 입력하세요"
           className="w-11/12 h-fit p-2 border border-borderColor outline-pointColor rounded-xl font-SCDream4 text-[11px] text-textColor tablet:text-sm desktop:w-4/6"
           {...register("cost", { required: "필수 정보입니다." })}
