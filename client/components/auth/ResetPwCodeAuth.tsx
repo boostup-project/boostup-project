@@ -1,15 +1,16 @@
 import AuthBtn from "components/reuse/btn/AuthBtn";
 import { ErrorMessage } from "@hookform/error-message";
-import { Dispatch, useState, SetStateAction, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useRecoilState } from "recoil";
-import { findPwEmail } from "../../atoms/auth/authAtom";
+import { findPwEmail, resetPwStep } from "../../atoms/auth/authAtom";
 import usePostCodeAuth from "hooks/auth/usePostCodeAuth";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const ResetPwCodeAuth = () => {
   const [email, setEmail] = useRecoilState<string>(findPwEmail);
+  const [step, setStep] = useRecoilState(resetPwStep);
   const [code, setCode] = useState<string>("");
 
   const {
@@ -35,9 +36,12 @@ const ResetPwCodeAuth = () => {
   useEffect(() => {
     if (isSuccess) {
       toast.success("인증에 성공하였습니다!", {
-        autoClose: 3000,
+        autoClose: 1500,
         position: toast.POSITION.TOP_RIGHT,
       });
+      setTimeout(() => {
+        setStep(3);
+      }, 1700);
     }
 
     if (isError) {
