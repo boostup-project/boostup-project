@@ -1,14 +1,22 @@
 package com.codueon.boostUp.global.config;
 
+import com.codueon.boostUp.global.handler.StompHandler;
+import com.codueon.boostUp.global.security.utils.JwtTokenUtils;
+import com.codueon.boostUp.global.utils.RedisUtils;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.messaging.simp.config.ChannelRegistration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
 import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker;
 import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
 import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerConfigurer;
 
 @Configuration
+@RequiredArgsConstructor
 @EnableWebSocketMessageBroker
 public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
+    private final JwtTokenUtils jwtTokenUtils;
+    private final RedisUtils redisUtils;
 
     /**
      * 엔드포인트 및 오리진 패턴 설정 메서드
@@ -21,7 +29,6 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
         // [/ws-connect] 엔드포인트로 들어온 http를 웹소켓 통신으로 전환해주는 역할을 함.
         registry.addEndpoint("/ws-connect")
                 .setAllowedOriginPatterns("*")
-                .setAllowedOrigins("*")
                 .withSockJS();
     }
 
@@ -38,5 +45,14 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
         config.setApplicationDestinationPrefixes("/pub");
         // destination header가 해당 포인트로 시작될 경우 구독 상태가 됨
         config.enableSimpleBroker("/queue", "/topic");
+    }
+
+    /**
+     * Security를 위한 StompIntercepter 메서드
+     * @param registration
+     */
+    @Override
+    public void configureClientInboundChannel(ChannelRegistration registration) {
+        registration.interceptors(new StompHandler());
     }
 }

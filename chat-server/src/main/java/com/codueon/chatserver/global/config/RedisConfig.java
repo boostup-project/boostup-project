@@ -1,6 +1,6 @@
-package com.codueon.boostUp.global.config;
+package com.codueon.chatserver.global.config;
 
-import com.codueon.boostUp.domain.chat.service.RedisSubscriber;
+import com.codueon.chatserver.domain.chat.service.RedisSubscriber;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -13,6 +13,7 @@ import org.springframework.data.redis.listener.ChannelTopic;
 import org.springframework.data.redis.listener.RedisMessageListenerContainer;
 import org.springframework.data.redis.listener.adapter.MessageListenerAdapter;
 import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
+import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 @Configuration
@@ -21,11 +22,15 @@ public class RedisConfig {
 
     @Value("${redis.host}")
     private String redisHost;
-
     @Value("${redis.port}")
     private int redisPort;
 
     private final ObjectMapper objectMapper;
+
+    @Bean
+    public RedisConnectionFactory redisConnectionFactory() {
+        return new LettuceConnectionFactory(redisHost, redisPort);
+    }
 
     @Bean
     public ChannelTopic channelTopic() {
@@ -37,24 +42,6 @@ public class RedisConfig {
         return new MessageListenerAdapter(redisSubscriber, "onMessage");
     }
 
-    /**
-     * Redis Lettuce 설정 빈 메서드(비동기)
-     * @return RedisConnectionFactory
-     * @author mozzi327
-     */
-    @Bean
-    public RedisConnectionFactory redisConnectionFactory() {
-        return new LettuceConnectionFactory(redisHost, redisPort);
-    }
-
-    /**
-     * Redis 메시지 컨테이너 빈 메서드
-     * @param factory RedisConnectionFactory
-     * @param listenerAdapter MessageListenerAdapter
-     * @param channelTopic 채널 토픽 정보
-     * @return RedisMessageListenerContainer
-     * @author mozzi327
-     */
     @Bean
     public RedisMessageListenerContainer redisMessageListenerContainer(RedisConnectionFactory factory) {
         RedisMessageListenerContainer container = new RedisMessageListenerContainer();
@@ -62,12 +49,6 @@ public class RedisConfig {
         return container;
     }
 
-    /**
-     * RedisTemplete 등록 빈 메서드
-     * @param connectionFactory RedisConnectionFactory
-     * @return RedisTemplete(Object, Object)
-     * @author mozzi327
-     */
     @Bean
     public RedisTemplate<?, ?> redisTemplate(RedisConnectionFactory connectionFactory) {
         RedisTemplate<?, ?> redisTemplate = new RedisTemplate<>();

@@ -1,7 +1,7 @@
-package com.codueon.boostUp.domain.chat.entity;
+package com.codueon.chatserver.domain.chat.entity;
 
-import com.codueon.boostUp.domain.member.entity.Member;
-import com.codueon.boostUp.global.utils.Auditable;
+import com.codueon.chatserver.domain.member.entity.Member;
+import com.codueon.chatserver.global.util.Auditable;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
