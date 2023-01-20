@@ -1,4 +1,4 @@
-package com.codueon.boostUp.domain.chat.constant;
+package com.codueon.boostUp.domain.chat.utils;
 
 public enum MessageType {
     ENTER, LEAVE, TALK

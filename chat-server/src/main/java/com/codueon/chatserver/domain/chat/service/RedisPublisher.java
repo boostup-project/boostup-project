@@ -1,6 +1,6 @@
-package com.codueon.boostUp.domain.chat.redis;
+package com.codueon.chatserver.domain.chat.service;
 
-import com.codueon.boostUp.domain.chat.entity.RedisChat;
+import com.codueon.chatserver.domain.chat.dto.RedisChat;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -13,8 +13,8 @@ import org.springframework.stereotype.Service;
 public class RedisPublisher {
     private final RedisTemplate<String, Object> redisTemplate;
 
-    public void publishingTopic(ChannelTopic topic, RedisChat message) {
-        redisTemplate.convertAndSend(topic.getTopic(), message);
+    public void publishingTopic(ChannelTopic topic, RedisChat redisChat) {
+        redisTemplate.convertAndSend(topic.getTopic(), redisChat);
         log.info("레디스 송신 완료");
     }
 }
