@@ -38,8 +38,7 @@ public class MemberController {
                                                        @RequestPart(value = "profileImage") MultipartFile file ) {
 
         Long memberId = 1L;
-        memberService.changeMemberInfo(name, file, memberId);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok().body(memberService.changeMemberInfo(name, file, memberId));
     }
 
     /**

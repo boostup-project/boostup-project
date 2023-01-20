@@ -9,7 +9,9 @@ import com.codueon.boostUp.domain.suggest.service.SuggestDbService;
 import com.codueon.boostUp.domain.suggest.service.SuggestService;
 import com.codueon.boostUp.domain.utils.DataForTest;
 import com.codueon.boostUp.global.exception.GlobalAdvice;
-import com.codueon.boostUp.global.webhook.SendErrorToDiscord;
+import com.codueon.boostUp.global.security.token.JwtAuthenticationToken;
+import com.codueon.boostUp.global.security.utils.JwtTokenUtils;
+import com.codueon.boostUp.global.utils.RedisUtils;
 import com.google.gson.Gson;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,10 +22,14 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
 import org.springframework.restdocs.payload.FieldDescriptor;
 import org.springframework.restdocs.payload.JsonFieldType;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 
@@ -49,9 +55,6 @@ class SuggestControllerTest {
     @MockBean
     protected SuggestDbService suggestDbService;
 
-    @MockBean
-    protected SendErrorToDiscord sendErrorToDiscord;
-
     protected DataForTest data = new DataForTest();
 
     protected Member member;
@@ -60,8 +63,18 @@ class SuggestControllerTest {
     protected ProfileImage profileImage;
     protected PaymentInfo paymentInfo;
 
+    @MockBean
+    protected RedisUtils redisUtils;
+    protected JwtTokenUtils jwtTokenUtils;
+    protected String accessToken;
+    protected String refreshToken;
+    protected Authentication authentication;
+
     @BeforeEach
     void setUp() throws Exception {
+        jwtTokenUtils = new JwtTokenUtils("suggestsuggestsuggestsuggestsuggestsuggestsuggestsuggestsuggestsuggestsuggestsuggestsuggestsuggest"
+                , 30, 1440);
+
         member = data.getMember1();
         suggest = data.getSuggest1();
         lesson = data.getLesson1();
@@ -70,6 +83,16 @@ class SuggestControllerTest {
                 .quantity(5)
                 .build();
         paymentInfo.setQuantityCount(3);
+
+        accessToken = jwtTokenUtils.generateAccessToken(member);
+        refreshToken = jwtTokenUtils.generateRefreshToken(member);
+
+        List<GrantedAuthority> authorities = member.getRoles().stream()
+                .map(role -> (GrantedAuthority) () -> "ROLE_" + role)
+                .collect(Collectors.toList());
+
+        authentication = new JwtAuthenticationToken(authorities, member.getName(), null, member.getId());
+        SecurityContextHolder.getContext().setAuthentication(authentication);
     }
 
     protected List<FieldDescriptor> getPaymentInfoResponse() {

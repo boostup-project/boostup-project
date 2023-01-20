@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.test.web.servlet.ResultActions;
 
+import static com.codueon.boostUp.global.security.utils.AuthConstants.*;
 import static org.mockito.Mockito.doNothing;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.delete;
@@ -24,6 +25,8 @@ public class SuggestDeleteTest extends SuggestControllerTest{
         ResultActions actions =
                 mockMvc.perform(
                         delete("/suggest/{suggest-id}", suggest.getId())
+                                .header(AUTHORIZATION, BEARER + accessToken)
+                                .header(REFRESH_TOKEN, refreshToken)
                                 .with(csrf())
                 );
 

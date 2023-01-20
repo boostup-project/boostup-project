@@ -1,10 +1,11 @@
 package com.codueon.boostUp.domain.member.entity;
 
-import lombok.Getter;
-import lombok.Builder;
 import lombok.AccessLevel;
-import javax.persistence.*;
+import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import javax.persistence.*;
 
 @Entity
 @Getter

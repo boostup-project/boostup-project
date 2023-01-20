@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.codueon.boostUp.domain.suggest.utils.SuggestConstants.*;
+import static com.codueon.boostUp.global.security.utils.AuthConstants.*;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
@@ -46,6 +47,8 @@ public class TossPaymentTest extends SuggestControllerTest{
         ResultActions actions =
                 mockMvc.perform(
                         get("/suggest/{suggest-id}/toss/payment/{payment-id}", suggest.getId(), paymentId)
+                                .header(AUTHORIZATION, BEARER + accessToken)
+                                .header(REFRESH_TOKEN, refreshToken)
                 );
 
         actions.andExpect(status().isOk())
@@ -175,6 +178,8 @@ public class TossPaymentTest extends SuggestControllerTest{
         ResultActions actions =
                 mockMvc.perform(
                         get("/suggest/{suggest-id}/refund", suggest.getId())
+                                .header(AUTHORIZATION, BEARER + accessToken)
+                                .header(REFRESH_TOKEN, refreshToken)
                 );
 
         actions.andExpect(status().isOk())
