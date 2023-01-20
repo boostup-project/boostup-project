@@ -1,13 +1,17 @@
 import AuthBtn from "components/reuse/btn/AuthBtn";
 import { ErrorMessage } from "@hookform/error-message";
-import { Dispatch, useState, SetStateAction } from "react";
 import { useForm } from "react-hook-form";
 import usePostAuthPw from "hooks/auth/usePostEmailAuth";
+import usePostCheckEmail from "hooks/auth/usePostCheckEmail";
 import { useRecoilState } from "recoil";
-import { findPwEmail } from "../../atoms/auth/authAtom";
+import { findPwEmail, resetPwStep } from "../../atoms/auth/authAtom";
+import { useEffect } from "react";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const ResetPwEmailAuth = () => {
   const [email, setEmail] = useRecoilState<string>(findPwEmail);
+  const [step, setStep] = useRecoilState(resetPwStep);
 
   const {
     handleSubmit,
@@ -15,7 +19,8 @@ const ResetPwEmailAuth = () => {
     formState: { errors },
   } = useForm({ mode: "onBlur" });
 
-  const { mutate } = usePostAuthPw();
+  const { mutate: requestCode } = usePostAuthPw();
+  const { mutate: checkEmail, isSuccess, isError } = usePostCheckEmail();
 
   const handleEmailChange = (e: any) => {
     setEmail(e.target.value);
@@ -23,15 +28,36 @@ const ResetPwEmailAuth = () => {
 
   const onSubmit = (e: any) => {
     console.log("Success Submit!");
-    mutate({ email });
+    checkEmail({ email });
+    // requestCode({ email });
   };
 
   const failSubmit = (e: any) => {
     console.log("Fail Submit");
   };
 
+  useEffect(() => {
+    if (isSuccess) {
+      toast.success("인증번호를 발송하였습니다", {
+        autoClose: 1500,
+        position: toast.POSITION.TOP_RIGHT,
+      });
+      setTimeout(() => {
+        requestCode({ email });
+      }, 1700);
+    }
+
+    if (isError) {
+      toast.error("등록되지 않은 이메일입니다", {
+        autoClose: 3000,
+        position: toast.POSITION.TOP_RIGHT,
+      });
+    }
+  }, [isSuccess, isError]);
+
   return (
     <>
+      <ToastContainer />
       <form
         onSubmit={handleSubmit(onSubmit, failSubmit)}
         className="w-full h-fit"
@@ -65,7 +91,7 @@ const ResetPwEmailAuth = () => {
           }}
         />
         <div className="w-full h-fit flex flex-col justify-center items-center mt-7">
-          <AuthBtn onClick={handleSubmit}>다 음</AuthBtn>
+          <AuthBtn onClick={handleSubmit}>인증요청</AuthBtn>
         </div>
       </form>
     </>
