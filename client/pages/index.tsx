@@ -21,8 +21,8 @@ const Home = () => {
           <Additional />
           <BasicInfo />
           <Curriculum />
-        </CreateModalContainer> */}
         <Cards></Cards>
+        </CreateModalContainer> */}
       </div>
     </>
   );

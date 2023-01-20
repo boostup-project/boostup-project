@@ -10,19 +10,3 @@ const getMainCard = async () => {
   });
 };
 export default getMainCard;
-
-// import type { GetStaticProps } from "next";
-
-// type Card = {
-//   title: string;
-// };
-// export const getStaticProps: GetStaticProps = async context => {
-//   const response = await fetch("https://d898-182-226-233-7.jp.ngrok.io");
-//   const card: Card = await response.json();
-
-//   return {
-//     props: {
-//       card,
-//     },
-//   };
-// };
