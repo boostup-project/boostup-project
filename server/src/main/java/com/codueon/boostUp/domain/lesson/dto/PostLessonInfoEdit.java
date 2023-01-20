@@ -9,22 +9,22 @@ import java.util.List;
 @Getter
 @NoArgsConstructor
 public class PostLessonInfoEdit {
-    private List<Long> languages;
+    private List<Integer> languages;
     private String name;
     private String title;
     private String company;
     private Integer career;
     private Integer cost;
-    private List<Long> addresses;
+    private List<Integer> addresses;
 
     @Builder
-    public PostLessonInfoEdit(List<Long> languages,
+    public PostLessonInfoEdit(List<Integer> languages,
                               String name,
                               String title,
                               String company,
                               Integer career,
                               Integer cost,
-                              List<Long> addresses) {
+                              List<Integer> addresses) {
         this.languages = languages;
         this.name = name;
         this.title = title;

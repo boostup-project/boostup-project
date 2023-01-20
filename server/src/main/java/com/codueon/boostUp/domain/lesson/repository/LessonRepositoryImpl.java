@@ -3,11 +3,15 @@ package com.codueon.boostUp.domain.lesson.repository;
 import com.codueon.boostUp.domain.lesson.dto.GetMainPageLesson;
 import com.codueon.boostUp.domain.lesson.dto.PostSearchLesson;
 import com.codueon.boostUp.domain.lesson.dto.QGetMainPageLesson;
+import com.codueon.boostUp.domain.lesson.entity.AddressInfo;
+import com.codueon.boostUp.domain.lesson.entity.LanguageInfo;
 import com.codueon.boostUp.domain.lesson.entity.QLesson;
 import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.*;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.JPQLQuery;
+import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -38,6 +42,7 @@ public class LessonRepositoryImpl implements CustomLessonRepository {
      */
     @Override
     public Page<GetMainPageLesson> getMainPageLessons(Pageable pageable) {
+
         List<GetMainPageLesson> result = queryFactory
                 .select(new QGetMainPageLesson(
                         lesson,
@@ -88,14 +93,14 @@ public class LessonRepositoryImpl implements CustomLessonRepository {
      * @author mozzi327
      */
     @Override
-    public Page<GetMainPageLesson> getMainPageLessonByLanguage(Long languageId,
+    public Page<GetMainPageLesson> getMainPageLessonByLanguage(Integer languageId,
                                                                Pageable pageable) {
         List<GetMainPageLesson> result = queryFactory
                 .select(new QGetMainPageLesson(
                         lessonLanguage.lesson,
                         Expressions.constant(false)
                 )).from(lessonLanguage)
-                .where(lessonLanguage.languages.id.eq(languageId))
+                .where(lessonLanguage.languageInfo.eq(LanguageInfo.findById(languageId)))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .orderBy(lessonLanguage.lesson.id.desc())
@@ -116,14 +121,14 @@ public class LessonRepositoryImpl implements CustomLessonRepository {
      */
     @Override
     public Page<GetMainPageLesson> getMainPageLessonByLanguageAndBookmarkInfo(Long memberId,
-                                                                              Long languageId,
+                                                                              Integer languageId,
                                                                               Pageable pageable) {
         List<GetMainPageLesson> result = queryFactory
                 .select(new QGetMainPageLesson(
                         lessonLanguage.lesson,
                         isBookmarked(lessonLanguage.lesson.id, memberId)
                 )).from(lessonLanguage)
-                .where(lessonLanguage.languages.id.eq(languageId))
+                .where(lessonLanguage.languageInfo.eq(LanguageInfo.findById(languageId)))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .orderBy(lessonLanguage.lesson.id.desc())
@@ -205,10 +210,10 @@ public class LessonRepositoryImpl implements CustomLessonRepository {
             builder.and(lessonLanguage.lesson.id.eq(lessonAddress.lesson.id));
 
         if (postSearchLesson.getAddress() != null)
-            builder.and(lessonAddress.address.id.eq(postSearchLesson.getAddress()));
+            builder.and(lessonAddress.addressInfo.eq(AddressInfo.findById(postSearchLesson.getAddress())));
 
         if (postSearchLesson.getLanguage() != null)
-            builder.and(lessonLanguage.languages.id.eq(postSearchLesson.getLanguage()));
+            builder.and(lessonLanguage.languageInfo.eq(LanguageInfo.findById(postSearchLesson.getLanguage())));
 
         if (postSearchLesson.getName() != null)
             builder.and(lesson.name.contains(postSearchLesson.getName()));

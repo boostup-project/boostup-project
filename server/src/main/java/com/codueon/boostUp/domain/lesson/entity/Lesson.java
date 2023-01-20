@@ -3,12 +3,14 @@ package com.codueon.boostUp.domain.lesson.entity;
 import com.codueon.boostUp.domain.lesson.dto.PostLesson;
 import com.codueon.boostUp.domain.lesson.dto.PostLessonDetailEdit;
 import com.codueon.boostUp.domain.lesson.dto.PostLessonInfoEdit;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 
 import javax.persistence.*;
 import java.io.CharArrayReader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Entity
 @Getter
@@ -25,10 +27,15 @@ public class Lesson {
     private Integer cost;
     private Long memberId;
 
+    @JsonManagedReference
     @OneToOne(mappedBy = "lesson", cascade = CascadeType.ALL, orphanRemoval = true)
     private ProfileImage profileImage;
+
+    @JsonManagedReference
     @OneToMany(mappedBy = "lesson", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<LessonLanguage> lessonLanguages = new ArrayList<>();
+
+    @JsonManagedReference
     @OneToMany(mappedBy = "lesson", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<LessonAddress> lessonAddresses = new ArrayList<>();
 
@@ -82,5 +89,17 @@ public class Lesson {
         this.cost = postLessonInfoEdit.getCost();
         this.lessonAddresses.clear();
         this.lessonLanguages.clear();
+    }
+
+    public List<String> getLanguageListAsString() {
+        return this.lessonLanguages.stream()
+                .map(language -> language.getLanguageInfo().getLanguages())
+                .collect(Collectors.toList());
+    }
+
+    public List<String> getAddressListAsString() {
+        return this.lessonAddresses.stream()
+                .map(address -> address.getAddressInfo().getAddress())
+                .collect(Collectors.toList());
     }
 }

@@ -43,11 +43,7 @@ public class GetBookmark {
         this.title = lesson.getTitle();
         this.name = lesson.getName();
         this.cost = lesson.getCost();
-        this.languages = lesson.getLessonLanguages().stream()
-                .map(language -> language.getLanguages().getLanguages())
-                .collect(Collectors.toList());
-        this.address = lesson.getLessonAddresses().stream()
-                .map(address -> address.getAddress().getAddress())
-                .collect(Collectors.toList());
+        this.languages = lesson.getLanguageListAsString();
+        this.address = lesson.getAddressListAsString();
     }
 }

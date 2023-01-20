@@ -2,6 +2,7 @@ package com.codueon.boostUp.domain.lesson.entity;
 
 import com.codueon.boostUp.domain.lesson.dto.PostLesson;
 import com.codueon.boostUp.domain.lesson.dto.PostLessonDetailEdit;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -26,6 +27,8 @@ public class LessonInfo {
     private String favoriteLocation;
     private String personality;
     private String costs;
+
+    @JsonManagedReference
     @OneToMany(mappedBy = "lessonInfo", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CareerImage> careerImages = new ArrayList<>();
 

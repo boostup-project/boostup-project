@@ -53,12 +53,8 @@ public class GetStudentSuggest {
         this.company = lesson.getCompany();
         this.career = lesson.getCareer();
         this.cost = lesson.getCost();
-        this.languages = lesson.getLessonLanguages().stream()
-                .map(language -> language.getLanguages().getLanguages())
-                .collect(Collectors.toList());
-        this.address = lesson.getLessonAddresses().stream()
-                .map(address -> address.getAddress().getAddress())
-                .collect(Collectors.toList());
+        this.languages = lesson.getLanguageListAsString();
+        this.address = lesson.getAddressListAsString();
         this.status = suggest.getStatus().getStatus();
         this.startTime = suggest.getStartTime();
         this.endTime = suggest.getEndTime();
