@@ -2,7 +2,7 @@ import React from "react";
 import Carouselcomp from "components/carousel/Carouselcomp";
 import LanguageFilter from "components/filter/LanguageFilter";
 import MoblieLanguageFilter from "components/filter/MobileLanguageFilter";
-
+import Cards from "./card";
 const Home = () => {
   return (
     <>
@@ -10,6 +10,7 @@ const Home = () => {
         <Carouselcomp />
         <LanguageFilter />
         <MoblieLanguageFilter />
+        <Cards></Cards>
       </div>
     </>
   );
