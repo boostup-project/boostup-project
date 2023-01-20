@@ -53,6 +53,7 @@ const MoblieLanguageFilter = () => {
                 onClick={() => handleFilterClick(el.id)}
               >
                 <Image
+                  key={el.id}
                   width={100}
                   height={100}
                   src={el.img}
