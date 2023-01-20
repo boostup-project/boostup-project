@@ -1,11 +1,12 @@
 import AuthContainer from "components/reuse/container/AuthContainer";
-import ResetPwAuth from "components/auth/ResetPwAuth";
+import ResetPwEmailAuth from "components/auth/ResetPwEmailAuth";
 import ResetPwSet from "components/auth/ResetPwSet";
-import { useState } from "react";
+import ResetPwCodeAuth from "components/auth/ResetPwCodeAuth";
+import { useRecoilValue } from "recoil";
+import { resetPwStep } from "atoms/auth/authAtom";
 
 const ResetPassword = () => {
-  const [isAuth, setIsAuth] = useState<boolean>(false);
-
+  const step = useRecoilValue(resetPwStep);
   return (
     <>
       <div className="flex flex-col bg-bgColor items-center justify-center w-full h-screen">
@@ -16,10 +17,12 @@ const ResetPassword = () => {
           본인인증 후 비밀번호를 재설정하세요!
         </div>
         <AuthContainer>
-          {isAuth ? (
-            <ResetPwSet />
+          {step === 1 ? (
+            <ResetPwEmailAuth />
+          ) : step === 2 ? (
+            <ResetPwCodeAuth />
           ) : (
-            <ResetPwAuth setIsAuth={setIsAuth} />
+            <ResetPwSet />
           )}
         </AuthContainer>
       </div>
