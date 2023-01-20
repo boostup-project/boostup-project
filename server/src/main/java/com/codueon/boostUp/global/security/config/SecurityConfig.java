@@ -74,7 +74,6 @@ public class SecurityConfig {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.addAllowedOrigin("http://localhost:8080");
         configuration.addAllowedOrigin("http://localhost:3000");
-        configuration.addAllowedOrigin("https://dbc7-182-226-233-7.jp.ngrok.io");
         configuration.addAllowedOrigin("ws://localhost:8080");
         configuration.addAllowedOrigin("http://codeuon.s3-website.ap-northeast-2.amazonaws.com");
         configuration.addAllowedOrigin("https://d12vhbt0xdnnpo.cloudfront.net");

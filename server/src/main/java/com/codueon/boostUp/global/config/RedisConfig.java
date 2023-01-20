@@ -50,8 +50,6 @@ public class RedisConfig {
     /**
      * Redis 메시지 컨테이너 빈 메서드
      * @param factory RedisConnectionFactory
-     * @param listenerAdapter MessageListenerAdapter
-     * @param channelTopic 채널 토픽 정보
      * @return RedisMessageListenerContainer
      * @author mozzi327
      */

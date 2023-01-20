@@ -83,6 +83,16 @@ public class MemberService {
     }
 
     /**
+     * 이메일 존재 여부 확인 메서드
+     * @param email 이메일 정보
+     * @author mozzi327
+     */
+    public void checkIsExistEmailInDb(String email) {
+        if (!memberDbService.checkExistEmail(email))
+            throw new BusinessLogicException(ExceptionCode.EMAIL_NOT_FOUND);
+    }
+
+    /**
      * 닉네임 중복 확인 메서드
      * @param name 닉네임 정보
      * @author mozzi327
