@@ -12,6 +12,7 @@ import org.springframework.test.web.servlet.ResultActions;
 
 import java.util.List;
 
+import static com.codueon.boostUp.global.security.utils.AuthConstants.*;
 import static org.mockito.Mockito.doNothing;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
@@ -41,6 +42,8 @@ public class SuggestPostTest extends SuggestControllerTest{
         ResultActions actions =
                 mockMvc.perform(
                         post("/suggest/lesson/{lesson-id}", lessonId)
+                                .header(AUTHORIZATION, BEARER + accessToken)
+                                .header(REFRESH_TOKEN, refreshToken)
                                 .accept(MediaType.APPLICATION_JSON)
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(content)
@@ -76,6 +79,8 @@ public class SuggestPostTest extends SuggestControllerTest{
         ResultActions actions =
                 mockMvc.perform(
                         post("/suggest/{suggest-id}/accept", suggest.getId())
+                                .header(AUTHORIZATION, BEARER + accessToken)
+                                .header(REFRESH_TOKEN, refreshToken)
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .accept(MediaType.APPLICATION_JSON)
                                 .content(content)
@@ -106,6 +111,8 @@ public class SuggestPostTest extends SuggestControllerTest{
         ResultActions actions =
                 mockMvc.perform(
                         post("/suggest/{suggest-id}/decline", suggest.getId())
+                                .header(AUTHORIZATION, BEARER + accessToken)
+                                .header(REFRESH_TOKEN, refreshToken)
                                 .accept(MediaType.APPLICATION_JSON)
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(content)

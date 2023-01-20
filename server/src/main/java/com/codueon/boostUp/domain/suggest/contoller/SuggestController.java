@@ -5,12 +5,14 @@ import com.codueon.boostUp.domain.suggest.dto.*;
 import com.codueon.boostUp.domain.suggest.response.Message;
 import com.codueon.boostUp.domain.suggest.service.SuggestDbService;
 import com.codueon.boostUp.domain.suggest.service.SuggestService;
+import com.codueon.boostUp.global.security.token.JwtAuthenticationToken;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -35,9 +37,11 @@ public class SuggestController {
      */
     @PostMapping("/suggest/lesson/{lesson-id}")
     public ResponseEntity<?> createSuggest(@PathVariable("lesson-id") Long lessonId,
-                                      @RequestBody @Valid PostSuggest post) {
+                                           @RequestBody @Valid PostSuggest post,
+                                           Authentication authentication) {
 
-        Long memberId = 1L;
+        JwtAuthenticationToken token = (JwtAuthenticationToken) authentication;
+        Long memberId = getMemberIdIfExistToken(token);
         suggestService.createSuggest(post, lessonId, memberId);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
@@ -51,9 +55,11 @@ public class SuggestController {
      */
     @PostMapping("/suggest/{suggest-id}/accept")
     public ResponseEntity acceptSuggest(@PathVariable("suggest-id") Long suggestId,
-                                        @RequestBody PostPaymentUrl post) {
+                                        @RequestBody PostPaymentUrl post,
+                                        Authentication authentication) {
 
-        Long memberId = 1L;
+        JwtAuthenticationToken token = (JwtAuthenticationToken) authentication;
+        Long memberId = getMemberIdIfExistToken(token);
         suggestService.acceptSuggest(suggestId, memberId, post.getQuantity());
         return ResponseEntity.ok().build();
     }
@@ -67,9 +73,11 @@ public class SuggestController {
      */
     @PostMapping("/suggest/{suggest-id}/decline")
     public ResponseEntity declineSuggest(@PathVariable("suggest-id") Long suggestId,
-                                         @RequestBody PostReason postReason) {
+                                         @RequestBody PostReason postReason,
+                                         Authentication authentication) {
 
-        Long memberId = 1L;
+        JwtAuthenticationToken token = (JwtAuthenticationToken) authentication;
+        Long memberId = getMemberIdIfExistToken(token);
         suggestService.declineSuggest(suggestId, memberId, postReason);
         return ResponseEntity.noContent().build();
     }
@@ -81,9 +89,11 @@ public class SuggestController {
      * @author LeeGoh
      */
     @GetMapping("/suggest/{suggest-id}/suggest-info")
-    public ResponseEntity getPaymentInfo(@PathVariable("suggest-id") Long suggestId) {
+    public ResponseEntity getPaymentInfo(@PathVariable("suggest-id") Long suggestId,
+                                         Authentication authentication) {
 
-        Long memberId = 1L;
+        JwtAuthenticationToken token = (JwtAuthenticationToken) authentication;
+        Long memberId = getMemberIdIfExistToken(token);
         return ResponseEntity.ok(suggestService.getPaymentInfo(suggestId, memberId));
     }
 
@@ -95,9 +105,11 @@ public class SuggestController {
      */
     @GetMapping("/suggest/{suggest-id}/kakao/payment")
     public ResponseEntity<Message<?>> orderKakaoPayment(@PathVariable("suggest-id") Long suggestId,
-                                       HttpServletRequest request) {
+                                                        HttpServletRequest request,
+                                                        Authentication authentication) {
 
-        Long memberId = 1L;
+        JwtAuthenticationToken token = (JwtAuthenticationToken) authentication;
+        Long memberId = getMemberIdIfExistToken(token);
         String requestUrl = request.getRequestURL().toString().replace(request.getRequestURI(), "");
         Message<?> message = suggestService.getKaKapPayUrl(suggestId, memberId, requestUrl);
         if (message.getData() == null) suggestService.getFailedPayMessage();
@@ -192,9 +204,11 @@ public class SuggestController {
      * @author LeeGoh
      */
     @GetMapping("/suggest/{suggest-id}/done")
-    public ResponseEntity endOfLesson(@PathVariable("suggest-id") Long suggestId) {
+    public ResponseEntity endOfLesson(@PathVariable("suggest-id") Long suggestId,
+                                      Authentication authentication) {
 
-        Long memberId = 1L;
+        JwtAuthenticationToken token = (JwtAuthenticationToken) authentication;
+        Long memberId = getMemberIdIfExistToken(token);
         suggestService.setSuggestStatusAndEndTime(suggestId, memberId);
         return ResponseEntity.ok().build();
     }
@@ -205,9 +219,11 @@ public class SuggestController {
      * @author LeeGoh
      */
     @GetMapping("/suggest/{suggest-id}/refund")
-    public ResponseEntity<Message> refundPayment(@PathVariable("suggest-id") Long suggestId) {
+    public ResponseEntity<Message> refundPayment(@PathVariable("suggest-id") Long suggestId,
+                                                 Authentication authentication) {
 
-        Long memberId = 1L;
+        JwtAuthenticationToken token = (JwtAuthenticationToken) authentication;
+        Long memberId = getMemberIdIfExistToken(token);
         Message message = suggestService.refundPaymentKakaoOrToss(suggestId, memberId);
         return ResponseEntity.ok().body(message);
     }
@@ -218,9 +234,11 @@ public class SuggestController {
      * @author LeeGoh
      */
     @GetMapping("/suggest/{suggest-id}/refund/info")
-    public ResponseEntity getRefundPaymentInfo(@PathVariable("suggest-id") Long suggestId) {
+    public ResponseEntity getRefundPaymentInfo(@PathVariable("suggest-id") Long suggestId,
+                                               Authentication authentication) {
 
-        Long memberId = 1L;
+        JwtAuthenticationToken token = (JwtAuthenticationToken) authentication;
+        Long memberId = getMemberIdIfExistToken(token);
         return ResponseEntity.ok().body(suggestService.getRefundPaymentInfo(suggestId, memberId));
     }
 
@@ -230,9 +248,11 @@ public class SuggestController {
      * @author LeeGoh
      */
     @GetMapping("/suggest/{suggest-id}/attendance")
-    public ResponseEntity getLessonAttendance(@PathVariable("suggest-id") Long suggestId) {
+    public ResponseEntity getLessonAttendance(@PathVariable("suggest-id") Long suggestId,
+                                              Authentication authentication) {
 
-        Long memberId = 1L;
+        JwtAuthenticationToken token = (JwtAuthenticationToken) authentication;
+        Long memberId = getMemberIdIfExistToken(token);
         return ResponseEntity.ok(suggestService.getLessonAttendance(suggestId, memberId));
     }
 
@@ -242,9 +262,11 @@ public class SuggestController {
      * @author LeeGoh
      */
     @GetMapping("/suggest/{suggest-id}/attendance/check")
-    public ResponseEntity<Integer> lessonAttendanceCheck(@PathVariable("suggest-id") Long suggestId) {
+    public ResponseEntity<Integer> lessonAttendanceCheck(@PathVariable("suggest-id") Long suggestId,
+                                                         Authentication authentication) {
 
-        Long memberId = 1L;
+        JwtAuthenticationToken token = (JwtAuthenticationToken) authentication;
+        Long memberId = getMemberIdIfExistToken(token);
         Integer quantityCount = suggestService.teacherChecksAttendance(suggestId, memberId);
         return ResponseEntity.ok().body(quantityCount);
     }
@@ -255,9 +277,11 @@ public class SuggestController {
      * @author LeeGoh
      */
     @GetMapping("/suggest/{suggest-id}/attendance/cancel")
-    public ResponseEntity<Integer> lessonAttendanceCancel(@PathVariable("suggest-id") Long suggestId) {
+    public ResponseEntity<Integer> lessonAttendanceCancel(@PathVariable("suggest-id") Long suggestId,
+                                                          Authentication authentication) {
 
-        Long memberId = 1L;
+        JwtAuthenticationToken token = (JwtAuthenticationToken) authentication;
+        Long memberId = getMemberIdIfExistToken(token);
         Integer quantityCount = suggestService.teacherCancelAttendance(suggestId, memberId);
         return ResponseEntity.ok().body(quantityCount);
     }
@@ -269,9 +293,11 @@ public class SuggestController {
      * @author LeeGoh
      */
     @GetMapping("/suggest/{suggest-id}/receipt")
-    public ResponseEntity getPaymentReceipt(@PathVariable("suggest-id") Long suggestId) {
+    public ResponseEntity getPaymentReceipt(@PathVariable("suggest-id") Long suggestId,
+                                            Authentication authentication) {
 
-        Long memberId = 1L;
+        JwtAuthenticationToken token = (JwtAuthenticationToken) authentication;
+        Long memberId = getMemberIdIfExistToken(token);
         return ResponseEntity.ok(suggestService.getPaymentReceipt(suggestId, memberId));
     }
 
@@ -286,9 +312,11 @@ public class SuggestController {
     @GetMapping("/suggest/lesson/{lesson-id}/tutor/tab/{tab-id}")
     public ResponseEntity<MultiResponseDto<?>> getTutorSuggest(@PathVariable("lesson-id") Long lessonId,
                                                                @PathVariable("tab-id") int tabId,
+                                                               Authentication authentication,
                                                                Pageable pageable) {
 
-        Long memberId = 1L;
+        JwtAuthenticationToken token = (JwtAuthenticationToken) authentication;
+        Long memberId = getMemberIdIfExistToken(token);
         Page<GetTutorSuggest> suggestions = suggestDbService.getTutorSuggestsOnMyPage(lessonId, memberId, tabId, pageable);
         return ResponseEntity.ok(new MultiResponseDto<>(suggestions));
     }
@@ -300,9 +328,11 @@ public class SuggestController {
      * @author LeeGoh
      */
     @GetMapping("/suggest/student")
-    public ResponseEntity<MultiResponseDto<?>> getStudentSuggest(Pageable pageable) {
+    public ResponseEntity<MultiResponseDto<?>> getStudentSuggest(Pageable pageable,
+                                                                 Authentication authentication) {
 
-        Long memberId = 1L;
+        JwtAuthenticationToken token = (JwtAuthenticationToken) authentication;
+        Long memberId = getMemberIdIfExistToken(token);
         Page<GetStudentSuggest> suggestions = suggestDbService.getStudentSuggestsOnMyPage(memberId, pageable);
         return ResponseEntity.ok(new MultiResponseDto<>(suggestions));
     }
@@ -314,11 +344,18 @@ public class SuggestController {
      * @author LeeGoh
      */
     @DeleteMapping("/suggest/{suggest-id}")
-    public ResponseEntity cancelSuggest(@PathVariable("suggest-id") Long suggestId) {
+    public ResponseEntity cancelSuggest(@PathVariable("suggest-id") Long suggestId,
+                                        Authentication authentication) {
 
-        Long memberId = 1L;
+        JwtAuthenticationToken token = (JwtAuthenticationToken) authentication;
+        Long memberId = getMemberIdIfExistToken(token);
         suggestService.cancelSuggest(suggestId, memberId);
         return ResponseEntity.noContent().build();
+    }
+
+    private Long getMemberIdIfExistToken(JwtAuthenticationToken token) {
+        if (token == null) return null;
+        else return token.getId();
     }
 
 }

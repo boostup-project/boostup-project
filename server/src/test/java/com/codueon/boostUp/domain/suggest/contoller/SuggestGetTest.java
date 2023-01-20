@@ -12,8 +12,11 @@ import org.springframework.test.web.servlet.ResultActions;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.codueon.boostUp.global.security.utils.AuthConstants.*;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doNothing;
+import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
+import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
@@ -42,6 +45,8 @@ public class SuggestGetTest extends SuggestControllerTest{
         ResultActions actions =
                 mockMvc.perform(
                         get("/suggest/{suggest-id}/suggest-info", suggest.getLessonId())
+                                .header(AUTHORIZATION, BEARER + accessToken)
+                                .header(REFRESH_TOKEN, refreshToken)
                 );
 
         actions.andExpect(status().isOk())
@@ -51,7 +56,7 @@ public class SuggestGetTest extends SuggestControllerTest{
                 .andExpect(jsonPath("$.company").value(getPaymentInfo.getCompany()))
                 .andExpect(jsonPath("$.profileImage").value(getPaymentInfo.getProfileImage()))
                 .andExpect(jsonPath("$.cost").value(getPaymentInfo.getCost()))
-                .andExpect(jsonPath("$.totalCost").value(totalCost))
+                .andExpect(jsonPath("$.totalCost").value(getPaymentInfo.getTotalCost()))
                 .andExpect(jsonPath("$.languages[0]").value("Java"))
                 .andExpect(jsonPath("$.languages[1]").value("Python"))
                 .andExpect(jsonPath("$.languages[2]").value("Javascript"))
@@ -76,6 +81,8 @@ public class SuggestGetTest extends SuggestControllerTest{
         ResultActions actions =
                 mockMvc.perform(
                         get("/suggest/{suggest-id}/done", suggest.getId())
+                                .header(AUTHORIZATION, BEARER + accessToken)
+                                .header(REFRESH_TOKEN, refreshToken)
                 );
 
         actions.andExpect(status().isOk())
@@ -89,8 +96,6 @@ public class SuggestGetTest extends SuggestControllerTest{
     @Test
     @DisplayName("GET 환불 영수증 조회")
     void getRefundPaymentInfo() throws Exception {
-        suggest.setTotalCost(50000);
-
         GetRefundPayment response = GetRefundPayment.builder()
                 .suggest(suggest)
                 .lesson(lesson)
@@ -103,6 +108,8 @@ public class SuggestGetTest extends SuggestControllerTest{
         ResultActions actions =
                 mockMvc.perform(
                         get("/suggest/{suggest-id}/refund/info", suggest.getId())
+                                .header(AUTHORIZATION, BEARER + accessToken)
+                                .header(REFRESH_TOKEN, refreshToken)
                 );
 
         actions.andExpect(status().isOk())
@@ -121,6 +128,10 @@ public class SuggestGetTest extends SuggestControllerTest{
                 .andExpect(jsonPath("$.address[1]").value("강동구"))
                 .andExpect(jsonPath("$.address[2]").value("강북구"))
                 .andDo(document("환불영수증조회",
+                        requestHeaders(
+                                headerWithName(AUTHORIZATION).description("엑세스 토큰"),
+                                headerWithName(REFRESH_TOKEN).description("리프레시 토큰")
+                        ),
                         pathParameters(
                                 parameterWithName("suggest-id").description("신청 식별자")
                         ),
@@ -146,6 +157,8 @@ public class SuggestGetTest extends SuggestControllerTest{
         ResultActions actions =
                 mockMvc.perform(
                         get("/suggest/{suggest-id}/attendance", suggest.getId())
+                                .header(AUTHORIZATION, BEARER + accessToken)
+                                .header(REFRESH_TOKEN, refreshToken)
                 );
 
         actions.andExpect(status().isOk())
@@ -177,6 +190,8 @@ public class SuggestGetTest extends SuggestControllerTest{
         ResultActions actions =
                 mockMvc.perform(
                         get("/suggest/{suggest-id}/attendance/check", suggest.getId())
+                                .header(AUTHORIZATION, BEARER + accessToken)
+                                .header(REFRESH_TOKEN, refreshToken)
                 );
 
         actions.andExpect(status().isOk())
@@ -198,6 +213,8 @@ public class SuggestGetTest extends SuggestControllerTest{
         ResultActions actions =
                 mockMvc.perform(
                         get("/suggest/{suggest-id}/receipt", suggest.getId())
+                                .header(AUTHORIZATION, BEARER + accessToken)
+                                .header(REFRESH_TOKEN, refreshToken)
                 );
 
         actions.andExpect(status().isOk())
@@ -217,12 +234,14 @@ public class SuggestGetTest extends SuggestControllerTest{
 
         GetPaymentReceipt getPaymentInfo = new GetPaymentReceipt(lesson, totalCost, quantity, paymentMethod);
 
-        given(suggestService.getPaymentReceipt(suggest.getId(), member.getId()))
+        given(suggestService.getPaymentReceipt(Mockito.anyLong(), Mockito.anyLong()))
                 .willReturn(getPaymentInfo);
 
         ResultActions actions =
                 mockMvc.perform(
                         get("/suggest/{suggest-id}/receipt", suggest.getId())
+                                .header(AUTHORIZATION, BEARER + accessToken)
+                                .header(REFRESH_TOKEN, refreshToken)
                 );
 
         actions.andExpect(status().isOk())
@@ -264,6 +283,8 @@ public class SuggestGetTest extends SuggestControllerTest{
         ResultActions actions =
                 mockMvc.perform(
                         get("/suggest/lesson/{lesson-id}/tutor/tab/{tab-id}", 1L, tabId)
+                                .header(AUTHORIZATION, BEARER + accessToken)
+                                .header(REFRESH_TOKEN, refreshToken)
                 );
 
         actions.andExpect(status().isOk())
@@ -301,6 +322,8 @@ public class SuggestGetTest extends SuggestControllerTest{
         ResultActions actions =
                 mockMvc.perform(
                         get("/suggest/student")
+                                .header(AUTHORIZATION, BEARER + accessToken)
+                                .header(REFRESH_TOKEN, refreshToken)
                 );
 
         actions.andExpect(status().isOk())
