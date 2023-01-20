@@ -5,10 +5,14 @@ import dynamic from "next/dynamic";
 import useWindowSize from "hooks/useWindowSize";
 import { bold, italic } from "@uiw/react-md-editor/lib/commands/";
 import { Dispatch, SetStateAction } from "react";
-import { SetterOrUpdater } from "recoil";
+import { SetterOrUpdater, useSetRecoilState } from "recoil";
 import { Info } from "./WriteModal";
-import postWrite from "apis/postWrite";
 import { langDict } from "components/reuse/dict";
+import usePostWrite from "hooks/usePostWrite";
+import { useEffect } from "react";
+import { isWrite } from "atoms/main/mainAtom";
+import { AxiosResponse } from "axios";
+import { UseMutateFunction } from "react-query";
 
 interface Props {
   basicInfo: Info;
@@ -16,6 +20,14 @@ interface Props {
   curInfo: string;
   setCurInfo: Dispatch<SetStateAction<string>>;
   setStep: SetterOrUpdater<number>;
+  powerWrite: boolean;
+  setPowerIsWrite: SetterOrUpdater<boolean>;
+  mutate: UseMutateFunction<
+    AxiosResponse<any, any>,
+    unknown,
+    FormData,
+    unknown
+  >;
 }
 
 interface BasicSubmit {
@@ -32,15 +44,31 @@ const Curriculum = ({
   curInfo,
   setCurInfo,
   setStep,
-}: Props) => {
+  powerWrite,
+  setPowerIsWrite,
+}: // mutate
+Props) => {
+  const isWritten = useSetRecoilState(isWrite);
+  const { mutate, isSuccess, isError } = usePostWrite();
   const screenWidth = useWindowSize();
-
   const toBack = (e: React.MouseEvent<HTMLButtonElement>) => {
     setStep(prev => prev - 1);
   };
   const handleChangeValue = (e: any) => {
     setCurInfo(e);
   };
+
+  useEffect(() => {
+    if (isSuccess) {
+      console.log("성공");
+      setPowerIsWrite(prev => !prev);
+      isWritten(prev => !prev);
+    }
+    if (isError) {
+      console.log("실패");
+    }
+  }),
+    [isSuccess, isError];
 
   const onClick = () => {
     const {
@@ -99,7 +127,8 @@ const Curriculum = ({
     formData.append("profileImage", proImage);
     formData.append("careerImage", proImage);
 
-    postWrite(formData);
+    // postWrite(formData);
+    mutate(formData);
   };
 
   return (
