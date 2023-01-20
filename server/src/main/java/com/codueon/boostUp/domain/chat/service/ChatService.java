@@ -4,17 +4,12 @@ import com.codueon.boostUp.domain.chat.dto.PostMessage;
 import com.codueon.boostUp.domain.chat.dto.RedisChat;
 import com.codueon.boostUp.domain.chat.repository.redis.ChatMessageRepository;
 import com.codueon.boostUp.domain.chat.repository.redis.LastSentScoreRepository;
-import com.codueon.boostUp.domain.member.entity.Member;
-import com.codueon.boostUp.domain.member.service.MemberDbService;
 import com.codueon.boostUp.global.exception.BusinessLogicException;
 import com.codueon.boostUp.global.exception.ExceptionCode;
-import com.codueon.boostUp.global.security.token.JwtAuthenticationToken;
-import io.netty.util.internal.StringUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.security.Principal;
 import java.time.LocalDateTime;
 import java.util.List;
 

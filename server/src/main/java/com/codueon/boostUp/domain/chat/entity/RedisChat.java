@@ -1,4 +1,4 @@
-package com.codueon.chatserver.domain.chat.dto;
+package com.codueon.boostUp.domain.chat.entity;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -9,6 +9,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -18,11 +19,12 @@ import java.time.LocalDateTime;
 public class RedisChat implements Serializable {
 
     @NotNull
-    private Long chatRoomId;
-    @NotNull
-    private Long receiverId;
+    private Long roomId;
 
     @NotNull
+    private Long senderId;
+
+    @NotBlank
     private String message;
 
     @JsonSerialize(using = LocalDateTimeSerializer.class)
@@ -30,12 +32,12 @@ public class RedisChat implements Serializable {
     private LocalDateTime createdAt;
 
     @Builder
-    public RedisChat(Long chatRoomId,
-                     Long receiverId,
+    public RedisChat(Long roomId,
+                     Long senderId,
                      String message,
                      LocalDateTime createdAt) {
-        this.chatRoomId = chatRoomId;
-        this.receiverId = receiverId;
+        this.roomId = roomId;
+        this.senderId = senderId;
         this.message = message;
         this.createdAt = createdAt;
     }

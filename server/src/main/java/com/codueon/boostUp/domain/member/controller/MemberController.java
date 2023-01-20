@@ -47,9 +47,20 @@ public class MemberController {
      * @param checkEmail 이메일 검사 정보
      * @author mozzi327
      */
-    @PostMapping("/email/check")
+    @PostMapping("/email/overlap/check")
     public ResponseEntity postCheckIsOverlappedEmail(@RequestBody PostEmail checkEmail) {
         memberService.checkIsOverLappedEmail(checkEmail.getEmail());
+        return ResponseEntity.ok().build();
+    }
+
+    /**
+     * DB 이메일 존재 여부 확인 컨트롤러 메서드
+     * @param checkEmail 이메일 검사 정보
+     * @author mozzi327
+     */
+    @PostMapping("/email/check")
+    public ResponseEntity postCheckIsExistEmailInDb(@RequestBody PostEmail checkEmail) {
+        memberService.checkIsExistEmailInDb(checkEmail.getEmail());
         return ResponseEntity.ok().build();
     }
 
@@ -58,7 +69,7 @@ public class MemberController {
      * @param checkName 닉네임 검사 정보
      * @author mozzi327
      */
-    @PostMapping("/name/check")
+    @PostMapping("/name/overlap/check")
     public ResponseEntity postCheckIsOverlappedName(@RequestBody PostName checkName) {
         memberService.checkIsOverLappedName(checkName.getName());
         return ResponseEntity.ok().build();

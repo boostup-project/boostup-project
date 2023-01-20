@@ -36,7 +36,7 @@ public class SuggestDbService {
      */
     public Suggest ifExistsReturnSuggest(Long suggestId) {
         return suggestRepository.findById(suggestId)
-                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.RESERVATION_NOT_FOUND));
+                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.SUGGEST_NOT_FOUND));
     }
 
     /**
@@ -47,7 +47,7 @@ public class SuggestDbService {
      */
     public PaymentInfo ifExistsReturnPaymentInfo(Long suggestId) {
         return paymentInfoRepository.findBySuggestId(suggestId)
-                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.RESERVATION_NOT_FOUND));
+                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.SUGGEST_NOT_FOUND));
     }
 
     /**
