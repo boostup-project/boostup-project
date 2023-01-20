@@ -25,16 +25,12 @@ public class GetTutorLesson {
     public GetTutorLesson(Lesson lesson) {
         this.lessonId = lesson.getId();
         this.profileImage = lesson.getProfileImage().getFilePath();
-        this.languages = lesson.getLessonLanguages().stream()
-                .map(lessonLanguage -> lessonLanguage.getLanguages().getLanguages())
-                .collect(Collectors.toList());
+        this.languages = lesson.getLanguageListAsString();
         this.name = lesson.getName();
         this.title = lesson.getTitle();
         this.company = lesson.getCompany();
         this.career = lesson.getCareer();
         this.cost = lesson.getCost();
-        this.address = lesson.getLessonAddresses().stream()
-                .map(lessonAddress -> lessonAddress.getAddress().getAddress())
-                .collect(Collectors.toList());
+        this.address = lesson.getAddressListAsString();
     }
 }

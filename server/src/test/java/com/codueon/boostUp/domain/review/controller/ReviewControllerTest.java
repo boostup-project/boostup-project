@@ -63,24 +63,14 @@ public class ReviewControllerTest {
                 .career(100)
                 .build();
 
-        Language language = Language.builder()
-                .id(1L)
-                .languages("Java")
-                .build();
-
         LessonLanguage lessonLanguage = LessonLanguage.builder()
                 .id(1L)
-                .languages(language)
-                .build();
-
-        Address address = Address.builder()
-                .id(1L)
-                .address("강남구")
+                .languageId(1)
                 .build();
 
         LessonAddress lessonAddress = LessonAddress.builder()
                 .id(1L)
-                .address(address)
+                .addressId(1)
                 .build();
 
         ProfileImage profileImage = ProfileImage.builder()

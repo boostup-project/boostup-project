@@ -217,9 +217,9 @@ public class LessonService {
 
         updateLesson.editLessonInfo(postLessonInfoEdit);
 
-        List<Long> languageList = postLessonInfoEdit.getLanguages();
+        List<Integer> languageList = postLessonInfoEdit.getLanguages();
 
-        List<Long> addressList = postLessonInfoEdit.getAddresses();
+        List<Integer> addressList = postLessonInfoEdit.getAddresses();
 
         lessonDbService.addLanguageList(languageList, updateLesson);
         lessonDbService.addAddressList(addressList, updateLesson);
@@ -260,8 +260,8 @@ public class LessonService {
 
         awsS3Service.delete(profileImage1.getFileName(),dir);
 
-        List<Long> languageList = postLessonInfoEdit.getLanguages();
-        List<Long> addressList = postLessonInfoEdit.getAddresses();
+        List<Integer> languageList = postLessonInfoEdit.getLanguages();
+        List<Integer> addressList = postLessonInfoEdit.getAddresses();
 
         lessonDbService.addLanguageList(languageList, updateLesson);
         lessonDbService.addAddressList(addressList, updateLesson);
@@ -457,7 +457,7 @@ public class LessonService {
      * @author mozzi327
      */
     public Page<GetMainPageLesson> getMainPageLessonsAboutLanguage(Long memberId,
-                                                                   Long languageId,
+                                                                   Integer languageId,
                                                                    Pageable pageable) {
         if (memberId != null) return lessonRepository.getMainPageLessonByLanguageAndBookmarkInfo(memberId, languageId, pageable);
         return lessonRepository.getMainPageLessonByLanguage(languageId, pageable);

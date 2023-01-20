@@ -22,8 +22,6 @@ import java.util.stream.Collectors;
 public class LessonDbService {
     private final LessonRepository lessonRepository;
     private final LessonInfoRepository lessonInfoRepository;
-    private final LanguageRepository languageRepository;
-    private final AddressRepository addressRepository;
     private final CurriculumRepository curriculumRepository;
     private final AwsS3Service awsS3Service;
 
@@ -51,12 +49,11 @@ public class LessonDbService {
      * @param lesson       과외 요약 정보
      * @author Quartz614
      */
-    public void addLanguageList(List<Long> languageList, Lesson lesson) {
+    public void addLanguageList(List<Integer> languageList, Lesson lesson) {
         languageList.forEach(
                 s -> {
-                    Language language = findIfExistLanguage(s);
                     LessonLanguage lessonLanguage = LessonLanguage.builder()
-                            .languages(language)
+                            .languageId(s)
                             .build();
                     lesson.addLessonLanguage(lessonLanguage);
                 }
@@ -70,12 +67,11 @@ public class LessonDbService {
      * @param lesson      과외 요약 정보
      * @author Quartz614
      */
-    public void addAddressList(List<Long> addressList, Lesson lesson) {
+    public void addAddressList(List<Integer> addressList, Lesson lesson) {
         addressList.forEach(
                 s -> {
-                    Address address = findIfExistAddress(s);
                     LessonAddress lessonAddress = LessonAddress.builder()
-                            .address(address)
+                            .addressId(s)
                             .build();
                     lesson.addLessonAddress(lessonAddress);
                 }
@@ -135,30 +131,6 @@ public class LessonDbService {
     /*--------------------------------------- DB Read 메서드 --------------------------------------*/
 
     /**
-     * 사용 언어 정보 조회 메서드
-     *
-     * @param languageId 사용 언어 식별자
-     * @return Language
-     * @author Quartz614
-     */
-    public Language findIfExistLanguage(Long languageId) {
-        return languageRepository.findById(languageId)
-                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.LANGUAGE_NOT_FOUND));
-    }
-
-    /**
-     * 주소 정보 조회 메서드
-     *
-     * @param addressId 주소 식별자
-     * @return Address
-     * @author Quartz614
-     */
-    public Address findIfExistAddress(Long addressId) {
-        return addressRepository.findById(addressId)
-                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.ADDRESS_NOT_FOUND));
-    }
-
-    /**
      * 과외 요약 정보 조회 메서드
      *
      * @param lessonId 과외 식별자
@@ -213,12 +185,11 @@ public class LessonDbService {
      * @return Language 언어
      * @author Quartz614
      */
-    public List<LessonLanguage> makeLanguageList(List<Long> languageList) {
+    public List<LessonLanguage> makeLanguageList(List<Integer> languageList) {
         return languageList.stream().map(
                 s -> {
-                    Language language = findIfExistLanguage(s);
                     return LessonLanguage.builder()
-                            .languages(language)
+                            .languageId(s)
                             .build();
 
                 }
@@ -231,12 +202,11 @@ public class LessonDbService {
      * @return Address 주소
      * @author Quartz614
      */
-    public List<LessonAddress> makeAddressList(List<Long> addressList) {
+    public List<LessonAddress> makeAddressList(List<Integer> addressList) {
         return addressList.stream().map(
                 s -> {
-                    Address address = findIfExistAddress(s);
                     return LessonAddress.builder()
-                            .address(address)
+                            .addressId(s)
                             .build();
 
                 }
