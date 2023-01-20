@@ -5,24 +5,14 @@ const inputStep = atom({
   default: 1,
 });
 
-const isWriteModal = atom({
-  key: "isWriteModal",
+const powerWriteModal = atom({
+  key: "powerWriteModal",
   default: false,
 });
 
-const baseSave = atom({
-  key: "baseSave",
-  default: {},
-});
-
-const addSave = atom({
-  key: "baseSave",
-  default: {},
-});
-
-const currSave = atom({
-  key: "baseSave",
-  default: "",
+const isWrite = atom({
+  key: "isWrite",
+  default: false,
 });
 
 const filterModal = atom({
@@ -32,4 +22,4 @@ const filterModal = atom({
   default: 48,
 });
 
-export { inputStep, baseSave, isWriteModal, addSave, currSave, filterModal };
+export { inputStep, powerWriteModal, filterModal, isWrite };

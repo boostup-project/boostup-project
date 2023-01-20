@@ -8,7 +8,7 @@ import { SearchPop } from "./SearchPop";
 import Image from "next/image";
 import Logo from "../../public/images/logo.png";
 import Link from "next/link";
-import { isWriteModal } from "atoms/main/mainAtom";
+import { powerWriteModal } from "atoms/main/mainAtom";
 import WriteModal from "components/createModal/WriteModal";
 
 interface SearchData {
@@ -23,14 +23,14 @@ interface SearchData {
 const Header = () => {
   const [log, setLog] = useRecoilState(logUser);
   const [seek, setSeek] = useState(false);
-  const [isWrite, setIsWrite] = useRecoilState(isWriteModal);
+  const [powerWrite, setPowerIsWrite] = useRecoilState(powerWriteModal);
 
   const onSubmit: SubmitHandler<SearchData> = data => {
     console.log(data);
   };
 
   const toWrite = (e: React.MouseEvent<HTMLDivElement>) => {
-    setIsWrite(prev => !prev);
+    setPowerIsWrite(prev => !prev);
   };
 
   return (
@@ -102,7 +102,7 @@ const Header = () => {
           <SearchPop onSubmit={onSubmit} absolute={false} />
         </div>
       )}
-      {isWrite && <WriteModal />}
+      {powerWrite && <WriteModal />}
     </>
   );
 };
