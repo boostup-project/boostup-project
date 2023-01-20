@@ -1,10 +1,9 @@
 import Card from "components/Card/card";
-//https://8a91-182-226-233-7.jp.ngrok.io
+
 //Mobile = 375 * 667
-const card = () => {
+const Cards = () => {
   return (
-    <div className="mt-24 flex flex-row justify-center flex-wrap desktop:w-10/12 tablet:w-full h-fit">
-      <Card></Card>
+    <div className="mt-3 flex flex-row flex-wrap w-full desktop:w-9/12 desktop:min-w-[1000px] tablet:w-full h-fit">
       <Card></Card>
       <Card></Card>
       <Card></Card>
@@ -16,4 +15,4 @@ const card = () => {
     </div>
   );
 };
-export default card;
+export default Cards;
