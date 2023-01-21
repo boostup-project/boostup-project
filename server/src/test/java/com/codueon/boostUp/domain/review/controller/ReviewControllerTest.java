@@ -7,6 +7,9 @@ import com.codueon.boostUp.domain.reveiw.entity.Review;
 import com.codueon.boostUp.domain.reveiw.service.ReviewService;
 import com.codueon.boostUp.domain.suggest.entity.Suggest;
 import com.codueon.boostUp.domain.suggest.service.SuggestDbService;
+import com.codueon.boostUp.global.security.token.JwtAuthenticationToken;
+import com.codueon.boostUp.global.security.utils.JwtTokenUtils;
+import com.codueon.boostUp.global.utils.RedisUtils;
 import com.codueon.boostUp.global.webhook.SendErrorToDiscord;
 import com.google.gson.Gson;
 import org.junit.jupiter.api.BeforeEach;
@@ -15,9 +18,15 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureWebM
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import java.util.List;
+import java.util.stream.Collectors;
+
+import static com.codueon.boostUp.global.security.utils.AuthConstants.*;
 
 @WithMockUser
 @AutoConfigureWebMvc
@@ -44,8 +53,17 @@ public class ReviewControllerTest {
     protected Lesson lesson;
     protected Suggest suggest;
 
+    @MockBean
+    protected RedisUtils redisUtils;
+    protected JwtTokenUtils jwtTokenUtils;
+    protected String accessToken;
+    protected String refreshToken;
+    protected Authentication authentication;
+
     @BeforeEach
     void setUp() {
+        jwtTokenUtils = new JwtTokenUtils(SECRET_KEY, ACCESS_EXIRATION_MINUTE, REFRESH_EXIRATION_MINUTE);
+
         member = Member.builder()
                 .id(1L)
                 .name("김길동")
@@ -97,6 +115,16 @@ public class ReviewControllerTest {
                 .languages("Java")
                 .requests("누워서 수업 들어도 되나요?")
                 .build();
+
+        accessToken = jwtTokenUtils.generateAccessToken(member);
+        refreshToken = jwtTokenUtils.generateRefreshToken(member);
+
+        List<GrantedAuthority> authorities = member.getRoles().stream()
+                .map(role -> (GrantedAuthority) () -> "ROLE_" + role)
+                .collect(Collectors.toList());
+
+        authentication = new JwtAuthenticationToken(authorities, member.getName(), null, member.getId());
+        SecurityContextHolder.getContext().setAuthentication(authentication);
     }
 
 }

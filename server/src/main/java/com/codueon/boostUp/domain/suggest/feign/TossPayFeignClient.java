@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RequestHeader;
 
 @FeignClient(value = "tosspay", url = "https://api.tosspayments.com", configuration = {FeignErrorConfig.class})
 public interface TossPayFeignClient {
-
     @PostMapping(value = "/v1/payments", consumes = "application/json")
     TossPayReadyInfo readyForTossPayment(@RequestHeader(PayConstants.AUTHORIZATION) String authorization,
                                          @RequestHeader(value = "Content-Type") String contentType,
@@ -26,5 +25,4 @@ public interface TossPayFeignClient {
                                     @RequestHeader(value = "Content-Type") String contentType,
                                     @PathVariable("paymentKey") String paymentKey,
                                     @RequestBody RequestForTossPayCancelInfo body);
-
 }

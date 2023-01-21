@@ -21,7 +21,6 @@ public class MyPageReviewGetTest extends ReviewControllerTest {
     @Test
     @DisplayName("사용자 작성 리뷰 조회")
     public void getMyPageReview() throws Exception {
-
         LocalDateTime start = LocalDateTime.of(2022, 12, 28, 12, 30, 5);
         LocalDateTime end = LocalDateTime.of(2022, 12, 30, 12, 30, 5);
 
@@ -46,14 +45,14 @@ public class MyPageReviewGetTest extends ReviewControllerTest {
         );
 
         actions.andExpect(status().isOk())
+                .andExpect(jsonPath("$.data[0].languages[0]").value(lesson.getLessonLanguages().get(0).getLanguageInfo().getLanguages()))
+                .andExpect(jsonPath("$.data[0].address[0]").value(lesson.getLessonAddresses().get(0).getAddressInfo().getAddress()))
                 .andExpect(jsonPath("$.data[0].profileImage").value(lesson.getProfileImage().getFilePath()))
-                .andExpect(jsonPath("$.data[0].languages[0]").value(lesson.getLessonLanguages().get(0).getLanguages().getLanguages()))
                 .andExpect(jsonPath("$.data[0].name").value(lesson.getName()))
                 .andExpect(jsonPath("$.data[0].title").value(lesson.getTitle()))
                 .andExpect(jsonPath("$.data[0].company").value(lesson.getCompany()))
                 .andExpect(jsonPath("$.data[0].career").value(lesson.getCareer()))
                 .andExpect(jsonPath("$.data[0].cost").value(lesson.getCost()))
-                .andExpect(jsonPath("$.data[0].address[0]").value(lesson.getLessonAddresses().get(0).getAddress().getAddress()))
                 .andExpect(jsonPath("$.data[0].startTime").value(start.toString()))
                 .andExpect(jsonPath("$.data[0].endTime").value(end.toString()))
                 .andExpect(jsonPath("$.data[0].score").value(review.getScore()))

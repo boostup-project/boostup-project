@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.RequestHeader;
 
 @FeignClient(value = "kakaopay", url = "https://kapi.kakao.com", configuration = {FeignErrorConfig.class})
 public interface KakaoPayFeignClient {
-
     @PostMapping(value = "/v1/payment/ready")
     KakaoPayReadyInfo readyForPayment(@RequestHeader(PayConstants.AUTHORIZATION) String authorization,
                                       @RequestHeader(PayConstants.ACCEPT) String accept,

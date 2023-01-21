@@ -6,6 +6,7 @@ import org.mockito.Mockito;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
 
+import static com.codueon.boostUp.global.security.utils.AuthConstants.*;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
@@ -22,6 +23,8 @@ public class BookmarkGetTest extends BookmarkControllerTest {
 
         ResultActions actions = mockMvc.perform(
                 get("/bookmark/lesson/{lesson-id}", lessonId)
+                        .header(AUTHORIZATION, BEARER + accessToken)
+                        .header(REFRESH_TOKEN, refreshToken)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
                         .with(csrf())

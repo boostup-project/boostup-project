@@ -7,11 +7,8 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 public class PostSuggest {
-
     private String days;
-
     private String languages;
-
     private String requests;
 
     @Builder

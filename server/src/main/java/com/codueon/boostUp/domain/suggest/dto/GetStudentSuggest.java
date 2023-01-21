@@ -1,7 +1,7 @@
 package com.codueon.boostUp.domain.suggest.dto;
 
 import com.codueon.boostUp.domain.lesson.entity.Lesson;
-import com.codueon.boostUp.domain.suggest.entity.Suggest;
+import com.codueon.boostUp.domain.suggest.entity.SuggestStatus;
 import com.querydsl.core.annotations.QueryProjection;
 import lombok.Builder;
 import lombok.Getter;
@@ -9,43 +9,32 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Getter
 @NoArgsConstructor
 public class GetStudentSuggest {
-
     private Long suggestId;
-
     private Long lessonId;
-
     private String name;
-
     private String title;
-
     private String profileImage;
-
     private String company;
-
     private Integer career;
-
     private Integer cost;
-
     private List<String> languages;
-
     private List<String> address;
-
     private String status;
-
     private LocalDateTime startTime;
-
     private LocalDateTime endTime;
 
     @Builder
     @QueryProjection
-    public GetStudentSuggest(Suggest suggest,
+    public GetStudentSuggest(Long suggestId,
+                             SuggestStatus status,
+                             LocalDateTime startTime,
+                             LocalDateTime endTime,
                              Lesson lesson) {
-        this.suggestId = suggest.getId();
+        this.suggestId = suggestId;
         this.lessonId = lesson.getId();
         this.name = lesson.getName();
         this.title = lesson.getTitle();
@@ -55,8 +44,8 @@ public class GetStudentSuggest {
         this.cost = lesson.getCost();
         this.languages = lesson.getLanguageListAsString();
         this.address = lesson.getAddressListAsString();
-        this.status = suggest.getStatus().getStatus();
-        this.startTime = suggest.getStartTime();
-        this.endTime = suggest.getEndTime();
+        this.status = status.getStatus();
+        this.startTime = startTime;
+        this.endTime = endTime;
     }
 }

@@ -24,7 +24,6 @@ import static com.codueon.boostUp.domain.suggest.utils.SuggestConstants.FAILED_P
 @RestController
 @RequiredArgsConstructor
 public class SuggestController {
-
     private final SuggestDbService suggestDbService;
     private final SuggestService suggestService;
 

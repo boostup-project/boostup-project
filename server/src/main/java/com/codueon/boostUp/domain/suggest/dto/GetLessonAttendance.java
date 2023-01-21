@@ -7,11 +7,8 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 public class GetLessonAttendance {
-
     private Integer quantity;
-
     private Integer quantityCount;
-
     private Integer progress;
 
     @Builder

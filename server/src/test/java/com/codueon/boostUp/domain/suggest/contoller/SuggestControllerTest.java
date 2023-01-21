@@ -31,6 +31,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.codueon.boostUp.domain.suggest.entity.SuggestStatus.DURING_LESSON;
+import static com.codueon.boostUp.global.security.utils.AuthConstants.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 
 @WithMockUser
@@ -72,11 +74,13 @@ class SuggestControllerTest {
 
     @BeforeEach
     void setUp() throws Exception {
-        jwtTokenUtils = new JwtTokenUtils("suggestsuggestsuggestsuggestsuggestsuggestsuggestsuggestsuggestsuggestsuggestsuggestsuggestsuggest"
-                , 30, 1440);
+        jwtTokenUtils = new JwtTokenUtils(SECRET_KEY, ACCESS_EXIRATION_MINUTE, REFRESH_EXIRATION_MINUTE);
 
         member = data.getMember1();
         suggest = data.getSuggest1();
+        suggest.setStartTime();
+        suggest.setEndTime();
+        suggest.setStatus(DURING_LESSON);
         lesson = data.getLesson1();
         profileImage = data.getProfileImage();
         paymentInfo = PaymentInfo.builder()

@@ -18,12 +18,11 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-import static com.codueon.boostUp.domain.suggest.entity.Suggest.SuggestStatus.*;
+import static com.codueon.boostUp.domain.suggest.entity.SuggestStatus.*;
 
 @Service
 @RequiredArgsConstructor
 public class SuggestDbService {
-
     private final SuggestRepository suggestRepository;
     private final ReasonRepository reasonRepository;
     private final PaymentInfoRepository paymentInfoRepository;
@@ -155,7 +154,7 @@ public class SuggestDbService {
      * @author LeeGoh
      */
     public void suggestGetMemberIdAndStatusIsDuringLesson(Suggest suggest, Long memberId) {
-        if (!suggest.getStatus().equals(DURING_LESSON) ||
+        if (!suggest.getSuggestStatus().equals(DURING_LESSON) ||
                 !suggest.getMemberId().equals(memberId)) {
             throw new BusinessLogicException(ExceptionCode.INVALID_ACCESS);
         }
@@ -170,7 +169,7 @@ public class SuggestDbService {
      */
     public void lessonGetMemberIdAndStatusIsDuringLesson(Suggest suggest, Lesson lesson, Long memberId) {
         if (!lesson.getMemberId().equals(memberId) ||
-                !suggest.getStatus().equals(DURING_LESSON) ) {
+                !suggest.getSuggestStatus().equals(DURING_LESSON) ) {
             throw new BusinessLogicException(ExceptionCode.INVALID_ACCESS);
         }
     }
@@ -182,8 +181,8 @@ public class SuggestDbService {
      * @author LeeGoh
      */
     public void suggestGetMemberIdAndStatusIsNotInProgress(Suggest suggest, Long memberId) {
-        if (suggest.getStatus().equals(ACCEPT_IN_PROGRESS) ||
-                suggest.getStatus().equals(PAY_IN_PROGRESS) ||
+        if (suggest.getSuggestStatus().equals(ACCEPT_IN_PROGRESS) ||
+                suggest.getSuggestStatus().equals(PAY_IN_PROGRESS) ||
                 !suggest.getMemberId().equals(memberId)) {
             throw new BusinessLogicException(ExceptionCode.INVALID_ACCESS);
         }

@@ -9,8 +9,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
 
-import java.util.Optional;
-
 import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
@@ -24,9 +22,9 @@ public class GetMainPageLessonTest extends LessonControllerTest {
     @DisplayName("메인페이지 과외 상세 검색 테스트")
     void getDetailSearchForLessonTest() throws Exception {
         PostSearchLesson postSearchLesson = PostSearchLesson.builder()
-                .address(1L)
+                .address(1)
                 .career(5)
-                .language(1L)
+                .language(1)
                 .startCost(2000)
                 .endCost(8000)
                 .build();
@@ -46,9 +44,9 @@ public class GetMainPageLessonTest extends LessonControllerTest {
 
         actions.andExpect(status().isOk())
                 .andExpect(jsonPath("$.data[0].lessonId").value(lessonList.get(0).getId()))
-                .andExpect(jsonPath("$.data[0].languages[0]").value("Java"))
+                .andExpect(jsonPath("$.data[0].languages[0]").value("Javascript"))
                 .andExpect(jsonPath("$.data[0].languages[1]").value("Python"))
-                .andExpect(jsonPath("$.data[0].languages[2]").value("Javascript"))
+                .andExpect(jsonPath("$.data[0].languages[2]").value("Go"))
                 .andExpect(jsonPath("$.data[0].title").value(lessonList.get(0).getTitle()))
                 .andExpect(jsonPath("$.data[0].cost").value(lessonList.get(0).getCost()))
                 .andExpect(jsonPath("$.data[0].profileImage").value(lessonList.get(0).getProfileImage().getFilePath()))
@@ -61,9 +59,9 @@ public class GetMainPageLessonTest extends LessonControllerTest {
                 .andExpect(jsonPath("$.data[0].bookmark").value(false))
 
                 .andExpect(jsonPath("$.data[1].lessonId").value(lessonList.get(1).getId()))
-                .andExpect(jsonPath("$.data[1].languages[0]").value("Java"))
+                .andExpect(jsonPath("$.data[1].languages[0]").value("Javascript"))
                 .andExpect(jsonPath("$.data[1].languages[1]").value("Python"))
-                .andExpect(jsonPath("$.data[1].languages[2]").value("Javascript"))
+                .andExpect(jsonPath("$.data[1].languages[2]").value("Go"))
                 .andExpect(jsonPath("$.data[1].title").value(lessonList.get(1).getTitle()))
                 .andExpect(jsonPath("$.data[1].cost").value(lessonList.get(1).getCost()))
                 .andExpect(jsonPath("$.data[1].profileImage").value(lessonList.get(1).getProfileImage().getFilePath()))
@@ -81,9 +79,9 @@ public class GetMainPageLessonTest extends LessonControllerTest {
     @DisplayName("메인페이지 과외 상세 검색 테스트(로그인 시)")
     void getDetailSearchForLessonTest2() throws Exception {
         PostSearchLesson postSearchLesson = PostSearchLesson.builder()
-                .address(1L)
+                .address(1)
                 .career(5)
-                .language(1L)
+                .language(1)
                 .startCost(2000)
                 .endCost(8000)
                 .build();
@@ -103,9 +101,9 @@ public class GetMainPageLessonTest extends LessonControllerTest {
 
         actions.andExpect(status().isOk())
                 .andExpect(jsonPath("$.data[0].lessonId").value(lessonList.get(0).getId()))
-                .andExpect(jsonPath("$.data[0].languages[0]").value("Java"))
+                .andExpect(jsonPath("$.data[0].languages[0]").value("Javascript"))
                 .andExpect(jsonPath("$.data[0].languages[1]").value("Python"))
-                .andExpect(jsonPath("$.data[0].languages[2]").value("Javascript"))
+                .andExpect(jsonPath("$.data[0].languages[2]").value("Go"))
                 .andExpect(jsonPath("$.data[0].title").value(lessonList.get(0).getTitle()))
                 .andExpect(jsonPath("$.data[0].cost").value(lessonList.get(0).getCost()))
                 .andExpect(jsonPath("$.data[0].profileImage").value(lessonList.get(0).getProfileImage().getFilePath()))
@@ -118,9 +116,9 @@ public class GetMainPageLessonTest extends LessonControllerTest {
                 .andExpect(jsonPath("$.data[0].bookmark").value(true))
 
                 .andExpect(jsonPath("$.data[1].lessonId").value(lessonList.get(1).getId()))
-                .andExpect(jsonPath("$.data[1].languages[0]").value("Java"))
+                .andExpect(jsonPath("$.data[1].languages[0]").value("Javascript"))
                 .andExpect(jsonPath("$.data[1].languages[1]").value("Python"))
-                .andExpect(jsonPath("$.data[1].languages[2]").value("Javascript"))
+                .andExpect(jsonPath("$.data[1].languages[2]").value("Go"))
                 .andExpect(jsonPath("$.data[1].title").value(lessonList.get(1).getTitle()))
                 .andExpect(jsonPath("$.data[1].cost").value(lessonList.get(1).getCost()))
                 .andExpect(jsonPath("$.data[1].profileImage").value(lessonList.get(1).getProfileImage().getFilePath()))
@@ -137,7 +135,6 @@ public class GetMainPageLessonTest extends LessonControllerTest {
     @Test
     @DisplayName("메인페이지 과외 전체 조회 테스트")
     void getMainPageLessonInfoTest1() throws Exception {
-
         given(lessonService.getMainPageLessons(Mockito.anyLong(), Mockito.any(Pageable.class)))
                 .willReturn(new PageImpl<>(mainPageResponse));
 
@@ -149,9 +146,9 @@ public class GetMainPageLessonTest extends LessonControllerTest {
 
         actions.andExpect(status().isOk())
                 .andExpect(jsonPath("$.data[0].lessonId").value(lessonList.get(0).getId()))
-                .andExpect(jsonPath("$.data[0].languages[0]").value("Java"))
+                .andExpect(jsonPath("$.data[0].languages[0]").value("Javascript"))
                 .andExpect(jsonPath("$.data[0].languages[1]").value("Python"))
-                .andExpect(jsonPath("$.data[0].languages[2]").value("Javascript"))
+                .andExpect(jsonPath("$.data[0].languages[2]").value("Go"))
                 .andExpect(jsonPath("$.data[0].title").value(lessonList.get(0).getTitle()))
                 .andExpect(jsonPath("$.data[0].cost").value(lessonList.get(0).getCost()))
                 .andExpect(jsonPath("$.data[0].profileImage").value(lessonList.get(0).getProfileImage().getFilePath()))
@@ -164,9 +161,9 @@ public class GetMainPageLessonTest extends LessonControllerTest {
                 .andExpect(jsonPath("$.data[0].bookmark").value(false))
 
                 .andExpect(jsonPath("$.data[1].lessonId").value(lessonList.get(1).getId()))
-                .andExpect(jsonPath("$.data[1].languages[0]").value("Java"))
+                .andExpect(jsonPath("$.data[1].languages[0]").value("Javascript"))
                 .andExpect(jsonPath("$.data[1].languages[1]").value("Python"))
-                .andExpect(jsonPath("$.data[1].languages[2]").value("Javascript"))
+                .andExpect(jsonPath("$.data[1].languages[2]").value("Go"))
                 .andExpect(jsonPath("$.data[1].title").value(lessonList.get(1).getTitle()))
                 .andExpect(jsonPath("$.data[1].cost").value(lessonList.get(1).getCost()))
                 .andExpect(jsonPath("$.data[1].profileImage").value(lessonList.get(1).getProfileImage().getFilePath()))
@@ -183,7 +180,6 @@ public class GetMainPageLessonTest extends LessonControllerTest {
     @Test
     @DisplayName("메인페이지 과외 전체 조회 테스트 (로그인 시)")
     void getMainPageLessonInfoTest2() throws Exception {
-
         given(lessonService.getMainPageLessons(Mockito.anyLong(), Mockito.any(Pageable.class)))
                 .willReturn(new PageImpl<>(mainPageResponse2));
 
@@ -195,9 +191,9 @@ public class GetMainPageLessonTest extends LessonControllerTest {
 
         actions.andExpect(status().isOk())
                 .andExpect(jsonPath("$.data[0].lessonId").value(lessonList.get(0).getId()))
-                .andExpect(jsonPath("$.data[0].languages[0]").value("Java"))
+                .andExpect(jsonPath("$.data[0].languages[0]").value("Javascript"))
                 .andExpect(jsonPath("$.data[0].languages[1]").value("Python"))
-                .andExpect(jsonPath("$.data[0].languages[2]").value("Javascript"))
+                .andExpect(jsonPath("$.data[0].languages[2]").value("Go"))
                 .andExpect(jsonPath("$.data[0].title").value(lessonList.get(0).getTitle()))
                 .andExpect(jsonPath("$.data[0].cost").value(lessonList.get(0).getCost()))
                 .andExpect(jsonPath("$.data[0].profileImage").value(lessonList.get(0).getProfileImage().getFilePath()))
@@ -210,9 +206,9 @@ public class GetMainPageLessonTest extends LessonControllerTest {
                 .andExpect(jsonPath("$.data[0].bookmark").value(true))
 
                 .andExpect(jsonPath("$.data[1].lessonId").value(lessonList.get(1).getId()))
-                .andExpect(jsonPath("$.data[1].languages[0]").value("Java"))
+                .andExpect(jsonPath("$.data[1].languages[0]").value("Javascript"))
                 .andExpect(jsonPath("$.data[1].languages[1]").value("Python"))
-                .andExpect(jsonPath("$.data[1].languages[2]").value("Javascript"))
+                .andExpect(jsonPath("$.data[1].languages[2]").value("Go"))
                 .andExpect(jsonPath("$.data[1].title").value(lessonList.get(1).getTitle()))
                 .andExpect(jsonPath("$.data[1].cost").value(lessonList.get(1).getCost()))
                 .andExpect(jsonPath("$.data[1].profileImage").value(lessonList.get(1).getProfileImage().getFilePath()))
@@ -231,7 +227,7 @@ public class GetMainPageLessonTest extends LessonControllerTest {
     void getMainPageForLanguageTest() throws Exception {
         Long languageId = 1L;
 
-        given(lessonService.getMainPageLessonsAboutLanguage(Mockito.anyLong(), Mockito.anyLong(), Mockito.any(Pageable.class)))
+        given(lessonService.getMainPageLessonsAboutLanguage(Mockito.anyLong(), Mockito.anyInt(), Mockito.any(Pageable.class)))
                 .willReturn(new PageImpl<>(mainPageResponse));
 
         ResultActions actions =
@@ -242,9 +238,9 @@ public class GetMainPageLessonTest extends LessonControllerTest {
 
         actions.andExpect(status().isOk())
                 .andExpect(jsonPath("$.data[0].lessonId").value(lessonList.get(0).getId()))
-                .andExpect(jsonPath("$.data[0].languages[0]").value("Java"))
+                .andExpect(jsonPath("$.data[0].languages[0]").value("Javascript"))
                 .andExpect(jsonPath("$.data[0].languages[1]").value("Python"))
-                .andExpect(jsonPath("$.data[0].languages[2]").value("Javascript"))
+                .andExpect(jsonPath("$.data[0].languages[2]").value("Go"))
                 .andExpect(jsonPath("$.data[0].title").value(lessonList.get(0).getTitle()))
                 .andExpect(jsonPath("$.data[0].cost").value(lessonList.get(0).getCost()))
                 .andExpect(jsonPath("$.data[0].profileImage").value(lessonList.get(0).getProfileImage().getFilePath()))
@@ -257,9 +253,9 @@ public class GetMainPageLessonTest extends LessonControllerTest {
                 .andExpect(jsonPath("$.data[0].bookmark").value(false))
 
                 .andExpect(jsonPath("$.data[1].lessonId").value(lessonList.get(1).getId()))
-                .andExpect(jsonPath("$.data[1].languages[0]").value("Java"))
+                .andExpect(jsonPath("$.data[1].languages[0]").value("Javascript"))
                 .andExpect(jsonPath("$.data[1].languages[1]").value("Python"))
-                .andExpect(jsonPath("$.data[1].languages[2]").value("Javascript"))
+                .andExpect(jsonPath("$.data[1].languages[2]").value("Go"))
                 .andExpect(jsonPath("$.data[1].title").value(lessonList.get(1).getTitle()))
                 .andExpect(jsonPath("$.data[1].cost").value(lessonList.get(1).getCost()))
                 .andExpect(jsonPath("$.data[1].profileImage").value(lessonList.get(1).getProfileImage().getFilePath()))
@@ -278,7 +274,7 @@ public class GetMainPageLessonTest extends LessonControllerTest {
     void getMainPageForLanguageTest2() throws Exception {
         Long languageId = 1L;
 
-        given(lessonService.getMainPageLessonsAboutLanguage(Mockito.anyLong(), Mockito.anyLong(), Mockito.any(Pageable.class)))
+        given(lessonService.getMainPageLessonsAboutLanguage(Mockito.anyLong(), Mockito.anyInt(), Mockito.any(Pageable.class)))
                 .willReturn(new PageImpl<>(mainPageResponse2));
 
         ResultActions actions =
@@ -289,9 +285,9 @@ public class GetMainPageLessonTest extends LessonControllerTest {
 
         actions.andExpect(status().isOk())
                 .andExpect(jsonPath("$.data[0].lessonId").value(lessonList.get(0).getId()))
-                .andExpect(jsonPath("$.data[0].languages[0]").value("Java"))
+                .andExpect(jsonPath("$.data[0].languages[0]").value("Javascript"))
                 .andExpect(jsonPath("$.data[0].languages[1]").value("Python"))
-                .andExpect(jsonPath("$.data[0].languages[2]").value("Javascript"))
+                .andExpect(jsonPath("$.data[0].languages[2]").value("Go"))
                 .andExpect(jsonPath("$.data[0].title").value(lessonList.get(0).getTitle()))
                 .andExpect(jsonPath("$.data[0].cost").value(lessonList.get(0).getCost()))
                 .andExpect(jsonPath("$.data[0].profileImage").value(lessonList.get(0).getProfileImage().getFilePath()))
@@ -304,9 +300,9 @@ public class GetMainPageLessonTest extends LessonControllerTest {
                 .andExpect(jsonPath("$.data[0].bookmark").value(true))
 
                 .andExpect(jsonPath("$.data[1].lessonId").value(lessonList.get(1).getId()))
-                .andExpect(jsonPath("$.data[1].languages[0]").value("Java"))
+                .andExpect(jsonPath("$.data[1].languages[0]").value("Javascript"))
                 .andExpect(jsonPath("$.data[1].languages[1]").value("Python"))
-                .andExpect(jsonPath("$.data[1].languages[2]").value("Javascript"))
+                .andExpect(jsonPath("$.data[1].languages[2]").value("Go"))
                 .andExpect(jsonPath("$.data[1].title").value(lessonList.get(1).getTitle()))
                 .andExpect(jsonPath("$.data[1].cost").value(lessonList.get(1).getCost()))
                 .andExpect(jsonPath("$.data[1].profileImage").value(lessonList.get(1).getProfileImage().getFilePath()))
