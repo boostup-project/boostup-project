@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 @Getter
 @NoArgsConstructor
 public class GetBookmark {
-    
+
     private Long bookmarkId;
 
     private Long lessonId;
