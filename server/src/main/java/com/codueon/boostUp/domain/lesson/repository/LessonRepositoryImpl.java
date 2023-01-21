@@ -100,6 +100,7 @@ public class LessonRepositoryImpl implements CustomLessonRepository {
                         lessonLanguage.lesson,
                         Expressions.constant(false)
                 )).from(lessonLanguage)
+                .leftJoin(lessonLanguage).on(lesson.id.eq(lessonLanguage.lesson.id))
                 .where(lessonLanguage.languageInfo.eq(LanguageInfo.findById(languageId)))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
@@ -128,6 +129,7 @@ public class LessonRepositoryImpl implements CustomLessonRepository {
                         lessonLanguage.lesson,
                         isBookmarked(lessonLanguage.lesson.id, memberId)
                 )).from(lessonLanguage)
+                .leftJoin(lessonLanguage).on(lesson.id.eq(lessonLanguage.lesson.id))
                 .where(lessonLanguage.languageInfo.eq(LanguageInfo.findById(languageId)))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
