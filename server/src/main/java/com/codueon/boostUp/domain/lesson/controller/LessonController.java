@@ -150,7 +150,7 @@ public class LessonController {
         JwtAuthenticationToken token = (JwtAuthenticationToken) authentication;
         Long memberId = getMemberIdIfExistToken(token);
 
-        return ResponseEntity.ok().body(lessonService.getLessonMypage(memberId););
+        return ResponseEntity.ok().body(lessonService.getLessonMypage(memberId));
     }
 
     /**
