@@ -1,0 +1,78 @@
+spring:
+  datasource:
+    url: ${AWS_RDS_SERVER_URL}
+    username: ${AWS_RDS_SERVER_ADMIN_ID}
+    password: ${AWS_RDS_SERVER_ADMIN_PASSWORD}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    database-platform: org.hibernate.dialect.MySQL8Dialect
+    generate-ddl: true
+    show-sql: true
+    hibernate:
+      ddl-auto: none
+
+feign:
+  client:
+    config:
+      default:
+        loggerLevel: FULL
+  logging:
+    url: https://discord.com/api/webhooks
+    service: ${DISCORD_SERVICE_LOGGING_URL}
+    server: ${DISCORD_SERVER_LOGGING_URL}
+
+cloud:
+  aws:
+    s3:
+      bucket: ${AWS_S3_BUCKET_NAME}
+    credentials:
+      accessKey: ${AWS_S3_BUCKET_ACCESS_KEY}
+      secretKey: ${AWS_S3_BUCKET_SECRET_KEY}
+    region:
+      static: ${AWS_S3_BUCKET_REGION}
+    stack:
+      auto: false
+
+redis:
+  host: ${AWS_REDIS_HOST_ADDRESS}
+  port: ${AWS_REDIS_PORT_NUMBER}
+
+kakao:
+  admin:
+    key: ${KAKAO_ADMIN_KEY}
+  host: https://kapi.kakao.com
+  uri:
+    pay-process: ${KAKAO_PAY_PROCESS_URL}
+  pay:
+    ready: ${KAKAO_PAY_READY_URL}
+    approve: ${KAKAO_PAY_APPROVE_URL}
+    cid: ${KAKAO_PAY_CID}
+    taxfree: ${KAKAO_PAY_TAX_FREE}
+    cancel: ${KAKAO_PAY_CANCEL_URL}
+    order: ${KAKAO_PAY_ORDER_URL}
+
+toss:
+  secret-key: ${TOSS_PAY_SECRET_KEY}
+
+jwt:
+  secret-key: ${JWT_SECRET_KEY}
+  access-token-expiration-minutes: ${JWT_ACCESS_TOKEN_EXPIRATION_MINUTES}
+  refresh-token-expiration-minutes: ${JWT_REFRESH_TOKEN_EXPIRATION_MINUTES}
+
+mail:
+  smtp:
+    auth: true
+    starttls:
+      required: true
+      enable: true
+    socketFactory:
+      class: javax.net.ssl.SSLSocketFactory
+      fallback: false
+      port: 465
+    port: 465
+  gmail-admin-id: ${MAIL_ADMIN_EMAIL}
+  gmail-admin-password: ${MAIL_ADMIN_PASSWORD}
+
+default:
+  image:
+    address: ${DEFAULT_IMAGE_URL}

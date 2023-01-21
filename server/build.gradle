@@ -76,8 +76,8 @@ dependencies {
 	asciidoctorExtensions 'org.springframework.restdocs:spring-restdocs-asciidoctor'
 
 	// DB
-	runtimeOnly 'com.h2database:h2'
-//    implementation 'mysql:mysql-connector-java'
+//	runtimeOnly 'com.h2database:h2'
+    implementation 'mysql:mysql-connector-java'
 	implementation "com.querydsl:querydsl-jpa:${queryDslVersion}"
 	implementation "com.querydsl:querydsl-apt:${queryDslVersion}"
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
@@ -87,6 +87,7 @@ dependencies {
 	// ETC
 	implementation 'org.springframework.boot:spring-boot-starter-mail'
 //	implementation group: 'io.awspring.cloud', name: 'spring-cloud-starter-aws-parameter-store-config'
+	implementation 'org.springframework.boot:spring-boot-starter-actuator' // server health check
 }
 
 dependencyManagement {
@@ -161,4 +162,11 @@ configurations {
 	querydsl.extendsFrom compileClasspath
 }
 
+bootJar {
+	mainClass = 'com.codueon.boostUp.BoostUpApplication'
+}
 
+bootRun {
+	String activeProfile = System.properties['spring.profiles.active']
+	systemProperty "spring.profiles.active", activeProfile
+}
