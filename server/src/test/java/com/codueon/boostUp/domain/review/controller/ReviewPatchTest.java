@@ -6,6 +6,8 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
+
+import static com.codueon.boostUp.global.security.utils.AuthConstants.*;
 import static org.mockito.Mockito.doNothing;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.patch;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
@@ -28,6 +30,8 @@ public class ReviewPatchTest extends ReviewControllerTest {
 
         ResultActions actions = mockMvc.perform(
                 patch("/review/{review-id}/edit", reviewId)
+                        .header(AUTHORIZATION, BEARER + accessToken)
+                        .header(REFRESH_TOKEN, refreshToken)
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
                         .with(csrf())

@@ -12,6 +12,8 @@ import java.util.Date;
 import static com.codueon.boostUp.domain.suggest.utils.SuggestConstants.*;
 import static com.codueon.boostUp.global.security.utils.AuthConstants.*;
 import static org.mockito.BDDMockito.given;
+import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
+import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
@@ -47,6 +49,10 @@ public class KakaoPaymentTest extends SuggestControllerTest{
                 .andDo(document("신청4.1-카카오결제요청",
                         pathParameters(
                                 parameterWithName("suggest-id").description("신청 식별자")
+                        ),
+                        requestHeaders(
+                                headerWithName(AUTHORIZATION).description("엑세스 토큰"),
+                                headerWithName(REFRESH_TOKEN).description("리프레시 토큰")
                         ),
                         responseFields(
                                 messageResponse()
@@ -219,6 +225,10 @@ public class KakaoPaymentTest extends SuggestControllerTest{
                 .andDo(document("신청9.1-카카오결제요청",
                         pathParameters(
                                 parameterWithName("suggest-id").description("신청 식별자")
+                        ),
+                        requestHeaders(
+                                headerWithName(AUTHORIZATION).description("엑세스 토큰"),
+                                headerWithName(REFRESH_TOKEN).description("리프레시 토큰")
                         )
                 ));
     }

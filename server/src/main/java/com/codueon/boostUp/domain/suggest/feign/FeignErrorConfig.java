@@ -8,7 +8,6 @@ import org.springframework.context.annotation.Bean;
 
 @Slf4j
 public class FeignErrorConfig {
-
     @Bean
     public ErrorDecoder errorDecoder() {
         return ((methodKey, response) -> {

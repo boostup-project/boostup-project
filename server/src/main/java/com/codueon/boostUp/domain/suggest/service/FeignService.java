@@ -24,7 +24,6 @@ import java.util.UUID;
 @Service
 @Transactional
 public class FeignService {
-
     @Value("${kakao.admin.key}")
     private String adminKey;
 
@@ -45,7 +44,6 @@ public class FeignService {
 
     @Autowired
     TossPayFeignClient tossPayFeignClient;
-
 
     /**
      * Kakao 결제 헤더 입력 메서드
@@ -212,7 +210,6 @@ public class FeignService {
      * @author LeeGoh
      */
     public RequestForTossPayCancelInfo setCancelBody(PaymentInfo paymentInfo) {
-
         Integer count = paymentInfo.getQuantity() - paymentInfo.getQuantityCount();
         Integer amount = paymentInfo.getAmount();
 
@@ -224,7 +221,6 @@ public class FeignService {
         } else return RequestForTossPayCancelInfo.builder()
                 .cancelReason("고객이 취소를 원함")
                 .build();
-
     }
 
     /**
@@ -234,8 +230,8 @@ public class FeignService {
      * @return KakaoPaySuccessInfo
      * @author LeeGoh
      */
-    public KakaoPaySuccessInfo getSuccessKakaoResponse(KakaoPayHeader headers, RequestForKakaoPayInfo params) {
-
+    public KakaoPaySuccessInfo getSuccessKakaoResponse(KakaoPayHeader headers,
+                                                       RequestForKakaoPayInfo params) {
         try {
             return kakaoFeignClient
                     .successForPayment(
@@ -248,7 +244,6 @@ public class FeignService {
             log.error(e.getMessage());
         }
         return null;
-
     }
 
     /**
@@ -258,8 +253,8 @@ public class FeignService {
      * @return TossPaySuccessInfo
      * @author LeeGoh
      */
-    public TossPaySuccessInfo getSuccessTossResponse(TossPayHeader headers, RequestForTossPayInfo body) {
-
+    public TossPaySuccessInfo getSuccessTossResponse(TossPayHeader headers,
+                                                     RequestForTossPayInfo body) {
         try {
             return tossPayFeignClient
                     .successForPayment(
@@ -271,11 +266,10 @@ public class FeignService {
             log.error(e.getMessage());
         }
         return null;
-
     }
 
-    public KakaoPayCancelInfo getCancelKakaoPaymentResponse(KakaoPayHeader headers, RequestForKakaoPayCancelInfo params) {
-
+    public KakaoPayCancelInfo getCancelKakaoPaymentResponse(KakaoPayHeader headers,
+                                                            RequestForKakaoPayCancelInfo params) {
         try {
             return kakaoFeignClient
                     .cancelForPayment(
@@ -288,7 +282,6 @@ public class FeignService {
             log.error(e.getMessage());
         }
         return null;
-
     }
 
     /**
@@ -313,7 +306,5 @@ public class FeignService {
             log.error(e.getMessage());
         }
         return null;
-
     }
-
 }

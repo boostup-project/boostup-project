@@ -6,36 +6,24 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Getter
 @NoArgsConstructor
 public class GetPaymentInfo {
-
     private String title;
-
     private String name;
-
     private List<String> languages;
-
     private List<String> address;
-
     private String company;
-
     private String profileImage;
-
     private Integer cost;
-
     private Integer totalCost;
-
     private Integer quantity;
-
 
     @Builder
     public GetPaymentInfo(Lesson lesson,
                           Integer totalCost,
                           Integer quantity ) {
-
         this.title = lesson.getTitle();
         this.name = lesson.getName();
         this.languages = lesson.getLanguageListAsString();
@@ -45,6 +33,5 @@ public class GetPaymentInfo {
         this.cost = lesson.getCost();
         this.totalCost = totalCost;
         this.quantity = quantity;
-
     }
 }

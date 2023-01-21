@@ -10,6 +10,8 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.codueon.boostUp.global.security.utils.AuthConstants.*;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
@@ -21,7 +23,6 @@ public class ReviewGetTest extends ReviewControllerTest {
     @Test
     @DisplayName("상세페이지 리뷰 전체 조회 메서드")
     public void getReviews() throws Exception {
-
         String image = "https://test.test.com/image/test.png";
         Long lessonId = 1L;
 
@@ -39,6 +40,8 @@ public class ReviewGetTest extends ReviewControllerTest {
         ResultActions actions =
                 mockMvc.perform(
                         get("/review/lesson/{lesson-id}", lessonId)
+                                .header(AUTHORIZATION, BEARER + accessToken)
+                                .header(REFRESH_TOKEN, refreshToken)
                                 .accept(MediaType.APPLICATION_JSON)
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .with(csrf())

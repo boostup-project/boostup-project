@@ -10,6 +10,7 @@ import org.mockito.Mockito;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
 
+import static com.codueon.boostUp.global.security.utils.AuthConstants.*;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -20,7 +21,6 @@ public class GetDetailPageLessonTest extends LessonControllerTest {
     @Test
     @DisplayName("과외 상세페이지 요약 정보 조회 테스트")
     void getLessonTest() throws Exception {
-
         GetLesson getLesson = GetLesson.builder()
                 .lesson(lesson)
                 .build();
@@ -30,15 +30,17 @@ public class GetDetailPageLessonTest extends LessonControllerTest {
         ResultActions actions =
                 mockMvc.perform(
                         get("/lesson/{lesson-id}", lesson.getId())
+                                .header(AUTHORIZATION, BEARER + accessToken)
+                                .header(REFRESH_TOKEN, refreshToken)
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .accept(MediaType.APPLICATION_JSON)
                 );
 
         actions.andExpect(status().isOk())
                 .andExpect(jsonPath("$.profileImage").value(lesson.getProfileImage().getFilePath()))
-                .andExpect(jsonPath("$.languages[0]").value("Java"))
+                .andExpect(jsonPath("$.languages[0]").value("Javascript"))
                 .andExpect(jsonPath("$.languages[1]").value("Python"))
-                .andExpect(jsonPath("$.languages[2]").value("Javascript"))
+                .andExpect(jsonPath("$.languages[2]").value("Go"))
                 .andExpect(jsonPath("$.name").value(lesson.getName()))
                 .andExpect(jsonPath("$.title").value(lesson.getTitle()))
                 .andExpect(jsonPath("$.company").value(lesson.getCompany()))
@@ -48,13 +50,11 @@ public class GetDetailPageLessonTest extends LessonControllerTest {
                 .andExpect(jsonPath("$.address[1]").value("강동구"))
                 .andExpect(jsonPath("$.address[2]").value("강북구"))
                 .andReturn();
-
     }
 
     @Test
     @DisplayName("과외 상세페이지 상세 정보 조회 테스트")
     void getLessonInfoTest() throws Exception {
-
         GetLessonInfo getLessonInfo = GetLessonInfo.builder()
                 .lessonInfo(lessonInfo)
                 .build();
@@ -63,6 +63,8 @@ public class GetDetailPageLessonTest extends LessonControllerTest {
 
         ResultActions actions =
                 mockMvc.perform(get("/lesson/{lesson-id}/detailInfo", lesson.getId())
+                        .header(AUTHORIZATION, BEARER + accessToken)
+                        .header(REFRESH_TOKEN, refreshToken)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
                 );
@@ -87,6 +89,8 @@ public class GetDetailPageLessonTest extends LessonControllerTest {
 
         ResultActions actions =
                 mockMvc.perform(get("/lesson/{lesson-id}/curriculum", lesson.getId())
+                        .header(AUTHORIZATION, BEARER + accessToken)
+                        .header(REFRESH_TOKEN, refreshToken)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
                 );

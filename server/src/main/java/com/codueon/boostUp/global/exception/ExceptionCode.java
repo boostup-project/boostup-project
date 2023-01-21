@@ -14,6 +14,7 @@ public enum ExceptionCode {
     SUGGEST_NOT_FOUND(415, "존재하지 않는 과외 신청 내역입니다."),
     LANGUAGE_NOT_FOUND(415, "존재하지 않는 언어입니다."),
     ADDRESS_NOT_FOUND(415, "존재하지 않는 주소입니다."),
+    STATUS_NOT_FOUND(415, "존재하지 않는 결제 상태입니다."),
     CHAT_NOT_FOUND(415, "존재하지 않는 메시지입니다."),
     CHATROOM_NOT_FOUND(415, "존재하지 않는 채팅방입니다."),
     EMAIL_NOT_FOUND(415, "이메일 정보를 다시 확인해주세요."),

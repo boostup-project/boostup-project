@@ -15,7 +15,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import static com.codueon.boostUp.domain.suggest.entity.Suggest.SuggestStatus.END_OF_LESSON;
 
 @Slf4j
 @Service

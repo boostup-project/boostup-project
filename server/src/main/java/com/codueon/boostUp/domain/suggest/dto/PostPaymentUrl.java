@@ -7,12 +7,10 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 public class PostPaymentUrl {
-
     private Integer quantity;
 
     @Builder
     public PostPaymentUrl(Integer quantity) {
         this.quantity = quantity;
     }
-
 }

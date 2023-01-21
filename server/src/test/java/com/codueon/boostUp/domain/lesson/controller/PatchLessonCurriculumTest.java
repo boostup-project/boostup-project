@@ -11,12 +11,11 @@ import org.springframework.test.web.servlet.ResultActions;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static com.codueon.boostUp.global.security.utils.AuthConstants.*;
 import static org.mockito.Mockito.doNothing;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.multipart;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.patch;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
@@ -43,8 +42,8 @@ public class PatchLessonCurriculumTest extends LessonControllerTest {
         ResultActions actions =
                 mockMvc.perform(
                         patch("/lesson/{lesson-id}/curriculum/modification", lessonId)
-//                                .header(AUTHORIZATION, "Bearer " + accessToken)
-//                                .header(Media.APPLICATION_JSON)
+                                .header(AUTHORIZATION, BEARER + accessToken)
+                                .header(REFRESH_TOKEN, refreshToken)
                                 .accept(MediaType.APPLICATION_JSON)
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(content)
@@ -56,10 +55,10 @@ public class PatchLessonCurriculumTest extends LessonControllerTest {
                 .andDo(document("과외 커리큘럼 수정",
 //                        getRequestPreProcessor(),
 //                        getResponsePreProcessor(),
-//                        requestHeaders(
-//                                headerWithName(AUTHORIZATION).description("엑세스 토큰"),
-//                                headerWithName(REFRESH).description("리프레시 토큰")
-//                        ),
+                        requestHeaders(
+                                headerWithName(AUTHORIZATION).description("엑세스 토큰"),
+                                headerWithName(REFRESH_TOKEN).description("리프레시 토큰")
+                        ),
                         pathParameters(
                                 parameterWithName("lesson-id").description("과외 식별자")
                         ),

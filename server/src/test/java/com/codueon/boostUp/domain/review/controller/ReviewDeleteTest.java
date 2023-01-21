@@ -6,6 +6,7 @@ import org.mockito.Mockito;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
 
+import static com.codueon.boostUp.global.security.utils.AuthConstants.*;
 import static org.mockito.Mockito.doNothing;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.delete;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
@@ -21,6 +22,8 @@ public class ReviewDeleteTest extends ReviewControllerTest {
 
         ResultActions actions = mockMvc.perform(
                 delete("/review/{review-id}", reviewId)
+                        .header(AUTHORIZATION, BEARER + accessToken)
+                        .header(REFRESH_TOKEN, refreshToken)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
                         .with(csrf())

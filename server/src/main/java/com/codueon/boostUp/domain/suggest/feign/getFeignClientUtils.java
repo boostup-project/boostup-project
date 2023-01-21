@@ -13,7 +13,6 @@ import java.nio.charset.StandardCharsets;
 @Slf4j
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class getFeignClientUtils {
-
     public static String getRequestBody(Response response) {
         if (response.request().body() == null) return "";
         return new String(response.request().body(), StandardCharsets.UTF_8);
