@@ -15,6 +15,8 @@ import java.util.stream.Collectors;
 @NoArgsConstructor
 public class GetBookmark {
 
+    // 테스트용 주석
+
     private Long bookmarkId;
 
     private Long lessonId;
