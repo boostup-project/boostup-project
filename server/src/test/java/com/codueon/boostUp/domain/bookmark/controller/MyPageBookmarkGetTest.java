@@ -11,6 +11,8 @@ import org.springframework.test.web.servlet.ResultActions;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.codueon.boostUp.global.security.utils.AuthConstants.*;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
@@ -35,6 +37,8 @@ public class MyPageBookmarkGetTest extends BookmarkControllerTest {
 
         ResultActions actions = mockMvc.perform(
                 get("/bookmark")
+                        .header(AUTHORIZATION, BEARER + accessToken)
+                        .header(REFRESH_TOKEN, refreshToken)
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
                         .with(csrf())
@@ -48,7 +52,7 @@ public class MyPageBookmarkGetTest extends BookmarkControllerTest {
                 .andExpect(jsonPath("$.data[0].title").value(bookmarkInfo.getTitle()))
                 .andExpect(jsonPath("$.data[0].name").value(bookmarkInfo.getName()))
                 .andExpect(jsonPath("$.data[0].cost").value(bookmarkInfo.getCost()))
-                .andExpect(jsonPath("$.data[0].languages[0]").value("Java"))
+                .andExpect(jsonPath("$.data[0].languages[0]").value("Javascript"))
                 .andExpect(jsonPath("$.data[0].address[0]").value("강남구"))
                 .andReturn();
     }

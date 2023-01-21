@@ -14,6 +14,8 @@ import java.util.List;
 
 import static com.codueon.boostUp.global.security.utils.AuthConstants.*;
 import static org.mockito.Mockito.doNothing;
+import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
+import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
@@ -56,6 +58,10 @@ public class SuggestPostTest extends SuggestControllerTest{
                         pathParameters(
                                 parameterWithName("lesson-id").description("과외 식별자")
                         ),
+                        requestHeaders(
+                                headerWithName(AUTHORIZATION).description("엑세스 토큰"),
+                                headerWithName(REFRESH_TOKEN).description("리프레시 토큰")
+                        ),
                         requestFields(
                                 List.of(
                                         fieldWithPath("days").type(JsonFieldType.STRING).description("희망 요일"),
@@ -92,6 +98,10 @@ public class SuggestPostTest extends SuggestControllerTest{
                         pathParameters(
                                 parameterWithName("suggest-id").description("신청 식별자")
                         ),
+                        requestHeaders(
+                                headerWithName(AUTHORIZATION).description("엑세스 토큰"),
+                                headerWithName(REFRESH_TOKEN).description("리프레시 토큰")
+                        ),
                         requestFields(
                                 fieldWithPath("quantity").type(JsonFieldType.NUMBER).description("과외 횟수")
                         )
@@ -123,6 +133,10 @@ public class SuggestPostTest extends SuggestControllerTest{
                 .andDo(document("신청2.2-신청거절",
                         pathParameters(
                                 parameterWithName("suggest-id").description("신청 식별자")
+                        ),
+                        requestHeaders(
+                                headerWithName(AUTHORIZATION).description("엑세스 토큰"),
+                                headerWithName(REFRESH_TOKEN).description("리프레시 토큰")
                         ),
                         requestFields(
                                 fieldWithPath("reason").type(JsonFieldType.STRING).description("거절 사유")

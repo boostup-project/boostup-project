@@ -13,6 +13,8 @@ import java.util.List;
 import static com.codueon.boostUp.domain.suggest.utils.SuggestConstants.*;
 import static com.codueon.boostUp.global.security.utils.AuthConstants.*;
 import static org.mockito.BDDMockito.given;
+import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
+import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
@@ -58,6 +60,10 @@ public class TossPaymentTest extends SuggestControllerTest{
                         pathParameters(
                                 parameterWithName("suggest-id").description("신청 식별자"),
                                 parameterWithName("payment-id").description("결제 정보 식별자")
+                        ),
+                        requestHeaders(
+                                headerWithName(AUTHORIZATION).description("엑세스 토큰"),
+                                headerWithName(REFRESH_TOKEN).description("리프레시 토큰")
                         ),
                         responseFields(
                                 messageResponse()
@@ -186,6 +192,10 @@ public class TossPaymentTest extends SuggestControllerTest{
                 .andDo(document("신청9.2-토스결제환불",
                         pathParameters(
                                 parameterWithName("suggest-id").description("신청 식별자")
+                        ),
+                        requestHeaders(
+                                headerWithName(AUTHORIZATION).description("엑세스 토큰"),
+                                headerWithName(REFRESH_TOKEN).description("리프레시 토큰")
                         )
                 ));
     }

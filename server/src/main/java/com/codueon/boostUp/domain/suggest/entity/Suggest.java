@@ -1,5 +1,6 @@
 package com.codueon.boostUp.domain.suggest.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -12,34 +13,27 @@ import java.time.LocalDateTime;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Suggest {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "SUGGEST_ID")
     private Long id;
-
     private String days;
-
     private String languages;
 
     @Column(length = 500)
     private String requests;
 
     @Enumerated(value = EnumType.STRING)
-    private SuggestStatus status = SuggestStatus.ACCEPT_IN_PROGRESS;
+    private SuggestStatus suggestStatus;
 
     private Long lessonId;
-
     private Long memberId;
-
     private Integer totalCost;
-
     private LocalDateTime startTime;
-
     private LocalDateTime endTime;
-
     private String paymentMethod;
 
+    @JsonBackReference
     @OneToOne(mappedBy = "suggest", cascade = CascadeType.REMOVE)
     private PaymentInfo paymentInfo;
 
@@ -79,26 +73,7 @@ public class Suggest {
     }
 
     public void setStatus(SuggestStatus status) {
-        this.status = status;
-    }
-
-    public enum SuggestStatus{
-        ACCEPT_IN_PROGRESS(1, "수락 대기 중"),
-        PAY_IN_PROGRESS(2, "결제 대기 중"), // 결제 취소, 결제 실패 포함
-        DURING_LESSON(3, "과외 중"), // == 결제 완료
-        END_OF_LESSON(4, "과외 종료"),
-        REFUND_PAYMENT(5, "환불 완료");
-
-        @Getter
-        private int stepNumber;
-
-        @Getter
-        private String status;
-
-        SuggestStatus(int stepNumber, String status) {
-            this.stepNumber = stepNumber;
-            this.status = status;
-        }
+        this.suggestStatus = status;
     }
 
     public void addPaymentInfo(PaymentInfo paymentInfo) {

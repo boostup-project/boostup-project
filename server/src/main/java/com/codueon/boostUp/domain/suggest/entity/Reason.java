@@ -11,16 +11,12 @@ import javax.persistence.*;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Reason {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "REASON_ID")
     private Long id;
-
     private String reason;
-
     private Long suggestId;
-
     private Long lessonId;
 
     @Builder

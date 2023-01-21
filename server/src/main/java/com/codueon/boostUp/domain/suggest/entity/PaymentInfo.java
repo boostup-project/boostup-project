@@ -2,6 +2,7 @@ package com.codueon.boostUp.domain.suggest.entity;
 
 import com.codueon.boostUp.domain.suggest.kakao.ReadyToKakaoPayInfo;
 import com.codueon.boostUp.domain.suggest.toss.ReadyToTossPayInfo;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -48,6 +49,7 @@ public class PaymentInfo {
     /* -------------------- */
 
     @OneToOne
+    @JsonManagedReference
     @JoinColumn(name = "SUGGEST_ID")
     private Suggest suggest;
 

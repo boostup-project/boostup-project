@@ -13,6 +13,7 @@ import org.springframework.test.web.servlet.ResultActions;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 
+import static com.codueon.boostUp.global.security.utils.AuthConstants.*;
 import static org.mockito.Mockito.doNothing;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
@@ -28,7 +29,6 @@ class PostLessonDetailEditTest extends LessonControllerTest {
     @Test
     @DisplayName("과외 상세 수정")
     void updateLessonDetail() throws Exception {
-
         Long lessonId = 1L;
 
         PostLessonDetailEdit data = PostLessonDetailEdit.builder()
@@ -51,21 +51,21 @@ class PostLessonDetailEditTest extends LessonControllerTest {
                         multipart("/lesson/{lesson-id}/detailInfo/modification", lessonId)
                                 .file(careerImage)
                                 .file(new MockMultipartFile("data", "", "application/json", content.getBytes(StandardCharsets.UTF_8)))
+                                .header(AUTHORIZATION, BEARER + accessToken)
+                                .header(REFRESH_TOKEN, refreshToken)
                                 .contentType(MediaType.MULTIPART_FORM_DATA)
                                 .accept(MediaType.APPLICATION_JSON)
                                 .content(content)
-//                                .header(AUTHORIZATION, "Bearer " + accessToken)
-//                                .header(REFRESH, refreshToken)
                                 .with(csrf())
                 );
         actions
                 .andExpect(status().isOk())
                 .andDo(document(
                         "과외 상세 수정",
-//                        requestHeaders(
-//                                headerWithName(AUTHORIZATION).description("액세스 토큰"),
-//                                headerWithName(REFRESH).description("리프레시 토큰")
-//                        ),
+                        requestHeaders(
+                                headerWithName(AUTHORIZATION).description("액세스 토큰"),
+                                headerWithName(REFRESH_TOKEN).description("리프레시 토큰")
+                        ),
                         requestFields(
                                 List.of(
                                         fieldWithPath("introduction").type(JsonFieldType.STRING).description("한줄 소개"),

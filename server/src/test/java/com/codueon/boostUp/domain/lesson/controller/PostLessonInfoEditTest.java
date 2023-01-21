@@ -13,7 +13,9 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.codueon.boostUp.global.security.utils.AuthConstants.*;
 import static org.mockito.Mockito.doNothing;
+import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.multipart;
@@ -27,16 +29,15 @@ class PostLessonInfoEditTest extends LessonControllerTest {
     @Test
     @DisplayName("과외 요약 수정")
     void updateLesson() throws Exception {
-
         Long lessonId = 1L;
 
-        List<Long> languageList = new ArrayList<>();
-        List<Long> addressList = new ArrayList<>();
+        List<Integer> languageList = new ArrayList<>();
+        List<Integer> addressList = new ArrayList<>();
 
-        languageList.add(2L);
-        addressList.add(2L);
+        languageList.add(2);
+        addressList.add(2);
 
-        com.codueon.boostUp.domain.lesson.dto.PostLessonInfoEdit data = com.codueon.boostUp.domain.lesson.dto.PostLessonInfoEdit.builder()
+        PostLessonInfoEdit data = PostLessonInfoEdit.builder()
                 .languages(languageList)
                 .title("우아한 형제들 가자!!")
                 .company( "카카오페이")
@@ -57,21 +58,21 @@ class PostLessonInfoEditTest extends LessonControllerTest {
                         multipart("/lesson/{lesson-id}/modification", lessonId)
                                 .file(profileImage)
                                 .file(new MockMultipartFile("data", "","application/json", content.getBytes(StandardCharsets.UTF_8)))
+                                .header(AUTHORIZATION, BEARER + accessToken)
+                                .header(REFRESH_TOKEN, refreshToken)
                                 .contentType(MediaType.MULTIPART_FORM_DATA)
                                 .accept(MediaType.APPLICATION_JSON)
                                 .content(content)
-//                                .header(AUTHORIZATION, "Bearer " + accessToken)
-//                                .header(REFRESH, refreshToken)
                                 .with(csrf())
                 );
         actions
                 .andExpect(status().isOk())
                 .andDo(document(
                         "과외 요약 수정",
-//                        requestHeaders(
-//                                headerWithName(AUTHORIZATION).description("액세스 토큰"),
-//                                headerWithName(REFRESH).description("리프레시 토큰")
-//                        ),
+                        requestHeaders(
+                                headerWithName(AUTHORIZATION).description("액세스 토큰"),
+                                headerWithName(REFRESH_TOKEN).description("리프레시 토큰")
+                        ),
                         requestFields(
                                 List.of(
                                         fieldWithPath("languages").type(JsonFieldType.ARRAY).description("가능 언어"),

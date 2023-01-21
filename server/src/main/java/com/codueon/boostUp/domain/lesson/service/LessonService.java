@@ -2,10 +2,6 @@ package com.codueon.boostUp.domain.lesson.service;
 
 import com.codueon.boostUp.domain.bookmark.repository.BookmarkRepository;
 import com.codueon.boostUp.domain.lesson.dto.*;
-import com.codueon.boostUp.domain.lesson.dto.PatchLessonCurriculum;
-import com.codueon.boostUp.domain.lesson.dto.PostLesson;
-import com.codueon.boostUp.domain.lesson.dto.PostLessonDetailEdit;
-import com.codueon.boostUp.domain.lesson.dto.PostLessonInfoEdit;
 import com.codueon.boostUp.domain.lesson.entity.Curriculum;
 import com.codueon.boostUp.domain.lesson.entity.Lesson;
 import com.codueon.boostUp.domain.lesson.entity.LessonInfo;
@@ -17,7 +13,6 @@ import com.codueon.boostUp.domain.reveiw.service.ReviewService;
 import com.codueon.boostUp.domain.suggest.entity.Suggest;
 import com.codueon.boostUp.domain.suggest.service.SuggestDbService;
 import com.codueon.boostUp.global.exception.BusinessLogicException;
-import com.codueon.boostUp.global.exception.ExceptionCode;
 import com.codueon.boostUp.global.file.AwsS3Service;
 import com.codueon.boostUp.global.file.FileHandler;
 import com.codueon.boostUp.global.file.UploadFile;
@@ -30,7 +25,10 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
 import java.util.List;
-import java.util.Optional;
+
+import static com.codueon.boostUp.domain.suggest.entity.SuggestStatus.*;
+import static com.codueon.boostUp.global.exception.ExceptionCode.NOT_ACCEPT_SUGGEST;
+import static com.codueon.boostUp.global.exception.ExceptionCode.NOT_PAY_SUCCESS;
 
 
 @Service
@@ -171,8 +169,10 @@ public class LessonService {
                                 PostLesson postLesson,
                                 List<MultipartFile> careerImage) {
         LessonInfo lessonInfo = LessonInfo.toEntity(savedLesson.getId(), postLesson);
+
         String dir = "careerImage";
         List<UploadFile> careerImages = awsS3Service.uploadFileList(careerImage, dir);
+
         lessonDbService.saveCareerImage(careerImages, lessonInfo);
         lessonDbService.saveLessonInfo(lessonInfo);
     }
@@ -251,9 +251,11 @@ public class LessonService {
                                  MultipartFile profileImage) {
         Member findMember = memberDbService.ifExistsReturnMember(memberId);
         Lesson updateLesson = lessonDbService.ifExistsReturnLesson(lessonId);
+
 //        if (!Objects.equals(updateLesson.getMemberId(), findMember)) {
 //            throw new BusinessLogicException(ExceptionCode.UNAUTHORIZED_FOR_UPDATE);
 //        }
+
         String dir = "profileImage";
         updateLesson.editLessonInfo(postLessonInfoEdit);
         ProfileImage profileImage1 = updateLesson.getProfileImage();
@@ -292,7 +294,6 @@ public class LessonService {
         Member findMember = memberDbService.ifExistsReturnMember(memberId);
         LessonInfo updateLessonDetail = lessonDbService.ifExsitsReturnLessonInfo(lessonId);
 
-
         updateLessonDetail.editLessonDetail(postLessonDetailEdit);
         List<UploadFile> uploadFileList = fileHandler.parseUploadFileInfo(careerImage);
         lessonDbService.editCareerImage(uploadFileList, updateLessonDetail);
@@ -314,9 +315,11 @@ public class LessonService {
                                    List<MultipartFile> careerImage) {
         Member findMember = memberDbService.ifExistsReturnMember(memberId);
         LessonInfo updateLessonDetail = lessonDbService.ifExsitsReturnLessonInfo(lessonId);
+
         //        if (!Objects.equals(updateLessonDetail.getMemberId(), findMember)) {
 //            throw new BusinessLogicException(ExceptionCode.UNAUTHORIZED_FOR_UPDATE);
 //        }
+
         String dir = "careerImage";
         updateLessonDetail.getCareerImages().forEach(careerImage1 -> awsS3Service.delete(careerImage1.getFileName(), dir));
         updateLessonDetail.editLessonDetail(postLessonDetailEdit);
@@ -361,12 +364,12 @@ public class LessonService {
         bookmarkRepository.deleteByLessonId(lessonId);
 
         for (Suggest suggest : findSuggest) {
-            if (suggest.getStatus().equals(Suggest.SuggestStatus.ACCEPT_IN_PROGRESS)) {
-                throw new BusinessLogicException(ExceptionCode.NOT_ACCEPT_SUGGEST);
-            } else if (suggest.getStatus().equals(Suggest.SuggestStatus.DURING_LESSON)) {
-                throw new BusinessLogicException(ExceptionCode.NOT_PAY_SUCCESS);
-            } else if (suggest.getStatus().equals(Suggest.SuggestStatus.PAY_IN_PROGRESS)) {
-                throw new BusinessLogicException(ExceptionCode.NOT_PAY_SUCCESS);
+            if (suggest.getSuggestStatus().equals(ACCEPT_IN_PROGRESS)) {
+                throw new BusinessLogicException(NOT_ACCEPT_SUGGEST);
+            } else if (suggest.getSuggestStatus().equals(DURING_LESSON)) {
+                throw new BusinessLogicException(NOT_PAY_SUCCESS);
+            } else if (suggest.getSuggestStatus().equals(PAY_IN_PROGRESS)) {
+                throw new BusinessLogicException(NOT_PAY_SUCCESS);
             }
         }
         lessonDbService.deleteLesson(findLesson);
@@ -392,12 +395,12 @@ public class LessonService {
         bookmarkRepository.deleteByLessonId(lessonId);
 
         for (Suggest suggest : findSuggest) {
-            if (suggest.getStatus().equals(Suggest.SuggestStatus.ACCEPT_IN_PROGRESS)) {
-                throw new BusinessLogicException(ExceptionCode.NOT_ACCEPT_SUGGEST);
-            } else if (suggest.getStatus().equals(Suggest.SuggestStatus.DURING_LESSON)) {
-                throw new BusinessLogicException(ExceptionCode.NOT_PAY_SUCCESS);
-            } else if (suggest.getStatus().equals(Suggest.SuggestStatus.PAY_IN_PROGRESS)) {
-                throw new BusinessLogicException(ExceptionCode.NOT_PAY_SUCCESS);
+            if (suggest.getSuggestStatus().equals(ACCEPT_IN_PROGRESS)) {
+                throw new BusinessLogicException(NOT_ACCEPT_SUGGEST);
+            } else if (suggest.getSuggestStatus().equals(DURING_LESSON)) {
+                throw new BusinessLogicException(NOT_PAY_SUCCESS);
+            } else if (suggest.getSuggestStatus().equals(PAY_IN_PROGRESS)) {
+                throw new BusinessLogicException(NOT_PAY_SUCCESS);
             }
         }
         

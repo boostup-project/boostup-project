@@ -14,5 +14,4 @@ public class Cancels {
     private Integer cancelAmount;
     private String canceledAt;
     private String transactionKey;
-
 }

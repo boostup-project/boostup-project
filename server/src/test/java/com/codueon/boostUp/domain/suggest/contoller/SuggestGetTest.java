@@ -57,15 +57,19 @@ public class SuggestGetTest extends SuggestControllerTest{
                 .andExpect(jsonPath("$.profileImage").value(getPaymentInfo.getProfileImage()))
                 .andExpect(jsonPath("$.cost").value(getPaymentInfo.getCost()))
                 .andExpect(jsonPath("$.totalCost").value(getPaymentInfo.getTotalCost()))
-                .andExpect(jsonPath("$.languages[0]").value("Java"))
+                .andExpect(jsonPath("$.languages[0]").value("Javascript"))
                 .andExpect(jsonPath("$.languages[1]").value("Python"))
-                .andExpect(jsonPath("$.languages[2]").value("Javascript"))
+                .andExpect(jsonPath("$.languages[2]").value("Go"))
                 .andExpect(jsonPath("$.address[0]").value("강남구"))
                 .andExpect(jsonPath("$.address[1]").value("강동구"))
                 .andExpect(jsonPath("$.address[2]").value("강북구"))
                 .andDo(document("신청3-결제페이지",
                         pathParameters(
                                 parameterWithName("suggest-id").description("신청 식별자")
+                        ),
+                        requestHeaders(
+                                headerWithName(AUTHORIZATION).description("엑세스 토큰"),
+                                headerWithName(REFRESH_TOKEN).description("리프레시 토큰")
                         ),
                         responseFields(
                                 getPaymentInfoResponse()
@@ -89,6 +93,10 @@ public class SuggestGetTest extends SuggestControllerTest{
                 .andDo(document("신청8-과외종료",
                         pathParameters(
                                 parameterWithName("suggest-id").description("신청 식별자")
+                        ),
+                        requestHeaders(
+                                headerWithName(AUTHORIZATION).description("엑세스 토큰"),
+                                headerWithName(REFRESH_TOKEN).description("리프레시 토큰")
                         )
                 ));
     }
@@ -121,19 +129,19 @@ public class SuggestGetTest extends SuggestControllerTest{
                 .andExpect(jsonPath("$.profileImage").value(response.getProfileImage()))
                 .andExpect(jsonPath("$.cost").value(response.getCost()))
                 .andExpect(jsonPath("$.totalCost").value(response.getTotalCost()))
-                .andExpect(jsonPath("$.languages[0]").value("Java"))
+                .andExpect(jsonPath("$.languages[0]").value("Javascript"))
                 .andExpect(jsonPath("$.languages[1]").value("Python"))
-                .andExpect(jsonPath("$.languages[2]").value("Javascript"))
+                .andExpect(jsonPath("$.languages[2]").value("Go"))
                 .andExpect(jsonPath("$.address[0]").value("강남구"))
                 .andExpect(jsonPath("$.address[1]").value("강동구"))
                 .andExpect(jsonPath("$.address[2]").value("강북구"))
                 .andDo(document("환불영수증조회",
+                        pathParameters(
+                                parameterWithName("suggest-id").description("신청 식별자")
+                        ),
                         requestHeaders(
                                 headerWithName(AUTHORIZATION).description("엑세스 토큰"),
                                 headerWithName(REFRESH_TOKEN).description("리프레시 토큰")
-                        ),
-                        pathParameters(
-                                parameterWithName("suggest-id").description("신청 식별자")
                         ),
                         responseFields(
                                 getRefundPaymentInfoResponse()
@@ -169,6 +177,10 @@ public class SuggestGetTest extends SuggestControllerTest{
                         pathParameters(
                                 parameterWithName("suggest-id").description("신청 식별자")
                         ),
+                        requestHeaders(
+                                headerWithName(AUTHORIZATION).description("엑세스 토큰"),
+                                headerWithName(REFRESH_TOKEN).description("리프레시 토큰")
+                        ),
                         responseFields(
                                 List.of(
                                         fieldWithPath("quantity").type(JsonFieldType.NUMBER).description("과외 횟수"),
@@ -198,6 +210,10 @@ public class SuggestGetTest extends SuggestControllerTest{
                 .andDo(document("출석부2-출석인정",
                         pathParameters(
                                 parameterWithName("suggest-id").description("신청 식별자")
+                        ),
+                        requestHeaders(
+                                headerWithName(AUTHORIZATION).description("엑세스 토큰"),
+                                headerWithName(REFRESH_TOKEN).description("리프레시 토큰")
                         )
                 ));
     }
@@ -221,6 +237,10 @@ public class SuggestGetTest extends SuggestControllerTest{
                 .andDo(document("출석부3-출석인정취소",
                         pathParameters(
                                 parameterWithName("suggest-id").description("신청 식별자")
+                        ),
+                        requestHeaders(
+                                headerWithName(AUTHORIZATION).description("엑세스 토큰"),
+                                headerWithName(REFRESH_TOKEN).description("리프레시 토큰")
                         )
                 ));
     }
@@ -253,15 +273,19 @@ public class SuggestGetTest extends SuggestControllerTest{
                 .andExpect(jsonPath("$.profileImage").value(getPaymentInfo.getProfileImage()))
                 .andExpect(jsonPath("$.cost").value(getPaymentInfo.getCost()))
                 .andExpect(jsonPath("$.totalCost").value(totalCost))
-                .andExpect(jsonPath("$.languages[0]").value("Java"))
+                .andExpect(jsonPath("$.languages[0]").value("Javascript"))
                 .andExpect(jsonPath("$.languages[1]").value("Python"))
-                .andExpect(jsonPath("$.languages[2]").value("Javascript"))
+                .andExpect(jsonPath("$.languages[2]").value("Go"))
                 .andExpect(jsonPath("$.address[0]").value("강남구"))
                 .andExpect(jsonPath("$.address[1]").value("강동구"))
                 .andExpect(jsonPath("$.address[2]").value("강북구"))
                 .andDo(document("결제영수증조회",
                         pathParameters(
                                 parameterWithName("suggest-id").description("신청 식별자")
+                        ),
+                        requestHeaders(
+                                headerWithName(AUTHORIZATION).description("엑세스 토큰"),
+                                headerWithName(REFRESH_TOKEN).description("리프레시 토큰")
                         ),
                         responseFields(
                                 getPaymentReceiptResponse()
@@ -274,8 +298,18 @@ public class SuggestGetTest extends SuggestControllerTest{
     void getTutorSuggest() throws Exception{
         int tabId = 1;
 
+        GetTutorSuggest getTutorSuggest = GetTutorSuggest.builder()
+                .suggestId(suggest.getId())
+                .days(suggest.getDays())
+                .languages(suggest.getLanguages())
+                .requests(suggest.getRequests())
+                .status(suggest.getSuggestStatus())
+                .lessonId(lesson.getId())
+                .name(lesson.getName())
+                .build();
+
         List<GetTutorSuggest> suggestList = new ArrayList<>();
-        suggestList.add(new GetTutorSuggest(suggest, lesson.getId(), lesson.getName()));
+        suggestList.add(getTutorSuggest);
 
         given(suggestDbService.getTutorSuggestsOnMyPage(Mockito.anyLong(), Mockito.anyLong(), Mockito.anyInt(), Mockito.any(Pageable.class)))
                 .willReturn(new PageImpl<>(suggestList));
@@ -302,6 +336,10 @@ public class SuggestGetTest extends SuggestControllerTest{
                                 parameterWithName("lesson-id").description("과외 식별자"),
                                 parameterWithName("tab-id").description("탭 식별자")
                         ),
+                        requestHeaders(
+                                headerWithName(AUTHORIZATION).description("엑세스 토큰"),
+                                headerWithName(REFRESH_TOKEN).description("리프레시 토큰")
+                        ),
                         responseFields(
                                 getTutorSuggestResponse()
                         )
@@ -313,8 +351,16 @@ public class SuggestGetTest extends SuggestControllerTest{
     void getStudentSuggest() throws Exception{
         lesson.addProfileImage(profileImage);
 
+        GetStudentSuggest getStudentSuggest = GetStudentSuggest.builder()
+                .suggestId(suggest.getId())
+                .lesson(lesson)
+                .status(suggest.getSuggestStatus())
+                .startTime(suggest.getStartTime())
+                .endTime(suggest.getEndTime())
+                .build();
+
         List<GetStudentSuggest> suggestList = new ArrayList<>();
-        suggestList.add(new GetStudentSuggest(suggest, lesson));
+        suggestList.add(getStudentSuggest);
 
         given(suggestDbService.getStudentSuggestsOnMyPage(Mockito.anyLong(), Mockito.any()))
                 .willReturn(new PageImpl<>(suggestList));
@@ -336,15 +382,17 @@ public class SuggestGetTest extends SuggestControllerTest{
                 .andExpect(jsonPath("$.data[0].career").value(suggestList.get(0).getCareer()))
                 .andExpect(jsonPath("$.data[0].cost").value(suggestList.get(0).getCost()))
                 .andExpect(jsonPath("$.data[0].status").value(suggestList.get(0).getStatus()))
-                .andExpect(jsonPath("$.data[0].startTime").value(suggestList.get(0).getStartTime()))
-                .andExpect(jsonPath("$.data[0].endTime").value(suggestList.get(0).getEndTime()))
-                .andExpect(jsonPath("$.data[0].languages[0]").value("Java"))
+                .andExpect(jsonPath("$.data[0].languages[0]").value("Javascript"))
                 .andExpect(jsonPath("$.data[0].languages[1]").value("Python"))
-                .andExpect(jsonPath("$.data[0].languages[2]").value("Javascript"))
+                .andExpect(jsonPath("$.data[0].languages[2]").value("Go"))
                 .andExpect(jsonPath("$.data[0].address[0]").value("강남구"))
                 .andExpect(jsonPath("$.data[0].address[1]").value("강동구"))
                 .andExpect(jsonPath("$.data[0].address[2]").value("강북구"))
                 .andDo(document("신청내역조회(학생)",
+                        requestHeaders(
+                                headerWithName(AUTHORIZATION).description("엑세스 토큰"),
+                                headerWithName(REFRESH_TOKEN).description("리프레시 토큰")
+                        ),
                         responseFields(
                                 getStudentSuggestResponse()
                         )

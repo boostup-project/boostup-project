@@ -37,5 +37,4 @@ public class KakaoPaySuccessInfo {
     public void setOrderStatus(String orderStatus) {
         this.orderStatus = orderStatus;
     }
-
 }

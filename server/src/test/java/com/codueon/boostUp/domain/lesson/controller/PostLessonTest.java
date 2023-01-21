@@ -1,7 +1,6 @@
 package com.codueon.boostUp.domain.lesson.controller;
 
 import com.codueon.boostUp.domain.lesson.dto.PostLesson;
-import org.apache.tomcat.util.http.parser.Authorization;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -14,7 +13,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.codueon.boostUp.global.security.utils.AuthConstants.AUTHORIZATION;
+import static com.codueon.boostUp.global.security.utils.AuthConstants.*;
 import static org.mockito.Mockito.doNothing;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
@@ -24,17 +23,15 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWit
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.testcontainers.shaded.com.google.common.net.HttpHeaders.REFRESH;
 
 public class PostLessonTest extends LessonControllerTest{
     @Test
     @DisplayName("Post 과외 생성")
     void postLesson() throws Exception {
-
-        List<Long> laungaueList = new ArrayList<>();
-        List<Long> addressList = new ArrayList<>();
-        laungaueList.add(1L);
-        addressList.add(1L);
+        List<Integer> laungaueList = new ArrayList<>();
+        List<Integer> addressList = new ArrayList<>();
+        laungaueList.add(1);
+        addressList.add(1);
 
         PostLesson data = PostLesson.builder()
                 .title("자바가 제일 쉬울 수도 있고 어려울 수도 있습니다")
@@ -55,6 +52,7 @@ public class PostLessonTest extends LessonControllerTest{
                 new MockMultipartFile("profileImage", "test.jpg", "image/jpg", "<<jpg data>>".getBytes());
         MockMultipartFile careerImage =
                 new MockMultipartFile("careerImage", "test1.jpg", "image/jpg", "<<jpg data>>".getBytes());
+
         String content = gson.toJson(data);
         doNothing().when(lessonService).createLesson(Mockito.any(PostLesson.class), Mockito.anyLong(), Mockito.any(), Mockito.anyList());
 
@@ -66,8 +64,8 @@ public class PostLessonTest extends LessonControllerTest{
                                 .file(new MockMultipartFile("data","", "application/json", content.getBytes(StandardCharsets.UTF_8) ))
                                 .contentType(MediaType.MULTIPART_FORM_DATA)
                                 .accept(MediaType.APPLICATION_JSON)
-//                                .header((AUTHORIZATION, "Bearer " + accessToken)
-//                                .header(REFRESH, refreshToken)
+                                .header(AUTHORIZATION, BEARER + accessToken)
+                                .header(REFRESH_TOKEN, refreshToken)
                                 .with(csrf())
                                 .content(content)
 
@@ -76,13 +74,12 @@ public class PostLessonTest extends LessonControllerTest{
                 .andExpect(status().isCreated())
                 .andDo(document(
                         "과외 등록",
-//                        requestHeaders(
-//                                headerWithName(AUTHORIZATION).description("엑세스 토큰"),
-//                                headerWithName(REFRESH).description("리프레시 토큰")
-//                        ),
+                        requestHeaders(
+                                headerWithName(AUTHORIZATION).description("엑세스 토큰"),
+                                headerWithName(REFRESH_TOKEN).description("리프레시 토큰")
+                        ),
                         requestFields(
                                 List.of(
-                                        fieldWithPath("lessonId").type(JsonFieldType.NUMBER).description("과외 식별자"),
                                         fieldWithPath("title").type(JsonFieldType.STRING).description("과외 타이틀"),
                                         fieldWithPath("company").type(JsonFieldType.STRING).description("재직 회사명"),
                                         fieldWithPath("career").type(JsonFieldType.NUMBER).description("경력"),

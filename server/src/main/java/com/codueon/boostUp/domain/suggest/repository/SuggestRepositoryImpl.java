@@ -4,7 +4,6 @@ import com.codueon.boostUp.domain.suggest.dto.GetStudentSuggest;
 import com.codueon.boostUp.domain.suggest.dto.GetTutorSuggest;
 import com.codueon.boostUp.domain.suggest.dto.QGetStudentSuggest;
 import com.codueon.boostUp.domain.suggest.dto.QGetTutorSuggest;
-import com.codueon.boostUp.domain.suggest.entity.Suggest;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.data.domain.Page;
@@ -16,9 +15,9 @@ import java.util.List;
 
 import static com.codueon.boostUp.domain.lesson.entity.QLesson.lesson;
 import static com.codueon.boostUp.domain.suggest.entity.QSuggest.suggest;
+import static com.codueon.boostUp.domain.suggest.entity.SuggestStatus.*;
 
 public class SuggestRepositoryImpl implements CustomSuggestRepository{
-
     private final JPAQueryFactory queryFactory;
 
     public SuggestRepositoryImpl(EntityManager em) {
@@ -29,7 +28,13 @@ public class SuggestRepositoryImpl implements CustomSuggestRepository{
     public Page<GetTutorSuggest> getTutorSuggestsOnMyPage(Long lessonId, Long memberId, int tabId, Pageable pageable) {
         List<GetTutorSuggest> results = queryFactory
                 .select(new QGetTutorSuggest(
-                        suggest,
+                        suggest.id,
+                        suggest.days,
+                        suggest.languages,
+                        suggest.requests,
+                        suggest.suggestStatus,
+                        suggest.startTime,
+                        suggest.endTime,
                         lesson.id,
                         lesson.name
                 ))
@@ -49,11 +54,11 @@ public class SuggestRepositoryImpl implements CustomSuggestRepository{
 
     private BooleanExpression changeStatusByTabId(int tabId) {
         switch (tabId) {
-            case 1: return suggest.status.eq(Suggest.SuggestStatus.ACCEPT_IN_PROGRESS).or(
-                           suggest.status.eq(Suggest.SuggestStatus.PAY_IN_PROGRESS));
-            case 2: return suggest.status.eq(Suggest.SuggestStatus.DURING_LESSON);
-            default: return suggest.status.eq(Suggest.SuggestStatus.END_OF_LESSON).or(
-                            suggest.status.eq(Suggest.SuggestStatus.REFUND_PAYMENT));
+            case 1: return suggest.suggestStatus.eq(ACCEPT_IN_PROGRESS).or(
+                           suggest.suggestStatus.eq(PAY_IN_PROGRESS));
+            case 2: return suggest.suggestStatus.eq(DURING_LESSON);
+            default: return suggest.suggestStatus.eq(END_OF_LESSON).or(
+                            suggest.suggestStatus.eq(REFUND_PAYMENT));
         }
     }
 
@@ -61,7 +66,10 @@ public class SuggestRepositoryImpl implements CustomSuggestRepository{
     public Page<GetStudentSuggest> getStudentSuggestsOnMyPage(Long memberId, Pageable pageable) {
         List<GetStudentSuggest> results = queryFactory
                 .select(new QGetStudentSuggest(
-                        suggest,
+                        suggest.id,
+                        suggest.suggestStatus,
+                        suggest.startTime,
+                        suggest.endTime,
                         lesson
                 ))
                 .from(suggest)
@@ -75,7 +83,4 @@ public class SuggestRepositoryImpl implements CustomSuggestRepository{
         long total = results.size();
         return new PageImpl<>(results, pageable, total);
     }
-
-
-
 }

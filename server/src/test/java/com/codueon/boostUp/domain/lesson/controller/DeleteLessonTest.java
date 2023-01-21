@@ -5,9 +5,9 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.test.web.servlet.ResultActions;
 
-
-import static org.junit.jupiter.api.Assertions.*;
+import static com.codueon.boostUp.global.security.utils.AuthConstants.*;
 import static org.mockito.Mockito.doNothing;
+import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.delete;
@@ -19,30 +19,30 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class DeleteLessonTest extends LessonControllerTest{
 
     @Test
-    @DisplayName("괴외 삭제")
+    @DisplayName("과외 삭제")
     void deleteLesson() throws Exception {
-
         Long lessonId = 1L;
+
         doNothing().when(lessonService).deleteLesson(Mockito.anyLong(), Mockito.anyLong());
 
         ResultActions actions =
                 mockMvc.perform(
                         delete("/lesson/{lesson-id}", lessonId)
-//                                .header(AUTHORIZATION, "Bearer " + accessToken)
-//                                .header(REFRESH, refreshToken)
+                                .header(AUTHORIZATION, BEARER + accessToken)
+                                .header(REFRESH_TOKEN, refreshToken)
                                 .with(csrf())
                 );
 
         actions
                 .andExpect(status().isNoContent())
                 .andDo(document("과외 삭제",
-//                        requestHeaders(
-//                                headerWithName(AUTHORIZATION).descrption("엑세스 토큰"),
-//                                headerWithName(REFRESH).description("리프레시 토큰")
-//                        ),
+                        requestHeaders(
+                                headerWithName(AUTHORIZATION).description("엑세스 토큰"),
+                                headerWithName(REFRESH_TOKEN).description("리프레시 토큰")
+                        ),
                         pathParameters(
                                 parameterWithName("lesson-id").description("과외 식별자")
                         )
-                        ));
+                ));
     }
 }

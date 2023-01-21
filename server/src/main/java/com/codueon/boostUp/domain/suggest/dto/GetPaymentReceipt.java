@@ -6,30 +6,19 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Getter
 @NoArgsConstructor
 public class GetPaymentReceipt {
-
     private String paymentMethod;
-
     private String title;
-
     private String name;
-
     private List<String> languages;
-
     private List<String> address;
-
     private String company;
-
     private String profileImage;
-
     private Integer cost;
-
     private Integer totalCost;
-
     private Integer quantity;
 
     @Builder
@@ -37,7 +26,6 @@ public class GetPaymentReceipt {
                              Integer totalCost,
                              Integer quantity,
                              String paymentMethod ) {
-
         this.title = lesson.getTitle();
         this.name = lesson.getName();
         this.languages = lesson.getLanguageListAsString();
@@ -48,7 +36,5 @@ public class GetPaymentReceipt {
         this.totalCost = totalCost;
         this.quantity = quantity;
         this.paymentMethod = paymentMethod;
-
     }
-
 }
