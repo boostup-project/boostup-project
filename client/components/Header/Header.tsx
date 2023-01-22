@@ -44,7 +44,9 @@ const Header = () => {
           </div>
           <div className="w-1/6 h-full flex justify-center items-center desktop:justify-start desktop:items-end">
             <div className="w-[57.91px] h-[30px] tablet:w-[142px] tablet:h-[69px] desktop:w-[142px] desktop:h-[72px]">
-              <Image src={Logo} alt="logo" />
+              <Link href="/">
+                <Image src={Logo} alt="logo" />
+              </Link>
             </div>
           </div>
           <div className="w-1/2 flex justify-end items-center mr-4 tablet:h-[40px] desktop:hidden">
