@@ -1,28 +1,134 @@
-import SmallBtn from "components/reuse/btn/SmallBtn";
-import { useEffect, useState } from "react";
-// import "../../styles/markdown.css"
-
 import "@uiw/react-md-editor/markdown-editor.css";
 import "@uiw/react-markdown-preview/markdown.css";
-import { bold, italic } from "@uiw/react-md-editor/lib/commands/"
+import SmallBtn from "components/reuse/btn/SmallBtn";
 import dynamic from "next/dynamic";
 import useWindowSize from "hooks/useWindowSize";
+import { bold, italic } from "@uiw/react-md-editor/lib/commands/";
+import { Dispatch, SetStateAction } from "react";
+import { SetterOrUpdater, useSetRecoilState } from "recoil";
+import { Info } from "./WriteModal";
+import { langDict } from "components/reuse/dict";
+import usePostWrite from "hooks/usePostWrite";
+import { useEffect } from "react";
+import { isWrite } from "atoms/main/mainAtom";
+import { AxiosResponse } from "axios";
+import { UseMutateFunction } from "react-query";
 
-const MDEditor = dynamic(() => 
-  import("@uiw/react-md-editor"), {
+interface Props {
+  basicInfo: Info;
+  addInfo: Info;
+  curInfo: string;
+  setCurInfo: Dispatch<SetStateAction<string>>;
+  setStep: SetterOrUpdater<number>;
+  powerWrite: boolean;
+  setPowerIsWrite: SetterOrUpdater<boolean>;
+  mutate: UseMutateFunction<
+    AxiosResponse<any, any>,
+    unknown,
+    FormData,
+    unknown
+  >;
+}
+
+interface BasicSubmit {
+  [index: string]: any;
+}
+
+const MDEditor = dynamic(() => import("@uiw/react-md-editor"), {
   ssr: false,
 });
 
-
-
-const Curriculum = () => {
-  const [value, setValue] = useState<string>("");
-  const [toolbar, setToolbar] = useState<boolean>(true);
-  
+const Curriculum = ({
+  basicInfo,
+  addInfo,
+  curInfo,
+  setCurInfo,
+  setStep,
+  powerWrite,
+  setPowerIsWrite,
+}: // mutate
+Props) => {
+  const isWritten = useSetRecoilState(isWrite);
+  const { mutate, isSuccess, isError } = usePostWrite();
   const screenWidth = useWindowSize();
-
+  const toBack = (e: React.MouseEvent<HTMLButtonElement>) => {
+    setStep(prev => prev - 1);
+  };
   const handleChangeValue = (e: any) => {
-    setValue(e);
+    setCurInfo(e);
+  };
+
+  useEffect(() => {
+    if (isSuccess) {
+      console.log("성공");
+      setPowerIsWrite(prev => !prev);
+      isWritten(prev => !prev);
+    }
+    if (isError) {
+      console.log("실패");
+    }
+  }),
+    [isSuccess, isError];
+
+  const onClick = () => {
+    const {
+      address,
+      career,
+      company,
+      cost,
+      language,
+      profileImg,
+      title,
+    }: BasicSubmit = basicInfo;
+    const {
+      detailCompany,
+      detailCost,
+      detailLocation,
+      detailImage,
+      introduction,
+      personality,
+    } = addInfo;
+    const proImage = profileImg[0];
+    const parseAddress = address.map((el: any) => el.value);
+    const parseLang = language.map((el: any) => langDict[el]);
+
+    const pre = {
+      title,
+      language: parseLang,
+      company,
+      career: parseInt(career),
+      address: parseAddress,
+      cost: parseInt(cost),
+      introduction,
+      detailCompany,
+      detailLocation,
+      personality,
+      detailCost,
+      curriculum: curInfo,
+    };
+
+    const json = JSON.stringify({
+      title,
+      languages: parseLang,
+      company,
+      career,
+      address: parseAddress,
+      cost,
+      introduction,
+      detailCompany,
+      detailLocation,
+      personality,
+      detailCost,
+      curriculum: curInfo,
+    });
+    const blob = new Blob([json], { type: "application/json" });
+    const formData = new FormData();
+    formData.append("data", blob);
+    formData.append("profileImage", proImage);
+    formData.append("careerImage", proImage);
+
+    // postWrite(formData);
+    mutate(formData);
   };
 
   return (
@@ -47,7 +153,7 @@ const Curriculum = () => {
       {screenWidth > 764 ? (
         <MDEditor
           height={400}
-          value={value}
+          value={curInfo}
           onChange={handleChangeValue}
           preview="live"
           commands={[bold, italic]}
@@ -56,7 +162,7 @@ const Curriculum = () => {
       ) : (
         <MDEditor
           height={400}
-          value={value}
+          value={curInfo}
           onChange={handleChangeValue}
           preview="edit"
           commands={[bold, italic]}
@@ -64,8 +170,10 @@ const Curriculum = () => {
         />
       )}
       <div className="flex flex-row justify-center items-center w-full h-fit mt-10">
-        <SmallBtn>취 소</SmallBtn>
-        <SmallBtn css="ml-5">등 록</SmallBtn>
+        <SmallBtn onClick={toBack}>이전</SmallBtn>
+        <SmallBtn onClick={onClick} css="ml-5">
+          등 록
+        </SmallBtn>
       </div>
     </>
   );

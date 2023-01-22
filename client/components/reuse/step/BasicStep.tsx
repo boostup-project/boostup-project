@@ -1,18 +1,11 @@
 import { inputStep } from "atoms/main/mainAtom";
-import { useRecoilState } from "recoil";
+import { useRecoilValue } from "recoil";
 const BasicStep = () => {
-  const [step, setStep] = useRecoilState<number>(inputStep);
-
-  const handleClickStep = () => {
-    setStep(1);
-  };
+  const step = useRecoilValue<number>(inputStep);
 
   return (
     <>
-      <div
-        className="w-fit h-fit flex flex-col justify-center items-center cursor-pointer"
-        onClick={handleClickStep}
-      >
+      <div className="w-fit h-fit flex flex-col justify-center items-center cursor-pointer">
         {step === 1 ? (
           <div className="w-[12px] h-[12px] bg-pointColor rounded-xl"></div>
         ) : (
