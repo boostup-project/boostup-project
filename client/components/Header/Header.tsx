@@ -35,15 +35,15 @@ const Header = () => {
 
   return (
     <>
-      <header className="bg-bgColor font-SCDream5 w-full pt-4 fixed top-0 z-[1] h-[63px] tablet:h-[69px] desktop:w-3/4 desktop:min-w-[1000px] desktop:h-[87px] desktop:mt-0">
+      <header className="bg-bgColor font-SCDream5 w-full pt-4 fixed top-0 z-[1] h-fit desktop:w-3/4 desktop:min-w-[1000px] desktop:h-[87px] desktop:mt-0">
         <nav className="w-full h-full flex tablet:justify-center tablet:items-center desktop:justify-between">
           <div className="w-1/2 flex justify-start items-center ml-4 tablet:h-[40px] desktop:hidden">
-            <div className="w-[18px] tablet:w-[34.5px]">
+            <div className="w-8 tablet:w-[34.5px]">
               <IconExit />
             </div>
           </div>
-          <div className="w-1/6 h-full flex justify-center items-center desktop:justify-start desktop:items-end">
-            <div className="w-[57.91px] h-[30px] tablet:w-[142px] tablet:h-[69px] desktop:w-[142px] desktop:h-[72px]">
+          <div className="tablet:w-1/6 h-fit flex justify-center items-center desktop:justify-start desktop:items-end">
+            <div className="flex justify-center items-center w-28 tablet:w-[142px] h-[69px] h-min-[69px]">
               <Link href="/">
                 <Image src={Logo} alt="logo" />
               </Link>
@@ -51,7 +51,7 @@ const Header = () => {
           </div>
           <div className="w-1/2 flex justify-end items-center mr-4 tablet:h-[40px] desktop:hidden">
             <div
-              className="w-[18px] tablet:w-[34.5px]"
+              className="w-9 tablet:w-[34.5px]"
               onClick={e => setSeek(!seek)}
             >
               <IconMagnify fill={textColor} />
