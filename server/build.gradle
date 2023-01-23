@@ -86,10 +86,7 @@ dependencies {
 
 	// ETC
 	implementation 'org.springframework.boot:spring-boot-starter-mail'
-<<<<<<< Updated upstream
-=======
 	implementation 'com.coveo:spring-boot-parameter-store-integration:1.5.0'
->>>>>>> Stashed changes
 	implementation 'org.springframework.boot:spring-boot-starter-actuator' // server health check
 	implementation group: 'io.awspring.cloud', name: 'spring-cloud-starter-aws-parameter-store-config'
 }
