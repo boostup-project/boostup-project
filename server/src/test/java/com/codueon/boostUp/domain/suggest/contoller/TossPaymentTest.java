@@ -11,6 +11,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.codueon.boostUp.domain.suggest.utils.SuggestConstants.*;
+import static com.codueon.boostUp.domain.utils.ApiDocumentUtils.getRequestPreProcessor;
+import static com.codueon.boostUp.domain.utils.ApiDocumentUtils.getResponsePreProcessor;
 import static com.codueon.boostUp.global.security.utils.AuthConstants.*;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
@@ -53,10 +55,13 @@ public class TossPaymentTest extends SuggestControllerTest{
                                 .header(REFRESH_TOKEN, refreshToken)
                 );
 
-        actions.andExpect(status().isOk())
+        actions
+                .andExpect(status().isOk())
                 .andExpect(jsonPath("$.message").value(message.getMessage()))
                 .andExpect(jsonPath("$.data").value(message.getData()))
                 .andDo(document("신청4.2-토스결제요청",
+                        getRequestPreProcessor(),
+                        getResponsePreProcessor(),
                         pathParameters(
                                 parameterWithName("suggest-id").description("신청 식별자"),
                                 parameterWithName("payment-id").description("결제 정보 식별자")
@@ -111,7 +116,8 @@ public class TossPaymentTest extends SuggestControllerTest{
                         get("/api/suggest/{suggest-id}/toss/success", suggest.getId())
                 );
 
-        actions.andExpect(status().isOk())
+        actions
+                .andExpect(status().isOk())
                 .andDo(document("신청5.2-토스결제성공",
                         pathParameters(
                                 parameterWithName("suggest-id").description("신청 식별자")
@@ -129,7 +135,8 @@ public class TossPaymentTest extends SuggestControllerTest{
                         get("/api/suggest/{suggest-id}/toss/failure", suggest.getId())
                 );
 
-        actions.andExpect(status().isOk())
+        actions
+                .andExpect(status().isOk())
                 .andDo(document("신청7.2-토스결제실패",
                         pathParameters(
                                 parameterWithName("suggest-id").description("신청 식별자")
@@ -188,8 +195,10 @@ public class TossPaymentTest extends SuggestControllerTest{
                                 .header(REFRESH_TOKEN, refreshToken)
                 );
 
-        actions.andExpect(status().isOk())
+        actions
+                .andExpect(status().isOk())
                 .andDo(document("신청9.2-토스결제환불",
+                        getRequestPreProcessor(),
                         pathParameters(
                                 parameterWithName("suggest-id").description("신청 식별자")
                         ),

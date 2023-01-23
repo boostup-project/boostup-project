@@ -7,7 +7,7 @@ include::{snippets}/과외 등록/curl-request.adoc[]
 include::{snippets}/과외 등록/http-request.adoc[]
 
 .request-header
-// include::{snippets}/과외 등록/request-headers.acod[]
+include::{snippets}/과외 등록/request-headers.adoc[]
 
 .request-fields
 include::{snippets}/과외 등록/request-fields.adoc[]
@@ -21,7 +21,7 @@ include::{snippets}/과외 요약 수정/curl-request.adoc[]
 include::{snippets}/과외 요약 수정/http-request.adoc[]
 
 .request-header
-// include::{snippets}/과외 요약 수정/request-headers.adoc[]
+include::{snippets}/과외 요약 수정/request-headers.adoc[]
 
 .request-fields
 include::{snippets}/과외 요약 수정/request-fields.adoc[]
@@ -35,7 +35,7 @@ include::{snippets}/과외 상세 수정/curl-request.adoc[]
 include::{snippets}/과외 상세 수정/http-request.adoc[]
 
 .request-header
-// include::{snippets}/과외 상세 수정/request-headers.adoc[]
+include::{snippets}/과외 상세 수정/request-headers.adoc[]
 
 .request-fields
 include::{snippets}/과외 상세 수정/request-fields.adoc[]
@@ -49,7 +49,7 @@ include::{snippets}/과외 커리큘럼 수정/curl-request.adoc
 include::{snippets}/과외 커리큘럼 수정/http-request.adoc[]
 
 .request-header
-// include::{snippets}/과외 커리큘럼 수정/request-headers.adoc[]
+include::{snippets}/과외 커리큘럼 수정/request-headers.adoc[]
 
 .request-fields
 include::{snippets}/과외 커리큘럼 수정/request-fields.adoc[]
@@ -63,7 +63,586 @@ include::{snippets}/과외 삭제/curl-request.adoc
 include::{snippets}/과외 삭제/http-request.adoc
 
 .request-header
-// include::{snippets}/과외 삭제/request-headers.adoc[]
+include::{snippets}/과외 삭제/request-headers.adoc[]
 
 .path-parameters
 include::{snippets}/과외 삭제/path-parameters.adoc[]
+
+
+=== 과외 전체 조회
+.curl-request
+include::{snippets}/과외 전체 조회/curl-request.adoc[]
+
+.http-request
+include::{snippets}/과외 전체 조회/http-request.adoc[]
+
+.http-response
+include::{snippets}/과외 전체 조회/http-response.adoc[]
+
+.request-fields
+include::{snippets}/과외 전체 조회/response-fields.adoc[]
+
+
+=== 과외 전체 조회(로그인)
+.curl-request
+include::{snippets}/과외 전체 조회(로그인)/curl-request.adoc[]
+
+.http-request
+include::{snippets}/과외 전체 조회(로그인)/http-request.adoc[]
+
+.request-header
+include::{snippets}/과외 전체 조회(로그인)/request-headers.adoc[]
+
+.http-response
+include::{snippets}/과외 전체 조회(로그인)/http-response.adoc[]
+
+.request-fields
+include::{snippets}/과외 전체 조회(로그인)/response-fields.adoc[]
+
+
+=== 과외 상세 검색
+.curl-request
+include::{snippets}/과외 상세 검색/curl-request.adoc[]
+
+.http-request
+include::{snippets}/과외 상세 검색/http-request.adoc[]
+
+.http-response
+include::{snippets}/과외 상세 검색/http-response.adoc[]
+
+.request-fields
+include::{snippets}/과외 상세 검색/response-fields.adoc[]
+
+
+=== 과외 상세 검색(로그인)
+.curl-request
+include::{snippets}/과외 상세 검색(로그인)/curl-request.adoc[]
+
+.http-request
+include::{snippets}/과외 상세 검색(로그인)/http-request.adoc[]
+
+.request-header
+include::{snippets}/과외 상세 검색(로그인)/request-headers.adoc[]
+
+.http-response
+include::{snippets}/과외 상세 검색(로그인)/http-response.adoc[]
+
+.request-fields
+include::{snippets}/과외 상세 검색(로그인)/response-fields.adoc[]
+
+
+=== 과외 언어별 조회
+.curl-request
+include::{snippets}/과외 언어별 조회/curl-request.adoc[]
+
+.http-request
+include::{snippets}/과외 언어별 조회/http-request.adoc[]
+
+.http-response
+include::{snippets}/과외 언어별 조회/http-response.adoc[]
+
+.request-fields
+include::{snippets}/과외 언어별 조회/response-fields.adoc[]
+
+
+=== 과외 언어별 조회(로그인)
+.curl-request
+include::{snippets}/과외 언어별 조회(로그인)/curl-request.adoc[]
+
+.http-request
+include::{snippets}/과외 언어별 조회(로그인)/http-request.adoc[]
+
+.request-header
+include::{snippets}/과외 언어별 조회(로그인)/request-headers.adoc[]
+
+.http-response
+include::{snippets}/과외 언어별 조회(로그인)/http-response.adoc[]
+
+.request-fields
+include::{snippets}/과외 언어별 조회(로그인)/response-fields.adoc[]
+
+
+=== 과외 상세 정보 조회
+.curl-request
+include::{snippets}/과외 상세 정보 조회/curl-request.adoc[]
+
+.http-request
+include::{snippets}/과외 상세 정보 조회/http-request.adoc[]
+
+.request-header
+include::{snippets}/과외 상세 정보 조회/request-headers.adoc[]
+
+.http-response
+include::{snippets}/과외 상세 정보 조회/http-response.adoc[]
+
+.request-fields
+include::{snippets}/과외 상세 정보 조회/response-fields.adoc[]
+
+
+=== 과외 커리큘럼 조회
+.curl-request
+include::{snippets}/과외 커리큘럼 조회/curl-request.adoc[]
+
+.http-request
+include::{snippets}/과외 커리큘럼 조회/http-request.adoc[]
+
+.request-header
+include::{snippets}/과외 커리큘럼 조회/request-headers.adoc[]
+
+.http-response
+include::{snippets}/과외 커리큘럼 조회/http-response.adoc[]
+
+.request-fields
+include::{snippets}/과외 커리큘럼 조회/response-fields.adoc[]
+
+
+=== 과외 이동 URL
+.curl-request
+include::{snippets}/과외 이동 URL/curl-request.adoc[]
+
+.http-request
+include::{snippets}/과외 이동 URL/http-request.adoc[]
+
+.request-header
+include::{snippets}/과외 이동 URL/request-headers.adoc[]
+
+.http-response
+include::{snippets}/과외 이동 URL/http-response.adoc[]
+
+
+
+== MemberController
+=== 회원가입
+.curl-request
+include::{snippets}/회원가입/curl-request.adoc[]
+
+.http-request
+include::{snippets}/회원가입/http-request.adoc[]
+
+
+== SuggestController
+=== 신청1-과외신청
+.curl-request
+include::{snippets}/신청1-과외신청/curl-request.adoc[]
+
+.http-request
+include::{snippets}/신청1-과외신청/http-request.adoc[]
+
+.request-header
+include::{snippets}/신청1-과외신청/request-headers.adoc[]
+
+.request-fields
+include::{snippets}/신청1-과외신청/request-fields.adoc[]
+
+
+=== 신청2.1-신청수락
+.curl-request
+include::{snippets}/신청2.1-신청수락/curl-request.adoc[]
+
+.http-request
+include::{snippets}/신청2.1-신청수락/http-request.adoc[]
+
+.request-header
+include::{snippets}/신청2.1-신청수락/request-headers.adoc[]
+
+.request-fields
+include::{snippets}/신청2.1-신청수락/request-fields.adoc[]
+
+
+=== 신청2.2-신청거절
+.curl-request
+include::{snippets}/신청2.2-신청거절/curl-request.adoc[]
+
+.http-request
+include::{snippets}/신청2.2-신청거절/http-request.adoc[]
+
+.request-header
+include::{snippets}/신청2.2-신청거절/request-headers.adoc[]
+
+.request-fields
+include::{snippets}/신청2.2-신청거절/request-fields.adoc[]
+
+
+=== 신청3-결제페이지
+.curl-request
+include::{snippets}/신청3-결제페이지/curl-request.adoc[]
+
+.http-request
+include::{snippets}/신청3-결제페이지/http-request.adoc[]
+
+.request-header
+include::{snippets}/신청3-결제페이지/request-headers.adoc[]
+
+.http-response
+include::{snippets}/신청3-결제페이지/http-response.adoc[]
+
+.request-fields
+include::{snippets}/신청3-결제페이지/response-fields.adoc[]
+
+
+=== 신청4.1-카카오결제요청
+.curl-request
+include::{snippets}/신청4.1-카카오결제요청/curl-request.adoc[]
+
+.http-request
+include::{snippets}/신청4.1-카카오결제요청/http-request.adoc[]
+
+.request-header
+include::{snippets}/신청4.1-카카오결제요청/request-headers.adoc[]
+
+.request-fields
+include::{snippets}/신청4.1-카카오결제요청/response-fields.adoc[]
+
+
+=== 신청4.2-토스결제요청
+.curl-request
+include::{snippets}/신청4.2-토스결제요청/curl-request.adoc[]
+
+.http-request
+include::{snippets}/신청4.2-토스결제요청/http-request.adoc[]
+
+.request-header
+include::{snippets}/신청4.2-토스결제요청/request-headers.adoc[]
+
+.request-fields
+include::{snippets}/신청4.2-토스결제요청/response-fields.adoc[]
+
+
+=== 신청5.1-카카오결제요청
+.curl-request
+include::{snippets}/신청5.1-카카오결제요청/curl-request.adoc[]
+
+.http-request
+include::{snippets}/신청5.1-카카오결제요청/http-request.adoc[]
+
+
+=== 신청5.2-토스결제성공
+.curl-request
+include::{snippets}/신청5.2-토스결제성공/curl-request.adoc[]
+
+.http-request
+include::{snippets}/신청5.2-토스결제성공/http-request.adoc[]
+
+
+=== 신청6-카카오결제취소
+.curl-request
+include::{snippets}/신청6-카카오결제취소/curl-request.adoc[]
+
+.http-request
+include::{snippets}/신청6-카카오결제취소/http-request.adoc[]
+
+
+=== 신청7.1-카카오결제실패
+.curl-request
+include::{snippets}/신청7.1-카카오결제실패/curl-request.adoc[]
+
+.http-request
+include::{snippets}/신청7.1-카카오결제실패/http-request.adoc[]
+
+
+=== 신청7.2-토스결제실패
+.curl-request
+include::{snippets}/신청7.2-토스결제실패/curl-request.adoc[]
+
+.http-request
+include::{snippets}/신청7.2-토스결제실패/http-request.adoc[]
+
+
+=== 신청8-과외종료
+.curl-request
+include::{snippets}/신청8-과외종료/curl-request.adoc[]
+
+.http-request
+include::{snippets}/신청8-과외종료/http-request.adoc[]
+
+.request-header
+include::{snippets}/신청8-과외종료/request-headers.adoc[]
+
+
+=== 신청9.1-카카오결제환불
+.curl-request
+include::{snippets}/신청9.1-카카오결제환불/curl-request.adoc[]
+
+.http-request
+include::{snippets}/신청9.1-카카오결제환불/http-request.adoc[]
+
+.request-header
+include::{snippets}/신청9.1-카카오결제환불/request-headers.adoc[]
+
+
+=== 신청9.2-토스결제환불
+.curl-request
+include::{snippets}/신청9.2-토스결제환불/curl-request.adoc[]
+
+.http-request
+include::{snippets}/신청9.2-토스결제환불/http-request.adoc[]
+
+.request-header
+include::{snippets}/신청9.2-토스결제환불/request-headers.adoc[]
+
+
+=== 신청취소
+.curl-request
+include::{snippets}/신청취소/curl-request.adoc[]
+
+.http-request
+include::{snippets}/신청취소/http-request.adoc[]
+
+.request-header
+include::{snippets}/신청취소/request-headers.adoc[]
+
+.http-response
+include::{snippets}/신청취소/http-response.adoc[]
+
+
+=== 결제영수증조회
+.curl-request
+include::{snippets}/결제영수증조회/curl-request.adoc[]
+
+.http-request
+include::{snippets}/결제영수증조회/http-request.adoc[]
+
+.request-header
+include::{snippets}/결제영수증조회/request-headers.adoc[]
+
+.http-response
+include::{snippets}/결제영수증조회/http-response.adoc[]
+
+.request-fields
+include::{snippets}/결제영수증조회/response-fields.adoc[]
+
+
+===환불영수증조회
+.curl-request
+include::{snippets}/환불영수증조회/curl-request.adoc[]
+
+.http-request
+include::{snippets}/환불영수증조회/http-request.adoc[]
+
+.request-header
+include::{snippets}/환불영수증조회/request-headers.adoc[]
+
+.http-response
+include::{snippets}/환불영수증조회/http-response.adoc[]
+
+.request-fields
+include::{snippets}/환불영수증조회/response-fields.adoc[]
+
+
+=== 출석부1-출석조회
+.curl-request
+include::{snippets}/출석부1-출석조회/curl-request.adoc[]
+
+.http-request
+include::{snippets}/출석부1-출석조회/http-request.adoc[]
+
+.request-header
+include::{snippets}/출석부1-출석조회/request-headers.adoc[]
+
+.http-response
+include::{snippets}/출석부1-출석조회/http-response.adoc[]
+
+.request-fields
+include::{snippets}/출석부1-출석조회/response-fields.adoc[]
+
+
+=== 출석부2-출석인정
+.curl-request
+include::{snippets}/출석부2-출석인정/curl-request.adoc[]
+
+.http-request
+include::{snippets}/출석부2-출석인정/http-request.adoc[]
+
+.request-header
+include::{snippets}/출석부2-출석인정/request-headers.adoc[]
+
+.http-response
+include::{snippets}/출석부2-출석인정/http-response.adoc[]
+
+
+=== 출석부3-출석인정취소
+.curl-request
+include::{snippets}/출석부3-출석인정취소/curl-request.adoc[]
+
+.http-request
+include::{snippets}/출석부3-출석인정취소/http-request.adoc[]
+
+.request-header
+include::{snippets}/출석부3-출석인정취소/request-headers.adoc[]
+
+.http-response
+include::{snippets}/출석부3-출석인정취소/http-response.adoc[]
+
+
+=== 신청내역조회(강사)
+.curl-request
+include::{snippets}/신청내역조회(강사)/curl-request.adoc[]
+
+.http-request
+include::{snippets}/신청내역조회(강사)/http-request.adoc[]
+
+.request-header
+include::{snippets}/신청내역조회(강사)/request-headers.adoc[]
+
+.http-response
+include::{snippets}/신청내역조회(강사)/http-response.adoc[]
+
+.request-fields
+include::{snippets}/신청내역조회(강사)/response-fields.adoc[]
+
+
+=== 신청내역조회(학생)
+.curl-request
+include::{snippets}/신청내역조회(학생)/curl-request.adoc[]
+
+.http-request
+include::{snippets}/신청내역조회(학생)/http-request.adoc[]
+
+.request-header
+include::{snippets}/신청내역조회(학생)/request-headers.adoc[]
+
+.http-response
+include::{snippets}/신청내역조회(학생)/http-response.adoc[]
+
+.request-fields
+include::{snippets}/신청내역조회(학생)/response-fields.adoc[]
+
+
+
+== ChatController
+
+
+
+== ReviewController
+=== 리뷰 생성
+.curl-request
+include::{snippets}/리뷰 생성/curl-request.adoc[]
+
+.http-request
+include::{snippets}/리뷰 생성/http-request.adoc[]
+
+.request-header
+include::{snippets}/리뷰 생성/request-headers.adoc[]
+
+
+=== 리뷰 수정
+.curl-request
+include::{snippets}/리뷰 수정/curl-request.adoc[]
+
+.http-request
+include::{snippets}/리뷰 수정/http-request.adoc[]
+
+.request-header
+include::{snippets}/리뷰 수정/request-headers.adoc[]
+
+
+=== 리뷰 상세페이지 조회
+.curl-request
+include::{snippets}/리뷰 상세페이지 조회/curl-request.adoc[]
+
+.http-request
+include::{snippets}/리뷰 상세페이지 조회/http-request.adoc[]
+
+.http-response
+include::{snippets}/리뷰 상세페이지 조회/http-response.adoc[]
+
+.request-fields
+include::{snippets}/리뷰 상세페이지 조회/response-fields.adoc[]
+
+
+=== 리뷰 마이페이지 조회
+.curl-request
+include::{snippets}/리뷰 마이페이지 조회/curl-request.adoc[]
+
+.http-request
+include::{snippets}/리뷰 마이페이지 조회/http-request.adoc[]
+
+.request-header
+include::{snippets}/리뷰 마이페이지 조회/request-headers.adoc[]
+
+.http-response
+include::{snippets}/리뷰 마이페이지 조회/http-response.adoc[]
+
+.request-fields
+include::{snippets}/리뷰 마이페이지 조회/response-fields.adoc[]
+
+
+=== 리뷰 삭제
+.curl-request
+include::{snippets}/리뷰 삭제/curl-request.adoc[]
+
+.http-request
+include::{snippets}/리뷰 삭제/http-request.adoc[]
+
+.request-header
+include::{snippets}/리뷰 삭제/request-headers.adoc[]
+
+
+
+== BookmarkController
+=== 북마크 생성
+.curl-request
+include::{snippets}/북마크 생성/curl-request.adoc[]
+
+.http-request
+include::{snippets}/북마크 생성/http-request.adoc[]
+
+.request-header
+include::{snippets}/북마크 생성/request-headers.adoc[]
+
+.http-response
+include::{snippets}/북마크 생성/http-response.adoc[]
+
+.request-fields
+include::{snippets}/북마크 생성/response-fields.adoc[]
+
+
+=== 북마크 삭제
+.curl-request
+include::{snippets}/북마크 삭제/curl-request.adoc[]
+
+.http-request
+include::{snippets}/북마크 삭제/http-request.adoc[]
+
+.request-header
+include::{snippets}/북마크 삭제/request-headers.adoc[]
+
+.http-response
+include::{snippets}/북마크 삭제/http-response.adoc[]
+
+.request-fields
+include::{snippets}/북마크 삭제/response-fields.adoc[]
+
+
+=== 북마크 여부 조회
+.curl-request
+include::{snippets}/북마크 여부 조회/curl-request.adoc[]
+
+.http-request
+include::{snippets}/북마크 여부 조회/http-request.adoc[]
+
+.request-header
+include::{snippets}/북마크 여부 조회/request-headers.adoc[]
+
+.http-response
+include::{snippets}/북마크 여부 조회/http-response.adoc[]
+
+.request-fields
+include::{snippets}/북마크 여부 조회/response-fields.adoc[]
+
+
+=== 북마크 마이페이지 조회
+.curl-request
+include::{snippets}/북마크 마이페이지 조회/curl-request.adoc[]
+
+.http-request
+include::{snippets}/북마크 마이페이지 조회/http-request.adoc[]
+
+.request-header
+include::{snippets}/북마크 마이페이지 조회/request-headers.adoc[]
+
+.http-response
+include::{snippets}/북마크 마이페이지 조회/http-response.adoc[]
+
+.request-fields
+include::{snippets}/북마크 마이페이지 조회/response-fields.adoc[]
