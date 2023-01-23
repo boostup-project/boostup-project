@@ -12,6 +12,7 @@ import com.codueon.boostUp.global.webhook.SendErrorToDiscord;
 import com.google.gson.Gson;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -29,6 +30,7 @@ import static com.codueon.boostUp.global.security.utils.AuthConstants.*;
 
 @WithMockUser
 @AutoConfigureMockMvc
+@AutoConfigureRestDocs
 @MockBean(JpaMetamodelMappingContext.class)
 @WebMvcTest(controllers = {MemberController.class})
 public class MemberControllerTest {
