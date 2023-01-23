@@ -20,14 +20,8 @@ interface Props {
   curInfo: string;
   setCurInfo: Dispatch<SetStateAction<string>>;
   setStep: SetterOrUpdater<number>;
-  powerWrite: boolean;
-  setPowerIsWrite: SetterOrUpdater<boolean>;
-  mutate: UseMutateFunction<
-    AxiosResponse<any, any>,
-    unknown,
-    FormData,
-    unknown
-  >;
+  isPowerWrite: boolean;
+  setIsPowerWrite: SetterOrUpdater<boolean>;
 }
 
 interface BasicSubmit {
@@ -44,11 +38,10 @@ const Curriculum = ({
   curInfo,
   setCurInfo,
   setStep,
-  powerWrite,
-  setPowerIsWrite,
-}: // mutate
-Props) => {
-  const isWritten = useSetRecoilState(isWrite);
+  isPowerWrite,
+  setIsPowerWrite,
+}: Props) => {
+  const setIsWritten = useSetRecoilState(isWrite);
   const { mutate, isSuccess, isError } = usePostWrite();
   const screenWidth = useWindowSize();
   const toBack = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -61,8 +54,8 @@ Props) => {
   useEffect(() => {
     if (isSuccess) {
       console.log("성공");
-      setPowerIsWrite(prev => !prev);
-      isWritten(prev => !prev);
+      setIsPowerWrite(prev => !prev);
+      setIsWritten(prev => !prev);
     }
     if (isError) {
       console.log("실패");

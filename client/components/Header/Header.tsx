@@ -5,10 +5,10 @@ import { SubmitHandler } from "react-hook-form";
 import { textColor } from "assets/color/color";
 import { IconExit, IconMagnify } from "assets/icon/";
 import { SearchPop } from "./SearchPop";
+import { powerWriteModal } from "atoms/main/mainAtom";
 import Image from "next/image";
 import Logo from "../../public/images/logo.png";
 import Link from "next/link";
-import { powerWriteModal } from "atoms/main/mainAtom";
 import WriteModal from "components/createModal/WriteModal";
 
 interface SearchData {
@@ -23,14 +23,14 @@ interface SearchData {
 const Header = () => {
   const [log, setLog] = useRecoilState(logUser);
   const [seek, setSeek] = useState(false);
-  const [powerWrite, setPowerIsWrite] = useRecoilState(powerWriteModal);
+  const [isPowerWrite, setIsPowerWrite] = useRecoilState(powerWriteModal);
 
   const onSubmit: SubmitHandler<SearchData> = data => {
     console.log(data);
   };
 
   const toWrite = (e: React.MouseEvent<HTMLDivElement>) => {
-    setPowerIsWrite(prev => !prev);
+    setIsPowerWrite(prev => !prev);
   };
 
   return (
@@ -104,7 +104,7 @@ const Header = () => {
           <SearchPop onSubmit={onSubmit} absolute={false} />
         </div>
       )}
-      {powerWrite && <WriteModal />}
+      {isPowerWrite && <WriteModal />}
     </>
   );
 };

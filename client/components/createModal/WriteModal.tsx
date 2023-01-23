@@ -7,8 +7,6 @@ import Curriculum from "./Curriculum";
 import { inputStep, powerWriteModal } from "atoms/main/mainAtom";
 import { useRecoilState } from "recoil";
 import { useState } from "react";
-import { AxiosResponse } from "axios";
-import { UseMutateFunction } from "react-query";
 
 interface ObjectPart {
   [index: string]: string | string[];
@@ -18,23 +16,14 @@ export interface Info {
   [index: string]: string | string[] | ObjectPart;
 }
 
-interface Props {
-  mutate: UseMutateFunction<
-    AxiosResponse<any, any>,
-    unknown,
-    FormData,
-    unknown
-  >;
-}
-
-const WriteModal = ({ mutate }: Props) => {
+const WriteModal = () => {
   const [basicInfo, setBasicInfo] = useState<Info>({});
   const [addInfo, setAddInfo] = useState<Info>({});
   const [curInfo, setCurInfo] = useState("");
   const [step, setStep] = useRecoilState(inputStep);
-  const [powerWrite, setPowerIsWrite] = useRecoilState(powerWriteModal);
+  const [isPowerWrite, setIsPowerWrite] = useRecoilState(powerWriteModal);
   const toWrite = () => {
-    setPowerIsWrite(prev => !prev);
+    setIsPowerWrite(prev => !prev);
   };
 
   console.log("basic", basicInfo);
@@ -67,9 +56,8 @@ const WriteModal = ({ mutate }: Props) => {
             curInfo={curInfo}
             setCurInfo={setCurInfo}
             setStep={setStep}
-            powerWrite={powerWrite}
-            setPowerIsWrite={setPowerIsWrite}
-            mutate={mutate}
+            isPowerWrite={isPowerWrite}
+            setIsPowerWrite={setIsPowerWrite}
           />
         )}
       </CreateModalContainer>
