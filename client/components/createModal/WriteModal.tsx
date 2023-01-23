@@ -1,7 +1,7 @@
 import ModalBackDrop from "components/reuse/container/ModalBackDrop";
 import StepNavWrapper from "components/reuse/container/StepNavWrapper";
 import CreateModalContainer from "components/reuse/CreateModalContainer";
-import Additional from "./Additional";
+import ExtraInfo from "./ExtraInfo";
 import BasicInfo from "./BasicInfo";
 import Curriculum from "./Curriculum";
 import { inputStep, powerWriteModal } from "atoms/main/mainAtom";
@@ -18,7 +18,7 @@ export interface Info {
 
 const WriteModal = () => {
   const [basicInfo, setBasicInfo] = useState<Info>({});
-  const [addInfo, setAddInfo] = useState<Info>({});
+  const [extraInfo, setExtraInfo] = useState<Info>({});
   const [curInfo, setCurInfo] = useState("");
   const [step, setStep] = useRecoilState(inputStep);
   const [isPowerWrite, setIsPowerWrite] = useRecoilState(powerWriteModal);
@@ -27,7 +27,7 @@ const WriteModal = () => {
   };
 
   console.log("basic", basicInfo);
-  console.log("add", addInfo);
+  console.log("add", extraInfo);
   console.log("cur", curInfo);
 
   return (
@@ -43,20 +43,15 @@ const WriteModal = () => {
           />
         )}
         {step === 2 && (
-          <Additional
-            // addInfo={addInfo}
-            setAddInfo={setAddInfo}
-            setStep={setStep}
-          />
+          <ExtraInfo setExtraInfo={setExtraInfo} setStep={setStep} />
         )}
         {step === 3 && (
           <Curriculum
             basicInfo={basicInfo}
-            addInfo={addInfo}
+            extraInfo={extraInfo}
             curInfo={curInfo}
             setCurInfo={setCurInfo}
             setStep={setStep}
-            isPowerWrite={isPowerWrite}
             setIsPowerWrite={setIsPowerWrite}
           />
         )}

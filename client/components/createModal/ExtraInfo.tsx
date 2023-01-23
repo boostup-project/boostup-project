@@ -7,16 +7,16 @@ import { SetterOrUpdater } from "recoil";
 import { Info } from "./WriteModal";
 import { Dispatch } from "react";
 
-interface Additional {
+interface ExtraInfo {
   [index: string]: string | string[];
 }
 
 interface Props {
-  setAddInfo: Dispatch<SetStateAction<Info>>;
+  setExtraInfo: Dispatch<SetStateAction<Info>>;
   setStep: SetterOrUpdater<number>;
 }
 
-const Additional = ({ setAddInfo, setStep }: Props) => {
+const ExtraInfo = ({ setExtraInfo, setStep }: Props) => {
   const [previewImages, setPreviewImages] = useState([]);
   const [detailImage, setDetailImage] = useState<string[]>([]);
   const imageInput: any = useRef();
@@ -24,7 +24,7 @@ const Additional = ({ setAddInfo, setStep }: Props) => {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<Additional>({
+  } = useForm<ExtraInfo>({
     mode: "onBlur",
   });
 
@@ -58,9 +58,9 @@ const Additional = ({ setAddInfo, setStep }: Props) => {
   };
 
   /** 제출 코드 **/
-  const testSubmit = (addtionalData: Additional) => {
+  const testSubmit = (addtionalData: ExtraInfo) => {
     addtionalData.detailImage = detailImage;
-    setAddInfo(addtionalData);
+    setExtraInfo(addtionalData);
     setStep(prev => prev + 1);
   };
 
@@ -219,4 +219,4 @@ const Additional = ({ setAddInfo, setStep }: Props) => {
     </>
   );
 };
-export default Additional;
+export default ExtraInfo;
