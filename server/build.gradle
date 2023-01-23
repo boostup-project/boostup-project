@@ -161,12 +161,3 @@ configurations {
 	}
 	querydsl.extendsFrom compileClasspath
 }
-
-bootJar {
-	mainClass = 'com.codueon.boostUp.BoostUpApplication'
-}
-
-bootRun {
-	String activeProfile = System.properties['spring.profiles.active']
-	systemProperty "spring.profiles.active", activeProfile
-}

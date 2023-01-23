@@ -16,10 +16,10 @@ feign:
     config:
       default:
         loggerLevel: FULL
-  logging:
-    url: https://discord.com/api/webhooks
-    service: ${DISCORD_SERVICE_LOGGING_URL}
-    server: ${DISCORD_SERVER_LOGGING_URL}
+logging:
+  url: https://discord.com/api/webhooks
+  service: ${DISCORD_SERVICE_LOGGING_URL}
+  server: ${DISCORD_SERVER_LOGGING_URL}
 
 cloud:
   aws:
