@@ -30,13 +30,6 @@ const MoblieLanguageFilter = () => {
   };
   return (
     <>
-      {/* 테스트용으로 확인이 끝난뒤에 삭제 예정입니다 */}
-      <button
-        className="w-32 h-9 flex flex-col justify-center items-center cursor-pointer fixed top-48 bg-pointColor z-10 rounded-xl text-white"
-        onClick={handleModalClick}
-      >
-        테스트버튼
-      </button>
       <div
         className={
           modal === 0
