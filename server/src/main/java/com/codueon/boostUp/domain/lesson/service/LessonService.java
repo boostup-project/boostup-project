@@ -1,5 +1,4 @@
 package com.codueon.boostUp.domain.lesson.service;
-
 import com.codueon.boostUp.domain.bookmark.repository.BookmarkRepository;
 import com.codueon.boostUp.domain.lesson.dto.*;
 import com.codueon.boostUp.domain.lesson.entity.Curriculum;
@@ -13,6 +12,7 @@ import com.codueon.boostUp.domain.reveiw.service.ReviewService;
 import com.codueon.boostUp.domain.suggest.entity.Suggest;
 import com.codueon.boostUp.domain.suggest.service.SuggestDbService;
 import com.codueon.boostUp.global.exception.BusinessLogicException;
+import com.codueon.boostUp.global.exception.ExceptionCode;
 import com.codueon.boostUp.global.file.AwsS3Service;
 import com.codueon.boostUp.global.file.FileHandler;
 import com.codueon.boostUp.global.file.UploadFile;
@@ -26,9 +26,13 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.transaction.Transactional;
 import java.util.List;
 
+
 import static com.codueon.boostUp.domain.suggest.entity.SuggestStatus.*;
 import static com.codueon.boostUp.global.exception.ExceptionCode.NOT_ACCEPT_SUGGEST;
 import static com.codueon.boostUp.global.exception.ExceptionCode.NOT_PAY_SUCCESS;
+
+import java.util.Objects;
+
 
 
 @Service
@@ -211,14 +215,13 @@ public class LessonService {
         Member findMember = memberDbService.ifExistsReturnMember(memberId);
         Lesson updateLesson = lessonDbService.ifExistsReturnLesson(lessonId);
 
-//        if (!Objects.equals(updateLesson.getMemberId(), findMember)) {
-//            throw new BusinessLogicException(ExceptionCode.UNAUTHORIZED_FOR_UPDATE);
-//        }
-
+        if (!Objects.equals(updateLesson.getMemberId(), findMember)) {
+            throw new BusinessLogicException(ExceptionCode.UNAUTHORIZED_FOR_UPDATE);
+        }
         updateLesson.editLessonInfo(postLessonInfoEdit);
 
-        List<Integer> languageList = postLessonInfoEdit.getLanguages();
 
+        List<Integer> languageList = postLessonInfoEdit.getLanguages();
         List<Integer> addressList = postLessonInfoEdit.getAddresses();
 
         lessonDbService.addLanguageList(languageList, updateLesson);
