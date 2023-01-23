@@ -1,0 +1,94 @@
+spring:
+  datasource:
+    url: ${/config/param/datasource-url}
+    username: ${/config/param/rds-username}
+    password: ${/config/param/rds-password}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    database-platform: org.hibernate.dialect.MySQL8Dialect
+    generate-ddl: true
+    show-sql: true
+    hibernate:
+      ddl-auto: none
+
+feign:
+  client:
+    config:
+      default:
+        loggerLevel: FULL
+  logging:
+    url: https://discord.com/api/webhooks
+    service: ${/config/param/discord-service-logging-url}
+    server: ${/config/param/discord-server-logging-url}
+
+cloud:
+  aws:
+    s3:
+      bucket: ${/config/param/bucket-name}
+    credentials:
+      accessKey: ${/config/param/s3-access-key}
+      secretKey: ${/config/param/s3-secret-key}
+    region:
+      static: ${/config/param/s3-region}
+    stack:
+      auto: false
+
+redis:
+  host: ${/config/param/redis-host}
+  port: ${/config/param/redis-port}
+
+kakao:
+  admin:
+    key: ${/config/param/kakao-admin-key}
+  host: ${/config/param/kakaopay-host}
+  uri:
+    pay-process: ${/config/param/kakaopay-pay-url}
+  pay:
+    ready: ${/config/param/kakaopay-ready-url}
+    approve: ${/config/param/kakaopay-approve-url}
+    cid: ${/config/param/kakaopay-cid}
+    taxfree: ${/config/param/kakaopay-taxfree}
+    cancel: ${/config/param/kakaopay-cancel-url}
+    order: ${/config/param/kakaopay-order-url}
+
+toss:
+  secret-key: ${/config/param/toss-secret-key}
+
+jwt:
+  secret-key: ${/config/param/jwt-secret-key}
+  access-token-expiration-minutes: ${/config/param/access-expiration-minute}
+  refresh-token-expiration-minutes: ${/config/param/refresh-expiration-minute}
+
+mail:
+  smtp:
+    auth: true
+    starttls:
+      required: true
+      enable: true
+    socketFactory:
+      class: javax.net.ssl.SSLSocketFactory
+      fallback: false
+      port: 465
+    port: 465
+  gmail-admin-id: ${/config/param/mail-admin-email}
+  gmail-admin-password: ${/config/param/mail-admin-password}
+
+default:
+  image:
+    address: ${/config/param/default-url}
+
+--- # blue
+spring:
+  config:
+    activate:
+      on-profile: set1
+  server:
+    port: 8081
+
+--- # green
+spring:
+  config:
+    activate:
+      on-profile: set2
+  server:
+    port: 8082
