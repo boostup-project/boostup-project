@@ -24,6 +24,7 @@ public class LessonDbService {
     private final LessonInfoRepository lessonInfoRepository;
     private final CurriculumRepository curriculumRepository;
     private final AwsS3Service awsS3Service;
+    // test
 
     /*--------------------------------------- DB Create 메서드 --------------------------------------*/
 
