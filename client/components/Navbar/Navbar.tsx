@@ -50,7 +50,7 @@ const Navbar = () => {
 
   useEffect(() => {
     if (mounted.current) {
-      toast.success("글이 성공적으로 작성되었습니다", {
+      toast.success("과외가 성공적으로 등록되었습니다", {
         autoClose: 1500,
         position: toast.POSITION.TOP_RIGHT,
       });
