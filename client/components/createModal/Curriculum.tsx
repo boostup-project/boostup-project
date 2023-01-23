@@ -11,16 +11,15 @@ import { langDict } from "components/reuse/dict";
 import usePostWrite from "hooks/usePostWrite";
 import { useEffect } from "react";
 import { isWrite } from "atoms/main/mainAtom";
-import { AxiosResponse } from "axios";
-import { UseMutateFunction } from "react-query";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 interface Props {
   basicInfo: Info;
-  addInfo: Info;
+  extraInfo: Info;
   curInfo: string;
   setCurInfo: Dispatch<SetStateAction<string>>;
   setStep: SetterOrUpdater<number>;
-  isPowerWrite: boolean;
   setIsPowerWrite: SetterOrUpdater<boolean>;
 }
 
@@ -34,11 +33,10 @@ const MDEditor = dynamic(() => import("@uiw/react-md-editor"), {
 
 const Curriculum = ({
   basicInfo,
-  addInfo,
+  extraInfo,
   curInfo,
   setCurInfo,
   setStep,
-  isPowerWrite,
   setIsPowerWrite,
 }: Props) => {
   const setIsWritten = useSetRecoilState(isWrite);
@@ -56,9 +54,14 @@ const Curriculum = ({
       console.log("성공");
       setIsPowerWrite(prev => !prev);
       setIsWritten(prev => !prev);
+      setStep(prev => prev - 2);
     }
     if (isError) {
       console.log("실패");
+      toast.error("과외를 다시 등록해주세요", {
+        autoClose: 1500,
+        position: toast.POSITION.TOP_RIGHT,
+      });
     }
   }),
     [isSuccess, isError];
@@ -80,7 +83,7 @@ const Curriculum = ({
       detailImage,
       introduction,
       personality,
-    } = addInfo;
+    } = extraInfo;
     const proImage = profileImg[0];
     const parseAddress = address.map((el: any) => el.value);
     const parseLang = language.map((el: any) => langDict[el]);
@@ -126,6 +129,7 @@ const Curriculum = ({
 
   return (
     <>
+      <ToastContainer />
       <div className="flex flex-col justify-center items-center w-full h-fit">
         <div className="w-fit h-fit font-SCDream5 desktop:text-sm tablet:text-sm text-[13.5px] text-pointColor">
           과외 진행방식에 대한 자세한 정보를 입력하세요
