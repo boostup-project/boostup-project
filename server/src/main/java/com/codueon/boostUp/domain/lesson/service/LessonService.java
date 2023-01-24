@@ -60,8 +60,12 @@ public class LessonService {
                              Long memberId,
                              MultipartFile profileImage,
                              List<MultipartFile> careerImage) {
+        if (lessonRepository.existsByMemberId(memberId)) {
+            throw new BusinessLogicException(ExceptionCode.LESSON_ALREADY_EXIST);
+        }
         Member findMember = memberDbService.ifExistsReturnMember(memberId);
         Lesson savedLesson = saveLessonAndReturnLesson(postLesson, findMember, profileImage);
+
         saveLessonInfo(savedLesson, postLesson, careerImage);
         saveCurriculum(savedLesson, postLesson);
     }
@@ -80,8 +84,12 @@ public class LessonService {
                              Long memberId,
                              MultipartFile profileImage,
                              List<MultipartFile> careerImage) {
+        if (lessonRepository.existsByMemberId(memberId)) {
+            throw new BusinessLogicException(ExceptionCode.LESSON_ALREADY_EXIST);
+        }
         Member findMember = memberDbService.ifExistsReturnMember(memberId);
         Lesson savedLesson = saveLessonAndReturnLessonS3(postLesson, findMember, profileImage);
+
         saveLessonInfoS3(savedLesson, postLesson, careerImage);
         saveCurriculum(savedLesson, postLesson);
     }
@@ -99,8 +107,8 @@ public class LessonService {
     private Lesson saveLessonAndReturnLesson(PostLesson postLesson,
                                              Member member,
                                              MultipartFile profileImage) {
-        Lesson lesson = Lesson.toEntity(postLesson, member.getName(), member.getId());
 
+        Lesson lesson = Lesson.toEntity(postLesson, member.getName(), member.getId());
         UploadFile uploadFile = fileHandler.uploadFile(profileImage);
         ProfileImage createProfileImage = ProfileImage.toEntity(uploadFile, uploadFile.getFilePath());
 
