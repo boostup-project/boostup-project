@@ -57,7 +57,7 @@ const Header = () => {
               <IconMagnify fill={textColor} />
             </div>
           </div>
-          <div className="relative hidden desktop:flex desktop:items-end desktop:w-6/12 h-full">
+          <div className="hidden desktop:flex desktop:items-end desktop:w-min-[500px] desktop:w-[648px] desktop:h-full desktop:relative desktop:visible">
             <div
               className={`w-full h-[50px] flex justify-center items-center border border-borderColor outline-pointColor font-SCDream2 text-sm text-textColor bg-white 
              ${seek ? `rounded-tr-xl rounded-tl-xl` : `rounded-xl`}`}
@@ -65,7 +65,7 @@ const Header = () => {
             >
               <div>조건에 맞는 과외선생님을 찾아보세요</div>
             </div>
-            {seek && <SearchPop onSubmit={onSubmit} absolute={true} />}
+            {/* {seek && <SearchPop onSubmit={onSubmit} />} */}
           </div>
           <div className="w-1/5 h-full hidden desktop:flex desktop:flex-row-reverse desktop:items-end">
             <div className="w-full pt-2 desktop:flex desktop:h-[50px] desktop:justify-end text-sm">
@@ -98,13 +98,12 @@ const Header = () => {
             </div>
           </div>
         </nav>
+        {seek && (
+          <div className="absolute top-40">
+            <SearchPop onSubmit={onSubmit} />
+          </div>
+        )}
       </header>
-      {seek && (
-        <div className="absolute top-40 desktop:hidden">
-          <SearchPop onSubmit={onSubmit} absolute={false} />
-        </div>
-      )}
-      {isPowerWrite && <WriteModal />}
     </>
   );
 };
