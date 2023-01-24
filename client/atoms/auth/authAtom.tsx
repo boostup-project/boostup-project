@@ -1,4 +1,7 @@
 import { atom } from "recoil";
+import { recoilPersist } from "recoil-persist";
+
+const { persistAtom } = recoilPersist();
 
 const findPwEmail = atom({
   key: "findPwEmail",
@@ -19,4 +22,17 @@ const resetPwStep = atom<Number>({
   key: "resetPwStep",
   default: 1,
 });
-export { findPwEmail, signUpErrorMessage, loginErrorMessage, resetPwStep };
+
+const logUser = atom({
+  key: "logUser",
+  default: false,
+  effects_UNSTABLE: [persistAtom],
+});
+
+export {
+  findPwEmail,
+  signUpErrorMessage,
+  loginErrorMessage,
+  resetPwStep,
+  logUser,
+};
