@@ -35,7 +35,7 @@ public enum ExceptionCode {
     EMAIL_ALREADY_EXIST(504, "이미 존재하는 이메일입니다."),
     NICKNAME_ALREADY_EXIST(504, "이미 존재하는 닉네임입니다."),
     RESOURCE_ALREADY_EXIST(504, "이미 존재하는 데이터입니다."),
-
+    LESSON_ALREADY_EXIST(504, "한 회원 당 하나의 과외만 등록 가능합니다."),
     // 요청 실패
     UPLOAD_FAILED(504, "업로드가 실패했습니다."),
     PAYMENT_URL_REQUEST_FAILED(504, "결제 URL 요청을 실패했습니다."),

@@ -11,4 +11,5 @@ import java.util.List;
 
 public interface LessonRepository extends JpaRepository<Lesson, Long>, CustomLessonRepository {
     Optional<Lesson> findByMemberId(Long memberId);
+    Boolean existsByMemberId(Long memberId);
 }
