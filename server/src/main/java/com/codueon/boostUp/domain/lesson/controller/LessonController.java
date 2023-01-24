@@ -36,15 +36,14 @@ public class LessonController {
                                         Authentication authentication,
                                         @RequestPart(value = "profileImage") MultipartFile profileImage,
                                         @RequestPart(value = "careerImage") List<MultipartFile> careerImage) {
-
         JwtAuthenticationToken token = (JwtAuthenticationToken) authentication;
         Long memberId = getMemberIdIfExistToken(token);
 
         /** 로컬 환경 */
-//        lessonService.createLesson(postLesson, memberId, profileImage, careerImage);
+        lessonService.createLesson(postLesson, token.getId(), profileImage, careerImage);
 
         /** S3 환경 */
-        lessonService.createLessonS3(postLesson, token.getId(), profileImage, careerImage);
+//        lessonService.createLessonS3(postLesson, token.getId(), profileImage, careerImage);
 
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
