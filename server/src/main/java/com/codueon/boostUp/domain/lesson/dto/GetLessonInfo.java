@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import java.util.List;
 import java.util.stream.Collectors;
 
+
 @Getter
 @NoArgsConstructor
 public class GetLessonInfo {
@@ -17,7 +18,7 @@ public class GetLessonInfo {
    private String personality;
    private String detailCost;
    private String detailLocation;
-   private List<Long> careerImage;
+   private List<CareerImageVO> careerImages;
    @Builder
     public GetLessonInfo(LessonInfo lessonInfo) {
         this.introduction = lessonInfo.getIntroduction();
@@ -25,8 +26,11 @@ public class GetLessonInfo {
         this.personality = lessonInfo.getPersonality();
         this.detailCost = lessonInfo.getCosts();
         this.detailLocation = lessonInfo.getFavoriteLocation();
-        this.careerImage = lessonInfo.getCareerImages().stream()
-                .map(CareerImage::getId)
+        this.careerImages = lessonInfo.getCareerImages().stream()
+                .map(careerImage -> CareerImageVO.builder()
+                        .careerImageId(careerImage.getId())
+                        .filePath(careerImage.getFilePath())
+                        .build())
                 .collect(Collectors.toList());
     }
 }
