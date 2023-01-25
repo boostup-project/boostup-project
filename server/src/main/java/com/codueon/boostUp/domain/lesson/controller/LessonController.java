@@ -141,15 +141,16 @@ public class LessonController {
 
     /**
      * 등록한 과외 마이페이지 조회 컨트롤러
+     *
      * @return ResponseEntity
      * @author Quartz614
      */
     @GetMapping(value = "/tutor")
-    public ResponseEntity<String> getLessonMypage(Authentication authentication) {
+    public ResponseEntity<WrapUrl> getLessonMypage(Authentication authentication) {
         JwtAuthenticationToken token = (JwtAuthenticationToken) authentication;
         Long memberId = getMemberIdIfExistToken(token);
 
-        return ResponseEntity.ok().body(lessonService.getLessonMypage(memberId));
+        return ResponseEntity.ok().body(new WrapUrl(lessonService.getLessonMypage(memberId)));
     }
 
     /**
