@@ -87,7 +87,7 @@ public class SuggestController {
      * @return ResponseEntity
      * @author LeeGoh
      */
-    @GetMapping("/suggest/{suggest-id}/suggest-info")
+    @GetMapping("/suggest/{suggest-id}/payment/info")
     public ResponseEntity getPaymentInfo(@PathVariable("suggest-id") Long suggestId,
                                          Authentication authentication) {
 
@@ -261,13 +261,13 @@ public class SuggestController {
      * @author LeeGoh
      */
     @GetMapping("/suggest/{suggest-id}/attendance/check")
-    public ResponseEntity<Integer> lessonAttendanceCheck(@PathVariable("suggest-id") Long suggestId,
+    public ResponseEntity lessonAttendanceCheck(@PathVariable("suggest-id") Long suggestId,
                                                          Authentication authentication) {
 
         JwtAuthenticationToken token = (JwtAuthenticationToken) authentication;
         Long memberId = getMemberIdIfExistToken(token);
         Integer quantityCount = suggestService.teacherChecksAttendance(suggestId, memberId);
-        return ResponseEntity.ok().body(quantityCount);
+        return ResponseEntity.ok().body(new GetQuantityCount(quantityCount));
     }
 
     /**
@@ -276,13 +276,13 @@ public class SuggestController {
      * @author LeeGoh
      */
     @GetMapping("/suggest/{suggest-id}/attendance/cancel")
-    public ResponseEntity<Integer> lessonAttendanceCancel(@PathVariable("suggest-id") Long suggestId,
+    public ResponseEntity lessonAttendanceCancel(@PathVariable("suggest-id") Long suggestId,
                                                           Authentication authentication) {
 
         JwtAuthenticationToken token = (JwtAuthenticationToken) authentication;
         Long memberId = getMemberIdIfExistToken(token);
         Integer quantityCount = suggestService.teacherCancelAttendance(suggestId, memberId);
-        return ResponseEntity.ok().body(quantityCount);
+        return ResponseEntity.ok().body(new GetQuantityCount(quantityCount));
     }
 
     /**

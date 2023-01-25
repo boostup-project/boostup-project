@@ -2,6 +2,7 @@ package com.codueon.boostUp.domain.lesson.entity;
 
 import com.codueon.boostUp.domain.lesson.dto.PostLesson;
 import com.codueon.boostUp.domain.lesson.dto.PostLessonDetailEdit;
+import com.codueon.boostUp.domain.lesson.dto.PostLessonInfoEdit;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -72,6 +73,10 @@ public class LessonInfo {
         this.costs = postLessonDetailEdit.getDetailCost();
         this.personality = postLessonDetailEdit.getPersonality();
         this.favoriteLocation = postLessonDetailEdit.getDetailLocation();
+    }
+
+    public void editCareerImage(List<CareerImage> careerImages) {
         this.careerImages.clear();
+        this.careerImages.addAll(careerImages);
     }
 }

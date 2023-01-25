@@ -1,7 +1,7 @@
-FROM openjdk:11-jdk
+FROM adoptopenjdk/openjdk11
 ARG IDLE_PROFILE
-ARG JAR_FILE=*SNAPSHOT.jar
+ARG JAR_FILE=build/libs/*SNAPSHOT.jar
 ENV ENV_IDLE_PROFILE=$IDLE_PROFILE
-COPY ${JAR_FILE} /app.jar
+COPY $JAR_FILE app.jar
 RUN echo $ENV_IDLE_PROFILE
 ENTRYPOINT ["java","-jar","/app.jar","--spring.profiles.active=${ENV_IDLE_PROFILE}"]

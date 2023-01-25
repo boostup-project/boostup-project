@@ -1,10 +1,7 @@
 package com.codueon.boostUp.domain.lesson.service;
 import com.codueon.boostUp.domain.bookmark.repository.BookmarkRepository;
 import com.codueon.boostUp.domain.lesson.dto.*;
-import com.codueon.boostUp.domain.lesson.entity.Curriculum;
-import com.codueon.boostUp.domain.lesson.entity.Lesson;
-import com.codueon.boostUp.domain.lesson.entity.LessonInfo;
-import com.codueon.boostUp.domain.lesson.entity.ProfileImage;
+import com.codueon.boostUp.domain.lesson.entity.*;
 import com.codueon.boostUp.domain.lesson.repository.LessonRepository;
 import com.codueon.boostUp.domain.member.entity.Member;
 import com.codueon.boostUp.domain.member.service.MemberDbService;
@@ -21,9 +18,11 @@ import lombok.SneakyThrows;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -61,8 +60,12 @@ public class LessonService {
                              Long memberId,
                              MultipartFile profileImage,
                              List<MultipartFile> careerImage) {
+        if (lessonRepository.existsByMemberId(memberId)) {
+            throw new BusinessLogicException(ExceptionCode.LESSON_ALREADY_EXIST);
+        }
         Member findMember = memberDbService.ifExistsReturnMember(memberId);
         Lesson savedLesson = saveLessonAndReturnLesson(postLesson, findMember, profileImage);
+
         saveLessonInfo(savedLesson, postLesson, careerImage);
         saveCurriculum(savedLesson, postLesson);
     }
@@ -81,8 +84,12 @@ public class LessonService {
                              Long memberId,
                              MultipartFile profileImage,
                              List<MultipartFile> careerImage) {
+        if (lessonRepository.existsByMemberId(memberId)) {
+            throw new BusinessLogicException(ExceptionCode.LESSON_ALREADY_EXIST);
+        }
         Member findMember = memberDbService.ifExistsReturnMember(memberId);
         Lesson savedLesson = saveLessonAndReturnLessonS3(postLesson, findMember, profileImage);
+
         saveLessonInfoS3(savedLesson, postLesson, careerImage);
         saveCurriculum(savedLesson, postLesson);
     }
@@ -100,8 +107,8 @@ public class LessonService {
     private Lesson saveLessonAndReturnLesson(PostLesson postLesson,
                                              Member member,
                                              MultipartFile profileImage) {
-        Lesson lesson = Lesson.toEntity(postLesson, member.getName(), member.getId());
 
+        Lesson lesson = Lesson.toEntity(postLesson, member.getName(), member.getId());
         UploadFile uploadFile = fileHandler.uploadFile(profileImage);
         ProfileImage createProfileImage = ProfileImage.toEntity(uploadFile, uploadFile.getFilePath());
 
@@ -215,11 +222,10 @@ public class LessonService {
         Member findMember = memberDbService.ifExistsReturnMember(memberId);
         Lesson updateLesson = lessonDbService.ifExistsReturnLesson(lessonId);
 
-        if (!Objects.equals(updateLesson.getMemberId(), findMember)) {
+        if (!Objects.equals(updateLesson.getMemberId(), findMember.getId())) {
             throw new BusinessLogicException(ExceptionCode.UNAUTHORIZED_FOR_UPDATE);
         }
         updateLesson.editLessonInfo(postLessonInfoEdit);
-
 
         List<Integer> languageList = postLessonInfoEdit.getLanguages();
         List<Integer> addressList = postLessonInfoEdit.getAddresses();
@@ -255,9 +261,9 @@ public class LessonService {
         Member findMember = memberDbService.ifExistsReturnMember(memberId);
         Lesson updateLesson = lessonDbService.ifExistsReturnLesson(lessonId);
 
-//        if (!Objects.equals(updateLesson.getMemberId(), findMember)) {
-//            throw new BusinessLogicException(ExceptionCode.UNAUTHORIZED_FOR_UPDATE);
-//        }
+        if (!Objects.equals(updateLesson.getMemberId(), findMember.getId())) {
+            throw new BusinessLogicException(ExceptionCode.UNAUTHORIZED_FOR_UPDATE);
+        }
 
         String dir = "profileImage";
         updateLesson.editLessonInfo(postLessonInfoEdit);
@@ -296,9 +302,25 @@ public class LessonService {
                                    List<MultipartFile> careerImage) {
         Member findMember = memberDbService.ifExistsReturnMember(memberId);
         LessonInfo updateLessonDetail = lessonDbService.ifExsitsReturnLessonInfo(lessonId);
-
         updateLessonDetail.editLessonDetail(postLessonDetailEdit);
+
+        if (!Objects.equals(updateLessonDetail.getId(),findMember.getId())) {
+            throw new BusinessLogicException(ExceptionCode.UNAUTHORIZED_FOR_UPDATE);
+        }
+
+        List<Long> careerImages = postLessonDetailEdit.getCareerImages();
+        List<CareerImage> careerImageList =  new ArrayList<>(updateLessonDetail.getCareerImages());
+
+        for (int i = 0; i < careerImages.size(); i++) {
+            for (int j = 0; j < careerImageList.size(); j++) {
+                if (careerImageList.get(j).getId() == careerImages.get(i)) {
+                    careerImageList.remove(j);
+                    break;
+                }
+            }
+        }
         List<UploadFile> uploadFileList = fileHandler.parseUploadFileInfo(careerImage);
+        updateLessonDetail.editCareerImage(careerImageList);
         lessonDbService.editCareerImage(uploadFileList, updateLessonDetail);
         lessonDbService.saveLessonInfo(updateLessonDetail);
     }
@@ -311,6 +333,7 @@ public class LessonService {
      * @param careerImage 경력 이미지
      * @author Quartz614
      */
+
     @SneakyThrows
     public void updateLessonDetailS3(Long lessonId,
                                    PostLessonDetailEdit postLessonDetailEdit,
@@ -318,16 +341,28 @@ public class LessonService {
                                    List<MultipartFile> careerImage) {
         Member findMember = memberDbService.ifExistsReturnMember(memberId);
         LessonInfo updateLessonDetail = lessonDbService.ifExsitsReturnLessonInfo(lessonId);
-
-        //        if (!Objects.equals(updateLessonDetail.getMemberId(), findMember)) {
-//            throw new BusinessLogicException(ExceptionCode.UNAUTHORIZED_FOR_UPDATE);
-//        }
-
-        String dir = "careerImage";
-        updateLessonDetail.getCareerImages().forEach(careerImage1 -> awsS3Service.delete(careerImage1.getFileName(), dir));
         updateLessonDetail.editLessonDetail(postLessonDetailEdit);
 
+        if (!Objects.equals(updateLessonDetail.getId(),findMember.getId())) {
+            throw new BusinessLogicException(ExceptionCode.UNAUTHORIZED_FOR_UPDATE);
+        }
+
+        String dir = "careerImage";
+        List<Long> careerImages = postLessonDetailEdit.getCareerImages();
+        List<CareerImage> careerImageList = new ArrayList<>(updateLessonDetail.getCareerImages());
+
+        for (int i = 0; i < careerImages.size(); i++) {
+            for (int j = 0; j < careerImageList.size(); j++) {
+                if (careerImageList.get(j).getId() == careerImages.get(i)) {
+                    awsS3Service.delete(careerImageList.get(j).getFilePath(), dir);
+                    careerImageList.remove(j);
+                    break;
+                }
+            }
+        }
+
         List<UploadFile> uploadFileList = awsS3Service.uploadFileList(careerImage, dir);
+        updateLessonDetail.editCareerImage(careerImageList);
         lessonDbService.editCareerImage(uploadFileList, updateLessonDetail);
         lessonDbService.saveLessonInfo(updateLessonDetail);
     }

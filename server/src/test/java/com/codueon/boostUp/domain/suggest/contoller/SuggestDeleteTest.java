@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.test.web.servlet.ResultActions;
 
+import static com.codueon.boostUp.domain.utils.ApiDocumentUtils.getRequestPreProcessor;
 import static com.codueon.boostUp.global.security.utils.AuthConstants.*;
 import static org.mockito.Mockito.doNothing;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
@@ -32,8 +33,10 @@ public class SuggestDeleteTest extends SuggestControllerTest{
                                 .with(csrf())
                 );
 
-        actions.andExpect(status().isNoContent())
+        actions
+                .andExpect(status().isNoContent())
                 .andDo(document("신청취소",
+                        getRequestPreProcessor(),
                         pathParameters(
                                 parameterWithName("suggest-id").description("신청 식별자")
                         ),

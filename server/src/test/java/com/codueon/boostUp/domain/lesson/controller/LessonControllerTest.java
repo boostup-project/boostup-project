@@ -18,6 +18,8 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureWebM
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
+import org.springframework.restdocs.payload.FieldDescriptor;
+import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -28,6 +30,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static com.codueon.boostUp.global.security.utils.AuthConstants.*;
+import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 
 @WithMockUser
 @AutoConfigureWebMvc
@@ -100,5 +103,27 @@ public class LessonControllerTest {
 
         authentication = new JwtAuthenticationToken(authorities, member.getName(), null, member.getId());
         SecurityContextHolder.getContext().setAuthentication(authentication);
+    }
+
+    protected List<FieldDescriptor> getLessonPageResponse() {
+        return List.of(
+                fieldWithPath("data").type(JsonFieldType.ARRAY).description("장소 데이터"),
+                fieldWithPath("data[0].lessonId").type(JsonFieldType.NUMBER).description("과외 식별자"),
+                fieldWithPath("data[0].title").type(JsonFieldType.STRING).description("과외 타이틀"),
+                fieldWithPath("data[0].cost").type(JsonFieldType.NUMBER).description("과외 가격"),
+                fieldWithPath("data[0].profileImage").type(JsonFieldType.STRING).description("섬네일 이미지"),
+                fieldWithPath("data[0].name").type(JsonFieldType.STRING).description("강사 이름"),
+                fieldWithPath("data[0].company").type(JsonFieldType.STRING).description("강사 대표회사"),
+                fieldWithPath("data[0].career").type(JsonFieldType.NUMBER).description("강사 경력"),
+                fieldWithPath("data[0].languages").type(JsonFieldType.ARRAY).description("과외 가능 언어"),
+                fieldWithPath("data[0].address").type(JsonFieldType.ARRAY).description("과외 가능 지역"),
+                fieldWithPath("data[0].bookmark").type(JsonFieldType.BOOLEAN).description("북마크 여부"),
+
+                fieldWithPath("pageInfo").type(JsonFieldType.OBJECT).description("페이지 정보"),
+                fieldWithPath("pageInfo.page").type(JsonFieldType.NUMBER).description("페이지"),
+                fieldWithPath("pageInfo.size").type(JsonFieldType.NUMBER).description("사이즈"),
+                fieldWithPath("pageInfo.totalElements").type(JsonFieldType.NUMBER).description("총 갯수"),
+                fieldWithPath("pageInfo.totalPages").type(JsonFieldType.NUMBER).description("총 페이지 수")
+        );
     }
 }

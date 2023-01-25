@@ -14,6 +14,7 @@ import javax.persistence.EntityManager;
 import java.util.List;
 
 import static com.codueon.boostUp.domain.lesson.entity.QLesson.lesson;
+import static com.codueon.boostUp.domain.member.entity.QMember.member;
 import static com.codueon.boostUp.domain.suggest.entity.QSuggest.suggest;
 import static com.codueon.boostUp.domain.suggest.entity.SuggestStatus.*;
 
@@ -36,10 +37,11 @@ public class SuggestRepositoryImpl implements CustomSuggestRepository{
                         suggest.startTime,
                         suggest.endTime,
                         lesson.id,
-                        lesson.name
+                        member.name
                 ))
                 .from(suggest)
                 .leftJoin(lesson).on(suggest.lessonId.eq(lesson.id))
+                .leftJoin(member).on(suggest.memberId.eq(member.id))
                 .where( lesson.memberId.eq(memberId),
                         suggest.lessonId.eq(lessonId),
                         changeStatusByTabId(tabId))
@@ -67,6 +69,7 @@ public class SuggestRepositoryImpl implements CustomSuggestRepository{
         List<GetStudentSuggest> results = queryFactory
                 .select(new QGetStudentSuggest(
                         suggest.id,
+                        member.name,
                         suggest.suggestStatus,
                         suggest.startTime,
                         suggest.endTime,
@@ -74,6 +77,7 @@ public class SuggestRepositoryImpl implements CustomSuggestRepository{
                 ))
                 .from(suggest)
                 .leftJoin(lesson).on(suggest.lessonId.eq(lesson.id))
+                .leftJoin(member).on(lesson.memberId.eq(member.id))
                 .where(suggest.memberId.eq(memberId))
                 .orderBy(suggest.id.desc())
                 .offset(pageable.getOffset())
