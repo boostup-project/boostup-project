@@ -4,6 +4,8 @@ import DetailTabBtn from "components/reuse/btn/DetailTabBtn";
 import DetailContentContainer from "components/reuse/container/DetailContentContainer";
 import DetailBtn from "components/reuse/btn/DetailBtn";
 import { useEffect, useState } from "react";
+import DetailExtra from "components/DetailExtra";
+import DetailCurriculum from "components/DetailCurriculum";
 
 const Detail = () => {
   // lessonId 받아오기
@@ -60,10 +62,12 @@ const Detail = () => {
         </div>
         <div className="desktop:min-w-[1000px] min-w-[95%] w-3/4 h-fit flex desktop:flex-row flex-col justify-start items-center">
           <DetailContentContainer>
-            각 탭별 컴포넌트를 생성하여 넣어주세요!
+            {tab === 1 && <DetailExtra />}
+            {tab === 2 && <DetailCurriculum />}
+
+            {/* 각 탭별 컴포넌트를 생성하여 넣어주세요! */}
           </DetailContentContainer>
-          <div className="w-full h-full flex flex-col justify-start items-center pl-3">
-            {/* 각 버튼 안에는 디자인에 맞게 div 박스 넣어서 구현해주세요! */}
+          {/* <div className="w-full h-full flex flex-col justify-start items-center pl-3">
             <DetailBtn bold={true} remove={false} onClick={() => {}}>
               신청하기
             </DetailBtn>
@@ -77,7 +81,7 @@ const Detail = () => {
             <DetailBtn bold={false} remove={true} onClick={() => {}}>
               삭제하기
             </DetailBtn>
-          </div>
+          </div> */}
         </div>
       </div>
     </>
