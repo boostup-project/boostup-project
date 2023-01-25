@@ -72,7 +72,7 @@ const Additional = ({ setAddInfo, setStep }: Props) => {
   return (
     <>
       <div className="w-full h-fit font-SCDream5 text-xs text-center text-pointColor mt-2 tablet:text-sm">
-        등록할 과와에 대한 자세한 정보를 입력하세요
+        등록할 과외에 대한 자세한 정보를 입력하세요
       </div>
       <form
         className="placeholder:text-center w-full flex flex-col items-center text-sm tablet:text-base"

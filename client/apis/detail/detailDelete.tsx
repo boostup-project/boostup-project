@@ -6,6 +6,8 @@ const detailDelete = async (lessonId: number) => {
     headers: {
       "content-Type": `application/json`,
       "ngrok-skip-browser-warning": "69420",
+      Authorization: `Bearer ${localStorage.getItem("token")}`,
+      RefreshToken: localStorage.getItem("refresh_token"),
     },
   });
 };

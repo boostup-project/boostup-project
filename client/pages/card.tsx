@@ -3,10 +3,10 @@ import ApplyModal from "components/Detail/ApplyModal";
 import DetailButtons from "components/Detail/DetailButtons";
 const Cards = () => {
   return (
-    <div className="mt-32 flex flex-row flex-wrap w-full desktop:w-9/12 desktop:min-w-[1000px] tablet:w-full h-fit">
-      {/* <Card /> */}
+    <div className="mt-12 flex flex-row flex-wrap w-full desktop:w-9/12 desktop:min-w-[1000px] tablet:w-full h-fit">
+      <Card />
       {/* <ApplyModal></ApplyModal> */}
-      <DetailButtons></DetailButtons>
+      {/* <DetailButtons></DetailButtons> */}
     </div>
   );
 };
