@@ -149,9 +149,10 @@ public class SuggestService {
         }
 
         Lesson findLesson = lessonDbService.ifExistsReturnLesson(findSuggest.getLessonId());
+        Member findTutor = memberDbService.ifExistsReturnMember(findLesson.getMemberId());
         PaymentInfo findPaymentInfo = suggestDbService.ifExistsReturnPaymentInfo(suggestId);
 
-        return new GetPaymentInfo(findLesson, findSuggest.getTotalCost(), findPaymentInfo.getQuantity());
+        return new GetPaymentInfo(findLesson, findTutor.getName(), findSuggest.getTotalCost(), findPaymentInfo.getQuantity());
     }
 
     /**
@@ -166,10 +167,11 @@ public class SuggestService {
         suggestDbService.suggestGetMemberIdAndStatusIsNotInProgress(findSuggest, memberId);
 
         Lesson findLesson = lessonDbService.ifExistsReturnLesson(findSuggest.getLessonId());
+        Member findTutor = memberDbService.ifExistsReturnMember(findLesson.getMemberId());
         PaymentInfo findPaymentInfo = suggestDbService.ifExistsReturnPaymentInfo(suggestId);
 
         return new GetPaymentReceipt(
-                findLesson, findSuggest.getTotalCost(), findPaymentInfo.getQuantity(), findSuggest.getPaymentMethod());
+                findLesson, findTutor.getName(), findSuggest.getTotalCost(), findPaymentInfo.getQuantity(), findSuggest.getPaymentMethod());
     }
 
     /*---------- 결제 로직 ----------*/
@@ -425,6 +427,7 @@ public class SuggestService {
     public GetRefundPayment getRefundPaymentInfo(Long suggestId, Long memberId) {
         Suggest findSuggest = suggestDbService.ifExistsReturnSuggest(suggestId);
         Lesson findLesson = lessonDbService.ifExistsReturnLesson(findSuggest.getId());
+        Member findTutor = memberDbService.ifExistsReturnMember(findLesson.getMemberId());
         PaymentInfo findPaymentInfo = suggestDbService.ifExistsReturnPaymentInfo(suggestId);
 
         if (!findSuggest.getMemberId().equals(memberId) ||
@@ -434,6 +437,7 @@ public class SuggestService {
 
         return GetRefundPayment.builder()
                 .suggest(findSuggest)
+                .tutorName(findTutor.getName())
                 .lesson(findLesson)
                 .paymentInfo(findPaymentInfo)
                 .build();
