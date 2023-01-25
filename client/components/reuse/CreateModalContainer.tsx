@@ -5,7 +5,10 @@ interface Props {
 const CreateModalContainer = ({ children }: Props) => {
   return (
     <>
-      <div className="absolute flex flex-col p-7 justify-start items-center top-28 min-h-[500px] rounded-xl desktop:w-1/2 tablet:w-3/4 w-[90%] h-fit bg-white border border-borderColor">
+      <div
+        className="absolute flex flex-col p-7 justify-start items-center top-16 bottom-10 min-h-[500px] max-h-[800px]  desktop:w-1/2 tablet:w-3/4 w-[90%] h-screen overflow-y-auto bg-white border border-borderColor rounded-xl"
+        onClick={e => e.stopPropagation()}
+      >
         {children}
       </div>
     </>

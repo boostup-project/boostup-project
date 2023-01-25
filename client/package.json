@@ -41,6 +41,5 @@
     "prettier": "^2.8.1",
     "tailwind-scrollbar": "^2.1.0",
     "tailwindcss": "^3.2.4"
-  },
-  "proxy" : "https://88f0-182-226-233-7.jp.ngrok.io"
+  }
 }

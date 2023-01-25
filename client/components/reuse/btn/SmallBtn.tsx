@@ -1,7 +1,7 @@
 interface Props {
-  onClick?: (e: any) => void;
+  onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
   children: React.ReactNode;
-  css? : string;
+  css?: string;
 }
 
 const SmallBtn = ({ onClick, children, css }: Props) => {

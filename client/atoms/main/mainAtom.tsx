@@ -5,6 +5,16 @@ const inputStep = atom({
   default: 1,
 });
 
+const powerWriteModal = atom({
+  key: "powerWriteModal",
+  default: false,
+});
+
+const isWrite = atom({
+  key: "isWrite",
+  default: false,
+});
+
 const filterModal = atom({
   // Modal ON : "30"
   // Modal OFF :"32"
@@ -12,4 +22,4 @@ const filterModal = atom({
   default: 48,
 });
 
-export { inputStep, filterModal };
+export { inputStep, powerWriteModal, filterModal, isWrite };
