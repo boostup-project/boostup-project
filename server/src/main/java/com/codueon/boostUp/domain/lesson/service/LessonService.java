@@ -222,7 +222,7 @@ public class LessonService {
         Member findMember = memberDbService.ifExistsReturnMember(memberId);
         Lesson updateLesson = lessonDbService.ifExistsReturnLesson(lessonId);
 
-        if (!Objects.equals(updateLesson.getMemberId(), findMember)) {
+        if (!Objects.equals(updateLesson.getMemberId(), findMember.getId())) {
             throw new BusinessLogicException(ExceptionCode.UNAUTHORIZED_FOR_UPDATE);
         }
         updateLesson.editLessonInfo(postLessonInfoEdit);
@@ -261,7 +261,7 @@ public class LessonService {
         Member findMember = memberDbService.ifExistsReturnMember(memberId);
         Lesson updateLesson = lessonDbService.ifExistsReturnLesson(lessonId);
 
-        if (!Objects.equals(updateLesson.getMemberId(), findMember)) {
+        if (!Objects.equals(updateLesson.getMemberId(), findMember.getId())) {
             throw new BusinessLogicException(ExceptionCode.UNAUTHORIZED_FOR_UPDATE);
         }
 
@@ -300,8 +300,13 @@ public class LessonService {
                                    PostLessonDetailEdit postLessonDetailEdit,
                                    Long memberId,
                                    List<MultipartFile> careerImage) {
+        Member findMember = memberDbService.ifExistsReturnMember(memberId);
         LessonInfo updateLessonDetail = lessonDbService.ifExsitsReturnLessonInfo(lessonId);
         updateLessonDetail.editLessonDetail(postLessonDetailEdit);
+
+        if (!Objects.equals(updateLessonDetail.getId(),findMember.getId())) {
+            throw new BusinessLogicException(ExceptionCode.UNAUTHORIZED_FOR_UPDATE);
+        }
 
         List<Long> careerImages = postLessonDetailEdit.getCareerImages();
         List<CareerImage> careerImageList =  new ArrayList<>(updateLessonDetail.getCareerImages());
@@ -334,8 +339,14 @@ public class LessonService {
                                    PostLessonDetailEdit postLessonDetailEdit,
                                    Long memberId,
                                    List<MultipartFile> careerImage) {
+        Member findMember = memberDbService.ifExistsReturnMember(memberId);
         LessonInfo updateLessonDetail = lessonDbService.ifExsitsReturnLessonInfo(lessonId);
         updateLessonDetail.editLessonDetail(postLessonDetailEdit);
+
+        if (!Objects.equals(updateLessonDetail.getId(),findMember.getId())) {
+            throw new BusinessLogicException(ExceptionCode.UNAUTHORIZED_FOR_UPDATE);
+        }
+
         String dir = "careerImage";
         List<Long> careerImages = postLessonDetailEdit.getCareerImages();
         List<CareerImage> careerImageList = new ArrayList<>(updateLessonDetail.getCareerImages());
