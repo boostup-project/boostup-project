@@ -5,12 +5,18 @@ import { powerApplyModal } from "atoms/detail/detailAtom";
 import { useRecoilState } from "recoil";
 import detailDelete from "apis/detail/detailDelete";
 import Swal from "sweetalert2";
+import { useState, useCallback } from "react";
+import CreateModalContainer from "components/reuse/CreateModalContainer";
+
 const DetailButtons = () => {
   const [powerApply, setPowerApply] = useRecoilState(powerApplyModal);
 
-  const toApply = () => {
-    setPowerApply(prev => !prev);
-  };
+  const [isOpenModal, setOpenModal] = useState<boolean>(false);
+
+  const onClickToggleModal = useCallback(() => {
+    setOpenModal(!isOpenModal);
+  }, [isOpenModal]);
+
   const chatNow = () => {
     return;
   };
@@ -34,10 +40,14 @@ const DetailButtons = () => {
   };
 
   return (
-    <>
-      {powerApply && <ApplyModal />}
-      <div className="flex flex-col w-1/5 h-fit">
-        <DetailBtn bold={true} remove={false} onClick={toApply}>
+    <div className="flex w-full h-full flex-col items-center">
+      {isOpenModal && (
+        <CreateModalContainer>
+          <ApplyModal onClickToggleModal={onClickToggleModal} />
+        </CreateModalContainer>
+      )}
+      <div className="flex flex-col desktop:w-1/5 desktop:h-fit tablet:w-full w-full">
+        <DetailBtn bold={true} remove={false} onClick={onClickToggleModal}>
           신청하기
         </DetailBtn>
         <DetailBtn bold={false} remove={false} onClick={chatNow}>
@@ -58,7 +68,7 @@ const DetailButtons = () => {
           </DetailBtn>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 export default DetailButtons;

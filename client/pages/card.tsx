@@ -4,9 +4,9 @@ import DetailButtons from "components/Detail/DetailButtons";
 const Cards = () => {
   return (
     <div className="mt-24 flex flex-row flex-wrap w-full desktop:w-9/12 desktop:min-w-[1000px] tablet:w-full h-fit">
-      <Card />
+      {/* <Card /> */}
       {/* <ApplyModal></ApplyModal> */}
-      {/* <DetailButtons></DetailButtons> */}
+      <DetailButtons></DetailButtons>
     </div>
   );
 };
