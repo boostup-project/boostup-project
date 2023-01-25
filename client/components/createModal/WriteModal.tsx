@@ -1,14 +1,12 @@
 import ModalBackDrop from "components/reuse/container/ModalBackDrop";
 import StepNavWrapper from "components/reuse/container/StepNavWrapper";
 import CreateModalContainer from "components/reuse/CreateModalContainer";
-import Additional from "./Additional";
+import ExtraInfo from "./ExtraInfo";
 import BasicInfo from "./BasicInfo";
 import Curriculum from "./Curriculum";
 import { inputStep, powerWriteModal } from "atoms/main/mainAtom";
 import { useRecoilState } from "recoil";
 import { useState } from "react";
-import { AxiosResponse } from "axios";
-import { UseMutateFunction } from "react-query";
 
 interface ObjectPart {
   [index: string]: string | string[];
@@ -18,27 +16,18 @@ export interface Info {
   [index: string]: string | string[] | ObjectPart;
 }
 
-interface Props {
-  mutate: UseMutateFunction<
-    AxiosResponse<any, any>,
-    unknown,
-    FormData,
-    unknown
-  >;
-}
-
-const WriteModal = ({ mutate }: Props) => {
+const WriteModal = () => {
   const [basicInfo, setBasicInfo] = useState<Info>({});
-  const [addInfo, setAddInfo] = useState<Info>({});
+  const [extraInfo, setExtraInfo] = useState<Info>({});
   const [curInfo, setCurInfo] = useState("");
   const [step, setStep] = useRecoilState(inputStep);
-  const [powerWrite, setPowerIsWrite] = useRecoilState(powerWriteModal);
+  const [isPowerWrite, setIsPowerWrite] = useRecoilState(powerWriteModal);
   const toWrite = () => {
-    setPowerIsWrite(prev => !prev);
+    setIsPowerWrite(prev => !prev);
   };
 
   console.log("basic", basicInfo);
-  console.log("add", addInfo);
+  console.log("add", extraInfo);
   console.log("cur", curInfo);
 
   return (
@@ -54,22 +43,16 @@ const WriteModal = ({ mutate }: Props) => {
           />
         )}
         {step === 2 && (
-          <Additional
-            // addInfo={addInfo}
-            setAddInfo={setAddInfo}
-            setStep={setStep}
-          />
+          <ExtraInfo setExtraInfo={setExtraInfo} setStep={setStep} />
         )}
         {step === 3 && (
           <Curriculum
             basicInfo={basicInfo}
-            addInfo={addInfo}
+            extraInfo={extraInfo}
             curInfo={curInfo}
             setCurInfo={setCurInfo}
             setStep={setStep}
-            powerWrite={powerWrite}
-            setPowerIsWrite={setPowerIsWrite}
-            mutate={mutate}
+            setIsPowerWrite={setIsPowerWrite}
           />
         )}
       </CreateModalContainer>

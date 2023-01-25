@@ -30,8 +30,7 @@ const ApplyModal = () => {
   const sendApplyClass = useMutation(getApply);
 
   const apply = () => {
-    const formData = new FormData();
-    sendApplyClass.mutate(formData);
+    return;
   };
 
   const langArr = Object.keys(langDict);

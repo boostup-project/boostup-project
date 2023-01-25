@@ -3,7 +3,7 @@ import CreateModalContainer from "components/reuse/container/CreateModalContaine
 // import SmallBtn from "components/reuse/btn/SmallBtn";
 import StepNavWrapper from "components/reuse/container/StepNavWrapper";
 import BasicInfo from "components/createModal/BasicInfo";
-import Additional from "components/createModal/Additional";
+import ExtraInfo from "components/createModal/ExtraInfo";
 import Curriculum from "components/createModal/Curriculum";
 import Carouselcomp from "components/carousel/Carouselcomp";
 import LanguageFilter from "components/filter/LanguageFilter";

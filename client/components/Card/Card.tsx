@@ -11,6 +11,7 @@ import { useEffect, useState } from "react";
 //import useGetMainCard from "./useGetMainCard";
 import getMainCard from "apis/card/getMainCard";
 import { dehydrate, QueryClient, useQuery } from "react-query";
+import axios from "axios";
 
 export async function getStaticProps() {
   const queryClient = new QueryClient();
@@ -23,7 +24,6 @@ export async function getStaticProps() {
     },
   };
 }
-
 const Card = () => {
   const [cards, setCards] = useState([]);
 

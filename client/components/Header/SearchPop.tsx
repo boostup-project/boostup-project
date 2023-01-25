@@ -6,10 +6,9 @@ import Select from "react-select";
 
 interface Props {
   onSubmit: any;
-  absolute?: boolean;
 }
 
-export const SearchPop = ({ onSubmit, absolute }: Props) => {
+export const SearchPop = ({ onSubmit }: Props) => {
   const { control, register, handleSubmit } = useForm();
   const [isAdd, setIsAdd] = useState(false);
   const [isLang, setIsLang] = useState(false);
@@ -19,7 +18,7 @@ export const SearchPop = ({ onSubmit, absolute }: Props) => {
 
   return (
     <div
-      className={`bg-white desktop:absolute tablet:top-[8px] desktop:top-[86px] desktop:w-full h-fit border border-borderColor rounded-br-xl rounded-bl-xl`}
+      className={`fixed h-fit border visible border-borderColor rounded-br-xl rounded-bl-xl bg-white tablet:left-[100px] tablet:top-[100px] desktop:absolute desktop:top-[70px] desktop:w-full`}
     >
       <form
         className="flex flex-col justify-center items-center"
