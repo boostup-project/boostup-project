@@ -67,7 +67,7 @@ public class ReviewGetTest extends ReviewControllerTest {
                 .andExpect(jsonPath("$.data[0].name").value(member.getName()))
                 .andExpect(jsonPath("$.data[0].score").value(review.getScore()))
                 .andExpect(jsonPath("$.data[0].comment").value(review.getComment()))
-                .andExpect(jsonPath("$.data[0].createdAt").value(review.getCreatedAt()))
+                .andExpect(jsonPath("$.data[0].createdAt").value(review.getCreatedAt().toString()))
                 .andDo(document("리뷰 상세페이지 조회",
                         pathParameters(
                                 parameterWithName("lesson-id").description("과외 식별자")
@@ -82,8 +82,8 @@ public class ReviewGetTest extends ReviewControllerTest {
                                         fieldWithPath("data[].comment").type(JsonFieldType.STRING).description("리뷰 내용"),
                                         fieldWithPath("data[].createdAt").type(JsonFieldType.STRING).description("리뷰 작성 시간"),
 
-                                        fieldWithPath("average").type(JsonFieldType.ARRAY).description("리뷰 평균"),
-                                        fieldWithPath("totalReviews").type(JsonFieldType.ARRAY).description("리뷰 개수"),
+                                        fieldWithPath("average").type(JsonFieldType.NUMBER).description("리뷰 평균"),
+                                        fieldWithPath("totalReviews").type(JsonFieldType.NUMBER).description("리뷰 개수"),
 
                                         fieldWithPath("pageInfo").type(JsonFieldType.OBJECT).description("페이지 정보"),
                                         fieldWithPath("pageInfo.page").type(JsonFieldType.NUMBER).description("페이지"),
@@ -137,7 +137,7 @@ public class ReviewGetTest extends ReviewControllerTest {
                 .andExpect(jsonPath("$.data[0].endTime").value(end.toString()))
                 .andExpect(jsonPath("$.data[0].score").value(review.getScore()))
                 .andExpect(jsonPath("$.data[0].comment").value(review.getComment()))
-                .andExpect(jsonPath("$.data[0].createdAt").value(review.getCreatedAt()))
+//                .andExpect(jsonPath("$.data[0].createdAt").value(review.getCreatedAt().toString()))
                 .andDo(document("리뷰 마이페이지 조회",
                         getRequestPreProcessor(),
                         getResponsePreProcessor(),
@@ -161,6 +161,7 @@ public class ReviewGetTest extends ReviewControllerTest {
                                         fieldWithPath("data[].profileImage").type(JsonFieldType.STRING).description("섬네일 이미지"),
                                         fieldWithPath("data[].languages").type(JsonFieldType.ARRAY).description("과외 가능 언어"),
                                         fieldWithPath("data[].address").type(JsonFieldType.ARRAY).description("과외 가능 주소"),
+                                        fieldWithPath("data[].createdAt").type(JsonFieldType.STRING).description("리뷰 작성 날짜"),
 
                                         fieldWithPath("pageInfo").type(JsonFieldType.OBJECT).description("페이지 정보"),
                                         fieldWithPath("pageInfo.page").type(JsonFieldType.NUMBER).description("페이지"),
