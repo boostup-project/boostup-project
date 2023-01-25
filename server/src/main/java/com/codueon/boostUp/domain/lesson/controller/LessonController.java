@@ -40,10 +40,10 @@ public class LessonController {
         Long memberId = getMemberIdIfExistToken(token);
 
         /** 로컬 환경 */
-        lessonService.createLesson(postLesson, token.getId(), profileImage, careerImage);
+        lessonService.createLesson(postLesson, memberId, profileImage, careerImage);
 
         /** S3 환경 */
-//        lessonService.createLessonS3(postLesson, token.getId(), profileImage, careerImage);
+//        lessonService.createLessonS3(postLesson, memberId, profileImage, careerImage);
 
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
@@ -69,7 +69,7 @@ public class LessonController {
 //        lessonService.updateLessonInfo(lessonId, postLessonInfoEdit, memberId, profileImage);
 
         /** S3 환경 */
-        lessonService.updateLessonInfoS3(lessonId, postLessonInfoEdit, token.getId(), profileImage);
+        lessonService.updateLessonInfoS3(lessonId, postLessonInfoEdit, memberId, profileImage);
 
         return ResponseEntity.ok().build();
     }
@@ -95,7 +95,7 @@ public class LessonController {
 //        lessonService.updateLessonDetail(lessonId, postLessonDetailEdit, memberId, careerImage);
 
         /** S3 환경 */
-        lessonService.updateLessonDetailS3(lessonId, postLessonDetailEdit, token.getId(), careerImage);
+        lessonService.updateLessonDetailS3(lessonId, postLessonDetailEdit, memberId, careerImage);
 
         return ResponseEntity.ok().build();
     }
