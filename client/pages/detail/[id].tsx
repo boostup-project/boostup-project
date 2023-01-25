@@ -4,15 +4,23 @@ import DetailTabBtn from "components/reuse/btn/DetailTabBtn";
 import DetailContentContainer from "components/reuse/container/DetailContentContainer";
 import DetailBtn from "components/reuse/btn/DetailBtn";
 import { useEffect, useState } from "react";
-import DetailExtra from "components/DetailExtra";
+import DetailExtra, { DetailExtraInfo } from "components/DetailExtra";
 import DetailCurriculum from "components/DetailCurriculum";
+import useGetExtra from "hooks/detail/useGetExtra";
+import { off } from "process";
 
 const Detail = () => {
   // lessonId 받아오기
   const router = useRouter();
-  const lessonId = router.query.id;
-
+  const lessonId = Number(router.query.id);
   const [tab, setTab] = useState(1);
+
+  const {
+    refetch: refetchGetExtra,
+    isSuccess,
+    isError,
+    data: extraData,
+  } = useGetExtra(lessonId);
 
   const handleTabClick = (id: number) => {
     setTab(id);
@@ -21,14 +29,26 @@ const Detail = () => {
   useEffect(() => {
     // refetch 실행위치
     // tab이 바뀔때마다 refetch 실행
-    if (tab === 1) {
+    if (tab === 1 && lessonId) {
       // 상세정보 refetch
-    } else if (tab === 2) {
+      refetchGetExtra();
+    } else if (tab === 2 && lessonId) {
       // 진행방식 refetch
     } else if (tab === 3) {
       // 과외후기 refetch
     }
-  }, [tab]);
+  }, [tab, lessonId]);
+
+  // useEffect(() => {
+  //   if (isSuccess) {
+  //     console.log("isSuccess", isSuccess);
+  //     setExtraInfo(extraData.data);
+  //     console.log(extraData.data);
+  //   }
+  //   if (isError) {
+  //     console.log("isError", isError);
+  //   }
+  // }, [isSuccess, isError, extraData]);
 
   return (
     <>
@@ -62,7 +82,7 @@ const Detail = () => {
         </div>
         <div className="desktop:min-w-[1000px] min-w-[95%] w-3/4 h-fit flex desktop:flex-row flex-col justify-start items-center">
           <DetailContentContainer>
-            {tab === 1 && <DetailExtra />}
+            {tab === 1 && <DetailExtra extraData={extraData} />}
             {tab === 2 && <DetailCurriculum />}
 
             {/* 각 탭별 컴포넌트를 생성하여 넣어주세요! */}

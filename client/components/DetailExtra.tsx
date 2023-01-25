@@ -1,10 +1,14 @@
+import { AxiosResponse } from "axios";
+import { useState } from "react";
+import { useEffect } from "react";
+
 interface CareerImage {
   [index: string]: string;
   careerImageId: string;
   careerImageUrl: string;
 }
 
-interface DetailExtraInfo {
+export interface DetailExtraInfo {
   [index: string]: string | Array<CareerImage>;
   introduction: string;
   detailCompany: string;
@@ -14,8 +18,12 @@ interface DetailExtraInfo {
   careerImage: Array<CareerImage>;
 }
 
-interface DetailTitles {
+export interface DetailTitles {
   [index: string]: string;
+}
+
+export interface Props {
+  extraData: AxiosResponse<any, any> | undefined;
 }
 
 const detailTitles: DetailTitles = {
@@ -29,63 +37,42 @@ const detailTitles: DetailTitles = {
 
 const detailTitlesArray = Object.keys(detailTitles);
 
-const dummy: DetailExtraInfo = {
-  introduction: "테스트",
-  detailCompany: "회사 테스트",
-  personality: "성격 테스트",
-  detailCost: "금액 테스트",
-  detailLocation: "위치 테스트",
-  careerImage: [
-    {
-      careerImageId: "1",
-      careerImageUrl: "https://source.unsplash.com/random",
-    },
-    {
-      careerImageId: "2",
-      careerImageUrl: "https://source.unsplash.com/random",
-    },
-    {
-      careerImageId: "3",
-      careerImageUrl: "https://source.unsplash.com/random",
-    },
-  ],
-};
+const DetailExtra = ({ extraData }: Props) => {
+  const [textData, setTextData] = useState<DetailTitles>();
+  const [images, setImages] = useState([]);
+  useEffect(() => {
+    if (extraData) {
+      const prompt = {
+        introduction: extraData.data.introduction,
+        detailCompany: extraData.data.detailCompany,
+        personality: extraData.data.personality,
+        detailCost: extraData.data.detailCost,
+        detailLocation: extraData.data.detailLocation,
+      };
+      setTextData(prompt);
+      setImages(extraData.data.careerImage);
+    }
+  }, [extraData]);
 
-const {
-  introduction,
-  detailCompany,
-  personality,
-  detailCost,
-  detailLocation,
-  careerImage,
-} = dummy;
-
-const textData: DetailTitles = {
-  introduction,
-  detailCompany,
-  personality,
-  detailCost,
-  detailLocation,
-};
-
-const DetailExtra = () => {
   return (
     <div className="w-full h-full">
       <div className="p-6 text-base">
-        {detailTitlesArray.map((title, i) => (
-          <div className="mb-5">
-            <div key={i} className="font-SCDream5">
-              {detailTitles[title]}
+        {!textData ? (
+          <div>Loading</div>
+        ) : (
+          detailTitlesArray.map((title, i) => (
+            <div key={i} className="mb-7">
+              <div className="font-SCDream5">{detailTitles[title]}</div>
+              <div className="font-SCDrea3">
+                {title === "careerImage" ? (
+                  <div>사진</div>
+                ) : (
+                  <div>• {textData[title]}</div>
+                )}
+              </div>
             </div>
-            <div className="font-SCDrea3">
-              {title !== "careerImage" ? (
-                <div>{textData[title]}</div>
-              ) : (
-                <div>hi</div>
-              )}
-            </div>
-          </div>
-        ))}
+          ))
+        )}
       </div>
     </div>
   );
