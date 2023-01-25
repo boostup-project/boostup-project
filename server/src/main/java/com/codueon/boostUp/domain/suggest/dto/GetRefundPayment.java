@@ -8,7 +8,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Getter
 @NoArgsConstructor
@@ -28,10 +27,11 @@ public class GetRefundPayment {
 
     @Builder
     public GetRefundPayment(Lesson lesson,
+                            String tutorName,
                             Suggest suggest,
                             PaymentInfo paymentInfo) {
         this.title = lesson.getTitle();
-        this.name = lesson.getName();
+        this.name = tutorName;
         this.languages = lesson.getLanguageListAsString();
         this.address = lesson.getAddressListAsString();
         this.company = lesson.getCompany();

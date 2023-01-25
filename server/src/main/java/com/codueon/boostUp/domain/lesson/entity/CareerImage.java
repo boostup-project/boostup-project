@@ -39,4 +39,6 @@ public class CareerImage {
     public void addLessonInfo(LessonInfo lessonInfo) {
         this.lessonInfo = lessonInfo;
     }
+
+
 }

@@ -12,16 +12,19 @@ import org.springframework.test.web.servlet.ResultActions;
 
 import java.util.List;
 
+import static com.codueon.boostUp.domain.utils.ApiDocumentUtils.getRequestPreProcessor;
 import static com.codueon.boostUp.global.security.utils.AuthConstants.*;
 import static org.mockito.Mockito.doNothing;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
+import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
+import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.restdocs.request.RequestDocumentation.*;
-import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 
 
 
@@ -53,8 +56,10 @@ public class SuggestPostTest extends SuggestControllerTest{
 
                 );
 
-        actions.andExpect(status().isCreated())
+        actions
+                .andExpect(status().isCreated())
                 .andDo(document("신청1-과외신청",
+                        getRequestPreProcessor(),
                         pathParameters(
                                 parameterWithName("lesson-id").description("과외 식별자")
                         ),
@@ -93,8 +98,10 @@ public class SuggestPostTest extends SuggestControllerTest{
                                 .with(csrf())
                 );
 
-        actions.andExpect(status().isOk())
+        actions
+                .andExpect(status().isOk())
                 .andDo(document("신청2.1-신청수락",
+                        getRequestPreProcessor(),
                         pathParameters(
                                 parameterWithName("suggest-id").description("신청 식별자")
                         ),
@@ -129,8 +136,10 @@ public class SuggestPostTest extends SuggestControllerTest{
                                 .with(csrf())
                 );
 
-        actions.andExpect(status().isNoContent())
+        actions
+                .andExpect(status().isNoContent())
                 .andDo(document("신청2.2-신청거절",
+                        getRequestPreProcessor(),
                         pathParameters(
                                 parameterWithName("suggest-id").description("신청 식별자")
                         ),

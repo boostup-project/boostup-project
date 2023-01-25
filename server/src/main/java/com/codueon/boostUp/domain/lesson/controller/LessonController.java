@@ -36,7 +36,6 @@ public class LessonController {
                                         Authentication authentication,
                                         @RequestPart(value = "profileImage") MultipartFile profileImage,
                                         @RequestPart(value = "careerImage") List<MultipartFile> careerImage) {
-
         JwtAuthenticationToken token = (JwtAuthenticationToken) authentication;
         Long memberId = getMemberIdIfExistToken(token);
 
@@ -44,7 +43,7 @@ public class LessonController {
         lessonService.createLesson(postLesson, memberId, profileImage, careerImage);
 
         /** S3 환경 */
-//        lessonService.createLessonS3(postLesson, token.getId(), profileImage, careerImage);
+//        lessonService.createLessonS3(postLesson, memberId, profileImage, careerImage);
 
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
@@ -70,7 +69,7 @@ public class LessonController {
         lessonService.updateLessonInfo(lessonId, postLessonInfoEdit, memberId, profileImage);
 
         /** S3 환경 */
-//        lessonService.updateLessonInfoS3(lessonId, postLessonInfoEdit, token.getId(), profileImage);
+//        lessonService.updateLessonInfoS3(lessonId, postLessonInfoEdit, memberId, profileImage);
 
         return ResponseEntity.ok().build();
     }
@@ -96,7 +95,7 @@ public class LessonController {
         lessonService.updateLessonDetail(lessonId, postLessonDetailEdit, memberId, careerImage);
 
         /** S3 환경 */
-//        lessonService.updateLessonDetailS3(lessonId, postLessonDetailEdit, token.getId(), careerImage);
+//        lessonService.updateLessonDetailS3(lessonId, postLessonDetailEdit, memberId, careerImage);
 
         return ResponseEntity.ok().build();
     }
@@ -142,15 +141,16 @@ public class LessonController {
 
     /**
      * 등록한 과외 마이페이지 조회 컨트롤러
+     *
      * @return ResponseEntity
      * @author Quartz614
      */
     @GetMapping(value = "/tutor")
-    public ResponseEntity<String> getLessonMypage(Authentication authentication) {
+    public ResponseEntity<WrapUrl> getLessonMypage(Authentication authentication) {
         JwtAuthenticationToken token = (JwtAuthenticationToken) authentication;
         Long memberId = getMemberIdIfExistToken(token);
 
-        return ResponseEntity.ok().body(lessonService.getLessonMypage(memberId));
+        return ResponseEntity.ok().body(new WrapUrl(lessonService.getLessonMypage(memberId)));
     }
 
     /**

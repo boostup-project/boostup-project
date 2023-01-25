@@ -15,20 +15,19 @@ public class PostLessonDetailEdit {
     private String personality;
     private String detailLocation;
 
-    private List<Long> careerImage;
-
+    private List<Long> careerImages;
     @Builder
     public PostLessonDetailEdit(String introduction,
                                 String detailCompany,
                                 String detailCost,
                                 String personality,
                                 String detailLocation,
-                                List<Long> careerImage) {
+                                List<Long> careerImages) {
         this.introduction = introduction;
         this.detailCompany = detailCompany;
         this.detailCost = detailCost;
         this.personality = personality;
         this.detailLocation = detailLocation;
-        this.careerImage = careerImage;
+        this.careerImages = careerImages;
     }
 }

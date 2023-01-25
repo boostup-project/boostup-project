@@ -1,6 +1,5 @@
 package com.codueon.boostUp.domain.member.service;
 
-import com.codueon.boostUp.domain.member.dto.PostAttemptFindPassword;
 import com.codueon.boostUp.domain.member.dto.PostPasswordInLoginPage;
 import com.codueon.boostUp.domain.member.entity.Member;
 import com.codueon.boostUp.domain.member.exception.AuthException;
@@ -32,7 +31,6 @@ public class MemberDbService {
         return memberRepository.findById(memberId)
                 .orElseThrow(() -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
     }
-
     /**
      * 사용자 정보 조회 메서드(이메일)
      *
@@ -68,7 +66,6 @@ public class MemberDbService {
             throw new BusinessLogicException(ExceptionCode.NICKNAME_ALREADY_EXIST);
         });
     }
-
     /**
      * 사용자 정보 저장 메서드
      *

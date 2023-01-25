@@ -10,6 +10,8 @@ import org.springframework.test.web.servlet.ResultActions;
 import java.util.Date;
 
 import static com.codueon.boostUp.domain.suggest.utils.SuggestConstants.*;
+import static com.codueon.boostUp.domain.utils.ApiDocumentUtils.getRequestPreProcessor;
+import static com.codueon.boostUp.domain.utils.ApiDocumentUtils.getResponsePreProcessor;
 import static com.codueon.boostUp.global.security.utils.AuthConstants.*;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
@@ -45,8 +47,11 @@ public class KakaoPaymentTest extends SuggestControllerTest{
                                 .header("RefreshToken", refreshToken)
                 );
 
-        actions.andExpect(status().isOk())
+        actions
+                .andExpect(status().isOk())
                 .andDo(document("신청4.1-카카오결제요청",
+                        getRequestPreProcessor(),
+                        getResponsePreProcessor(),
                         pathParameters(
                                 parameterWithName("suggest-id").description("신청 식별자")
                         ),
@@ -104,7 +109,8 @@ public class KakaoPaymentTest extends SuggestControllerTest{
                                 .param("pg_token", pgToken)
                 );
 
-        actions.andExpect(status().isOk())
+        actions
+                .andExpect(status().isOk())
                 .andDo(document("신청5.1-카카오결제요청",
                         pathParameters(
                                 parameterWithName("suggest-id").description("신청 식별자")
@@ -122,8 +128,9 @@ public class KakaoPaymentTest extends SuggestControllerTest{
                         get("/api/suggest/{suggest-id}/kakao/cancellation", suggest.getId())
                 );
 
-        actions.andExpect(status().isOk())
-                .andDo(document("신청6-키키오결제취소",
+        actions
+                .andExpect(status().isOk())
+                .andDo(document("신청6-카카오결제취소",
                         pathParameters(
                                 parameterWithName("suggest-id").description("신청 식별자")
                         )
@@ -140,7 +147,8 @@ public class KakaoPaymentTest extends SuggestControllerTest{
                         get("/api/suggest/{suggest-id}/kakao/failure", suggest.getId())
                 );
 
-        actions.andExpect(status().isOk())
+        actions
+                .andExpect(status().isOk())
                 .andDo(document("신청7.1-카카오결제실패",
                         pathParameters(
                                 parameterWithName("suggest-id").description("신청 식별자")
@@ -221,8 +229,10 @@ public class KakaoPaymentTest extends SuggestControllerTest{
                                 .header(REFRESH_TOKEN, refreshToken)
                 );
 
-        actions.andExpect(status().isOk())
-                .andDo(document("신청9.1-카카오결제요청",
+        actions
+                .andExpect(status().isOk())
+                .andDo(document("신청9.1-카카오결제환불",
+                        getRequestPreProcessor(),
                         pathParameters(
                                 parameterWithName("suggest-id").description("신청 식별자")
                         ),
