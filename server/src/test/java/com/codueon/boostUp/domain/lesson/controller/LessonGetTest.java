@@ -499,6 +499,12 @@ public class LessonGetTest extends LessonControllerTest {
                 .andExpect(jsonPath("$.personality").value(lessonInfo.getPersonality()))
                 .andExpect(jsonPath("$.detailCost").value(lessonInfo.getCosts()))
                 .andExpect(jsonPath("$.detailLocation").value(lessonInfo.getFavoriteLocation()))
+                .andExpect(jsonPath("$.careerImages[0].careerImageId").value(1))
+                .andExpect(jsonPath("$.careerImages[0].filePath").value("https://test.com/careerImage/test1.jpg"))
+                .andExpect(jsonPath("$.careerImages[1].careerImageId").value(2))
+                .andExpect(jsonPath("$.careerImages[1].filePath").value("https://test.com/careerImage/test2.jpg"))
+                .andExpect(jsonPath("$.careerImages[2].careerImageId").value(3))
+                .andExpect(jsonPath("$.careerImages[2].filePath").value("https://test.com/careerImage/test3.jpg"))
                 .andDo(document("과외 상세 정보 조회",
                         getResponsePreProcessor(),
                         pathParameters(
@@ -514,7 +520,11 @@ public class LessonGetTest extends LessonControllerTest {
                                         fieldWithPath("detailCompany").type(JsonFieldType.STRING).description("강사 경력"),
                                         fieldWithPath("personality").type(JsonFieldType.STRING).description("강사 성격"),
                                         fieldWithPath("detailCost").type(JsonFieldType.STRING).description("상세 가격"),
-                                        fieldWithPath("detailLocation").type(JsonFieldType.STRING).description("상세 지역")
+                                        fieldWithPath("detailLocation").type(JsonFieldType.STRING).description("상세 지역"),
+
+                                        fieldWithPath("careerImages").type(JsonFieldType.ARRAY).description("경력 이미지"),
+                                        fieldWithPath("careerImages[].careerImageId").type(JsonFieldType.NUMBER).description("경력 이미지 식별자"),
+                                        fieldWithPath("careerImages[].filePath").type(JsonFieldType.STRING).description("경력 이미지 주소")
                                 )
                         )
                 ));
