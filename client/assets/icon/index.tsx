@@ -1,3 +1,5 @@
+import exp from "constants";
+
 export { IconChat } from "./IconChat";
 export { IconCode } from "./IconCode";
 export { IconExit } from "./IconExit";
@@ -10,3 +12,5 @@ export { IconPaper } from "./IconPaper";
 export { IconRibbon } from "./IconRibbon";
 export { IconWon } from "./IconWon";
 export { IconPlace } from "./IconPlace";
+export { IconFullheart } from "./IconFullheart";
+export { IconEmptyheart } from "./IconEmptyheart";
