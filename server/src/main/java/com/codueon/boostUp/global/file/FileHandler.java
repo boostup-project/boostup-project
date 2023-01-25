@@ -118,5 +118,4 @@ public class FileHandler {
     private String createFileName(String fileName) {
         return UUID.randomUUID().toString().concat(getFileExtension(fileName));
     }
-
 }

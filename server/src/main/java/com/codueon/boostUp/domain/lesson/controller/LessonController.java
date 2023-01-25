@@ -92,10 +92,10 @@ public class LessonController {
         Long memberId = getMemberIdIfExistToken(token);
 
         /** 로컬 환경 */
-//        lessonService.updateLessonDetail(lessonId, postLessonDetailEdit, memberId, careerImage);
+        lessonService.updateLessonDetail(lessonId, postLessonDetailEdit, memberId, careerImage);
 
         /** S3 환경 */
-        lessonService.updateLessonDetailS3(lessonId, postLessonDetailEdit, memberId, careerImage);
+//        lessonService.updateLessonDetailS3(lessonId, postLessonDetailEdit, memberId, careerImage);
 
         return ResponseEntity.ok().build();
     }
