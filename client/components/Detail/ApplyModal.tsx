@@ -21,10 +21,6 @@ interface ModalDefaultType {
 const ApplyModal = ({
   onClickToggleModal,
 }: PropsWithChildren<ModalDefaultType>) => {
-  const [powerApply, setPowerApply] = useRecoilState(powerApplyModal);
-
-  const [data, setData] = useState<Application>();
-
   const {
     control,
     register,
@@ -32,8 +28,11 @@ const ApplyModal = ({
     formState: { errors },
   } = useForm<Application>({ mode: "onBlur" });
 
+  const { mutate, error, isSuccess, isError } = useGetApply();
+
   const apply = () => {
-    return;
+    const data = { day: day };
+    mutate({ lessonId });
   };
 
   const langArr = Object.keys(langDict);
@@ -152,7 +151,7 @@ const ApplyModal = ({
             />
             <div className="flex flex-row justify-center items-center w-full h-fit mt-10">
               <SmallBtn onClick={onClickToggleModal}>취 소</SmallBtn>
-              <SmallBtn css="ml-5" onClick={apply}>
+              <SmallBtn css="ml-5" onClick={handleSubmit}>
                 신 청
               </SmallBtn>
             </div>

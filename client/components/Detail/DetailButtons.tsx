@@ -7,12 +7,11 @@ import detailDelete from "apis/detail/detailDelete";
 import Swal from "sweetalert2";
 import { useState, useCallback } from "react";
 import CreateModalContainer from "components/reuse/CreateModalContainer";
+import useDetailDelete from "hooks/detail/useDetailDelete";
 
 const DetailButtons = () => {
-  const [powerApply, setPowerApply] = useRecoilState(powerApplyModal);
-
   const [isOpenModal, setOpenModal] = useState<boolean>(false);
-
+  const { mutate } = useDetailDelete();
   const onClickToggleModal = useCallback(() => {
     setOpenModal(!isOpenModal);
   }, [isOpenModal]);
@@ -25,6 +24,7 @@ const DetailButtons = () => {
     return;
   };
   const deletePost = () => {
+    const lessonId = 2;
     Swal.fire({
       title: "과외를 삭제하시겠습니까?",
       text: "다시 되돌릴 수 없습니다.",
@@ -34,7 +34,7 @@ const DetailButtons = () => {
       confirmButtonColor: "#3085d6",
     }).then(result => {
       if (result.isConfirmed) {
-        detailDelete;
+        mutate(lessonId);
       }
     });
   };

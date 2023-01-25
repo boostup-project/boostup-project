@@ -6,7 +6,9 @@ const useGetApply = () => {
     onSuccess: res => {
       console.log("success");
     },
-    onError: err => {},
+    onError: err => {
+      console.log("success");
+    },
   });
 };
 
