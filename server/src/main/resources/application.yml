@@ -77,18 +77,9 @@ default:
   image:
     address: ${/config/param/default-url}
 
---- # blue
-spring:
-  config:
-    activate:
-      on-profile: set1
-  server:
-    port: 8081
-
---- # green
-spring:
-  config:
-    activate:
-      on-profile: set2
-  server:
-    port: 8082
+aws:
+  paramstore:
+    enabled: true
+    prefix: /config
+    name: param # 리소스 이름을 작성합니다.
+    profileSeparator: _
