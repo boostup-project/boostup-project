@@ -45,8 +45,8 @@ const Header = () => {
   };
 
   return (
-    <>
-      <header className="bg-bgColor font-SCDream5 w-full pt-4 fixed top-0 z-[1] h-fit desktop:w-3/4 desktop:min-w-[1000px] desktop:h-[87px] desktop:mt-0">
+    <header className="bg-bgColor font-SCDream5 w-full fixed top-0 z-[1] h-fit flex justify-center items-center shadow">
+      <div className="pt-5 pb-2 desktop:w-3/4 desktop:min-w-[1000px] desktop:h-[87px] desktop:mt-0">
         <nav className="w-full h-full flex tablet:justify-center tablet:items-center desktop:justify-between">
           <div className="w-1/2 flex justify-start items-center ml-4 tablet:h-[40px] desktop:hidden">
             <div className="w-8 tablet:w-[34.5px]" onClick={logOutEvent}>
@@ -71,7 +71,7 @@ const Header = () => {
           <div className="hidden desktop:flex desktop:items-end desktop:w-min-[500px] desktop:w-[648px] desktop:h-full desktop:relative desktop:visible">
             <div
               className={`w-full h-[50px] flex justify-center items-center border border-borderColor outline-pointColor font-SCDream2 text-sm text-textColor bg-white 
-             ${seek ? `rounded-tr-xl rounded-tl-xl` : `rounded-xl`}`}
+            ${seek ? `rounded-tr-xl rounded-tl-xl` : `rounded-xl`}`}
               onClick={e => setSeek(!seek)}
             >
               <div>조건에 맞는 과외선생님을 찾아보세요</div>
@@ -111,8 +111,8 @@ const Header = () => {
             <SearchPop onSubmit={onSubmit} />
           </div>
         )}
-      </header>
-    </>
+      </div>
+    </header>
   );
 };
 

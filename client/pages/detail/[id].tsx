@@ -4,10 +4,10 @@ import DetailTabBtn from "components/reuse/btn/DetailTabBtn";
 import DetailContentContainer from "components/reuse/container/DetailContentContainer";
 import DetailBtn from "components/reuse/btn/DetailBtn";
 import { useEffect, useState } from "react";
-import DetailExtra, { DetailExtraInfo } from "components/DetailExtra";
+import DetailExtra from "components/DetailExtra";
 import DetailCurriculum from "components/DetailCurriculum";
 import useGetExtra from "hooks/detail/useGetExtra";
-import { off } from "process";
+import useGetCurriculum from "hooks/detail/useGetCurriculum";
 
 const Detail = () => {
   // lessonId 받아오기
@@ -17,10 +17,17 @@ const Detail = () => {
 
   const {
     refetch: refetchGetExtra,
-    isSuccess,
-    isError,
+    isSuccess: extraSuccess,
+    isError: extraError,
     data: extraData,
   } = useGetExtra(lessonId);
+
+  const {
+    refetch: refetchGetCur,
+    isSuccess: curSuccess,
+    isError: curError,
+    data: curData,
+  } = useGetCurriculum(lessonId);
 
   const handleTabClick = (id: number) => {
     setTab(id);
@@ -34,25 +41,15 @@ const Detail = () => {
       refetchGetExtra();
     } else if (tab === 2 && lessonId) {
       // 진행방식 refetch
+      refetchGetCur();
     } else if (tab === 3) {
       // 과외후기 refetch
     }
   }, [tab, lessonId]);
 
-  // useEffect(() => {
-  //   if (isSuccess) {
-  //     console.log("isSuccess", isSuccess);
-  //     setExtraInfo(extraData.data);
-  //     console.log(extraData.data);
-  //   }
-  //   if (isError) {
-  //     console.log("isError", isError);
-  //   }
-  // }, [isSuccess, isError, extraData]);
-
   return (
     <>
-      <div className="flex flex-col bg-bgColor items-center justify-start w-full h-screen pt-28">
+      <div className="flex flex-col bg-bgColor items-center justify-start w-full h-full pt-28">
         <DetailSummeryContainer>{lessonId}</DetailSummeryContainer>
         <div className="flex w-3/4 desktop:min-w-[1000px] min-w-[95%] h-fit rounded-xl flex-row justify-start items-center mt-5">
           <DetailTabBtn
@@ -83,7 +80,7 @@ const Detail = () => {
         <div className="desktop:min-w-[1000px] min-w-[95%] w-3/4 h-fit flex desktop:flex-row flex-col justify-start items-center">
           <DetailContentContainer>
             {tab === 1 && <DetailExtra extraData={extraData} />}
-            {tab === 2 && <DetailCurriculum />}
+            {tab === 2 && <DetailCurriculum curData={curData} />}
 
             {/* 각 탭별 컴포넌트를 생성하여 넣어주세요! */}
           </DetailContentContainer>

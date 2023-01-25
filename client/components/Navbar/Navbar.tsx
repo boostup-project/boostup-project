@@ -63,7 +63,6 @@ const Navbar = () => {
     };
   }, []);
 
-  // 하단 Navbar의 필터 버튼 클릭시 10~16줄 코드를 넣어주시면 됩니다!
   const handleModalClick = () => {
     if (modal === 0) {
       setModal(48);
