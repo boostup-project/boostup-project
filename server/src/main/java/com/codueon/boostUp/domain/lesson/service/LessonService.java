@@ -261,9 +261,9 @@ public class LessonService {
         Member findMember = memberDbService.ifExistsReturnMember(memberId);
         Lesson updateLesson = lessonDbService.ifExistsReturnLesson(lessonId);
 
-//        if (!Objects.equals(updateLesson.getMemberId(), findMember)) {
-//            throw new BusinessLogicException(ExceptionCode.UNAUTHORIZED_FOR_UPDATE);
-//        }
+        if (!Objects.equals(updateLesson.getMemberId(), findMember)) {
+            throw new BusinessLogicException(ExceptionCode.UNAUTHORIZED_FOR_UPDATE);
+        }
 
         String dir = "profileImage";
         updateLesson.editLessonInfo(postLessonInfoEdit);
@@ -300,17 +300,15 @@ public class LessonService {
                                    PostLessonDetailEdit postLessonDetailEdit,
                                    Long memberId,
                                    List<MultipartFile> careerImage) {
-        Member findMember = memberDbService.ifExistsReturnMember(memberId);
         LessonInfo updateLessonDetail = lessonDbService.ifExsitsReturnLessonInfo(lessonId);
         updateLessonDetail.editLessonDetail(postLessonDetailEdit);
-        String dir = "careerImage";
+
         List<Long> careerImages = postLessonDetailEdit.getCareerImages();
-        List<CareerImage> careerImageList = updateLessonDetail.getCareerImages();
+        List<CareerImage> careerImageList =  new ArrayList<>(updateLessonDetail.getCareerImages());
 
         for (int i = 0; i < careerImages.size(); i++) {
             for (int j = 0; j < careerImageList.size(); j++) {
-                if (careerImageList.get(j).getId().equals(careerImages.get(i))) {
-                    awsS3Service.delete(careerImageList.get(j).getFilePath(), dir);
+                if (careerImageList.get(j).getId() == careerImages.get(i)) {
                     careerImageList.remove(j);
                     break;
                 }
@@ -336,7 +334,6 @@ public class LessonService {
                                    PostLessonDetailEdit postLessonDetailEdit,
                                    Long memberId,
                                    List<MultipartFile> careerImage) {
-        Member findMember = memberDbService.ifExistsReturnMember(memberId);
         LessonInfo updateLessonDetail = lessonDbService.ifExsitsReturnLessonInfo(lessonId);
         updateLessonDetail.editLessonDetail(postLessonDetailEdit);
         String dir = "careerImage";
