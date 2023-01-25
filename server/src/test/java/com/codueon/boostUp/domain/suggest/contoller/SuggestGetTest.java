@@ -35,18 +35,19 @@ public class SuggestGetTest extends SuggestControllerTest{
     void getPaymentInfo() throws Exception {
         Integer quantity = 5;
         Integer totalCost = 250000;
+        String tutorName = "김선생";
 
         lesson.addProfileImage(profileImage);
 
         GetPaymentInfo getPaymentInfo =
-                new GetPaymentInfo(lesson, totalCost, quantity);
+                new GetPaymentInfo(lesson, tutorName, totalCost, quantity);
 
         given(suggestService.getPaymentInfo(Mockito.anyLong(), Mockito.anyLong()))
                 .willReturn(getPaymentInfo);
 
         ResultActions actions =
                 mockMvc.perform(
-                        get("/suggest/{suggest-id}/suggest-info", suggest.getLessonId())
+                        get("/suggest/{suggest-id}/payment/info", suggest.getLessonId())
                                 .header(AUTHORIZATION, BEARER + accessToken)
                                 .header(REFRESH_TOKEN, refreshToken)
                 );
@@ -111,8 +112,11 @@ public class SuggestGetTest extends SuggestControllerTest{
     @Test
     @DisplayName("GET 환불 영수증 조회")
     void getRefundPaymentInfo() throws Exception {
+        String tutorName = "김선생";
+
         GetRefundPayment response = GetRefundPayment.builder()
                 .suggest(suggest)
+                .tutorName(tutorName)
                 .lesson(lesson)
                 .paymentInfo(paymentInfo)
                 .build();
@@ -221,6 +225,7 @@ public class SuggestGetTest extends SuggestControllerTest{
 
         actions
                 .andExpect(status().isOk())
+                .andExpect(jsonPath("$.quantityCount").value(quantityCount))
                 .andDo(document("출석부2-출석인정",
                         getRequestPreProcessor(),
                         pathParameters(
@@ -229,6 +234,9 @@ public class SuggestGetTest extends SuggestControllerTest{
                         requestHeaders(
                                 headerWithName(AUTHORIZATION).description("엑세스 토큰"),
                                 headerWithName(REFRESH_TOKEN).description("리프레시 토큰")
+                        ),
+                        responseFields(
+                                fieldWithPath("quantityCount").type(JsonFieldType.NUMBER).description("출석 인정 횟수")
                         )
                 ));
     }
@@ -243,13 +251,14 @@ public class SuggestGetTest extends SuggestControllerTest{
 
         ResultActions actions =
                 mockMvc.perform(
-                        get("/suggest/{suggest-id}/receipt", suggest.getId())
+                        get("/suggest/{suggest-id}/attendance/cancel", suggest.getId())
                                 .header(AUTHORIZATION, BEARER + accessToken)
                                 .header(REFRESH_TOKEN, refreshToken)
                 );
 
         actions
                 .andExpect(status().isOk())
+                .andExpect(jsonPath("$.quantityCount").value(quantityCount))
                 .andDo(document("출석부3-출석인정취소",
                         getRequestPreProcessor(),
                         pathParameters(
@@ -258,6 +267,9 @@ public class SuggestGetTest extends SuggestControllerTest{
                         requestHeaders(
                                 headerWithName(AUTHORIZATION).description("엑세스 토큰"),
                                 headerWithName(REFRESH_TOKEN).description("리프레시 토큰")
+                        ),
+                        responseFields(
+                                fieldWithPath("quantityCount").type(JsonFieldType.NUMBER).description("출석 인정 횟수")
                         )
                 ));
     }
@@ -268,8 +280,9 @@ public class SuggestGetTest extends SuggestControllerTest{
         Integer totalCost = 50000;
         Integer quantity = 5;
         String paymentMethod = "카카오페이";
+        String tutorName = "김선생";
 
-        GetPaymentReceipt getPaymentInfo = new GetPaymentReceipt(lesson, totalCost, quantity, paymentMethod);
+        GetPaymentReceipt getPaymentInfo = new GetPaymentReceipt(lesson, tutorName, totalCost, quantity, paymentMethod);
 
         given(suggestService.getPaymentReceipt(Mockito.anyLong(), Mockito.anyLong()))
                 .willReturn(getPaymentInfo);
@@ -325,7 +338,7 @@ public class SuggestGetTest extends SuggestControllerTest{
                 .requests(suggest.getRequests())
                 .status(suggest.getSuggestStatus())
                 .lessonId(lesson.getId())
-                .name(lesson.getName())
+                .name(member.getName())
                 .build();
 
         List<GetTutorSuggest> suggestList = new ArrayList<>();
@@ -372,6 +385,7 @@ public class SuggestGetTest extends SuggestControllerTest{
     @Test
     @DisplayName("GET 마이페이지 신청 내역 조회 - 학생용")
     void getStudentSuggest() throws Exception{
+        String tutorName = "김선생";
         lesson.addProfileImage(profileImage);
 
         GetStudentSuggest getStudentSuggest = GetStudentSuggest.builder()
@@ -380,6 +394,7 @@ public class SuggestGetTest extends SuggestControllerTest{
                 .status(suggest.getSuggestStatus())
                 .startTime(suggest.getStartTime())
                 .endTime(suggest.getEndTime())
+                .tutorName(tutorName)
                 .build();
 
         List<GetStudentSuggest> suggestList = new ArrayList<>();

@@ -23,11 +23,12 @@ public class GetPaymentReceipt {
 
     @Builder
     public GetPaymentReceipt(Lesson lesson,
+                             String tutorName,
                              Integer totalCost,
                              Integer quantity,
                              String paymentMethod ) {
         this.title = lesson.getTitle();
-        this.name = lesson.getName();
+        this.name = tutorName;
         this.languages = lesson.getLanguageListAsString();
         this.address = lesson.getAddressListAsString();
         this.company = lesson.getCompany();
