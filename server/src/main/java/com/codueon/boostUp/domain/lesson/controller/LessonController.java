@@ -66,10 +66,10 @@ public class LessonController {
         Long memberId = getMemberIdIfExistToken(token);
 
         /** 로컬 환경 */
-//        lessonService.updateLessonInfo(lessonId, postLessonInfoEdit, memberId, profileImage);
+        lessonService.updateLessonInfo(lessonId, postLessonInfoEdit, memberId, profileImage);
 
         /** S3 환경 */
-        lessonService.updateLessonInfoS3(lessonId, postLessonInfoEdit, memberId, profileImage);
+//        lessonService.updateLessonInfoS3(lessonId, postLessonInfoEdit, memberId, profileImage);
 
         return ResponseEntity.ok().build();
     }
@@ -131,10 +131,10 @@ public class LessonController {
         Long memberId = getMemberIdIfExistToken(token);
 
         /** 로컬 환경 */
-//        lessonService.deleteLesson(memberId, lessonId);
+        lessonService.deleteLesson(memberId, lessonId);
 
         /** S3 환경 */
-        lessonService.deleteLessonS3(memberId, lessonId);
+//        lessonService.deleteLessonS3(memberId, lessonId);
 
         return ResponseEntity.noContent().build();
     }
