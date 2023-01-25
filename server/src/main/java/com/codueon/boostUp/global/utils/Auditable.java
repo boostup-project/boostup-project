@@ -24,5 +24,7 @@ public abstract class Auditable {
     private LocalDateTime lastModifiedAt;
 
     protected Auditable() {
+        this.createdAt = LocalDateTime.now();
+        this.lastModifiedAt = LocalDateTime.now();
     }
 }
