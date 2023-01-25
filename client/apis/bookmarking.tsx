@@ -1,7 +1,7 @@
 import axios from "axios";
 
-const getMainCard = async () => {
-  return await axios.get(`/lesson`, {
+const bookmarking = async (lessonId: number) => {
+  return await axios.get(`bookmark/lesson/${lessonId}/modification`, {
     baseURL: process.env.NEXT_PUBLIC_API_URL,
     headers: {
       "content-Type": `application/json`,
@@ -9,4 +9,4 @@ const getMainCard = async () => {
     },
   });
 };
-export default getMainCard;
+export default bookmarking;

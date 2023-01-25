@@ -4,6 +4,9 @@ interface AddDict {
 interface LangDict {
   [index: string]: number;
 }
+interface DayDict {
+  [index: string]: number;
+}
 export const addDict: AddDict = {
   강남구: 1,
   강동구: 2,
@@ -43,6 +46,16 @@ export const langDict: LangDict = {
   Swift: 8,
 };
 
+export const dayDict: DayDict = {
+  월요일: 1,
+  화요일: 2,
+  수요일: 3,
+  목요일: 4,
+  금요일: 5,
+  토요일: 6,
+  일요일: 7,
+  요일무관: 8,
+};
 
 export const detailLangDict = [
   {

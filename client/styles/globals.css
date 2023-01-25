@@ -22,52 +22,67 @@ html, body, div, span, applet, object, iframe,
     vertical-align: baseline;
   } */
 
-  /* HTML5 display-role reset for older browsers */
-  article, aside, details, figcaption, figure,
-  footer, header, hgroup, main, menu, nav, section {
-    display: block;
-  }
+/* HTML5 display-role reset for older browsers */
+article,
+aside,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+main,
+menu,
+nav,
+section {
+  display: block;
+}
 
-  /* HTML5 hidden-attribute fix for newer browsers */
-  *[hidden] {
-    display: none;
-  }
+/* HTML5 hidden-attribute fix for newer browsers */
+*[hidden] {
+  display: none;
+}
 
-  body {
-    line-height: 1;
-  }
+body {
+  line-height: 1;
+}
 
-  menu, ol, ul, li {
-    list-style: none;
-  }
+menu,
+ol,
+ul,
+li {
+  list-style: none;
+}
 
-  blockquote, q {
-    quotes: none;
-  }
+blockquote,
+q {
+  quotes: none;
+}
 
-  blockquote:before, blockquote:after,
-  q:before, q:after {
-    content: '';
-    content: none;
-  }
+blockquote:before,
+blockquote:after,
+q:before,
+q:after {
+  content: "";
+  content: none;
+}
 
-  table {
-    border-collapse: collapse;
-    border-spacing: 0;
-  }
-  
-  button {
-    cursor: pointer;
-  }
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
 
-  * {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-    font-size: 100%;
-    vertical-align: baseline;
-  }
+button {
+  cursor: pointer;
+}
 
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-size: 100%;
+  vertical-align: baseline;
+}
 
 @font-face {
   font-family: "SCDream1";
@@ -114,15 +129,14 @@ html, body, div, span, applet, object, iframe,
   src: url("../public/fonts/SCDream9.otf");
 }
 
-
 .slick-dots {
-  top : 210px;
+  top: 210px;
 }
 
 .slick-dots li button {
-    color: #7e6330;
+  color: #7e6330;
 }
 
 .slick-dots li button:before {
-    color: orange;
+  color: orange;
 }
