@@ -1,4 +1,4 @@
-import Card from "components/Card/card";
+import Card from "components/Maincard/card";
 import ApplyModal from "components/Detail/ApplyModal";
 import DetailButtons from "components/Detail/DetailButtons";
 const Cards = () => {
