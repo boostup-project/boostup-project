@@ -1,4 +1,6 @@
 spring:
+  config:
+    import: 'aws-parameterstore'
   datasource:
     url: ${/config/param/datasource-url}
     username: ${/config/param/rds-username}
