@@ -7,7 +7,7 @@ const Home = () => {
   return (
     <>
       <div className="flex flex-col bg-bgColor items-center justify-start w-full h-screen">
-        <Carouselcomp />
+    <Carouselcomp />
         <LanguageFilter />
         <MoblieLanguageFilter />
         <Cards></Cards>
