@@ -79,7 +79,7 @@ public class MemberControllerTest {
                 .map(role -> (GrantedAuthority) () -> "ROLE_" + role)
                 .collect(Collectors.toList());
 
-        authentication = new JwtAuthenticationToken(authorities, member.getName(), null, member.getId());
+        authentication = new JwtAuthenticationToken(authorities, member.getName(), null, member.getId(), false, accessToken);
         SecurityContextHolder.getContext().setAuthentication(authentication);
     }
 }
