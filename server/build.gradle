@@ -76,8 +76,8 @@ dependencies {
 	asciidoctorExtensions 'org.springframework.restdocs:spring-restdocs-asciidoctor'
 
 	// DB
-//	runtimeOnly 'com.h2database:h2'
-    implementation 'mysql:mysql-connector-java'
+	runtimeOnly 'com.h2database:h2'
+//    implementation 'mysql:mysql-connector-java'
 	implementation "com.querydsl:querydsl-jpa:${queryDslVersion}"
 	implementation "com.querydsl:querydsl-apt:${queryDslVersion}"
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
