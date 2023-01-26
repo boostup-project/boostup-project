@@ -122,4 +122,17 @@ public class RedisUtils {
     private String makeCodeKeyForAuthorization(String key) {
         return "EmailCode " + key;
     }
+
+    /**
+     * redis refreshToken 존재 유무 메서드
+     * @param key 사용자 email
+     * @return
+     * @author LimJaeminZ
+     */
+    public void isExistRefreshToken(String key) {
+        String refreshKey = "commonRT : " + key;
+        Optional<Object> isExistToken = Optional.ofNullable(redisTemplate.opsForValue().get(refreshKey));
+
+        isExistToken.orElseThrow(() -> new AuthException(ExceptionCode.INVALID_REFRESH_TOKEN));
+    }
 }

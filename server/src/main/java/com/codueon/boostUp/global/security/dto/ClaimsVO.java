@@ -1,0 +1,28 @@
+package com.codueon.boostUp.global.security.dto;
+
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+import java.io.Serializable;
+import java.util.List;
+
+@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+public class ClaimsVO implements Serializable {
+    private List<String> roles;
+    private String email;
+    private String sub;
+    private long iat;
+    private long exp;
+
+    @Builder
+    public ClaimsVO(List<String> roles, String email, String sub, long iat, long exp) {
+        this.roles = roles;
+        this.email = email;
+        this.sub = sub;
+        this.iat = iat;
+        this.exp = exp;
+    }
+}
