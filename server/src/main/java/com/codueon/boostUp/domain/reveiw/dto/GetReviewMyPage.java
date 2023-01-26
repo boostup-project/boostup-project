@@ -10,7 +10,6 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -19,10 +18,7 @@ public class GetReviewMyPage {
     private List<String> languages;
     private String name;
     private String title;
-    private String company;
-    private Integer career;
     private Integer cost;
-    private List<String> address;
     private LocalDateTime startTime;
     private LocalDateTime endTime;
     private Integer score;
@@ -33,18 +29,16 @@ public class GetReviewMyPage {
     @QueryProjection
     public GetReviewMyPage(Review review,
                            Lesson lesson,
+                           String tutorName,
                            LocalDateTime startTime,
                            LocalDateTime endTime) {
         this.profileImage = lesson.getProfileImage().getFilePath();
         this.languages = lesson.getLanguageListAsString();
-        this.address = lesson.getAddressListAsString();
-        this.name = lesson.getName();
+        this.name = tutorName;
         this.title = lesson.getTitle();
-        this.company = lesson.getCompany();
-        this.career = lesson.getCareer();
         this.cost = lesson.getCost();
-        this.startTime = startTime; // 야매
-        this.endTime = endTime; // 야매
+        this.startTime = startTime;
+        this.endTime = endTime;
         this.score = review.getScore();
         this.comment = review.getComment();
         this.createdAt = review.getCreatedAt();
