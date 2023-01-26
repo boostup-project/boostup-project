@@ -100,10 +100,12 @@ public class ReviewGetTest extends ReviewControllerTest {
     public void getMyPageReview() throws Exception {
         LocalDateTime start = LocalDateTime.of(2022, 12, 28, 12, 30, 5);
         LocalDateTime end = LocalDateTime.of(2022, 12, 30, 12, 30, 5);
+        String tutorName = "김선생";
 
         GetReviewMyPage reviewMyPage = GetReviewMyPage.builder()
                 .review(review)
                 .lesson(lesson)
+                .tutorName(tutorName)
                 .startTime(start)
                 .endTime(end)
                 .build();
@@ -126,18 +128,15 @@ public class ReviewGetTest extends ReviewControllerTest {
         actions
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data[0].languages[0]").value(lesson.getLessonLanguages().get(0).getLanguageInfo().getLanguages()))
-                .andExpect(jsonPath("$.data[0].address[0]").value(lesson.getLessonAddresses().get(0).getAddressInfo().getAddress()))
                 .andExpect(jsonPath("$.data[0].profileImage").value(lesson.getProfileImage().getFilePath()))
-                .andExpect(jsonPath("$.data[0].name").value(lesson.getName()))
+                .andExpect(jsonPath("$.data[0].name").value(tutorName))
                 .andExpect(jsonPath("$.data[0].title").value(lesson.getTitle()))
-                .andExpect(jsonPath("$.data[0].company").value(lesson.getCompany()))
-                .andExpect(jsonPath("$.data[0].career").value(lesson.getCareer()))
                 .andExpect(jsonPath("$.data[0].cost").value(lesson.getCost()))
                 .andExpect(jsonPath("$.data[0].startTime").value(start.toString()))
                 .andExpect(jsonPath("$.data[0].endTime").value(end.toString()))
                 .andExpect(jsonPath("$.data[0].score").value(review.getScore()))
                 .andExpect(jsonPath("$.data[0].comment").value(review.getComment()))
-//                .andExpect(jsonPath("$.data[0].createdAt").value(review.getCreatedAt().toString()))
+//                .andExpect(jsonPath("$.data[0].createdAt").value(review.getCreatedAt()))
                 .andDo(document("리뷰 마이페이지 조회",
                         getRequestPreProcessor(),
                         getResponsePreProcessor(),
@@ -150,8 +149,6 @@ public class ReviewGetTest extends ReviewControllerTest {
                                         fieldWithPath("data").type(JsonFieldType.ARRAY).description("북마크 데이터"),
                                         fieldWithPath("data[].name").type(JsonFieldType.STRING).description("강사 이름"),
                                         fieldWithPath("data[].title").type(JsonFieldType.STRING).description("과외 타이틀"),
-                                        fieldWithPath("data[].company").type(JsonFieldType.STRING).description("강사 대표회사"),
-                                        fieldWithPath("data[].career").type(JsonFieldType.NUMBER).description("강사 경력"),
                                         fieldWithPath("data[].cost").type(JsonFieldType.NUMBER).description("과외 가격"),
                                         fieldWithPath("data[].startTime").type(JsonFieldType.STRING).description("과외 시작 날짜"),
                                         fieldWithPath("data[].endTime").type(JsonFieldType.STRING).description("과외 종료 날짜"),
@@ -160,7 +157,6 @@ public class ReviewGetTest extends ReviewControllerTest {
                                         fieldWithPath("data[].createdAt").type(JsonFieldType.STRING).description("리뷰 작성 시간"),
                                         fieldWithPath("data[].profileImage").type(JsonFieldType.STRING).description("섬네일 이미지"),
                                         fieldWithPath("data[].languages").type(JsonFieldType.ARRAY).description("과외 가능 언어"),
-                                        fieldWithPath("data[].address").type(JsonFieldType.ARRAY).description("과외 가능 주소"),
                                         fieldWithPath("data[].createdAt").type(JsonFieldType.STRING).description("리뷰 작성 날짜"),
 
                                         fieldWithPath("pageInfo").type(JsonFieldType.OBJECT).description("페이지 정보"),

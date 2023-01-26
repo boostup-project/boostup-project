@@ -52,11 +52,14 @@ public class ReviewRepositoryImpl implements CustomReviewRepository {
                 .select(new QGetReviewMyPage(
                         review,
                         lesson,
+                        member.name,
                         suggest.startTime,
                         suggest.endTime
-                )).from(review)
+                ))
+                .from(review)
                 .leftJoin(lesson).on(review.lessonId.eq(lesson.id))
                 .leftJoin(suggest).on(review.memberId.eq(suggest.memberId))
+                .leftJoin(member).on(lesson.memberId.eq(member.id))
                 .where(review.memberId.eq(memberId))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())

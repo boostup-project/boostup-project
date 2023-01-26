@@ -4,11 +4,13 @@ package com.codueon.boostUp.domain.reveiw.controller;
 import com.codueon.boostUp.domain.dto.MultiResponseDto;
 import com.codueon.boostUp.domain.reveiw.dto.*;
 import com.codueon.boostUp.domain.reveiw.service.ReviewService;
+import com.codueon.boostUp.global.security.token.JwtAuthenticationToken;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -27,9 +29,11 @@ public class ReviewController {
     @PostMapping("/lesson/{lesson-id}/suggest/{suggest-id}")
     public ResponseEntity<?> postReview(@PathVariable("lesson-id") Long lessonId,
                                         @PathVariable("suggest-id") Long suggestId,
-                                        @RequestBody PostReview postReview) {
-        // TODO : 시큐리티 적용 시 Authentication 객체 추가 요
-        Long memberId = 1L; // 임시 하드 코딩 ㅎㅎ
+                                        @RequestBody PostReview postReview,
+                                        Authentication authentication) {
+        JwtAuthenticationToken token = (JwtAuthenticationToken) authentication;
+        Long memberId = getMemberIdIfExistToken(token);
+
         reviewService.createStudentReview(memberId, lessonId, suggestId, postReview);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
@@ -43,7 +47,7 @@ public class ReviewController {
      */
     @GetMapping("/lesson/{lesson-id}")
     public ResponseEntity<GetAllDetailReviews> getDetailInfoReviews(@PathVariable("lesson-id") Long lessonId,
-                                                  Pageable pageable) {
+                                                                    Pageable pageable) {
         Page<GetReview> getReviews = reviewService.findAllDetailInfoReviews(lessonId, pageable);
         return ResponseEntity.ok().body(new GetAllDetailReviews(getReviews));
     }
@@ -55,9 +59,11 @@ public class ReviewController {
      * @author mozzi327
      */
     @GetMapping
-    public ResponseEntity<MultiResponseDto> getMyPageReview(Pageable pageable) {
-        // TODO : 시큐리티 적용 시 Authentication 객체 추가 요
-        Long memberId = 1L; // 임시 하드 코딩 ㅎㅎ
+    public ResponseEntity<MultiResponseDto> getMyPageReview(Pageable pageable,
+                                                            Authentication authentication) {
+        JwtAuthenticationToken token = (JwtAuthenticationToken) authentication;
+        Long memberId = getMemberIdIfExistToken(token);
+
         Page<GetReviewMyPage> getReviews = reviewService.findAllMyPageReviews(memberId, pageable);
         return ResponseEntity.ok().body(new MultiResponseDto<>(getReviews));
     }
@@ -68,11 +74,13 @@ public class ReviewController {
      * @param patchReview 리뷰 수정 정보
      * @author mozzi327
      */
-    @PatchMapping("/{review-id}/edit")
+    @PatchMapping("/{review-id}/modification")
     public ResponseEntity<?> updateReview(@PathVariable("review-id") Long reviewId,
-                                          @RequestBody PatchReview patchReview) {
-        // TODO : 시큐리티 적용 시 Authentication 객체 추가 요
-        Long memberId = 1L; // 임시 하드 코딩 ㅎㅎ
+                                          @RequestBody PatchReview patchReview,
+                                          Authentication authentication) {
+        JwtAuthenticationToken token = (JwtAuthenticationToken) authentication;
+        Long memberId = getMemberIdIfExistToken(token);
+
         reviewService.editReview(memberId, reviewId, patchReview);
         return ResponseEntity.ok().build();
     }
@@ -83,10 +91,17 @@ public class ReviewController {
      * @author mozzi327
      */
     @DeleteMapping("/{review-id}")
-    public ResponseEntity<?> deleteReview(@PathVariable("review-id") Long reviewId) {
-        // TODO : 시큐리티 적용 시 Authentication 객체 추가 요
-        Long memberId = 1L; // 임시 하드 코딩 ㅎㅎ
+    public ResponseEntity<?> deleteReview(@PathVariable("review-id") Long reviewId,
+                                          Authentication authentication) {
+        JwtAuthenticationToken token = (JwtAuthenticationToken) authentication;
+        Long memberId = getMemberIdIfExistToken(token);
+
         reviewService.removeReview(memberId, reviewId);
         return ResponseEntity.noContent().build();
+    }
+
+    private Long getMemberIdIfExistToken(JwtAuthenticationToken token) {
+        if (token == null) return null;
+        else return token.getId();
     }
 }
