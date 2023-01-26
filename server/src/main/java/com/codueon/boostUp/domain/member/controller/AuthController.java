@@ -34,7 +34,7 @@ public class AuthController {
      * 사용자 로그아웃
      * @param accessToken 엑세스 토큰
      * @param refreshToken 리프레시 토큰
-     * @param authentication 사용자 인증 정보*
+     * @param authentication 사용자 인증 정보
      * @author LimJaeminZ
      */
     @DeleteMapping("/logout")
@@ -46,10 +46,23 @@ public class AuthController {
         return ResponseEntity.ok().build();
     }
 
+    /**
+     * 토큰 재발급
+     * @param accessToken 엑세스 토큰
+     * @param refreshToken 리프레시 토큰
+     * @param authentication 사용자 인증 정보
+     * @return ResponseEntity
+     * @author LimJaeminZ
+     */
     @GetMapping("/re-issue")
     public ResponseEntity getReIssueToken(@RequestHeader("authorization") String accessToken,
-                                          @RequestHeader("refreshToken") String refreshToken) {
-        // TODO : 시큐리티 적용 시 Authentication 객체 추가 요
-        return ResponseEntity.ok().build();
+                                          @RequestHeader("refreshToken") String refreshToken,
+                                          Authentication authentication) {
+        JwtAuthenticationToken token = (JwtAuthenticationToken) authentication;
+
+        TokenDto.Response response = authService.reIssueToken(accessToken, refreshToken, token.getId());
+        return ResponseEntity.ok()
+                .headers(response.getHeaders())
+                .body(response.getResponse());
     }
 }

@@ -18,7 +18,6 @@ public class MemberDetailService implements UserDetailsService {
 
     /**
      * 유저 정보 조회 후 MemberDetails 리턴
-     *
      * @param email 사용자 이메일
      * @return MemberDetails
      * @author LimJaeminZ
