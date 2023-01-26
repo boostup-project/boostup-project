@@ -120,7 +120,7 @@ public class LessonPostTest extends LessonControllerTest{
 
         String content = gson.toJson(data);
 
-        doNothing().when(lessonService).updateLessonDetail(Mockito.anyLong(), Mockito.any(PostLessonDetailEdit.class), Mockito.anyLong(), Mockito.anyList());
+        doNothing().when(lessonService).updateLessonDetail(Mockito.anyLong(), Mockito.any(PostLessonDetailEdit.class), Mockito.anyList());
 
         ResultActions actions =
                 mockMvc.perform(
@@ -181,7 +181,7 @@ public class LessonPostTest extends LessonControllerTest{
 
         String content = gson.toJson(data);
 
-        doNothing().when(lessonService).updateLessonInfo(Mockito.any(), Mockito.any(PostLessonInfoEdit.class), Mockito.anyLong(), Mockito.any());
+        doNothing().when(lessonService).updateLessonInfo(Mockito.any(), Mockito.any(PostLessonInfoEdit.class), Mockito.any());
 
         ResultActions actions =
                 mockMvc.perform(
