@@ -1,5 +1,4 @@
 import getExtra from "apis/detail/getExtra";
-import { Dispatch, SetStateAction } from "react";
 import { useQuery } from "react-query";
 
 const useGetExtra = (lessonId: number) => {

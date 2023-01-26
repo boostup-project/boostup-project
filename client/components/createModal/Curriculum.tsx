@@ -122,8 +122,6 @@ const Curriculum = ({
     formData.append("data", blob);
     formData.append("profileImage", proImage);
     formData.append("careerImage", proImage);
-
-    // postWrite(formData);
     mutate(formData);
   };
 

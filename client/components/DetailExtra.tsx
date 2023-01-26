@@ -1,6 +1,7 @@
 import { AxiosResponse } from "axios";
 import { useState } from "react";
 import { useEffect } from "react";
+import DetailExtraModi from "./DetailExtraModi";
 
 interface CareerImage {
   [index: string]: string;
@@ -22,7 +23,7 @@ export interface DetailTitles {
   [index: string]: string;
 }
 
-export interface Props {
+interface Props {
   extraData: AxiosResponse<any, any> | undefined;
 }
 
@@ -39,7 +40,8 @@ const detailTitlesArray = Object.keys(detailTitles);
 
 const DetailExtra = ({ extraData }: Props) => {
   const [textData, setTextData] = useState<DetailTitles>();
-  const [images, setImages] = useState([]);
+  const [images, setImages] = useState<string[]>([]);
+  const [isEdit, setIsEdit] = useState(false);
   useEffect(() => {
     if (extraData) {
       const prompt = {
@@ -50,20 +52,43 @@ const DetailExtra = ({ extraData }: Props) => {
         detailLocation: extraData.data.detailLocation,
       };
       setTextData(prompt);
+      const careerImages = extraData.data.careerImage;
+      if (careerImages) {
+        const extractedImage = careerImages.map((image: CareerImage) => {
+          image.careerImageUrl;
+        });
+        setImages(extractedImage);
+      }
       setImages(extraData.data.careerImage);
     }
   }, [extraData]);
+  const modalOpen = () => {
+    setIsEdit(prev => !prev);
+  };
 
   return (
     <div className="w-full h-full">
-      <div className="p-6 text-base">
+      {isEdit && (
+        <DetailExtraModi
+          modalOpen={modalOpen}
+          textData={textData!}
+          images={images}
+        />
+      )}
+      <div
+        className="w-full flex justify-end pt-6 px-6 text-pointColor font-SCDream3 cursor-pointer hover:underline"
+        onClick={modalOpen}
+      >
+        edit
+      </div>
+      <div className="pb-6 pt-3 px-6 text-base">
         {!textData ? (
           <div>Loading</div>
         ) : (
           detailTitlesArray.map((title, i) => (
             <div key={i} className="mb-7">
               <div className="font-SCDream5">{detailTitles[title]}</div>
-              <div className="font-SCDrea3">
+              <div className="font-SCDream3">
                 {title === "careerImage" ? (
                   <div>사진</div>
                 ) : (
