@@ -20,12 +20,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
-
 import static com.codueon.boostUp.domain.suggest.entity.SuggestStatus.*;
 import static com.codueon.boostUp.global.exception.ExceptionCode.NOT_ACCEPT_SUGGEST;
 import static com.codueon.boostUp.global.exception.ExceptionCode.NOT_PAY_SUCCESS;
@@ -55,6 +52,7 @@ public class LessonService {
                              Long memberId,
                              MultipartFile profileImage,
                              List<MultipartFile> careerImage) {
+
         if (lessonRepository.existsByMemberId(memberId)) {
             throw new BusinessLogicException(ExceptionCode.LESSON_ALREADY_EXIST);
         }
@@ -79,6 +77,7 @@ public class LessonService {
                              Long memberId,
                              MultipartFile profileImage,
                              List<MultipartFile> careerImage) {
+
         if (lessonRepository.existsByMemberId(memberId)) {
             throw new BusinessLogicException(ExceptionCode.LESSON_ALREADY_EXIST);
         }
@@ -128,6 +127,7 @@ public class LessonService {
     private Lesson saveLessonAndReturnLessonS3(PostLesson postLesson,
                                              Member member,
                                              MultipartFile profileImage) {
+
         Lesson lesson = Lesson.toEntity(postLesson, member.getName(), member.getId());
 
         String dir = "profileImage";
@@ -154,8 +154,10 @@ public class LessonService {
     private void saveLessonInfo(Lesson savedLesson,
                                 PostLesson postLesson,
                                 List<MultipartFile> careerImage) {
+
         LessonInfo lessonInfo = LessonInfo.toEntity(savedLesson.getId(), postLesson);
         List<UploadFile> careerImages = fileHandler.parseUploadFileInfo(careerImage);
+
         lessonDbService.saveCareerImage(careerImages, lessonInfo);
         lessonDbService.saveLessonInfo(lessonInfo);
     }
@@ -212,10 +214,6 @@ public class LessonService {
         Member findMember = memberDbService.ifExistsReturnMember(memberId);
         Lesson updateLesson = lessonDbService.ifExistsReturnLesson(lessonId);
 
-        if (!Objects.equals(updateLesson.getMemberId(), findMember.getId())) {
-            throw new BusinessLogicException(ExceptionCode.UNAUTHORIZED_FOR_UPDATE);
-        }
-
         updateLesson.editLessonInfo(postLessonInfoEdit);
 
         List<Integer> languageList = postLessonInfoEdit.getLanguages();
@@ -248,17 +246,14 @@ public class LessonService {
                                  PostLessonInfoEdit postLessonInfoEdit,
                                  Long memberId,
                                  MultipartFile profileImage) {
+
         Member findMember = memberDbService.ifExistsReturnMember(memberId);
         Lesson updateLesson = lessonDbService.ifExistsReturnLesson(lessonId);
 
-        if (!Objects.equals(updateLesson.getMemberId(), findMember.getId())) {
-            throw new BusinessLogicException(ExceptionCode.UNAUTHORIZED_FOR_UPDATE);
-        }
-
-        String dir = "profileImage";
         updateLesson.editLessonInfo(postLessonInfoEdit);
         ProfileImage profileImage1 = updateLesson.getProfileImage();
 
+        String dir = "profileImage";
         awsS3Service.delete(profileImage1.getFileName(),dir);
 
         List<Integer> languageList = postLessonInfoEdit.getLanguages();
@@ -291,13 +286,10 @@ public class LessonService {
                                    PostLessonDetailEdit postLessonDetailEdit,
                                    Long memberId,
                                    List<MultipartFile> careerImage) {
+
         Member findMember = memberDbService.ifExistsReturnMember(memberId);
         LessonInfo updateLessonDetail = lessonDbService.ifExsitsReturnLessonInfo(lessonId);
         updateLessonDetail.editLessonDetail(postLessonDetailEdit);
-
-        if (!Objects.equals(updateLessonDetail.getId(),findMember.getId())) {
-            throw new BusinessLogicException(ExceptionCode.UNAUTHORIZED_FOR_UPDATE);
-        }
 
         List<Long> careerImages = postLessonDetailEdit.getCareerImages();
         List<CareerImage> careerImageList =  new ArrayList<>(updateLessonDetail.getCareerImages());
@@ -313,6 +305,7 @@ public class LessonService {
 
         List<UploadFile> uploadFileList = fileHandler.parseUploadFileInfo(careerImage);
         updateLessonDetail.editCareerImage(careerImageList);
+
         lessonDbService.editCareerImage(uploadFileList, updateLessonDetail);
         lessonDbService.saveLessonInfo(updateLessonDetail);
     }
@@ -330,17 +323,15 @@ public class LessonService {
                                    PostLessonDetailEdit postLessonDetailEdit,
                                    Long memberId,
                                    List<MultipartFile> careerImage) {
+
         Member findMember = memberDbService.ifExistsReturnMember(memberId);
         LessonInfo updateLessonDetail = lessonDbService.ifExsitsReturnLessonInfo(lessonId);
         updateLessonDetail.editLessonDetail(postLessonDetailEdit);
 
-        if (!Objects.equals(updateLessonDetail.getId(),findMember.getId())) {
-            throw new BusinessLogicException(ExceptionCode.UNAUTHORIZED_FOR_UPDATE);
-        }
-
-        String dir = "careerImage";
         List<Long> careerImages = postLessonDetailEdit.getCareerImages();
         List<CareerImage> careerImageList = new ArrayList<>(updateLessonDetail.getCareerImages());
+
+        String dir = "careerImage";
 
         for (int i = 0; i < careerImages.size(); i++) {
             for (int j = 0; j < careerImageList.size(); j++) {
@@ -369,8 +360,10 @@ public class LessonService {
     public void updateCurriculum(Long lessonId,
                                  PatchLessonCurriculum patchLessonCurriculum,
                                  Long memberId) {
+
         Member findMember = memberDbService.ifExistsReturnMember(memberId);
         Curriculum updateCurriculum = lessonDbService.ifExsistsReturnCurriculum(lessonId);
+
         updateCurriculum.editCurriculum(patchLessonCurriculum);
         lessonDbService.editCurriculum(updateCurriculum);
     }
@@ -464,6 +457,7 @@ public class LessonService {
      * @author Quartz614
      */
     public String getLessonMypage(Long memberId) {
+
         Lesson findLesson = lessonDbService.ifExistsReturnLessonByMemberId(memberId);
         String lessonUrl = "http://localhost:3000/lesson/" + findLesson.getId();
         return lessonUrl;
@@ -477,6 +471,7 @@ public class LessonService {
      * @author mozzi327
      */
     public Page<GetMainPageLesson> getMainPageLessons(Long memberId, Pageable pageable) {
+
         if (memberId == null) return lessonRepository.getMainPageLessons(pageable);
         return lessonRepository.getMainPageLessonsAndBookmarkInfo(memberId, pageable);
     }
@@ -492,6 +487,7 @@ public class LessonService {
     public Page<GetMainPageLesson> getDetailSearchLessons(Long memberId,
                                                           PostSearchLesson postSearchLesson,
                                                           Pageable pageable) {
+
         if (memberId != null) return lessonRepository.getDetailSearchMainPageLessonAndGetBookmarkInfo(memberId, postSearchLesson, pageable);
         return lessonRepository.getDetailSearchMainPageLesson(postSearchLesson, pageable);
     }
@@ -506,6 +502,7 @@ public class LessonService {
     public Page<GetMainPageLesson> getMainPageLessonsAboutLanguage(Long memberId,
                                                                    Integer languageId,
                                                                    Pageable pageable) {
+
         if (memberId != null) return lessonRepository.getMainPageLessonByLanguageAndBookmarkInfo(memberId, languageId, pageable);
         return lessonRepository.getMainPageLessonByLanguage(languageId, pageable);
     }
@@ -517,6 +514,7 @@ public class LessonService {
      * @author mozzi327
      */
     public GetLesson getDetailLesson(Long lessonId) {
+
         Lesson findLesson = lessonDbService.ifExistsReturnLesson(lessonId);
         return GetLesson.builder()
                 .lesson(findLesson)
@@ -530,6 +528,7 @@ public class LessonService {
      * @author mozzi327
      */
     public GetLessonInfo getDetailLessonInfo(Long lessonId) {
+
         LessonInfo lessonInfo = lessonDbService.ifExsitsReturnLessonInfo(lessonId);
         return GetLessonInfo.builder()
                 .lessonInfo(lessonInfo)
@@ -543,6 +542,7 @@ public class LessonService {
      * @author mozzi327
      */
     public GetLessonCurriculum getDetailLessonCurriculum(Long lessonId) {
+
         Curriculum findCurriculum = lessonDbService.ifExsistsReturnCurriculum(lessonId);
         return GetLessonCurriculum.builder()
                 .curriculum(findCurriculum.getCurriculum())
@@ -556,6 +556,7 @@ public class LessonService {
      * @author mozzi327
      */
     public GetTutorLesson getMyLesson(Long memberId) {
+
         Lesson findLesson = lessonDbService.ifExistsReturnLessonByMemberId(memberId);
         return GetTutorLesson.builder()
                 .lesson(findLesson)
