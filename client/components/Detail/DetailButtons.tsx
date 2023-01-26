@@ -24,6 +24,8 @@ const DetailButtons = () => {
     return;
   };
   const deletePost = () => {
+    //삭제기능테스트완료했으나 lessonId를 받아오고,
+    //토큰이 없는 경우 삭제버튼이 보이지 않는 기능 구현이 필요
     const lessonId = 2;
     Swal.fire({
       title: "과외를 삭제하시겠습니까?",
@@ -35,31 +37,35 @@ const DetailButtons = () => {
     }).then(result => {
       if (result.isConfirmed) {
         mutate(lessonId);
+        return Swal.fire({
+          text: "삭제완료",
+          icon: "success",
+          confirmButtonColor: "#3085d6",
+        });
       }
     });
   };
 
   return (
-    <div className="flex w-full h-full flex-col items-center">
-      {isOpenModal && (
-        <CreateModalContainer>
-          <ApplyModal onClickToggleModal={onClickToggleModal} />
-        </CreateModalContainer>
-      )}
-      <div className="flex flex-col desktop:w-1/5 desktop:h-fit tablet:w-full w-full">
+    <div className="flex w-full h-full flex-col ">
+      {isOpenModal && <ApplyModal onClickToggleModal={onClickToggleModal} />}
+      <div className="flex flex-col desktop:w-1/5 desktop:h-fit tablet:w-[97%] w-[97%] justify-center">
         <DetailBtn bold={true} remove={false} onClick={onClickToggleModal}>
           신청하기
         </DetailBtn>
         <DetailBtn bold={false} remove={false} onClick={chatNow}>
           실시간 채팅
         </DetailBtn>
-        <div className="relative">
-          <div className="flex w-1/3 h-1/3 absolute top-4 left-8">
-            {true ? <IconFullheart /> : <IconEmptyheart />}
-          </div>
-
+        <div className="relative justify-center items-center">
           <DetailBtn bold={false} remove={false} onClick={bookmarking}>
-            선생님 찜하기
+            <div className="flex w-1/2 h-1/3 absolute justify-center items-center">
+              {false ? (
+                <IconFullheart width="25" heigth="25" />
+              ) : (
+                <IconEmptyheart width="25" heigth="25" />
+              )}
+              저장하기
+            </div>
           </DetailBtn>
         </div>
         <div className="mt-10">

@@ -31,8 +31,8 @@ const ApplyModal = ({
   const { mutate, error, isSuccess, isError } = useGetApply();
 
   const apply = () => {
-    const data = { day: day };
-    mutate({ lessonId });
+    // const data = { day: day };
+    // mutate({ lessonId });
   };
 
   const langArr = Object.keys(langDict);
