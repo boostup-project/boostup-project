@@ -1,5 +1,4 @@
 package com.codueon.boostUp.domain.lesson.service;
-
 import com.codueon.boostUp.domain.bookmark.repository.BookmarkRepository;
 import com.codueon.boostUp.domain.lesson.dto.*;
 import com.codueon.boostUp.domain.lesson.entity.*;
@@ -201,19 +200,15 @@ public class LessonService {
      * 과외 요약 정보 수정 메서드 (로컬)
      * @param lessonId 과외 식별자
      * @param postLessonInfoEdit 수정 과외 요약정보
-     * @param memberId 회원 식별자
      * @param profileImage 회원 프로필 이미지
      * @author Quartz614
      */
     @SneakyThrows
     public void updateLessonInfo(Long lessonId,
                                  PostLessonInfoEdit postLessonInfoEdit,
-                                 Long memberId,
                                  MultipartFile profileImage) {
 
-        Member findMember = memberDbService.ifExistsReturnMember(memberId);
         Lesson updateLesson = lessonDbService.ifExistsReturnLesson(lessonId);
-
         updateLesson.editLessonInfo(postLessonInfoEdit);
 
         List<Integer> languageList = postLessonInfoEdit.getLanguages();
@@ -229,6 +224,7 @@ public class LessonService {
                 .filePath(uploadFile.getFilePath())
                 .fileSize(uploadFile.getFileSize())
                 .build();
+
         updateLesson.addProfileImage(editProfileImage);
         lessonDbService.saveLesson(updateLesson);
     }
@@ -237,17 +233,14 @@ public class LessonService {
      * 과외 요약 정보 수정 메서드 (S3)
      * @param lessonId 과외 식별자
      * @param postLessonInfoEdit 수정 과외 요약정보
-     * @param memberId 회원 식별자
      * @param profileImage 회원 프로필 이미지
      * @author Quartz614
      */
     @SneakyThrows
     public void updateLessonInfoS3(Long lessonId,
                                  PostLessonInfoEdit postLessonInfoEdit,
-                                 Long memberId,
                                  MultipartFile profileImage) {
 
-        Member findMember = memberDbService.ifExistsReturnMember(memberId);
         Lesson updateLesson = lessonDbService.ifExistsReturnLesson(lessonId);
 
         updateLesson.editLessonInfo(postLessonInfoEdit);
@@ -269,6 +262,7 @@ public class LessonService {
                 .filePath(uploadFile.getFilePath())
                 .fileSize(uploadFile.getFileSize())
                 .build();
+
         updateLesson.addProfileImage(editProfileImage);
         lessonDbService.saveLesson(updateLesson);
     }
@@ -277,17 +271,14 @@ public class LessonService {
      * 과외 상세 정보 수정 메서드 (로컬)
      * @param lessonId 과외 식별자
      * @param postLessonDetailEdit 수정 과외 상세정보
-     * @param memberId 회원 식별자
      * @param careerImage 경력 이미지
      * @author Quartz614
      */
     @SneakyThrows
     public void updateLessonDetail(Long lessonId,
                                    PostLessonDetailEdit postLessonDetailEdit,
-                                   Long memberId,
                                    List<MultipartFile> careerImage) {
 
-        Member findMember = memberDbService.ifExistsReturnMember(memberId);
         LessonInfo updateLessonDetail = lessonDbService.ifExsitsReturnLessonInfo(lessonId);
         updateLessonDetail.editLessonDetail(postLessonDetailEdit);
 
@@ -314,17 +305,14 @@ public class LessonService {
      * 과외 상세 정보 수정 메서드 (S3)
      * @param lessonId 과외 식별자
      * @param postLessonDetailEdit 수정 과외 상세정보
-     * @param memberId 회원 식별자
      * @param careerImage 경력 이미지
      * @author Quartz614
      */
     @SneakyThrows
     public void updateLessonDetailS3(Long lessonId,
                                    PostLessonDetailEdit postLessonDetailEdit,
-                                   Long memberId,
                                    List<MultipartFile> careerImage) {
 
-        Member findMember = memberDbService.ifExistsReturnMember(memberId);
         LessonInfo updateLessonDetail = lessonDbService.ifExsitsReturnLessonInfo(lessonId);
         updateLessonDetail.editLessonDetail(postLessonDetailEdit);
 
@@ -353,15 +341,12 @@ public class LessonService {
      * 커리큘럼 수정 메서드
      * @param lessonId 과외 식별자
      * @param patchLessonCurriculum 수정 커리큘럼 정보
-     * @param memberId 회원 식별자
      * @author Quartz614
      */
     @SneakyThrows
     public void updateCurriculum(Long lessonId,
-                                 PatchLessonCurriculum patchLessonCurriculum,
-                                 Long memberId) {
+                                 PatchLessonCurriculum patchLessonCurriculum) {
 
-        Member findMember = memberDbService.ifExistsReturnMember(memberId);
         Curriculum updateCurriculum = lessonDbService.ifExsistsReturnCurriculum(lessonId);
 
         updateCurriculum.editCurriculum(patchLessonCurriculum);

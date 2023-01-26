@@ -1,9 +1,16 @@
 package com.codueon.boostUp.global.security.config;
 
+import com.codueon.boostUp.domain.member.repository.MemberRepository;
+import com.codueon.boostUp.domain.member.service.MemberDbService;
+import com.codueon.boostUp.global.security.details.OAuth2DetailService;
 import com.codueon.boostUp.global.security.filter.JwtVerificationFilter;
+import com.codueon.boostUp.global.security.handler.OAuth2FailureHandler;
+import com.codueon.boostUp.global.security.handler.OAuth2SuccessHandler;
 import com.codueon.boostUp.global.security.provider.JwtAuthenticationProvider;
+import com.codueon.boostUp.global.security.utils.CustomAuthorityUtils;
 import com.codueon.boostUp.global.security.utils.JwtTokenUtils;
 import com.codueon.boostUp.global.utils.RedisUtils;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,6 +22,7 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.client.web.OAuth2LoginAuthenticationFilter;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.csrf.CsrfFilter;
@@ -30,7 +38,10 @@ import org.springframework.web.filter.CharacterEncodingFilter;
 public class SecurityConfig {
     private final JwtTokenUtils jwtTokenUtils;
     private final RedisUtils redisUtils;
-    private final JwtAuthenticationProvider jwtAuthenticationProvider;
+    private final OAuth2DetailService oAuth2DetailService;
+    private final MemberRepository memberRepository;
+    private final CustomAuthorityUtils authorityUtils;
+    private final ObjectMapper objectMapper;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -59,13 +70,20 @@ public class SecurityConfig {
                 .antMatchers("/h2/**").permitAll()
                 .antMatchers("/auth/**").permitAll()
                 .antMatchers("/member/**").permitAll()
-                //.antMatchers("/lesson/**").permitAll()
-                .antMatchers(HttpMethod.POST, "/lesson/registration").hasAuthority("ROLE_USER")
+                .antMatchers("/lesson/**").permitAll()
+                //.antMatchers(HttpMethod.POST, "/lesson/registration").hasAuthority("ROLE_USER")
                 .antMatchers("/suggest/**").permitAll()
                 .antMatchers("/api/**").permitAll()
                 .antMatchers("/ws-connect/**").permitAll()
-                .anyRequest().permitAll();
-
+                .anyRequest().permitAll()
+                .and()
+                .exceptionHandling()
+                .and()
+                .oauth2Login(oauth2 -> {
+                    oauth2.userInfoEndpoint().userService(oAuth2DetailService);
+                    oauth2.successHandler(new OAuth2SuccessHandler(memberRepository, jwtTokenUtils));
+                    oauth2.failureHandler(new OAuth2FailureHandler());
+                });
         return http.build();
     }
 
@@ -96,13 +114,12 @@ public class SecurityConfig {
     public class CustomFilterConfig extends AbstractHttpConfigurer<CustomFilterConfig, HttpSecurity> {
         @Override
         public void configure(HttpSecurity builder) {
-            AuthenticationManager authenticationManager = builder.getSharedObject(AuthenticationManager.class);
-
-            JwtVerificationFilter jwtVerificationFilter = new JwtVerificationFilter(authenticationManager, jwtTokenUtils, redisUtils);
+            JwtVerificationFilter jwtVerificationFilter =
+                    new JwtVerificationFilter(jwtTokenUtils, redisUtils, authorityUtils, memberRepository, objectMapper);
 
             builder
-                    .addFilterBefore(jwtVerificationFilter, UsernamePasswordAuthenticationFilter.class)
-                    .authenticationProvider(jwtAuthenticationProvider);
+                    .addFilterBefore(jwtVerificationFilter, OAuth2LoginAuthenticationFilter.class)
+                    .addFilterBefore(jwtVerificationFilter, UsernamePasswordAuthenticationFilter.class);
         }
     }
 }
