@@ -1,6 +1,5 @@
 spring:
   config:
-    import: 'aws-parameterstore'
   datasource:
     url: ${/config/param/datasource-url}
     username: ${/config/param/rds-username}
@@ -79,9 +78,5 @@ default:
   image:
     address: ${/config/param/default-url}
 
-aws:
-  paramstore:
-    enabled: true
-    prefix: /config
-    name: param # 리소스 이름을 작성합니다.
-    profileSeparator: _
+awsParameterStorePropertySource:
+  enabled: true
