@@ -1,5 +1,9 @@
 spring:
   config:
+<<<<<<< HEAD:server/src/main/resources/application-prod.yml
+=======
+    import: 'aws-parameterstore'
+>>>>>>> 987bb09e2c54bc6a0b8707df6c17c58a886b7b55:server/src/main/resources/application.yml
   datasource:
     url: ${/config/param/datasource-url}
     username: ${/config/param/rds-username}
@@ -80,3 +84,10 @@ default:
 
 awsParameterStorePropertySource:
   enabled: true
+
+aws:
+  paramstore:
+    enabled: true
+    prefix: /config
+    name: param # 리소스 이름을 작성합니다.
+    profileSeparator: _
