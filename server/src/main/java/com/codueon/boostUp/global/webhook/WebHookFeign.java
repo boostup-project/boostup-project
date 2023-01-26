@@ -4,13 +4,13 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 
-@FeignClient(value = "webhook-logging", url = "${feign.logging.url}")
+@FeignClient(value = "webhook-logging", url = "${logging.url}")
 public interface WebHookFeign {
-    @PostMapping(value = "${feign.logging.server}")
+    @PostMapping(value = "${logging.server}")
     void sendServerLogging(@RequestHeader("Accept") String contentType,
                            WebHookError webHookError);
 
-    @PostMapping(value = "${feign.logging.service}")
+    @PostMapping(value = "${logging.service}")
     void sendServiceLogging(@RequestHeader("Accept") String contentType,
                             WebHookError webHookError);
 }

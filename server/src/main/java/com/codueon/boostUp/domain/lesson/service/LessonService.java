@@ -1,4 +1,5 @@
 package com.codueon.boostUp.domain.lesson.service;
+
 import com.codueon.boostUp.domain.bookmark.repository.BookmarkRepository;
 import com.codueon.boostUp.domain.lesson.dto.*;
 import com.codueon.boostUp.domain.lesson.entity.*;
@@ -18,21 +19,13 @@ import lombok.SneakyThrows;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.util.CollectionUtils;
 import org.springframework.web.multipart.MultipartFile;
-
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
-
-
 import static com.codueon.boostUp.domain.suggest.entity.SuggestStatus.*;
 import static com.codueon.boostUp.global.exception.ExceptionCode.NOT_ACCEPT_SUGGEST;
 import static com.codueon.boostUp.global.exception.ExceptionCode.NOT_PAY_SUCCESS;
-
-import java.util.Objects;
-
-
 
 @Service
 @RequiredArgsConstructor
@@ -48,7 +41,6 @@ public class LessonService {
 
     /**
      * 과외 등록 메서드 (Local)
-     *
      * @param postLesson   과외 등록 정보
      * @param memberId     사용자 식별자
      * @param profileImage 프로필 사진
@@ -60,9 +52,11 @@ public class LessonService {
                              Long memberId,
                              MultipartFile profileImage,
                              List<MultipartFile> careerImage) {
+
         if (lessonRepository.existsByMemberId(memberId)) {
             throw new BusinessLogicException(ExceptionCode.LESSON_ALREADY_EXIST);
         }
+
         Member findMember = memberDbService.ifExistsReturnMember(memberId);
         Lesson savedLesson = saveLessonAndReturnLesson(postLesson, findMember, profileImage);
 
@@ -72,7 +66,6 @@ public class LessonService {
 
     /**
      * 과외 등록 메서드 (S3)
-     *
      * @param postLesson   과외 등록 정보
      * @param memberId     사용자 식별자
      * @param profileImage 프로필 사진
@@ -84,9 +77,11 @@ public class LessonService {
                              Long memberId,
                              MultipartFile profileImage,
                              List<MultipartFile> careerImage) {
+
         if (lessonRepository.existsByMemberId(memberId)) {
             throw new BusinessLogicException(ExceptionCode.LESSON_ALREADY_EXIST);
         }
+
         Member findMember = memberDbService.ifExistsReturnMember(memberId);
         Lesson savedLesson = saveLessonAndReturnLessonS3(postLesson, findMember, profileImage);
 
@@ -96,7 +91,6 @@ public class LessonService {
 
     /**
      * Lesson을 저장하고 객체를 리턴하는 메서드 (Local)
-     *
      * @param postLesson   과외 등록 정보
      * @param member       사용자 식별자
      * @param profileImage 프로필 사진
@@ -123,7 +117,6 @@ public class LessonService {
 
     /**
      * Lesson을 저장하고 객체를 리턴하는 메서드 (S3)
-     *
      * @param postLesson   과외 등록 정보
      * @param member       사용자 식별자
      * @param profileImage 프로필 사진
@@ -134,6 +127,7 @@ public class LessonService {
     private Lesson saveLessonAndReturnLessonS3(PostLesson postLesson,
                                              Member member,
                                              MultipartFile profileImage) {
+
         Lesson lesson = Lesson.toEntity(postLesson, member.getName(), member.getId());
 
         String dir = "profileImage";
@@ -151,7 +145,6 @@ public class LessonService {
 
     /**
      * 과외 디테일 정보 저장 메서드 (Local)
-     *
      * @param savedLesson 저장 후 조회된 요약 정보
      * @param postLesson  과외 등록 정보
      * @param careerImage 경력 사진
@@ -161,15 +154,16 @@ public class LessonService {
     private void saveLessonInfo(Lesson savedLesson,
                                 PostLesson postLesson,
                                 List<MultipartFile> careerImage) {
+
         LessonInfo lessonInfo = LessonInfo.toEntity(savedLesson.getId(), postLesson);
         List<UploadFile> careerImages = fileHandler.parseUploadFileInfo(careerImage);
+
         lessonDbService.saveCareerImage(careerImages, lessonInfo);
         lessonDbService.saveLessonInfo(lessonInfo);
     }
 
     /**
      * 과외 디테일 정보 저장 메서드 (S3)
-     *
      * @param savedLesson 저장 후 조회된 요약 정보
      * @param postLesson  과외 등록 정보
      * @param careerImage 경력 사진
@@ -190,7 +184,6 @@ public class LessonService {
 
     /**
      * 커리큘럼 저장 메서드
-     *
      * @param savedLesson 저장 후 조회된 요약 정보
      * @param postLesson  과외 등록 정보
      * @author Quartz614
@@ -206,7 +199,6 @@ public class LessonService {
 
     /**
      * 과외 요약 정보 수정 메서드 (로컬)
-     *
      * @param lessonId 과외 식별자
      * @param postLessonInfoEdit 수정 과외 요약정보
      * @param memberId 회원 식별자
@@ -222,9 +214,6 @@ public class LessonService {
         Member findMember = memberDbService.ifExistsReturnMember(memberId);
         Lesson updateLesson = lessonDbService.ifExistsReturnLesson(lessonId);
 
-        if (!Objects.equals(updateLesson.getMemberId(), findMember.getId())) {
-            throw new BusinessLogicException(ExceptionCode.UNAUTHORIZED_FOR_UPDATE);
-        }
         updateLesson.editLessonInfo(postLessonInfoEdit);
 
         List<Integer> languageList = postLessonInfoEdit.getLanguages();
@@ -246,7 +235,6 @@ public class LessonService {
 
     /**
      * 과외 요약 정보 수정 메서드 (S3)
-     *
      * @param lessonId 과외 식별자
      * @param postLessonInfoEdit 수정 과외 요약정보
      * @param memberId 회원 식별자
@@ -258,17 +246,14 @@ public class LessonService {
                                  PostLessonInfoEdit postLessonInfoEdit,
                                  Long memberId,
                                  MultipartFile profileImage) {
+
         Member findMember = memberDbService.ifExistsReturnMember(memberId);
         Lesson updateLesson = lessonDbService.ifExistsReturnLesson(lessonId);
 
-        if (!Objects.equals(updateLesson.getMemberId(), findMember.getId())) {
-            throw new BusinessLogicException(ExceptionCode.UNAUTHORIZED_FOR_UPDATE);
-        }
-
-        String dir = "profileImage";
         updateLesson.editLessonInfo(postLessonInfoEdit);
         ProfileImage profileImage1 = updateLesson.getProfileImage();
 
+        String dir = "profileImage";
         awsS3Service.delete(profileImage1.getFileName(),dir);
 
         List<Integer> languageList = postLessonInfoEdit.getLanguages();
@@ -287,6 +272,7 @@ public class LessonService {
         updateLesson.addProfileImage(editProfileImage);
         lessonDbService.saveLesson(updateLesson);
     }
+
     /**
      * 과외 상세 정보 수정 메서드 (로컬)
      * @param lessonId 과외 식별자
@@ -300,13 +286,10 @@ public class LessonService {
                                    PostLessonDetailEdit postLessonDetailEdit,
                                    Long memberId,
                                    List<MultipartFile> careerImage) {
+
         Member findMember = memberDbService.ifExistsReturnMember(memberId);
         LessonInfo updateLessonDetail = lessonDbService.ifExsitsReturnLessonInfo(lessonId);
         updateLessonDetail.editLessonDetail(postLessonDetailEdit);
-
-        if (!Objects.equals(updateLessonDetail.getId(),findMember.getId())) {
-            throw new BusinessLogicException(ExceptionCode.UNAUTHORIZED_FOR_UPDATE);
-        }
 
         List<Long> careerImages = postLessonDetailEdit.getCareerImages();
         List<CareerImage> careerImageList =  new ArrayList<>(updateLessonDetail.getCareerImages());
@@ -319,8 +302,10 @@ public class LessonService {
                 }
             }
         }
+
         List<UploadFile> uploadFileList = fileHandler.parseUploadFileInfo(careerImage);
         updateLessonDetail.editCareerImage(careerImageList);
+
         lessonDbService.editCareerImage(uploadFileList, updateLessonDetail);
         lessonDbService.saveLessonInfo(updateLessonDetail);
     }
@@ -333,23 +318,20 @@ public class LessonService {
      * @param careerImage 경력 이미지
      * @author Quartz614
      */
-
     @SneakyThrows
     public void updateLessonDetailS3(Long lessonId,
                                    PostLessonDetailEdit postLessonDetailEdit,
                                    Long memberId,
                                    List<MultipartFile> careerImage) {
+
         Member findMember = memberDbService.ifExistsReturnMember(memberId);
         LessonInfo updateLessonDetail = lessonDbService.ifExsitsReturnLessonInfo(lessonId);
         updateLessonDetail.editLessonDetail(postLessonDetailEdit);
 
-        if (!Objects.equals(updateLessonDetail.getId(),findMember.getId())) {
-            throw new BusinessLogicException(ExceptionCode.UNAUTHORIZED_FOR_UPDATE);
-        }
-
-        String dir = "careerImage";
         List<Long> careerImages = postLessonDetailEdit.getCareerImages();
         List<CareerImage> careerImageList = new ArrayList<>(updateLessonDetail.getCareerImages());
+
+        String dir = "careerImage";
 
         for (int i = 0; i < careerImages.size(); i++) {
             for (int j = 0; j < careerImageList.size(); j++) {
@@ -376,10 +358,12 @@ public class LessonService {
      */
     @SneakyThrows
     public void updateCurriculum(Long lessonId,
-                                       PatchLessonCurriculum patchLessonCurriculum,
-                                       Long memberId) {
+                                 PatchLessonCurriculum patchLessonCurriculum,
+                                 Long memberId) {
+
         Member findMember = memberDbService.ifExistsReturnMember(memberId);
         Curriculum updateCurriculum = lessonDbService.ifExsistsReturnCurriculum(lessonId);
+
         updateCurriculum.editCurriculum(patchLessonCurriculum);
         lessonDbService.editCurriculum(updateCurriculum);
     }
@@ -392,14 +376,14 @@ public class LessonService {
      */
     @Transactional
     public void deleteLesson(Long memberId, Long lessonId) {
-        Member findMember = memberDbService.ifExistsReturnMember(memberId);
         Lesson findLesson = lessonDbService.ifExistsReturnLesson(lessonId);
-        LessonInfo findLessonInfo = lessonDbService.ifExsitsReturnLessonInfo(lessonId);
-        Curriculum findCurriculum = lessonDbService.ifExsistsReturnCurriculum(lessonId);
-        List<Suggest> findSuggest = suggestDbService.findAllSuggestForLesson(lessonId);
+        Member findMember = memberDbService.ifExistsReturnMember(findLesson.getMemberId());
 
-        reviewService.removeAllByReviews(lessonId);
-        bookmarkRepository.deleteByLessonId(lessonId);
+        if (!findMember.getId().equals(memberId)) {
+            throw new BusinessLogicException(ExceptionCode.UNAUTHORIZED_FOR_DELETE);
+        }
+
+        List<Suggest> findSuggest = suggestDbService.findAllSuggestForLesson(lessonId);
 
         for (Suggest suggest : findSuggest) {
             if (suggest.getSuggestStatus().equals(ACCEPT_IN_PROGRESS)) {
@@ -410,6 +394,13 @@ public class LessonService {
                 throw new BusinessLogicException(NOT_PAY_SUCCESS);
             }
         }
+
+        LessonInfo findLessonInfo = lessonDbService.ifExsitsReturnLessonInfo(lessonId);
+        Curriculum findCurriculum = lessonDbService.ifExsistsReturnCurriculum(lessonId);
+
+        reviewService.removeAllByReviews(lessonId);
+        bookmarkRepository.deleteByLessonId(lessonId);
+
         lessonDbService.deleteLesson(findLesson);
         lessonDbService.deleteLessonInfo(findLessonInfo);
         lessonDbService.deleteCurriculum(findCurriculum);
@@ -423,14 +414,14 @@ public class LessonService {
      */
     @Transactional
     public void deleteLessonS3(Long memberId, Long lessonId) {
-        Member findMember = memberDbService.ifExistsReturnMember(memberId);
         Lesson findLesson = lessonDbService.ifExistsReturnLesson(lessonId);
-        LessonInfo findLessonInfo = lessonDbService.ifExsitsReturnLessonInfo(lessonId);
-        Curriculum findCurriculum = lessonDbService.ifExsistsReturnCurriculum(lessonId);
-        List<Suggest> findSuggest = suggestDbService.findAllSuggestForLesson(lessonId);
+        Member findMember = memberDbService.ifExistsReturnMember(findLesson.getMemberId());
 
-        reviewService.removeAllByReviews(lessonId);
-        bookmarkRepository.deleteByLessonId(lessonId);
+        if (!findMember.getId().equals(memberId)) {
+            throw new BusinessLogicException(ExceptionCode.UNAUTHORIZED_FOR_DELETE);
+        }
+
+        List<Suggest> findSuggest = suggestDbService.findAllSuggestForLesson(lessonId);
 
         for (Suggest suggest : findSuggest) {
             if (suggest.getSuggestStatus().equals(ACCEPT_IN_PROGRESS)) {
@@ -441,13 +432,21 @@ public class LessonService {
                 throw new BusinessLogicException(NOT_PAY_SUCCESS);
             }
         }
-        
+
+        LessonInfo findLessonInfo = lessonDbService.ifExsitsReturnLessonInfo(lessonId);
+        Curriculum findCurriculum = lessonDbService.ifExsistsReturnCurriculum(lessonId);
+
+        reviewService.removeAllByReviews(lessonId);
+        bookmarkRepository.deleteByLessonId(lessonId);
+
         String dir = "profileImage";
         String dir1 = "careerImage";
-        lessonDbService.deleteLesson(findLesson);
-        lessonDbService.deleteLessonInfo(findLessonInfo);
+
         awsS3Service.delete(findLesson.getProfileImage().getFileName(),dir);
         findLessonInfo.getCareerImages().forEach(careerImage -> awsS3Service.delete(careerImage.getFileName(), dir1));
+
+        lessonDbService.deleteLesson(findLesson);
+        lessonDbService.deleteLessonInfo(findLessonInfo);
         lessonDbService.deleteCurriculum(findCurriculum);
     }
 
@@ -458,6 +457,7 @@ public class LessonService {
      * @author Quartz614
      */
     public String getLessonMypage(Long memberId) {
+
         Lesson findLesson = lessonDbService.ifExistsReturnLessonByMemberId(memberId);
         String lessonUrl = "http://localhost:3000/lesson/" + findLesson.getId();
         return lessonUrl;
@@ -471,6 +471,7 @@ public class LessonService {
      * @author mozzi327
      */
     public Page<GetMainPageLesson> getMainPageLessons(Long memberId, Pageable pageable) {
+
         if (memberId == null) return lessonRepository.getMainPageLessons(pageable);
         return lessonRepository.getMainPageLessonsAndBookmarkInfo(memberId, pageable);
     }
@@ -486,6 +487,7 @@ public class LessonService {
     public Page<GetMainPageLesson> getDetailSearchLessons(Long memberId,
                                                           PostSearchLesson postSearchLesson,
                                                           Pageable pageable) {
+
         if (memberId != null) return lessonRepository.getDetailSearchMainPageLessonAndGetBookmarkInfo(memberId, postSearchLesson, pageable);
         return lessonRepository.getDetailSearchMainPageLesson(postSearchLesson, pageable);
     }
@@ -500,6 +502,7 @@ public class LessonService {
     public Page<GetMainPageLesson> getMainPageLessonsAboutLanguage(Long memberId,
                                                                    Integer languageId,
                                                                    Pageable pageable) {
+
         if (memberId != null) return lessonRepository.getMainPageLessonByLanguageAndBookmarkInfo(memberId, languageId, pageable);
         return lessonRepository.getMainPageLessonByLanguage(languageId, pageable);
     }
@@ -511,6 +514,7 @@ public class LessonService {
      * @author mozzi327
      */
     public GetLesson getDetailLesson(Long lessonId) {
+
         Lesson findLesson = lessonDbService.ifExistsReturnLesson(lessonId);
         return GetLesson.builder()
                 .lesson(findLesson)
@@ -524,6 +528,7 @@ public class LessonService {
      * @author mozzi327
      */
     public GetLessonInfo getDetailLessonInfo(Long lessonId) {
+
         LessonInfo lessonInfo = lessonDbService.ifExsitsReturnLessonInfo(lessonId);
         return GetLessonInfo.builder()
                 .lessonInfo(lessonInfo)
@@ -537,6 +542,7 @@ public class LessonService {
      * @author mozzi327
      */
     public GetLessonCurriculum getDetailLessonCurriculum(Long lessonId) {
+
         Curriculum findCurriculum = lessonDbService.ifExsistsReturnCurriculum(lessonId);
         return GetLessonCurriculum.builder()
                 .curriculum(findCurriculum.getCurriculum())
@@ -550,6 +556,7 @@ public class LessonService {
      * @author mozzi327
      */
     public GetTutorLesson getMyLesson(Long memberId) {
+
         Lesson findLesson = lessonDbService.ifExistsReturnLessonByMemberId(memberId);
         return GetTutorLesson.builder()
                 .lesson(findLesson)

@@ -40,7 +40,7 @@ public class ReviewPatchTest extends ReviewControllerTest {
         doNothing().when(reviewService).editReview(Mockito.anyLong(), Mockito.anyLong(), Mockito.any(PatchReview.class));
 
         ResultActions actions = mockMvc.perform(
-                patch("/review/{review-id}/edit", reviewId)
+                patch("/review/{review-id}/modification", reviewId)
                         .header(AUTHORIZATION, BEARER + accessToken)
                         .header(REFRESH_TOKEN, refreshToken)
                         .accept(MediaType.APPLICATION_JSON)

@@ -33,9 +33,11 @@ public class ReviewService {
      */
     public void createStudentReview(Long memberId, Long lessonId, Long suggestId, PostReview postReview) {
         Suggest suggest = suggestDbService.ifExistsReturnSuggest(suggestId);
+
         // 예외 처리 : 과외 종료 상태가 아닐 때
 //        if(!suggest.getStatus().equals(END_OF_LESSON))
 //            throw new BusinessLogicException(ExceptionCode.NOT_PAY_SUCCESS);
+
         // 리뷰 내역이 이미 존재할 때 예외 처리
         ifExistReviewThrowException(lessonId, memberId);
 

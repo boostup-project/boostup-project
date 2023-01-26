@@ -2,14 +2,14 @@ package com.codueon.boostUp.domain.bookmark.controller;
 
 import com.codueon.boostUp.domain.bookmark.dto.GetBookmark;
 import com.codueon.boostUp.domain.bookmark.dto.WrapBookmark;
-import com.codueon.boostUp.domain.bookmark.entity.Bookmark;
 import com.codueon.boostUp.domain.bookmark.service.BookmarkService;
 import com.codueon.boostUp.domain.dto.MultiResponseDto;
-import com.codueon.boostUp.domain.dto.SingleResponseDto;
+import com.codueon.boostUp.global.security.token.JwtAuthenticationToken;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,9 +28,11 @@ public class BookmarkController {
      * @author mozzi327
      */
     @GetMapping("/lesson/{lesson-id}")
-    public ResponseEntity getBookmark(@PathVariable("lesson-id") Long lessonId) {
-        // TODO : 시큐리티 적용 시 Authentication 객체 추가 요
-        Long memberId = 1L; // 임시 하드 코딩 ㅋㅋ
+    public ResponseEntity getBookmark(@PathVariable("lesson-id") Long lessonId,
+                                      Authentication authentication) {
+        JwtAuthenticationToken token = (JwtAuthenticationToken) authentication;
+        Long memberId = getMemberIdIfExistToken(token);
+
         boolean isBookmarked = bookmarkService.isMemberBookmarked(memberId, lessonId);
         return ResponseEntity.ok().body(new WrapBookmark(isBookmarked));
     }
@@ -41,10 +43,12 @@ public class BookmarkController {
      * @return isBookmark
      * @author mozzi327
      */
-    @GetMapping("/lesson/{lesson-id}/edit")
-    public ResponseEntity changeBookmark(@PathVariable("lesson-id") Long lessonId) {
-        // TODO : 시큐리티 적용 시 Authentication 객체 추가 요
-        Long memberId = 1L; // 임시 하드 코딩 ㅋㅋ
+    @GetMapping("/lesson/{lesson-id}/modification")
+    public ResponseEntity changeBookmark(@PathVariable("lesson-id") Long lessonId,
+                                         Authentication authentication) {
+        JwtAuthenticationToken token = (JwtAuthenticationToken) authentication;
+        Long memberId = getMemberIdIfExistToken(token);
+
         boolean isBookmarked = bookmarkService.changeBookmarkStatus(memberId, lessonId);
         return ResponseEntity.ok().body(new WrapBookmark(isBookmarked));
     }
@@ -55,10 +59,17 @@ public class BookmarkController {
      * @author mozzi327
      */
     @GetMapping
-    public ResponseEntity getBookmarks(Pageable pageable) {
-        // TODO : 시큐리티 적용 시 Authentication 객체 추가 요
-        Long memberId = 1L; // 임시 하드 코딩 ㅋㅋ
+    public ResponseEntity getBookmarks(Pageable pageable,
+                                       Authentication authentication) {
+        JwtAuthenticationToken token = (JwtAuthenticationToken) authentication;
+        Long memberId = getMemberIdIfExistToken(token);
+
         Page<GetBookmark> bookmarkList = bookmarkService.findBookmarkList(memberId, pageable);
         return ResponseEntity.ok().body(new MultiResponseDto<>(bookmarkList));
+    }
+
+    private Long getMemberIdIfExistToken(JwtAuthenticationToken token) {
+        if (token == null) return null;
+        else return token.getId();
     }
 }

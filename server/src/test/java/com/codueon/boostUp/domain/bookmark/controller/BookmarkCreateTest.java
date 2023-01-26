@@ -32,7 +32,7 @@ public class BookmarkCreateTest extends BookmarkControllerTest {
 
         ResultActions actions =
                 mockMvc.perform(
-                        get("/bookmark/lesson/{lesson-id}/edit", lessonId)
+                        get("/bookmark/lesson/{lesson-id}/modification", lessonId)
                                 .header(AUTHORIZATION, BEARER + accessToken)
                                 .header(REFRESH_TOKEN, refreshToken)
                                 .accept(MediaType.APPLICATION_JSON)
