@@ -24,6 +24,7 @@ import static com.codueon.boostUp.domain.bookmark.entity.QBookmark.bookmark;
 import static com.codueon.boostUp.domain.lesson.entity.QLesson.lesson;
 import static com.codueon.boostUp.domain.lesson.entity.QLessonAddress.lessonAddress;
 import static com.codueon.boostUp.domain.lesson.entity.QLessonLanguage.lessonLanguage;
+import static com.codueon.boostUp.domain.lesson.entity.QProfileImage.profileImage;
 
 public class LessonRepositoryImpl implements CustomLessonRepository {
 
