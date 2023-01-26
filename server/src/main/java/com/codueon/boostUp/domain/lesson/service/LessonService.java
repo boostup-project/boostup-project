@@ -1,4 +1,5 @@
 package com.codueon.boostUp.domain.lesson.service;
+
 import com.codueon.boostUp.domain.bookmark.repository.BookmarkRepository;
 import com.codueon.boostUp.domain.lesson.dto.*;
 import com.codueon.boostUp.domain.lesson.entity.*;
@@ -18,21 +19,16 @@ import lombok.SneakyThrows;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.util.CollectionUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
-
+import java.util.Objects;
 
 import static com.codueon.boostUp.domain.suggest.entity.SuggestStatus.*;
 import static com.codueon.boostUp.global.exception.ExceptionCode.NOT_ACCEPT_SUGGEST;
 import static com.codueon.boostUp.global.exception.ExceptionCode.NOT_PAY_SUCCESS;
-
-import java.util.Objects;
-
-
 
 @Service
 @RequiredArgsConstructor
@@ -48,7 +44,6 @@ public class LessonService {
 
     /**
      * 과외 등록 메서드 (Local)
-     *
      * @param postLesson   과외 등록 정보
      * @param memberId     사용자 식별자
      * @param profileImage 프로필 사진
@@ -63,6 +58,7 @@ public class LessonService {
         if (lessonRepository.existsByMemberId(memberId)) {
             throw new BusinessLogicException(ExceptionCode.LESSON_ALREADY_EXIST);
         }
+
         Member findMember = memberDbService.ifExistsReturnMember(memberId);
         Lesson savedLesson = saveLessonAndReturnLesson(postLesson, findMember, profileImage);
 
@@ -72,7 +68,6 @@ public class LessonService {
 
     /**
      * 과외 등록 메서드 (S3)
-     *
      * @param postLesson   과외 등록 정보
      * @param memberId     사용자 식별자
      * @param profileImage 프로필 사진
@@ -87,6 +82,7 @@ public class LessonService {
         if (lessonRepository.existsByMemberId(memberId)) {
             throw new BusinessLogicException(ExceptionCode.LESSON_ALREADY_EXIST);
         }
+
         Member findMember = memberDbService.ifExistsReturnMember(memberId);
         Lesson savedLesson = saveLessonAndReturnLessonS3(postLesson, findMember, profileImage);
 
@@ -96,7 +92,6 @@ public class LessonService {
 
     /**
      * Lesson을 저장하고 객체를 리턴하는 메서드 (Local)
-     *
      * @param postLesson   과외 등록 정보
      * @param member       사용자 식별자
      * @param profileImage 프로필 사진
@@ -123,7 +118,6 @@ public class LessonService {
 
     /**
      * Lesson을 저장하고 객체를 리턴하는 메서드 (S3)
-     *
      * @param postLesson   과외 등록 정보
      * @param member       사용자 식별자
      * @param profileImage 프로필 사진
@@ -151,7 +145,6 @@ public class LessonService {
 
     /**
      * 과외 디테일 정보 저장 메서드 (Local)
-     *
      * @param savedLesson 저장 후 조회된 요약 정보
      * @param postLesson  과외 등록 정보
      * @param careerImage 경력 사진
@@ -169,7 +162,6 @@ public class LessonService {
 
     /**
      * 과외 디테일 정보 저장 메서드 (S3)
-     *
      * @param savedLesson 저장 후 조회된 요약 정보
      * @param postLesson  과외 등록 정보
      * @param careerImage 경력 사진
@@ -190,7 +182,6 @@ public class LessonService {
 
     /**
      * 커리큘럼 저장 메서드
-     *
      * @param savedLesson 저장 후 조회된 요약 정보
      * @param postLesson  과외 등록 정보
      * @author Quartz614
@@ -206,7 +197,6 @@ public class LessonService {
 
     /**
      * 과외 요약 정보 수정 메서드 (로컬)
-     *
      * @param lessonId 과외 식별자
      * @param postLessonInfoEdit 수정 과외 요약정보
      * @param memberId 회원 식별자
@@ -225,6 +215,7 @@ public class LessonService {
         if (!Objects.equals(updateLesson.getMemberId(), findMember.getId())) {
             throw new BusinessLogicException(ExceptionCode.UNAUTHORIZED_FOR_UPDATE);
         }
+
         updateLesson.editLessonInfo(postLessonInfoEdit);
 
         List<Integer> languageList = postLessonInfoEdit.getLanguages();
@@ -246,7 +237,6 @@ public class LessonService {
 
     /**
      * 과외 요약 정보 수정 메서드 (S3)
-     *
      * @param lessonId 과외 식별자
      * @param postLessonInfoEdit 수정 과외 요약정보
      * @param memberId 회원 식별자
@@ -287,6 +277,7 @@ public class LessonService {
         updateLesson.addProfileImage(editProfileImage);
         lessonDbService.saveLesson(updateLesson);
     }
+
     /**
      * 과외 상세 정보 수정 메서드 (로컬)
      * @param lessonId 과외 식별자
@@ -319,6 +310,7 @@ public class LessonService {
                 }
             }
         }
+
         List<UploadFile> uploadFileList = fileHandler.parseUploadFileInfo(careerImage);
         updateLessonDetail.editCareerImage(careerImageList);
         lessonDbService.editCareerImage(uploadFileList, updateLessonDetail);
@@ -333,7 +325,6 @@ public class LessonService {
      * @param careerImage 경력 이미지
      * @author Quartz614
      */
-
     @SneakyThrows
     public void updateLessonDetailS3(Long lessonId,
                                    PostLessonDetailEdit postLessonDetailEdit,
@@ -376,8 +367,8 @@ public class LessonService {
      */
     @SneakyThrows
     public void updateCurriculum(Long lessonId,
-                                       PatchLessonCurriculum patchLessonCurriculum,
-                                       Long memberId) {
+                                 PatchLessonCurriculum patchLessonCurriculum,
+                                 Long memberId) {
         Member findMember = memberDbService.ifExistsReturnMember(memberId);
         Curriculum updateCurriculum = lessonDbService.ifExsistsReturnCurriculum(lessonId);
         updateCurriculum.editCurriculum(patchLessonCurriculum);
@@ -392,14 +383,14 @@ public class LessonService {
      */
     @Transactional
     public void deleteLesson(Long memberId, Long lessonId) {
-        Member findMember = memberDbService.ifExistsReturnMember(memberId);
         Lesson findLesson = lessonDbService.ifExistsReturnLesson(lessonId);
-        LessonInfo findLessonInfo = lessonDbService.ifExsitsReturnLessonInfo(lessonId);
-        Curriculum findCurriculum = lessonDbService.ifExsistsReturnCurriculum(lessonId);
-        List<Suggest> findSuggest = suggestDbService.findAllSuggestForLesson(lessonId);
+        Member findMember = memberDbService.ifExistsReturnMember(findLesson.getMemberId());
 
-        reviewService.removeAllByReviews(lessonId);
-        bookmarkRepository.deleteByLessonId(lessonId);
+        if (!findMember.getId().equals(memberId)) {
+            throw new BusinessLogicException(ExceptionCode.UNAUTHORIZED_FOR_DELETE);
+        }
+
+        List<Suggest> findSuggest = suggestDbService.findAllSuggestForLesson(lessonId);
 
         for (Suggest suggest : findSuggest) {
             if (suggest.getSuggestStatus().equals(ACCEPT_IN_PROGRESS)) {
@@ -410,6 +401,13 @@ public class LessonService {
                 throw new BusinessLogicException(NOT_PAY_SUCCESS);
             }
         }
+
+        LessonInfo findLessonInfo = lessonDbService.ifExsitsReturnLessonInfo(lessonId);
+        Curriculum findCurriculum = lessonDbService.ifExsistsReturnCurriculum(lessonId);
+
+        reviewService.removeAllByReviews(lessonId);
+        bookmarkRepository.deleteByLessonId(lessonId);
+
         lessonDbService.deleteLesson(findLesson);
         lessonDbService.deleteLessonInfo(findLessonInfo);
         lessonDbService.deleteCurriculum(findCurriculum);
@@ -423,14 +421,14 @@ public class LessonService {
      */
     @Transactional
     public void deleteLessonS3(Long memberId, Long lessonId) {
-        Member findMember = memberDbService.ifExistsReturnMember(memberId);
         Lesson findLesson = lessonDbService.ifExistsReturnLesson(lessonId);
-        LessonInfo findLessonInfo = lessonDbService.ifExsitsReturnLessonInfo(lessonId);
-        Curriculum findCurriculum = lessonDbService.ifExsistsReturnCurriculum(lessonId);
-        List<Suggest> findSuggest = suggestDbService.findAllSuggestForLesson(lessonId);
+        Member findMember = memberDbService.ifExistsReturnMember(findLesson.getMemberId());
 
-        reviewService.removeAllByReviews(lessonId);
-        bookmarkRepository.deleteByLessonId(lessonId);
+        if (!findMember.getId().equals(memberId)) {
+            throw new BusinessLogicException(ExceptionCode.UNAUTHORIZED_FOR_DELETE);
+        }
+
+        List<Suggest> findSuggest = suggestDbService.findAllSuggestForLesson(lessonId);
 
         for (Suggest suggest : findSuggest) {
             if (suggest.getSuggestStatus().equals(ACCEPT_IN_PROGRESS)) {
@@ -441,13 +439,21 @@ public class LessonService {
                 throw new BusinessLogicException(NOT_PAY_SUCCESS);
             }
         }
-        
+
+        LessonInfo findLessonInfo = lessonDbService.ifExsitsReturnLessonInfo(lessonId);
+        Curriculum findCurriculum = lessonDbService.ifExsistsReturnCurriculum(lessonId);
+
+        reviewService.removeAllByReviews(lessonId);
+        bookmarkRepository.deleteByLessonId(lessonId);
+
         String dir = "profileImage";
         String dir1 = "careerImage";
-        lessonDbService.deleteLesson(findLesson);
-        lessonDbService.deleteLessonInfo(findLessonInfo);
+
         awsS3Service.delete(findLesson.getProfileImage().getFileName(),dir);
         findLessonInfo.getCareerImages().forEach(careerImage -> awsS3Service.delete(careerImage.getFileName(), dir1));
+
+        lessonDbService.deleteLesson(findLesson);
+        lessonDbService.deleteLessonInfo(findLessonInfo);
         lessonDbService.deleteCurriculum(findCurriculum);
     }
 

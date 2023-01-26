@@ -22,6 +22,7 @@ public enum ExceptionCode {
 
     // 인증 인가
     UNAUTHORIZED_FOR_UPDATE(403, "수정 권한이 없습니다."),
+    UNAUTHORIZED_FOR_DELETE(403, "삭제 권한이 없습니다."),
     INVALID_ACCESS(403, "유효하지 않은 접근입니다."),
     INVALID_MEMBER(403, "회원 정보를 다시 확인하세요."),
     INVALID_OAUTH2(403, "지원하지 않는 OAuth2 프로바이더입니다."),

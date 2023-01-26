@@ -1,16 +1,14 @@
 package com.codueon.boostUp.domain.bookmark.repository;
 
-import java.util.List;
-import javax.persistence.EntityManager;
-
+import com.codueon.boostUp.domain.bookmark.dto.GetBookmark;
 import com.codueon.boostUp.domain.bookmark.dto.QGetBookmark;
-import com.codueon.boostUp.domain.member.entity.Member;
-import com.querydsl.core.types.dsl.Expressions;
-import org.springframework.data.domain.Page;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
-import com.codueon.boostUp.domain.bookmark.dto.GetBookmark;
+
+import javax.persistence.EntityManager;
+import java.util.List;
 
 import static com.codueon.boostUp.domain.bookmark.entity.QBookmark.bookmark;
 import static com.codueon.boostUp.domain.lesson.entity.QLesson.lesson;
@@ -28,11 +26,12 @@ public class BookmarkRepositoryImpl implements CustomBookmarkRepository {
         List<GetBookmark> result = queryFactory
                 .select(new QGetBookmark(
                         bookmark,
-                        lesson
+                        lesson,
+                        member.name
                 ))
                 .from(bookmark)
-                .leftJoin(member).on(bookmark.memberId.eq(member.id))
                 .leftJoin(lesson).on(bookmark.lessonId.eq(lesson.id))
+                .leftJoin(member).on(lesson.memberId.eq(member.id))
                 .where(bookmark.memberId.eq(memberId))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
