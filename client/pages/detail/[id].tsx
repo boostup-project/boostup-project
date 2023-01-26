@@ -3,12 +3,14 @@ import DetailSummeryContainer from "components/reuse/container/DetailSummeryCont
 import DetailTabBtn from "components/reuse/btn/DetailTabBtn";
 import DetailContentContainer from "components/reuse/container/DetailContentContainer";
 import DetailBtn from "components/reuse/btn/DetailBtn";
+import DetailBasicInfo from "components/detailComp/DetailBasicInfo";
 import { useEffect, useState } from "react";
+import useGetBasicInfo from "hooks/detail/useGetBasicInfo";
 
 const Detail = () => {
   // lessonId 받아오기
   const router = useRouter();
-  const lessonId = router.query.id;
+  const lessonId = Number(router.query.id);
 
   const [tab, setTab] = useState(1);
 
@@ -16,9 +18,17 @@ const Detail = () => {
     setTab(id);
   };
 
+  const { refetch: basicInfoRefetch, data: basicInfo } =
+    useGetBasicInfo(lessonId);
+
   useEffect(() => {
     // refetch 실행위치
     // tab이 바뀔때마다 refetch 실행
+    if (lessonId) {
+      // 요약정보 요청
+      basicInfoRefetch();
+    }
+
     if (tab === 1) {
       // 상세정보 refetch
     } else if (tab === 2) {
@@ -26,12 +36,14 @@ const Detail = () => {
     } else if (tab === 3) {
       // 과외후기 refetch
     }
-  }, [tab]);
+  }, [tab, lessonId]);
 
   return (
     <>
       <div className="flex flex-col bg-bgColor items-center justify-start w-full h-screen pt-28">
-        <DetailSummeryContainer>{lessonId}</DetailSummeryContainer>
+        <DetailSummeryContainer>
+          <DetailBasicInfo basicInfo={basicInfo?.data} />
+        </DetailSummeryContainer>
         <div className="flex w-3/4 desktop:min-w-[1000px] min-w-[95%] h-fit rounded-xl flex-row justify-start items-center mt-5">
           <DetailTabBtn
             bold={tab === 1 ? true : false}
