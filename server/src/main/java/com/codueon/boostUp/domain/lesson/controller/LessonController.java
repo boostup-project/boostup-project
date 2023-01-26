@@ -34,8 +34,8 @@ public class LessonController {
     @PostMapping(value = "/registration")
     public ResponseEntity<?> postLesson(@RequestPart(value = "data") PostLesson postLesson,
                                         Authentication authentication,
-                                        @RequestPart(value = "profileImage") MultipartFile profileImage,
-                                        @RequestPart(value = "careerImage") List<MultipartFile> careerImage) {
+                                        @RequestPart(required = false, value = "profileImage") MultipartFile profileImage,
+                                        @RequestPart(required = false, value = "careerImage") List<MultipartFile> careerImage) {
         JwtAuthenticationToken token = (JwtAuthenticationToken) authentication;
         Long memberId = getMemberIdIfExistToken(token);
 
@@ -61,15 +61,14 @@ public class LessonController {
     public ResponseEntity updateLesson(@PathVariable("lesson-id") Long lessonId,
                                        @RequestPart(value = "data") PostLessonInfoEdit postLessonInfoEdit,
                                        Authentication authentication,
-                                       @RequestPart(value = "profileImage") MultipartFile profileImage) {
+                                       @RequestPart(required = false, value = "profileImage") MultipartFile profileImage) {
         JwtAuthenticationToken token = (JwtAuthenticationToken) authentication;
-        Long memberId = getMemberIdIfExistToken(token);
 
         /** 로컬 환경 */
-        lessonService.updateLessonInfo(lessonId, postLessonInfoEdit, memberId, profileImage);
+        lessonService.updateLessonInfo(lessonId, postLessonInfoEdit, profileImage);
 
         /** S3 환경 */
-//        lessonService.updateLessonInfoS3(lessonId, postLessonInfoEdit, memberId, profileImage);
+//        lessonService.updateLessonInfoS3(lessonId, postLessonInfoEdit, profileImage);
 
         return ResponseEntity.ok().build();
     }
@@ -86,16 +85,13 @@ public class LessonController {
     @PostMapping("/{lesson-id}/detailInfo/modification")
     public ResponseEntity updateLessonDetail(@PathVariable("lesson-id") Long lessonId,
                                              @RequestPart(value = "data") PostLessonDetailEdit postLessonDetailEdit,
-                                             Authentication authentication,
-                                             @RequestPart(value = "careerImage") List<MultipartFile> careerImage) {
-        JwtAuthenticationToken token = (JwtAuthenticationToken) authentication;
-        Long memberId = getMemberIdIfExistToken(token);
+                                             @RequestPart(required = false, value = "careerImage") List<MultipartFile> careerImage) {
 
         /** 로컬 환경 */
-        lessonService.updateLessonDetail(lessonId, postLessonDetailEdit, memberId, careerImage);
+        lessonService.updateLessonDetail(lessonId, postLessonDetailEdit, careerImage);
 
         /** S3 환경 */
-//        lessonService.updateLessonDetailS3(lessonId, postLessonDetailEdit, memberId, careerImage);
+//        lessonService.updateLessonDetailS3(lessonId, postLessonDetailEdit, careerImage);
 
         return ResponseEntity.ok().build();
     }
@@ -109,12 +105,9 @@ public class LessonController {
      */
     @PatchMapping("/{lesson-id}/curriculum/modification")
     public ResponseEntity updateCurriculum(@PathVariable("lesson-id") Long lessonId,
-                                           @RequestBody PatchLessonCurriculum patchLessonCurriculum,
-                                           Authentication authentication) {
-        JwtAuthenticationToken token = (JwtAuthenticationToken) authentication;
-        Long memberId = getMemberIdIfExistToken(token);
+                                           @RequestBody PatchLessonCurriculum patchLessonCurriculum) {
 
-        lessonService.updateCurriculum(lessonId, patchLessonCurriculum, memberId);
+        lessonService.updateCurriculum(lessonId, patchLessonCurriculum);
         return ResponseEntity.ok().build();
     }
 

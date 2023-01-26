@@ -12,19 +12,16 @@ public class JwtAuthenticationToken extends AbstractAuthenticationToken {
     private Object principal;
     private Object credential;
     private Long id;
+    private boolean isExpired;
 
-    public JwtAuthenticationToken(Collection<? extends GrantedAuthority> authorities, Object principal, Object credential, Long id) {
+    public JwtAuthenticationToken(Collection<? extends GrantedAuthority> authorities, Object principal, Object credential, Long id, boolean isExpired, String accessToken) {
         super(authorities);
         this.principal = principal;
         this.credential = credential;
         this.id = id;
-        this.setAuthenticated(true);
-    }
-
-    public JwtAuthenticationToken(String accessToken) {
-        super(null);
+        this.isExpired = isExpired;
         this.accessToken = accessToken;
-        this.setAuthenticated(false);
+        this.setAuthenticated(true);
     }
 
     @Override
@@ -39,5 +36,13 @@ public class JwtAuthenticationToken extends AbstractAuthenticationToken {
 
     public String getAccessToken() {
         return this.accessToken;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setAccessToken(String accessToken) {
+        this.accessToken = accessToken;
     }
 }

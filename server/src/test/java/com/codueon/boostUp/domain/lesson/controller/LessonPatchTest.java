@@ -38,7 +38,7 @@ public class LessonPatchTest extends LessonControllerTest {
 
         String content = gson.toJson(data);
 
-        doNothing().when(lessonService).updateCurriculum(Mockito.anyLong(), Mockito.any(PatchLessonCurriculum.class), Mockito.anyLong());
+        doNothing().when(lessonService).updateCurriculum(Mockito.anyLong(), Mockito.any(PatchLessonCurriculum.class));
 
         ResultActions actions =
                 mockMvc.perform(

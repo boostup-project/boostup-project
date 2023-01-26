@@ -17,15 +17,11 @@ import org.springframework.stereotype.Component;
 
 import java.nio.charset.StandardCharsets;
 import java.security.Key;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 @Component
 @Slf4j
 public class JwtTokenUtils {
-    private static final String BEARER = "Bearer";
     @Getter
     private final String secretKey;
 
@@ -148,7 +144,7 @@ public class JwtTokenUtils {
     }
 
     /**
-     * 검증 후 JWS 반환 메서드
+     * 검증 후 JWS(서명된 JWT) 반환 메서드
      * @param jws
      * @return
      * @author LimJaeminZ
@@ -169,7 +165,7 @@ public class JwtTokenUtils {
      * @author LimJaeminZ
      */
     public String parseAccessToken(String accessToken) {
-        if(accessToken.startsWith(BEARER))
+        if(accessToken.startsWith(AuthConstants.BEARER))
             return accessToken.split(" ")[1];
         throw new AuthException(ExceptionCode.INVALID_AUTH_TOKEN);
     }
