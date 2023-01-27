@@ -4,8 +4,11 @@ import DetailTabBtn from "components/reuse/btn/DetailTabBtn";
 import DetailContentContainer from "components/reuse/container/DetailContentContainer";
 import DetailBtn from "components/reuse/btn/DetailBtn";
 import DetailBasicInfo from "components/detailComp/DetailBasicInfo";
+import MobileDetailBasicInfo from "components/detailComp/MobileDetailBasicInfo";
+import DetailBasicInfoEditModal from "components/detailComp/DetailBasicInfoEditModal";
 import { useEffect, useState } from "react";
 import useGetBasicInfo from "hooks/detail/useGetBasicInfo";
+import useWindowSize from "hooks/useWindowSize";
 
 const Detail = () => {
   // lessonId 받아오기
@@ -20,6 +23,8 @@ const Detail = () => {
 
   const { refetch: basicInfoRefetch, data: basicInfo } =
     useGetBasicInfo(lessonId);
+
+  const widthSize = useWindowSize();
 
   useEffect(() => {
     // refetch 실행위치
@@ -41,8 +46,13 @@ const Detail = () => {
   return (
     <>
       <div className="flex flex-col bg-bgColor items-center justify-start w-full h-screen pt-28">
+        {/* 요약정보 */}
         <DetailSummeryContainer>
-          <DetailBasicInfo basicInfo={basicInfo?.data} />
+          {widthSize > 764 ? (
+            <DetailBasicInfo basicInfo={basicInfo?.data} />
+          ) : (
+            <MobileDetailBasicInfo basicInfo={basicInfo?.data} />
+          )}
         </DetailSummeryContainer>
         <div className="flex w-3/4 desktop:min-w-[1000px] min-w-[95%] h-fit rounded-xl flex-row justify-start items-center mt-5">
           <DetailTabBtn
