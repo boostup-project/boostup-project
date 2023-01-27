@@ -12,6 +12,7 @@ import { logUser } from "atoms/auth/authAtom";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useEffect } from "react";
+import { useRouter } from "next/router";
 
 interface SearchData {
   name: string;
@@ -23,9 +24,26 @@ interface SearchData {
 }
 
 const Header = () => {
+  const router = useRouter();
   const [log, setLog] = useRecoilState<boolean>(logUser);
+  const [wordOne, setWordOne] = useState<string>("");
+  const [wordTwo, setWordTwo] = useState<string>("");
+  const [writeBtn, setWriteBtn] = useState<string>("");
   const [seek, setSeek] = useState(false);
   const [isPowerWrite, setIsPowerWrite] = useRecoilState(powerWriteModal);
+
+  useEffect(() => {
+    if (log) {
+      setWordOne("마이페이지");
+      setWordTwo("로그아웃");
+      setWriteBtn("과외 등록");
+    }
+    if (!log) {
+      setWordOne("로그인");
+      setWordTwo("회원가입");
+      setWriteBtn("");
+    }
+  }, [log]);
 
   const onSubmit: SubmitHandler<SearchData> = data => {
     console.log(data);
@@ -33,6 +51,20 @@ const Header = () => {
 
   const toWrite = (e: React.MouseEvent<HTMLDivElement>) => {
     setIsPowerWrite(prev => !prev);
+  };
+
+  const wordOneEvent = () => {
+    if (!log) {
+      router.push("/login");
+    }
+  };
+  const wordTwoEvent = () => {
+    if (log) {
+      logOutEvent();
+    }
+    if (!log) {
+      router.push("/signup");
+    }
   };
 
   const logOutEvent = () => {
@@ -80,28 +112,25 @@ const Header = () => {
           </div>
           <div className="w-1/5 h-full hidden desktop:flex desktop:flex-row-reverse desktop:items-end">
             <div className="w-full pt-2 desktop:flex desktop:h-[50px] desktop:justify-end text-sm">
-              {log ? (
-                <>
-                  <div className="min-w-fit mr-8 py-1">마이페이지</div>
-                  <div className="min-w-fit mr-8 py-1" onClick={logOutEvent}>
-                    로그아웃
-                  </div>
-                  <div
-                    onClick={toWrite}
-                    className="min-w-fit w-1/4 h-fit p-1 rounded-md bg-pointColor text-white text-center"
-                  >
-                    과외등록
-                  </div>
-                </>
-              ) : (
-                <>
-                  <div className="mr-8">
-                    <Link href="/login">로그인</Link>
-                  </div>
-                  <div>
-                    <Link href="/signup">회원가입</Link>
-                  </div>
-                </>
+              <div
+                className="min-w-fit mr-8 py-1 cursor-pointer hover:underline"
+                onClick={wordOneEvent}
+              >
+                {wordOne}
+              </div>
+              <div
+                className="min-w-fit mr-8 py-1 cursor-pointer hover:underline"
+                onClick={wordTwoEvent}
+              >
+                {wordTwo}
+              </div>
+              {writeBtn.length > 1 && (
+                <div
+                  onClick={toWrite}
+                  className="min-w-fit w-1/4 h-fit p-1 rounded-md bg-pointColor text-white text-center cursor-pointer hover:underline"
+                >
+                  {writeBtn}
+                </div>
               )}
             </div>
           </div>
@@ -117,3 +146,29 @@ const Header = () => {
 };
 
 export default Header;
+
+// {
+//   log ? (
+//     <>
+//       <div className="min-w-fit mr-8 py-1">마이페이지</div>
+//       <div className="min-w-fit mr-8 py-1" onClick={logOutEvent}>
+//         로그아웃
+//       </div>
+//       <div
+//         onClick={toWrite}
+//         className="min-w-fit w-1/4 h-fit p-1 rounded-md bg-pointColor text-white text-center"
+//       >
+//         과외등록
+//       </div>
+//     </>
+//   ) : (
+//     <>
+//       <div className="mr-8">
+//         <Link href="/login">로그인</Link>
+//       </div>
+//       <div>
+//         <Link href="/signup">회원가입</Link>
+//       </div>
+//     </>
+//   );
+// }
