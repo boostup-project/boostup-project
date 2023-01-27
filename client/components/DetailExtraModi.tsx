@@ -6,17 +6,22 @@ import { useState, useRef } from "react";
 import ExtraInfo from "./createModal/ExtraInfo";
 import CreateModalContainer from "./reuse/CreateModalContainer";
 import { DetailTitles } from "./DetailExtra";
+import usePostExtraModi from "hooks/detail/usePostExtraModi";
+import { useEffect } from "react";
+import { toast } from "react-toastify";
 
 interface Props {
   modalOpen: () => void;
   textData: DetailTitles;
   images: string[];
+  lessonId: number;
 }
 
-const DetailExtraModi = ({ modalOpen, textData, images }: Props) => {
+const DetailExtraModi = ({ modalOpen, textData, images, lessonId }: Props) => {
   const [previewImages, setPreviewImages] = useState<string[]>([]);
   const [detailImages, setDetailImages] = useState<string[]>([]);
   const imageInput: any = useRef();
+  const { mutate, isError, isSuccess } = usePostExtraModi();
   const {
     register,
     handleSubmit,
@@ -32,6 +37,15 @@ const DetailExtraModi = ({ modalOpen, textData, images }: Props) => {
     detailCost,
     detailLocation,
   } = textData;
+
+  useEffect(() => {
+    if (isError) {
+      toast.error("다시 수정하여 보내주세요", {
+        autoClose: 1500,
+        position: toast.POSITION.TOP_RIGHT,
+      });
+    }
+  }, [isError]);
 
   const onCickImageUpload = () => {
     imageInput.current.click();
@@ -62,6 +76,7 @@ const DetailExtraModi = ({ modalOpen, textData, images }: Props) => {
   };
 
   const testSubmit = (e: any) => {
+    console.log(e);
     const json = JSON.stringify({
       introduction: e.introduction,
       detailCompany: e.detailCompany,
@@ -76,6 +91,11 @@ const DetailExtraModi = ({ modalOpen, textData, images }: Props) => {
     detailImages.map(image => {
       formData.append("careerImage", image[0]);
     });
+    const assemble = {
+      object: formData,
+      id: lessonId,
+    };
+    mutate(assemble);
   };
 
   return (

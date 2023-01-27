@@ -79,12 +79,14 @@ const Detail = () => {
         </div>
         <div className="desktop:min-w-[1000px] min-w-[95%] w-3/4 h-fit flex desktop:flex-row flex-col justify-start items-center">
           <DetailContentContainer>
-            {tab === 1 && <DetailExtra extraData={extraData} />}
+            {tab === 1 && (
+              <DetailExtra extraData={extraData} lessonId={lessonId} />
+            )}
             {tab === 2 && <DetailCurriculum curData={curData} />}
 
             {/* 각 탭별 컴포넌트를 생성하여 넣어주세요! */}
           </DetailContentContainer>
-          {/* <div className="w-full h-full flex flex-col justify-start items-center pl-3">
+          <div className="w-full h-full flex flex-col justify-start items-center pl-3">
             <DetailBtn bold={true} remove={false} onClick={() => {}}>
               신청하기
             </DetailBtn>
@@ -98,7 +100,7 @@ const Detail = () => {
             <DetailBtn bold={false} remove={true} onClick={() => {}}>
               삭제하기
             </DetailBtn>
-          </div> */}
+          </div>
         </div>
       </div>
     </>

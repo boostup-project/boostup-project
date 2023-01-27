@@ -25,6 +25,7 @@ export interface DetailTitles {
 
 interface Props {
   extraData: AxiosResponse<any, any> | undefined;
+  lessonId: number;
 }
 
 const detailTitles: DetailTitles = {
@@ -38,10 +39,11 @@ const detailTitles: DetailTitles = {
 
 const detailTitlesArray = Object.keys(detailTitles);
 
-const DetailExtra = ({ extraData }: Props) => {
+const DetailExtra = ({ extraData, lessonId }: Props) => {
   const [textData, setTextData] = useState<DetailTitles>();
   const [images, setImages] = useState<string[]>([]);
   const [isEdit, setIsEdit] = useState(false);
+  // console.log("extraData", extraData!.data);
   useEffect(() => {
     if (extraData) {
       const prompt = {
@@ -73,15 +75,16 @@ const DetailExtra = ({ extraData }: Props) => {
           modalOpen={modalOpen}
           textData={textData!}
           images={images}
+          lessonId={lessonId}
         />
       )}
       <div
-        className="w-full flex justify-end pt-6 px-6 text-pointColor font-SCDream3 cursor-pointer hover:underline"
+        className="w-full h-full flex justify-end pt-6 px-6 text-pointColor font-SCDream3 cursor-pointer hover:underline"
         onClick={modalOpen}
       >
         edit
       </div>
-      <div className="pb-6 pt-3 px-6 text-base">
+      <div className="w-full h-full pb-6 pt-3 px-6 text-base">
         {!textData ? (
           <div>Loading</div>
         ) : (
@@ -90,7 +93,7 @@ const DetailExtra = ({ extraData }: Props) => {
               <div className="font-SCDream5">{detailTitles[title]}</div>
               <div className="font-SCDream3">
                 {title === "careerImage" ? (
-                  <div>사진</div>
+                  <></>
                 ) : (
                   <div>• {textData[title]}</div>
                 )}
