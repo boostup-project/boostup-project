@@ -20,6 +20,7 @@ interface Props {
 }
 
 const BasicInfo = ({ basicInfo, setBasicInfo, toWrite, setStep }: Props) => {
+  console.log(basicInfo);
   const [previewImg, setPreviewImg] = useState<string>("");
   const {
     control,
@@ -33,6 +34,7 @@ const BasicInfo = ({ basicInfo, setBasicInfo, toWrite, setStep }: Props) => {
 
   const options: any = [
     ...addArr.map((el, idx) => ({
+      key: idx,
       value: addDict[el],
       label: el,
     })),

@@ -87,7 +87,7 @@ const Curriculum = ({
     const proImage = profileImg[0];
     const parseAddress = address.map((el: any) => el.value);
     const parseLang = language.map((el: any) => langDict[el]);
-
+    console.log(basicInfo);
     const pre = {
       title,
       language: parseLang,

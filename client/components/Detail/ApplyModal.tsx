@@ -2,14 +2,13 @@ import CreateModalContainer from "../reuse/container/CreateModalContainer";
 import { useForm } from "react-hook-form";
 import { langDict, dayDict } from "../reuse/dict";
 import SmallBtn from "../reuse/btn/SmallBtn";
+import AuthBtn from "components/reuse/btn/AuthBtn";
 import { useMutation } from "react-query";
-import useGetApply from "hooks/detail/useGetApply";
+import usePostApply from "hooks/detail/usePostApply";
 import { useState } from "react";
-import { powerApplyModal } from "atoms/detail/detailAtom";
 import { useRecoilState } from "recoil";
-import getApply from "apis/detail/getApply";
-import ModalBackDrop from "components/reuse/container/ModalBackDrop";
 import { PropsWithChildren } from "react";
+import postApply from "apis/detail/postApply";
 
 interface Application {
   [index: string]: string | string[];
@@ -28,11 +27,15 @@ const ApplyModal = ({
     formState: { errors },
   } = useForm<Application>({ mode: "onBlur" });
 
-  const { mutate, error, isSuccess, isError } = useGetApply();
+  const { mutate, error, isSuccess, isError } = usePostApply();
 
-  const apply = () => {
+  const onSubmit = (applyData: Application) => {
     // const data = { day: day };
-    // mutate({ lessonId });
+    const formData = new FormData();
+
+    const lessonId = 1;
+    postApply(applyData, 1);
+    console.log(applyData);
   };
 
   const langArr = Object.keys(langDict);
@@ -44,7 +47,7 @@ const ApplyModal = ({
         <CreateModalContainer>
           <form
             className="flex flex-col items-center w-full text-sm z-20"
-            onSubmit={handleSubmit(apply)}
+            onSubmit={handleSubmit(onSubmit)}
           >
             <div className="flex w-full desktop:w-4/6 h-fit font-SCDream7 text-lg text-textColor mt-4 mb-2">
               신청하기
@@ -65,7 +68,7 @@ const ApplyModal = ({
                         <input
                           type="checkbox"
                           value={el}
-                          {...register("day", { required: "true" })}
+                          {...register("days", { required: "true" })}
                         />
                         {el}
                       </label>
@@ -83,7 +86,7 @@ const ApplyModal = ({
                         <input
                           type="checkbox"
                           value={el}
-                          {...register("day", { required: "true" })}
+                          {...register("days", { required: "true" })}
                         />
                         {el}
                       </label>
@@ -111,7 +114,7 @@ const ApplyModal = ({
                         <input
                           type="checkbox"
                           value={el}
-                          {...register("language", { required: "true" })}
+                          {...register("languages", { required: "true" })}
                         />
                         {el}
                       </label>
@@ -129,7 +132,7 @@ const ApplyModal = ({
                         <input
                           type="checkbox"
                           value={el}
-                          {...register("language", { required: "true" })}
+                          {...register("languages", { required: "true" })}
                         />
                         {el}
                       </label>
@@ -148,12 +151,13 @@ const ApplyModal = ({
               type="text"
               placeholder="요청사항을 입력하세요"
               className="w-11/12 desktop:w-4/6 h-fit p-2 border border-borderColor outline-pointColor rounded-xl font-SCDream4 text-xs text-textColor tablet:text-sm "
+              {...register("requests")}
             />
             <div className="flex flex-row justify-center items-center w-full h-fit mt-10">
-              <SmallBtn onClick={onClickToggleModal}>취 소</SmallBtn>
-              <SmallBtn css="ml-5" onClick={handleSubmit}>
-                신 청
+              <SmallBtn css="mr-4" onClick={onClickToggleModal}>
+                취 소
               </SmallBtn>
+              <SmallBtn>신 청</SmallBtn>
             </div>
           </form>
         </CreateModalContainer>

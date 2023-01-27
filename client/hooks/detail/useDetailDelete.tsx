@@ -1,4 +1,4 @@
-import detailDelete from "apis/detail/detailDelete";
+import detailDelete from "apis/detail/deleteDetail";
 import { useMutation } from "react-query";
 
 const useDetailDelete = () => {

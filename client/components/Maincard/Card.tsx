@@ -8,11 +8,15 @@ import {
 } from "assets/icon/";
 
 import { NextPage, GetStaticProps } from "next";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 //import useGetMainCard from "./useGetMainCard";
 import getMainCard from "apis/card/getMainCard";
 import { dehydrate, QueryClient, useQuery } from "react-query";
+import useGetLike from "hooks/detail/useGetLike";
+import Swal from "sweetalert2";
+import useGetMainCard from "hooks/main/useGetMainCard";
+import { useRouter } from "next/router";
 
 export async function getStaticProps() {
   const queryClient = new QueryClient();
@@ -27,13 +31,16 @@ export async function getStaticProps() {
 }
 
 const Card = () => {
-  const [cards, setCards] = useState([]);
-
+  const [cards, setCards] = useState<any>();
+  const lessonId = 5;
+  const router = useRouter();
+  const { refetch } = useGetLike(lessonId);
+  const [likes, setLikes] = useState(true);
   const { isLoading, isError, data } = useQuery("cards", () => getMainCard(), {
     enabled: true,
     onSuccess: data => {
       // 성공시 호출
-      console.log(data.data.data.bookmark);
+
       setCards(data.data.data);
     },
     onError: error => {
@@ -41,11 +48,29 @@ const Card = () => {
     },
     retry: 2,
   });
+  useEffect(() => {}, [likes]);
 
+  const handleLike = () => {
+    if (localStorage.getItem("token")) {
+      refetch();
+      setLikes(prev => !prev);
+      console.log(likes);
+      router.push("/");
+    } else {
+      return Swal.fire({
+        text: "로그인해주세요",
+        icon: "warning",
+        confirmButtonColor: "#3085d6",
+      });
+    }
+  };
   return (
     <div className="flex flex-row flex-wrap w-full">
       {cards?.map((card: any) => (
-        <div className="h-fit m-1 desktop:w-[24%] tablet:w-[32%] w-[48%] ">
+        <div
+          key={card.lessonId}
+          className="h-fit m-1 desktop:w-[24%] tablet:w-[32%] w-[48%] rounded-lg"
+        >
           <div className="flex flex-col w-full h-1/4 border border-borderColor rounded-lg">
             <div className="relative">
               <div className="flex relative w-full h-full">
@@ -53,18 +78,22 @@ const Card = () => {
                   className="flex w-full object-cover rounded-t-lg desktop:h-44 tablet:h-40 h-36"
                   src={card.profileImage}
                 />
-                <div className="flex w-1/6 h-1/6 absolute top-2 right-px">
+                <button
+                  className="flex decktop:w-[15%] tablet:w-[28px] w-[25px] absolute top-2 right-1"
+                  onClick={handleLike}
+                >
                   {card.bookmark ? <IconFullheart /> : <IconEmptyheart />}
-                </div>
+                </button>
               </div>
             </div>
             <Link href={`/lesson/${card.lessonId}`}>
               <div className="flex flex-col w-full h-2/3">
                 <div className="flex flex-row whitespace-wrap">
                   <div className="flex">
-                    {card.languages.map((el: any) => {
+                    {card.languages?.map((el: any) => {
                       return (
                         <div
+                          key={el.id}
                           className={`flex justify-center bg-${el} items-center px-1 py-0.5 ml-1 mt-1 border rounded-xl desktop:text-xs tablet:text-[10px] text-[6px]`}
                         >
                           {el}
@@ -76,7 +105,7 @@ const Card = () => {
                 <div className="flex justify-start items-start w-full h-fit font-SCDream5 desktop:text-xs tablet:text-[10px] text-[8px] text-textColor ml-2  my-1">
                   {card.name}
                 </div>
-                <div className="flex inline-block justify-start items-start w-full h-fit font-SCDream6  desktop:text-base tablet:text-sm text-xs text-textColor ml-2 mb-2 whitespace-wrap ">
+                <div className="flex justify-start items-start w-full h-fit font-SCDream6 desktop:text-base tablet:text-sm text-xs text-textColor ml-1 mb-2 flex-wrap">
                   {card.title}
                 </div>
                 <div className="flex justify-start items-start w-full h-fit font-SCDream5 text-textColor ml-2 mb-2 desktop:text-xs tablet:text-[10px] text-[8px]">
@@ -95,7 +124,7 @@ const Card = () => {
                   <div className="mr-1 desktop:w-3.5 tablet:w-2.5 w-2 ">
                     <IconPlace />
                   </div>
-                  {card.address.map((el: any) => {
+                  {card.address?.map((el: any) => {
                     return <div className="ml-1">{el}</div>;
                   })}
                 </div>
