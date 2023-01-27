@@ -7,6 +7,7 @@ import { IconImg } from "assets/icon";
 import { modalImgTxt } from "assets/color/color";
 import { SetterOrUpdater } from "recoil";
 import { Info } from "./WriteModal";
+import { useEffect } from "react";
 
 interface BasicInfo {
   [index: string]: string | string[];
@@ -22,6 +23,13 @@ interface Props {
 const BasicInfo = ({ basicInfo, setBasicInfo, toWrite, setStep }: Props) => {
   console.log(basicInfo);
   const [previewImg, setPreviewImg] = useState<string>("");
+  const [profileImg, setProfileImg] = useState<any>();
+  const [title, setTitle] = useState<string>("");
+  const [language, setLanguage] = useState<string[]>([]);
+  const [company, setCompany] = useState<string>("");
+  const [career, setCareer] = useState<string>("");
+  const [area, setArea] = useState<string[]>([]);
+  const [cost, setCost] = useState<string>("");
   const {
     control,
     register,
@@ -63,6 +71,20 @@ const BasicInfo = ({ basicInfo, setBasicInfo, toWrite, setStep }: Props) => {
     setBasicInfo(basicData);
     setStep(prev => prev + 1);
   };
+
+  // 페이지 랜더링이 데이터 Fetch 보다 먼저 진행됨에 따른 딜레이 해결
+  useEffect(() => {
+    if (basicInfo) {
+      setPreviewImg(basicInfo.profileImage as string);
+      setProfileImg(basicInfo.profileImage as string);
+      setTitle(basicInfo.title as string);
+      setLanguage(basicInfo.languages as string[]);
+      setCompany(basicInfo.company as string);
+      setCareer(basicInfo.career as string);
+      setArea(basicInfo.address as string[]);
+      setCost(basicInfo.cost as string);
+    }
+  }, [basicInfo]);
 
   return (
     <>
@@ -112,7 +134,6 @@ const BasicInfo = ({ basicInfo, setBasicInfo, toWrite, setStep }: Props) => {
               accept="image/jpeg,.txt"
               {...register("profileImg", { required: "필수 정보입니다" })}
               onChange={e => insertImg(e)}
-              // defaultValue={basicInfo.profileImage as any}
             />
           </label>
         </div>
@@ -126,8 +147,10 @@ const BasicInfo = ({ basicInfo, setBasicInfo, toWrite, setStep }: Props) => {
           type="text"
           placeholder="타이틀을 입력하세요"
           className="w-11/12 desktop:w-4/6 h-fit p-2 border border-borderColor outline-pointColor rounded-xl font-SCDream4 text-xs text-textColor tablet:text-sm "
-          {...register("title", { required: "필수 정보입니다." })}
-          // defaultValue={basicInfo.title as any}
+          defaultValue={"hello"}
+          {...register("title", {
+            required: "필수 정보입니다.",
+          })}
         />
         <p className="w-11/12 text-xs text-negativeMessage mt-1 tablet:text-sm desktop:w-4/6">
           {errors?.title?.message}
@@ -184,7 +207,7 @@ const BasicInfo = ({ basicInfo, setBasicInfo, toWrite, setStep }: Props) => {
           placeholder="현재 회사 또는 학교를 입력하세요"
           className="w-11/12 h-fit p-2 border border-borderColor outline-pointColor rounded-xl font-SCDream4 text-[11px] text-textColor tablet:text-sm desktop:w-4/6"
           {...register("company", { required: "필수 정보입니다." })}
-          // defaultValue={basicInfo.company as any}
+          defaultValue={company}
         />
         <p className="w-11/12 text-xs text-negativeMessage mt-1 tablet:text-sm desktop:w-4/6">
           {errors?.company?.message}

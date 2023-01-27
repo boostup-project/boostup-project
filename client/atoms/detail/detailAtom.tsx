@@ -5,4 +5,9 @@ const powerApplyModal = atom({
   default: false,
 });
 
-export { powerApplyModal };
+const powerBasicEditModal = atom({
+  key: "powerBasicEditModal",
+  default: false,
+});
+
+export { powerApplyModal, powerBasicEditModal };
