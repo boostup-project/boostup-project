@@ -125,7 +125,11 @@ const Card = () => {
                     <IconPlace />
                   </div>
                   {card.address?.map((el: any) => {
-                    return <div className="ml-1">{el}</div>;
+                    return (
+                      <div className="ml-1" key={el.id}>
+                        {el}
+                      </div>
+                    );
                   })}
                 </div>
                 <div className="flex justify-center items-start w-full h-fit font-SCDream7 desktop:text-base tablet:text-sm text-[12px] text-textColor ml-1 mb-2">
