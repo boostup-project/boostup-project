@@ -2,21 +2,24 @@ import CreateModalContainer from "../reuse/container/CreateModalContainer";
 import { useForm } from "react-hook-form";
 import { langDict, dayDict } from "../reuse/dict";
 import SmallBtn from "../reuse/btn/SmallBtn";
+import AuthBtn from "components/reuse/btn/AuthBtn";
 import { useMutation } from "react-query";
-import useGetApply from "hooks/detail/useGetApply";
+import usePostApply from "hooks/detail/usePostApply";
 import { useState } from "react";
-import { powerApplyModal } from "atoms/detail/detailAtom";
 import { useRecoilState } from "recoil";
-import getApply from "apis/detail/getApply";
-import ModalBackDrop from "components/reuse/container/ModalBackDrop";
+import { PropsWithChildren } from "react";
+import postApply from "apis/detail/postApply";
 
 interface Application {
   [index: string]: string | string[];
 }
+interface ModalDefaultType {
+  onClickToggleModal: () => void;
+}
 
-const ApplyModal = () => {
-  const [powerApply, setPowerApply] = useRecoilState(powerApplyModal);
-  const [data, setData] = useState<Application>();
+const ApplyModal = ({
+  onClickToggleModal,
+}: PropsWithChildren<ModalDefaultType>) => {
   const {
     control,
     register,
@@ -24,13 +27,15 @@ const ApplyModal = () => {
     formState: { errors },
   } = useForm<Application>({ mode: "onBlur" });
 
-  const toApply = () => {
-    setPowerApply(prev => !prev);
-  };
-  const sendApplyClass = useMutation(getApply);
+  const { mutate, error, isSuccess, isError } = usePostApply();
 
-  const apply = () => {
-    return;
+  const onSubmit = (applyData: Application) => {
+    // const data = { day: day };
+    const formData = new FormData();
+
+    const lessonId = 1;
+    postApply(applyData, 1);
+    console.log(applyData);
   };
 
   const langArr = Object.keys(langDict);
@@ -38,11 +43,11 @@ const ApplyModal = () => {
 
   return (
     <>
-      <ModalBackDrop onClick={toApply}>
+      <div className="fixed z-10 top-0 left-0 bottom-0 right-0 bg-modalBgColor grid place-items-center">
         <CreateModalContainer>
           <form
-            className="flex flex-col items-center w-full text-sm "
-            onSubmit={handleSubmit(apply)}
+            className="flex flex-col items-center w-full text-sm z-20"
+            onSubmit={handleSubmit(onSubmit)}
           >
             <div className="flex w-full desktop:w-4/6 h-fit font-SCDream7 text-lg text-textColor mt-4 mb-2">
               신청하기
@@ -63,7 +68,7 @@ const ApplyModal = () => {
                         <input
                           type="checkbox"
                           value={el}
-                          {...register("day", { required: "true" })}
+                          {...register("days", { required: "true" })}
                         />
                         {el}
                       </label>
@@ -81,7 +86,7 @@ const ApplyModal = () => {
                         <input
                           type="checkbox"
                           value={el}
-                          {...register("day", { required: "true" })}
+                          {...register("days", { required: "true" })}
                         />
                         {el}
                       </label>
@@ -109,7 +114,7 @@ const ApplyModal = () => {
                         <input
                           type="checkbox"
                           value={el}
-                          {...register("language", { required: "true" })}
+                          {...register("languages", { required: "true" })}
                         />
                         {el}
                       </label>
@@ -127,7 +132,7 @@ const ApplyModal = () => {
                         <input
                           type="checkbox"
                           value={el}
-                          {...register("language", { required: "true" })}
+                          {...register("languages", { required: "true" })}
                         />
                         {el}
                       </label>
@@ -146,16 +151,17 @@ const ApplyModal = () => {
               type="text"
               placeholder="요청사항을 입력하세요"
               className="w-11/12 desktop:w-4/6 h-fit p-2 border border-borderColor outline-pointColor rounded-xl font-SCDream4 text-xs text-textColor tablet:text-sm "
+              {...register("requests")}
             />
             <div className="flex flex-row justify-center items-center w-full h-fit mt-10">
-              <SmallBtn onClick={toApply}>취 소</SmallBtn>
-              <SmallBtn css="ml-5" onClick={apply}>
-                신 청
+              <SmallBtn css="mr-4" onClick={onClickToggleModal}>
+                취 소
               </SmallBtn>
+              <SmallBtn>신 청</SmallBtn>
             </div>
           </form>
         </CreateModalContainer>
-      </ModalBackDrop>
+      </div>
     </>
   );
 };

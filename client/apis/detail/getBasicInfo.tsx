@@ -1,7 +1,7 @@
 import axios from "axios";
 
-const bookmarking = async (lessonId: number) => {
-  return await axios.get(`bookmark/lesson/${lessonId}/modification`, {
+const getBasicInfo = (lessonId: number) => {
+  return axios.get(`/lesson/${lessonId}`, {
     baseURL: process.env.NEXT_PUBLIC_API_URL,
     headers: {
       "content-Type": `application/json`,
@@ -9,4 +9,5 @@ const bookmarking = async (lessonId: number) => {
     },
   });
 };
-export default bookmarking;
+
+export default getBasicInfo;
