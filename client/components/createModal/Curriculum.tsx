@@ -56,13 +56,6 @@ const Curriculum = ({
       setIsWritten(prev => !prev);
       setStep(prev => prev - 2);
     }
-    if (isError) {
-      console.log("실패");
-      toast.error("과외를 다시 등록해주세요", {
-        autoClose: 1500,
-        position: toast.POSITION.TOP_RIGHT,
-      });
-    }
   }),
     [isSuccess, isError];
 
