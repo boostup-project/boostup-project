@@ -7,6 +7,10 @@ import DetailBasicInfo from "components/detailComp/DetailBasicInfo";
 import MobileDetailBasicInfo from "components/detailComp/MobileDetailBasicInfo";
 import DetailBasicInfoEditModal from "components/detailComp/DetailBasicInfoEditModal";
 import { useEffect, useState } from "react";
+import DetailExtra from "components/DetailExtra";
+import DetailCurriculum from "components/DetailCurriculum";
+import useGetExtra from "hooks/detail/useGetExtra";
+import useGetCurriculum from "hooks/detail/useGetCurriculum";
 import useGetBasicInfo from "hooks/detail/useGetBasicInfo";
 import useWindowSize from "hooks/useWindowSize";
 
@@ -16,6 +20,20 @@ const Detail = () => {
   const lessonId = Number(router.query.id);
 
   const [tab, setTab] = useState(1);
+
+  const {
+    refetch: refetchGetExtra,
+    isSuccess: extraSuccess,
+    isError: extraError,
+    data: extraData,
+  } = useGetExtra(lessonId);
+
+  const {
+    refetch: refetchGetCur,
+    isSuccess: curSuccess,
+    isError: curError,
+    data: curData,
+  } = useGetCurriculum(lessonId);
 
   const handleTabClick = (id: number) => {
     setTab(id);
@@ -36,8 +54,10 @@ const Detail = () => {
 
     if (tab === 1) {
       // 상세정보 refetch
-    } else if (tab === 2) {
+      refetchGetExtra();
+    } else if (tab === 2 && lessonId) {
       // 진행방식 refetch
+      refetchGetCur();
     } else if (tab === 3) {
       // 과외후기 refetch
     }
@@ -82,10 +102,14 @@ const Detail = () => {
         </div>
         <div className="desktop:min-w-[1000px] min-w-[95%] w-3/4 h-fit flex desktop:flex-row flex-col justify-start items-center">
           <DetailContentContainer>
-            각 탭별 컴포넌트를 생성하여 넣어주세요!
+            {tab === 1 && (
+              <DetailExtra extraData={extraData} lessonId={lessonId} />
+            )}
+            {tab === 2 && <DetailCurriculum curData={curData} />}
+
+            {/* 각 탭별 컴포넌트를 생성하여 넣어주세요! */}
           </DetailContentContainer>
           <div className="w-full h-full flex flex-col justify-start items-center pl-3">
-            {/* 각 버튼 안에는 디자인에 맞게 div 박스 넣어서 구현해주세요! */}
             <DetailBtn bold={true} remove={false} onClick={() => {}}>
               신청하기
             </DetailBtn>
