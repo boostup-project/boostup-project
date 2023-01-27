@@ -80,7 +80,7 @@ const Header = () => {
           </div>
           <div className="w-1/5 h-full hidden desktop:flex desktop:flex-row-reverse desktop:items-end">
             <div className="w-full pt-2 desktop:flex desktop:h-[50px] desktop:justify-end text-sm">
-              {log ? (
+              {/* {log ? (
                 <>
                   <div className="min-w-fit mr-8 py-1">마이페이지</div>
                   <div className="min-w-fit mr-8 py-1" onClick={logOutEvent}>
@@ -102,7 +102,7 @@ const Header = () => {
                     <Link href="/signup">회원가입</Link>
                   </div>
                 </>
-              )}
+              )} */}
             </div>
           </div>
         </nav>

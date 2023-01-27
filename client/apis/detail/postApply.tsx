@@ -1,7 +1,10 @@
 import axios from "axios";
+interface ObjectPart {
+  [index: string]: string | string[];
+}
 
-const getMainCard = async () => {
-  return await axios.get(`/lesson`, {
+const postApply = async (object: ObjectPart, lessonId: Number) => {
+  return await axios.post(`/suggest/lesson/${lessonId}`, object, {
     baseURL: process.env.NEXT_PUBLIC_API_URL,
     headers: {
       "content-Type": `application/json`,
@@ -11,4 +14,4 @@ const getMainCard = async () => {
     },
   });
 };
-export default getMainCard;
+export default postApply;
