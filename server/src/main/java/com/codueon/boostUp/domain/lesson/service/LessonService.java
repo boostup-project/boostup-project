@@ -52,9 +52,9 @@ public class LessonService {
                              MultipartFile profileImage,
                              List<MultipartFile> careerImage) {
 
-//        if (lessonRepository.existsByMemberId(memberId)) {
-//            throw new BusinessLogicException(ExceptionCode.LESSON_ALREADY_EXIST);
-//        }
+        if (lessonRepository.existsByMemberId(memberId)) {
+            throw new BusinessLogicException(ExceptionCode.LESSON_ALREADY_EXIST);
+        }
 
         Member findMember = memberDbService.ifExistsReturnMember(memberId);
         Lesson savedLesson = saveLessonAndReturnLesson(postLesson, findMember, profileImage);
@@ -209,6 +209,7 @@ public class LessonService {
         Lesson updateLesson = lessonDbService.ifExistsReturnLesson(lessonId);
         updateLesson.editLessonInfo(postLessonInfoEdit);
 
+        updateLesson.editLessonInfo(postLessonInfoEdit);
         List<Integer> languageList = postLessonInfoEdit.getLanguages();
         List<Integer> addressList = postLessonInfoEdit.getAddresses();
 
