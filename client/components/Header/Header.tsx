@@ -78,7 +78,7 @@ const Header = () => {
 
   return (
     <header className="bg-bgColor font-SCDream5 w-full fixed top-0 z-[1] h-fit flex justify-center items-center shadow">
-      <div className="pt-5 pb-2 desktop:w-3/4 desktop:min-w-[1000px] desktop:h-[87px] desktop:mt-0">
+      <div className="pt-5 w-full pb-2 desktop:w-3/4 desktop:min-w-[1000px] desktop:h-[87px] desktop:mt-0">
         <nav className="w-full h-full flex tablet:justify-center tablet:items-center desktop:justify-between">
           <div className="w-1/2 flex justify-start items-center ml-4 tablet:h-[40px] desktop:hidden">
             <div className="w-8 tablet:w-[34.5px]" onClick={logOutEvent}>
@@ -86,7 +86,7 @@ const Header = () => {
             </div>
           </div>
           <div className="tablet:w-1/6 h-fit flex justify-center items-center desktop:justify-start desktop:items-end">
-            <div className="flex justify-center items-center w-28 tablet:w-[142px] h-[69px] h-min-[69px]">
+            <div className="flex justify-center items-center w-[142px] w-min-[142px] h-[69px] h-min-[69px]">
               <Link href="/">
                 <Image src={Logo} alt="logo" />
               </Link>
@@ -146,3 +146,29 @@ const Header = () => {
 };
 
 export default Header;
+
+// {
+//   log ? (
+//     <>
+//       <div className="min-w-fit mr-8 py-1">마이페이지</div>
+//       <div className="min-w-fit mr-8 py-1" onClick={logOutEvent}>
+//         로그아웃
+//       </div>
+//       <div
+//         onClick={toWrite}
+//         className="min-w-fit w-1/4 h-fit p-1 rounded-md bg-pointColor text-white text-center"
+//       >
+//         과외등록
+//       </div>
+//     </>
+//   ) : (
+//     <>
+//       <div className="mr-8">
+//         <Link href="/login">로그인</Link>
+//       </div>
+//       <div>
+//         <Link href="/signup">회원가입</Link>
+//       </div>
+//     </>
+//   );
+// }
