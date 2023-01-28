@@ -35,7 +35,7 @@ public class ReviewService {
      */
     @Transactional
     public void createStudentReview(Long memberId, Long lessonId, Long suggestId, PostReview postReview) {
-        Suggest suggest = suggestDbService.ifNotExistSuggestThrowException(suggestId, memberId);
+        Suggest suggest = suggestDbService.ifNotExistSuggestThrowException(lessonId, suggestId, memberId);
 
         // 예외 처리 : 과외 종료 상태가 아닐 때
 //        if(!suggest.getStatus().equals(END_OF_LESSON))

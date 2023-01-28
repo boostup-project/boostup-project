@@ -8,5 +8,5 @@ import java.util.Optional;
 
 public interface SuggestRepository extends JpaRepository<Suggest, Long> , CustomSuggestRepository{
     List<Suggest> findAllById(Long lessonId);
-    Optional<Suggest> findByIdAndMemberId(Long suggestId, Long memberId);
+    Optional<Suggest> findByIdAndLessonIdAndMemberId(Long lessonId, Long suggestId, Long memberId);
 }
