@@ -68,12 +68,13 @@ public class BookmarkGetTest extends BookmarkControllerTest {
     @Test
     @DisplayName("GET 북마크 전체 조회")
     void getBookmarks() throws Exception {
-        String tutorName = "김선생";
+        String name = "김선생";
 
         GetBookmark bookmarkInfo = GetBookmark.builder()
-                .bookmark(bookmark)
+                .bookmarkId(bookmark.getId())
+                .bookmarkUrl(bookmark.getBookmarkUrl())
                 .lesson(lesson)
-                .tutorName(tutorName)
+                .name(name)
                 .build();
 
         List<GetBookmark> bookmarkList = new ArrayList<>();
