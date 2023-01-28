@@ -30,7 +30,7 @@ public class Member extends Auditable {
     @Enumerated(value = EnumType.STRING)
     private AccountStatus accountStatus = AccountStatus.COMMON_MEMBER;
 
-    @OneToOne(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Embedded
     private MemberImage memberImage;
 
     @Builder
@@ -53,7 +53,6 @@ public class Member extends Auditable {
     }
 
     public void addMemberImage(MemberImage memberImage) {
-        if (memberImage.getMember() != this) memberImage.setMember(this);
         this.memberImage = memberImage;
     }
 

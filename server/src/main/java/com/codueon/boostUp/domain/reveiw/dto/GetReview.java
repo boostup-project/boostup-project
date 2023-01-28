@@ -19,14 +19,17 @@ public class GetReview {
 
     @Builder
     @QueryProjection
-    public GetReview(Review review,
+    public GetReview(Long reviewId,
                      String image,
-                     String name) {
-        this.reviewId = review.getId();
+                     String name,
+                     Integer score,
+                     String comment,
+                     LocalDateTime createdAt) {
+        this.reviewId = reviewId;
         this.image = image;
         this.name = name;
-        this.score = review.getScore();
-        this.comment = review.getComment();
-        this.createdAt = review.getCreatedAt();
+        this.score = score;
+        this.comment = comment;
+        this.createdAt = createdAt;
     }
 }

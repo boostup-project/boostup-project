@@ -105,7 +105,6 @@ public class LessonService {
         UploadFile uploadFile = fileHandler.uploadFile(profileImage);
         ProfileImage createProfileImage = ProfileImage.toEntity(uploadFile, uploadFile.getFilePath());
 
-        createProfileImage.addLesson(lesson);
         lesson.addProfileImage(createProfileImage);
 
         lessonDbService.addLanguageList(postLesson.getLanguages(), lesson);
@@ -133,7 +132,6 @@ public class LessonService {
         UploadFile uploadFile = awsS3Service.uploadfile(profileImage, dir);
         ProfileImage createProfileImage = ProfileImage.toEntity(uploadFile, uploadFile.getFilePath());
 
-        createProfileImage.addLesson(lesson);
         lesson.addProfileImage(createProfileImage);
 
         lessonDbService.addLanguageList(postLesson.getLanguages(), lesson);

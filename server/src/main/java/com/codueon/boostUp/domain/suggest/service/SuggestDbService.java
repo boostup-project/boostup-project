@@ -50,6 +50,18 @@ public class SuggestDbService {
     }
 
     /**
+     * 과외 신청 정보 존재 여부 확인 메서드
+     * @param suggestId 과외 신청 식별자
+     * @param memberId 사용자 식별자
+     * @author Suggest
+     * @author mozzi327
+     */
+    public Suggest ifNotExistSuggestThrowException(Long suggestId, Long memberId) {
+        return suggestRepository.findByIdAndMemberId(suggestId, memberId)
+                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.SUGGEST_NOT_FOUND));
+    }
+
+    /**
      * 신청 저장 메서드
      * @param suggest 신청 정보
      * @author LeeGoh
