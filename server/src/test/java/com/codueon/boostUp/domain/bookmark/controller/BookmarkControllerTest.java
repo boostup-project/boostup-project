@@ -72,7 +72,6 @@ public class BookmarkControllerTest {
 
         lesson = Lesson.builder()
                 .id(1L)
-                .name("홍자루")
                 .title("자바 숙성 강의")
                 .cost(5000)
                 .memberId(1L)

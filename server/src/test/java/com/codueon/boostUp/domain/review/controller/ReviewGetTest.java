@@ -40,9 +40,12 @@ public class ReviewGetTest extends ReviewControllerTest {
         Long lessonId = 1L;
 
         GetReview reviewRes = GetReview.builder()
-                .review(review)
+                .reviewId(review.getId())
                 .image(image)
                 .name(member.getName())
+                .score(review.getScore())
+                .comment(review.getComment())
+                .createdAt(review.getCreatedAt())
                 .build();
 
         List<GetReview> reviewList = new ArrayList<>();
@@ -103,9 +106,12 @@ public class ReviewGetTest extends ReviewControllerTest {
         String tutorName = "김선생";
 
         GetReviewMyPage reviewMyPage = GetReviewMyPage.builder()
-                .review(review)
+                .lessonId(review.getLessonId())
                 .lesson(lesson)
-                .tutorName(tutorName)
+                .name(tutorName)
+                .score(review.getScore())
+                .comment(review.getComment())
+                .createdAt(review.getCreatedAt())
                 .startTime(start)
                 .endTime(end)
                 .build();
@@ -146,7 +152,8 @@ public class ReviewGetTest extends ReviewControllerTest {
                         ),
                         responseFields(
                                 List.of(
-                                        fieldWithPath("data").type(JsonFieldType.ARRAY).description("북마크 데이터"),
+                                        fieldWithPath("data").type(JsonFieldType.ARRAY).description("리뷰 데이터"),
+                                        fieldWithPath("data[].lessonId").type(JsonFieldType.NUMBER).description("과외 식별자"),
                                         fieldWithPath("data[].name").type(JsonFieldType.STRING).description("강사 이름"),
                                         fieldWithPath("data[].title").type(JsonFieldType.STRING).description("과외 타이틀"),
                                         fieldWithPath("data[].cost").type(JsonFieldType.NUMBER).description("과외 가격"),

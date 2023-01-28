@@ -13,7 +13,6 @@ public class DataForTest {
 
     public MemberImage getMemberImage() {
         return MemberImage.builder()
-                .id(1L)
                 .fileName("하이하이")
                 .filePath("https://test.com/memberImage/test.jpg")
                 .fileSize(50000L)
@@ -23,7 +22,6 @@ public class DataForTest {
 
     public ProfileImage getProfileImage() {
         return ProfileImage.builder()
-                .id(1L)
                 .fileName("하이하이")
                 .filePath("https://test.com/profileImage/test.jpg")
                 .fileSize(50000L)
