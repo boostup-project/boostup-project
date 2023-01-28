@@ -5,6 +5,8 @@ import com.codueon.boostUp.domain.lesson.dto.PostLessonDetailEdit;
 import com.codueon.boostUp.domain.lesson.dto.PostLessonInfoEdit;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
 import java.io.CharArrayReader;
@@ -26,16 +28,15 @@ public class Lesson {
     private Integer cost;
     private Long memberId;
 
-    @JsonManagedReference
-    @OneToOne(mappedBy = "lesson", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Embedded
     private ProfileImage profileImage;
 
     @JsonManagedReference
-    @OneToMany(mappedBy = "lesson", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "lesson", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     private List<LessonLanguage> lessonLanguages = new ArrayList<>();
 
     @JsonManagedReference
-    @OneToMany(mappedBy = "lesson", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "lesson", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     private List<LessonAddress> lessonAddresses = new ArrayList<>();
 
     @Builder
@@ -64,7 +65,6 @@ public class Lesson {
     }
 
     public void addProfileImage(ProfileImage profileImage) {
-        if(profileImage.getLesson() != this) profileImage.addLesson(this);
         this.profileImage = profileImage;
     }
 

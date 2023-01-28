@@ -16,6 +16,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -31,8 +33,9 @@ public class ReviewService {
      * @param postReview 리뷰 등록 정보
      * @author mozzi327
      */
+    @Transactional
     public void createStudentReview(Long memberId, Long lessonId, Long suggestId, PostReview postReview) {
-        Suggest suggest = suggestDbService.ifExistsReturnSuggest(suggestId);
+        Suggest suggest = suggestDbService.ifNotExistSuggestThrowException(suggestId, memberId);
 
         // 예외 처리 : 과외 종료 상태가 아닐 때
 //        if(!suggest.getStatus().equals(END_OF_LESSON))
@@ -46,6 +49,7 @@ public class ReviewService {
                 .score(postReview.getScore())
                 .memberId(memberId)
                 .lessonId(lessonId)
+                .suggestId(suggestId)
                 .build();
         reviewRepository.save(review);
     }
@@ -57,6 +61,7 @@ public class ReviewService {
      * @return Page(GetReview)
      * @author mozzi327
      */
+    @Transactional
     public Page<GetReview> findAllDetailInfoReviews(Long lessonId, Pageable pageable) {
         return reviewRepository.getReviewList(lessonId, pageable);
     }
@@ -68,6 +73,7 @@ public class ReviewService {
      * @return Page(GetReviewMyPage)
      * @author mozzi327
      */
+    @Transactional
     public Page<GetReviewMyPage> findAllMyPageReviews(Long memberId, Pageable pageable) {
         return reviewRepository.getMyPageReviewList(memberId, pageable);
     }

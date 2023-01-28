@@ -12,6 +12,7 @@ import java.util.Optional;
 
 @Entity
 @Getter
+@NamedEntityGraph
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Review extends Auditable {
 
@@ -29,13 +30,17 @@ public class Review extends Auditable {
 
     private Long memberId;
 
+    private Long suggestId;
+
     @Builder
-    public Review(Long id, String comment, Integer score, Long lessonId, Long memberId) {
+    public Review(Long id, String comment, Integer score,
+                  Long lessonId, Long memberId, Long suggestId) {
         this.id = id;
         this.comment = comment;
         this.score = score;
         this.lessonId = lessonId;
         this.memberId = memberId;
+        this.suggestId = suggestId;
     }
 
     public void editReview(PatchReview editReview) {
