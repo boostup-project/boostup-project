@@ -139,23 +139,27 @@ const Curriculum = ({
         진행방식
       </div>
       {screenWidth > 764 ? (
-        <MDEditor
-          height={400}
-          value={curInfo}
-          onChange={handleChangeValue}
-          preview="live"
-          commands={[bold, italic]}
-          className="flex flex-col w-full h-full mt-5"
-        />
+        <div data-color-mode="light" className="w-full">
+          <MDEditor
+            height={400}
+            value={curInfo}
+            onChange={handleChangeValue}
+            preview="live"
+            commands={[bold, italic]}
+            className="flex flex-col w-full h-full mt-5"
+          />
+        </div>
       ) : (
-        <MDEditor
-          height={400}
-          value={curInfo}
-          onChange={handleChangeValue}
-          preview="edit"
-          commands={[bold, italic]}
-          className="flex flex-col w-full h-full mt-5"
-        />
+        <div data-color-mode="light" className="w-full">
+          <MDEditor
+            height={400}
+            value={curInfo}
+            onChange={handleChangeValue}
+            preview="edit"
+            commands={[bold, italic]}
+            className="flex flex-col w-full h-full mt-5"
+          />
+        </div>
       )}
       <div className="flex flex-row justify-center items-center w-full h-fit mt-10">
         <SmallBtn onClick={toBack}>이전</SmallBtn>
