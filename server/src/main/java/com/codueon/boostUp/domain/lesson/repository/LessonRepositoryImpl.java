@@ -1,8 +1,6 @@
 package com.codueon.boostUp.domain.lesson.repository;
 
-import com.codueon.boostUp.domain.lesson.dto.GetMainPageLesson;
-import com.codueon.boostUp.domain.lesson.dto.PostSearchLesson;
-import com.codueon.boostUp.domain.lesson.dto.QGetMainPageLesson;
+import com.codueon.boostUp.domain.lesson.dto.*;
 import com.codueon.boostUp.domain.lesson.entity.AddressInfo;
 import com.codueon.boostUp.domain.lesson.entity.LanguageInfo;
 import com.codueon.boostUp.domain.lesson.entity.QLesson;
@@ -24,7 +22,9 @@ import static com.codueon.boostUp.domain.bookmark.entity.QBookmark.bookmark;
 import static com.codueon.boostUp.domain.lesson.entity.QLesson.lesson;
 import static com.codueon.boostUp.domain.lesson.entity.QLessonAddress.lessonAddress;
 import static com.codueon.boostUp.domain.lesson.entity.QLessonLanguage.lessonLanguage;
-import static com.codueon.boostUp.domain.lesson.entity.QProfileImage.profileImage;
+
+import static com.codueon.boostUp.domain.member.entity.QMember.member;
+
 
 public class LessonRepositoryImpl implements CustomLessonRepository {
 
@@ -47,9 +47,10 @@ public class LessonRepositoryImpl implements CustomLessonRepository {
         List<GetMainPageLesson> result = queryFactory
                 .select(new QGetMainPageLesson(
                         lesson,
+                        member.name,
                         Expressions.constant(false)
                 ))
-                .from(lesson)
+                .from(lesson,member)
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .orderBy(lesson.id.desc())
@@ -73,9 +74,10 @@ public class LessonRepositoryImpl implements CustomLessonRepository {
         List<GetMainPageLesson> result = queryFactory
                 .select(new QGetMainPageLesson(
                         lesson,
+                        member.name,
                         isBookmarked(lesson.id, memberId)
                 ))
-                .from(lesson)
+                .from(lesson, member)
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .orderBy(lesson.id.desc())
@@ -99,8 +101,9 @@ public class LessonRepositoryImpl implements CustomLessonRepository {
         List<GetMainPageLesson> result = queryFactory
                 .select(new QGetMainPageLesson(
                         lessonLanguage.lesson,
+                        member.name,
                         Expressions.constant(false)
-                )).from(lessonLanguage)
+                )).from(lessonLanguage, member)
                 .leftJoin(lessonLanguage).on(lesson.id.eq(lessonLanguage.lesson.id))
                 .where(lessonLanguage.languageInfo.eq(LanguageInfo.findById(languageId)))
                 .offset(pageable.getOffset())
@@ -128,8 +131,9 @@ public class LessonRepositoryImpl implements CustomLessonRepository {
         List<GetMainPageLesson> result = queryFactory
                 .select(new QGetMainPageLesson(
                         lessonLanguage.lesson,
+                        member.name,
                         isBookmarked(lessonLanguage.lesson.id, memberId)
-                )).from(lessonLanguage)
+                )).from(lessonLanguage, member)
                 .leftJoin(lessonLanguage).on(lesson.id.eq(lessonLanguage.lesson.id))
                 .where(lessonLanguage.languageInfo.eq(LanguageInfo.findById(languageId)))
                 .offset(pageable.getOffset())
@@ -155,8 +159,9 @@ public class LessonRepositoryImpl implements CustomLessonRepository {
         List<GetMainPageLesson> result = queryFactory
                 .select(new QGetMainPageLesson(
                         lesson,
+                        member.name,
                         Expressions.constant(false)
-                )).from(lesson)
+                )).from(lesson,member)
                 .leftJoin(lessonAddress).on(lesson.id.eq(lessonAddress.lesson.id))
                 .leftJoin(lessonLanguage).on(lesson.id.eq(lessonLanguage.lesson.id))
                 .where(makeDetailSearchConditions(postSearchLesson))
@@ -185,8 +190,9 @@ public class LessonRepositoryImpl implements CustomLessonRepository {
         List<GetMainPageLesson> result = queryFactory
                 .select(new QGetMainPageLesson(
                         lesson,
+                        member.name,
                         isBookmarked(lesson.id, memberId)
-                )).from(lesson)
+                )).from(lesson, member)
                 .leftJoin(lessonAddress).on(lesson.id.eq(lessonAddress.lesson.id))
                 .leftJoin(lessonLanguage).on(lesson.id.eq(lessonLanguage.lesson.id))
                 .where(makeDetailSearchConditions(postSearchLesson))
@@ -197,6 +203,16 @@ public class LessonRepositoryImpl implements CustomLessonRepository {
 
         long total = result.size();
         return new PageImpl<>(result, pageable, total);
+    }
+
+    public GetLesson getDetailLesson(Long lessonId) {
+        GetLesson result = queryFactory
+                .select(new QGetLesson(
+                        lesson,
+                        member
+                )).from(lesson, member)
+                .fetchOne();
+        return result;
     }
 
     /**
@@ -219,7 +235,7 @@ public class LessonRepositoryImpl implements CustomLessonRepository {
             builder.and(lessonLanguage.languageInfo.eq(LanguageInfo.findById(postSearchLesson.getLanguage())));
 
         if (postSearchLesson.getName() != null)
-            builder.and(lesson.name.contains(postSearchLesson.getName()));
+            builder.and(member.name.contains(postSearchLesson.getName()));
 
         if (postSearchLesson.getCareer() != null)
             builder.and(lesson.career.goe(postSearchLesson.getCareer()));

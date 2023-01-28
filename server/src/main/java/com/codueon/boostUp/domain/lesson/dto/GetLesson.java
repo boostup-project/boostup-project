@@ -1,6 +1,7 @@
 package com.codueon.boostUp.domain.lesson.dto;
 
 import com.codueon.boostUp.domain.lesson.entity.Lesson;
+import com.codueon.boostUp.domain.member.entity.Member;
 import com.querydsl.core.annotations.QueryProjection;
 import lombok.Builder;
 import lombok.Getter;
@@ -22,10 +23,12 @@ public class GetLesson {
     private List<String> address;
 
     @Builder
-    public GetLesson(Lesson lesson) {
+    @QueryProjection
+    public GetLesson(Lesson lesson,
+                     Member member) {
         this.profileImage = lesson.getProfileImage().getFilePath();
         this.languages = lesson.getLanguageListAsString();
-        this.name = lesson.getName();
+        this.name = member.getName();
         this.title = lesson.getTitle();
         this.company = lesson.getCompany();
         this.career = lesson.getCareer();

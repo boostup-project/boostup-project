@@ -1,5 +1,6 @@
 package com.codueon.boostUp.domain.lesson.repository;
 
+import com.codueon.boostUp.domain.lesson.dto.GetLesson;
 import com.codueon.boostUp.domain.lesson.entity.Lesson;
 import com.codueon.boostUp.domain.lesson.entity.LessonAddress;
 import com.codueon.boostUp.domain.lesson.entity.LessonLanguage;

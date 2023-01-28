@@ -1,6 +1,7 @@
 package com.codueon.boostUp.domain.lesson.dto;
 
 import com.codueon.boostUp.domain.lesson.entity.Lesson;
+import com.codueon.boostUp.domain.member.entity.Member;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -22,11 +23,12 @@ public class GetTutorLesson {
     private List<String> address;
 
     @Builder
-    public GetTutorLesson(Lesson lesson) {
+    public GetTutorLesson(Lesson lesson,
+                          Member member) {
         this.lessonId = lesson.getId();
         this.profileImage = lesson.getProfileImage().getFilePath();
         this.languages = lesson.getLanguageListAsString();
-        this.name = lesson.getName();
+        this.name = member.getName();
         this.title = lesson.getTitle();
         this.company = lesson.getCompany();
         this.career = lesson.getCareer();
