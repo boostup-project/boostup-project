@@ -42,7 +42,7 @@ public class SuggestGetTest extends SuggestControllerTest{
         GetPaymentInfo getPaymentInfo =
                 new GetPaymentInfo(lesson, tutorName, totalCost, quantity);
 
-        given(suggestService.getPaymentInfo(Mockito.anyLong(), Mockito.anyLong()))
+        given(suggestDbService.getPaymentInfoOnMyPage(Mockito.anyLong(), Mockito.anyLong()))
                 .willReturn(getPaymentInfo);
 
         ResultActions actions =
@@ -284,7 +284,7 @@ public class SuggestGetTest extends SuggestControllerTest{
 
         GetPaymentReceipt getPaymentInfo = new GetPaymentReceipt(lesson, tutorName, totalCost, quantity, paymentMethod);
 
-        given(suggestService.getPaymentReceipt(Mockito.anyLong(), Mockito.anyLong()))
+        given(suggestDbService.getPaymentReceiptOnMyPage(Mockito.anyLong(), Mockito.anyLong()))
                 .willReturn(getPaymentInfo);
 
         ResultActions actions =

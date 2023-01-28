@@ -133,47 +133,6 @@ public class SuggestService {
         suggestDbService.deleteSuggest(findSuggest);
     }
 
-    /**
-     * 결제 페이지 요청 메서드
-     * @param suggestId 신청 식별자
-     * @param memberId 사용자 식별자
-     * @return GetPaymentInfo
-     * @author LeeGoh
-     */
-    public GetPaymentInfo getPaymentInfo(Long suggestId, Long memberId) {
-        Suggest findSuggest = suggestDbService.ifExistsReturnSuggest(suggestId);
-
-        if (!memberId.equals(findSuggest.getMemberId()) ||
-            !findSuggest.getSuggestStatus().equals(PAY_IN_PROGRESS)) {
-            throw new BusinessLogicException(INVALID_ACCESS);
-        }
-
-        Lesson findLesson = lessonDbService.ifExistsReturnLesson(findSuggest.getLessonId());
-        Member findTutor = memberDbService.ifExistsReturnMember(findLesson.getMemberId());
-        PaymentInfo findPaymentInfo = suggestDbService.ifExistsReturnPaymentInfo(suggestId);
-
-        return new GetPaymentInfo(findLesson, findTutor.getName(), findSuggest.getTotalCost(), findPaymentInfo.getQuantity());
-    }
-
-    /**
-     * 결제 영수증 요청 메서드
-     * @param suggestId 신청 식별자
-     * @param memberId 사용자 식별자
-     * @return GetPaymentReceipt
-     * @author LeeGoh
-     */
-    public GetPaymentReceipt getPaymentReceipt(Long suggestId, Long memberId) {
-        Suggest findSuggest = suggestDbService.ifExistsReturnSuggest(suggestId);
-        suggestDbService.suggestGetMemberIdAndStatusIsNotInProgress(findSuggest, memberId);
-
-        Lesson findLesson = lessonDbService.ifExistsReturnLesson(findSuggest.getLessonId());
-        Member findTutor = memberDbService.ifExistsReturnMember(findLesson.getMemberId());
-        PaymentInfo findPaymentInfo = suggestDbService.ifExistsReturnPaymentInfo(suggestId);
-
-        return new GetPaymentReceipt(
-                findLesson, findTutor.getName(), findSuggest.getTotalCost(), findPaymentInfo.getQuantity(), findSuggest.getPaymentMethod());
-    }
-
     /*---------- 결제 로직 ----------*/
 
     /**
