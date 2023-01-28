@@ -52,7 +52,7 @@ const Detail = () => {
       basicInfoRefetch();
     }
 
-    if (tab === 1) {
+    if (tab === 1 && lessonId) {
       // 상세정보 refetch
       refetchGetExtra();
     } else if (tab === 2 && lessonId) {
@@ -65,7 +65,7 @@ const Detail = () => {
 
   return (
     <>
-      <div className="flex flex-col bg-bgColor items-center justify-start w-full h-screen pt-28">
+      <div className="flex flex-col bg-bgColor items-center justify-start w-full h-full pt-28">
         {/* 요약정보 */}
         <DetailSummeryContainer>
           {widthSize > 764 ? (
