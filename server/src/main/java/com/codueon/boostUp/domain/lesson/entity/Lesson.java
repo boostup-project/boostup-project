@@ -20,7 +20,6 @@ public class Lesson {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "LESSON_ID")
     private Long id;
-    private String name;
     private String title;
     private Integer career;
     private String company;
@@ -41,14 +40,12 @@ public class Lesson {
 
     @Builder
     public Lesson(Long id,
-                  String name,
                   String title,
                   String company,
                   Integer career,
                   Integer cost,
                   Long memberId) {
         this.id = id;
-        this.name = name;
         this.title = title;
         this.company = company;
         this.career = career;
@@ -58,7 +55,6 @@ public class Lesson {
 
     public static Lesson toEntity(PostLesson postLesson, String name, Long memberId) {
         return Lesson.builder()
-                .name(name)
                 .title(postLesson.getTitle())
                 .company(postLesson.getCompany())
                 .career(postLesson.getCareer())

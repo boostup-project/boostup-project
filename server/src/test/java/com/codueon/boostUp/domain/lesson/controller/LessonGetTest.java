@@ -37,7 +37,9 @@ public class LessonGetTest extends LessonControllerTest {
     @Test
     @DisplayName("메인페이지 과외 상세 검색 테스트")
     void getDetailSearchForLessonTest() throws Exception {
+
         PostSearchLesson postSearchLesson = PostSearchLesson.builder()
+                .name("김길동")
                 .address(1)
                 .career(5)
                 .language(1)
@@ -66,7 +68,7 @@ public class LessonGetTest extends LessonControllerTest {
                 .andExpect(jsonPath("$.data[0].title").value(lessonList.get(0).getTitle()))
                 .andExpect(jsonPath("$.data[0].cost").value(lessonList.get(0).getCost()))
                 .andExpect(jsonPath("$.data[0].profileImage").value(lessonList.get(0).getProfileImage().getFilePath()))
-                .andExpect(jsonPath("$.data[0].name").value(lessonList.get(0).getName()))
+                .andExpect(jsonPath("$.data[0].name").value(data.getMember1().getName()))
                 .andExpect(jsonPath("$.data[0].company").value(lessonList.get(0).getCompany()))
                 .andExpect(jsonPath("$.data[0].career").value(lessonList.get(0).getCareer()))
                 .andExpect(jsonPath("$.data[0].address[0]").value("강남구"))
@@ -81,7 +83,7 @@ public class LessonGetTest extends LessonControllerTest {
                 .andExpect(jsonPath("$.data[1].title").value(lessonList.get(1).getTitle()))
                 .andExpect(jsonPath("$.data[1].cost").value(lessonList.get(1).getCost()))
                 .andExpect(jsonPath("$.data[1].profileImage").value(lessonList.get(1).getProfileImage().getFilePath()))
-                .andExpect(jsonPath("$.data[1].name").value(lessonList.get(1).getName()))
+                .andExpect(jsonPath("$.data[1].name").value(data.getMember1().getName()))
                 .andExpect(jsonPath("$.data[1].company").value(lessonList.get(1).getCompany()))
                 .andExpect(jsonPath("$.data[1].career").value(lessonList.get(1).getCareer()))
                 .andExpect(jsonPath("$.data[1].address[0]").value("강남구"))
@@ -94,6 +96,7 @@ public class LessonGetTest extends LessonControllerTest {
                         getResponsePreProcessor(),
                         requestFields(
                                 List.of(
+                                        fieldWithPath("name").type(JsonFieldType.STRING).description("닉네임"),
                                         fieldWithPath("address").type(JsonFieldType.NUMBER).description("검색 주소"),
                                         fieldWithPath("career").type(JsonFieldType.NUMBER).description("최소 경력"),
                                         fieldWithPath("language").type(JsonFieldType.NUMBER).description("검색 언어"),
@@ -111,6 +114,7 @@ public class LessonGetTest extends LessonControllerTest {
     @DisplayName("메인페이지 과외 상세 검색 테스트(로그인 시)")
     void getDetailSearchForLessonTest2() throws Exception {
         PostSearchLesson postSearchLesson = PostSearchLesson.builder()
+                .name("김길동")
                 .address(1)
                 .career(5)
                 .language(1)
@@ -141,7 +145,7 @@ public class LessonGetTest extends LessonControllerTest {
                 .andExpect(jsonPath("$.data[0].title").value(lessonList.get(0).getTitle()))
                 .andExpect(jsonPath("$.data[0].cost").value(lessonList.get(0).getCost()))
                 .andExpect(jsonPath("$.data[0].profileImage").value(lessonList.get(0).getProfileImage().getFilePath()))
-                .andExpect(jsonPath("$.data[0].name").value(lessonList.get(0).getName()))
+                .andExpect(jsonPath("$.data[0].name").value(data.getMember1().getName()))
                 .andExpect(jsonPath("$.data[0].company").value(lessonList.get(0).getCompany()))
                 .andExpect(jsonPath("$.data[0].career").value(lessonList.get(0).getCareer()))
                 .andExpect(jsonPath("$.data[0].address[0]").value("강남구"))
@@ -156,7 +160,7 @@ public class LessonGetTest extends LessonControllerTest {
                 .andExpect(jsonPath("$.data[1].title").value(lessonList.get(1).getTitle()))
                 .andExpect(jsonPath("$.data[1].cost").value(lessonList.get(1).getCost()))
                 .andExpect(jsonPath("$.data[1].profileImage").value(lessonList.get(1).getProfileImage().getFilePath()))
-                .andExpect(jsonPath("$.data[1].name").value(lessonList.get(1).getName()))
+                .andExpect(jsonPath("$.data[1].name").value(data.getMember1().getName()))
                 .andExpect(jsonPath("$.data[1].company").value(lessonList.get(1).getCompany()))
                 .andExpect(jsonPath("$.data[1].career").value(lessonList.get(1).getCareer()))
                 .andExpect(jsonPath("$.data[1].address[0]").value("강남구"))
@@ -173,6 +177,7 @@ public class LessonGetTest extends LessonControllerTest {
                         ),
                         requestFields(
                                 List.of(
+                                        fieldWithPath("name").type(JsonFieldType.STRING).description("닉네임"),
                                         fieldWithPath("address").type(JsonFieldType.NUMBER).description("검색 주소"),
                                         fieldWithPath("career").type(JsonFieldType.NUMBER).description("최소 경력"),
                                         fieldWithPath("language").type(JsonFieldType.NUMBER).description("검색 언어"),
@@ -206,7 +211,7 @@ public class LessonGetTest extends LessonControllerTest {
                 .andExpect(jsonPath("$.data[0].title").value(lessonList.get(0).getTitle()))
                 .andExpect(jsonPath("$.data[0].cost").value(lessonList.get(0).getCost()))
                 .andExpect(jsonPath("$.data[0].profileImage").value(lessonList.get(0).getProfileImage().getFilePath()))
-                .andExpect(jsonPath("$.data[0].name").value(lessonList.get(0).getName()))
+                .andExpect(jsonPath("$.data[0].name").value(data.getMember1().getName()))
                 .andExpect(jsonPath("$.data[0].company").value(lessonList.get(0).getCompany()))
                 .andExpect(jsonPath("$.data[0].career").value(lessonList.get(0).getCareer()))
                 .andExpect(jsonPath("$.data[0].address[0]").value("강남구"))
@@ -221,7 +226,7 @@ public class LessonGetTest extends LessonControllerTest {
                 .andExpect(jsonPath("$.data[1].title").value(lessonList.get(1).getTitle()))
                 .andExpect(jsonPath("$.data[1].cost").value(lessonList.get(1).getCost()))
                 .andExpect(jsonPath("$.data[1].profileImage").value(lessonList.get(1).getProfileImage().getFilePath()))
-                .andExpect(jsonPath("$.data[1].name").value(lessonList.get(1).getName()))
+                .andExpect(jsonPath("$.data[1].name").value(data.getMember1().getName()))
                 .andExpect(jsonPath("$.data[1].company").value(lessonList.get(1).getCompany()))
                 .andExpect(jsonPath("$.data[1].career").value(lessonList.get(1).getCareer()))
                 .andExpect(jsonPath("$.data[1].address[0]").value("강남구"))
@@ -260,7 +265,7 @@ public class LessonGetTest extends LessonControllerTest {
                 .andExpect(jsonPath("$.data[0].title").value(lessonList.get(0).getTitle()))
                 .andExpect(jsonPath("$.data[0].cost").value(lessonList.get(0).getCost()))
                 .andExpect(jsonPath("$.data[0].profileImage").value(lessonList.get(0).getProfileImage().getFilePath()))
-                .andExpect(jsonPath("$.data[0].name").value(lessonList.get(0).getName()))
+                .andExpect(jsonPath("$.data[0].name").value(data.getMember1().getName()))
                 .andExpect(jsonPath("$.data[0].company").value(lessonList.get(0).getCompany()))
                 .andExpect(jsonPath("$.data[0].career").value(lessonList.get(0).getCareer()))
                 .andExpect(jsonPath("$.data[0].address[0]").value("강남구"))
@@ -275,7 +280,7 @@ public class LessonGetTest extends LessonControllerTest {
                 .andExpect(jsonPath("$.data[1].title").value(lessonList.get(1).getTitle()))
                 .andExpect(jsonPath("$.data[1].cost").value(lessonList.get(1).getCost()))
                 .andExpect(jsonPath("$.data[1].profileImage").value(lessonList.get(1).getProfileImage().getFilePath()))
-                .andExpect(jsonPath("$.data[1].name").value(lessonList.get(1).getName()))
+                .andExpect(jsonPath("$.data[1].name").value(data.getMember1().getName()))
                 .andExpect(jsonPath("$.data[1].company").value(lessonList.get(1).getCompany()))
                 .andExpect(jsonPath("$.data[1].career").value(lessonList.get(1).getCareer()))
                 .andExpect(jsonPath("$.data[1].address[0]").value("강남구"))
@@ -319,7 +324,7 @@ public class LessonGetTest extends LessonControllerTest {
                 .andExpect(jsonPath("$.data[0].title").value(lessonList.get(0).getTitle()))
                 .andExpect(jsonPath("$.data[0].cost").value(lessonList.get(0).getCost()))
                 .andExpect(jsonPath("$.data[0].profileImage").value(lessonList.get(0).getProfileImage().getFilePath()))
-                .andExpect(jsonPath("$.data[0].name").value(lessonList.get(0).getName()))
+                .andExpect(jsonPath("$.data[0].name").value(data.getMember1().getName()))
                 .andExpect(jsonPath("$.data[0].company").value(lessonList.get(0).getCompany()))
                 .andExpect(jsonPath("$.data[0].career").value(lessonList.get(0).getCareer()))
                 .andExpect(jsonPath("$.data[0].address[0]").value("강남구"))
@@ -334,7 +339,7 @@ public class LessonGetTest extends LessonControllerTest {
                 .andExpect(jsonPath("$.data[1].title").value(lessonList.get(1).getTitle()))
                 .andExpect(jsonPath("$.data[1].cost").value(lessonList.get(1).getCost()))
                 .andExpect(jsonPath("$.data[1].profileImage").value(lessonList.get(1).getProfileImage().getFilePath()))
-                .andExpect(jsonPath("$.data[1].name").value(lessonList.get(1).getName()))
+                .andExpect(jsonPath("$.data[1].name").value(data.getMember1().getName()))
                 .andExpect(jsonPath("$.data[1].company").value(lessonList.get(1).getCompany()))
                 .andExpect(jsonPath("$.data[1].career").value(lessonList.get(1).getCareer()))
                 .andExpect(jsonPath("$.data[1].address[0]").value("강남구"))
@@ -379,7 +384,7 @@ public class LessonGetTest extends LessonControllerTest {
                 .andExpect(jsonPath("$.data[0].title").value(lessonList.get(0).getTitle()))
                 .andExpect(jsonPath("$.data[0].cost").value(lessonList.get(0).getCost()))
                 .andExpect(jsonPath("$.data[0].profileImage").value(lessonList.get(0).getProfileImage().getFilePath()))
-                .andExpect(jsonPath("$.data[0].name").value(lessonList.get(0).getName()))
+                .andExpect(jsonPath("$.data[0].name").value(data.getMember1().getName()))
                 .andExpect(jsonPath("$.data[0].company").value(lessonList.get(0).getCompany()))
                 .andExpect(jsonPath("$.data[0].career").value(lessonList.get(0).getCareer()))
                 .andExpect(jsonPath("$.data[0].address[0]").value("강남구"))
@@ -394,7 +399,7 @@ public class LessonGetTest extends LessonControllerTest {
                 .andExpect(jsonPath("$.data[1].title").value(lessonList.get(1).getTitle()))
                 .andExpect(jsonPath("$.data[1].cost").value(lessonList.get(1).getCost()))
                 .andExpect(jsonPath("$.data[1].profileImage").value(lessonList.get(1).getProfileImage().getFilePath()))
-                .andExpect(jsonPath("$.data[1].name").value(lessonList.get(1).getName()))
+                .andExpect(jsonPath("$.data[1].name").value(data.getMember1().getName()))
                 .andExpect(jsonPath("$.data[1].company").value(lessonList.get(1).getCompany()))
                 .andExpect(jsonPath("$.data[1].career").value(lessonList.get(1).getCareer()))
                 .andExpect(jsonPath("$.data[1].address[0]").value("강남구"))
@@ -422,6 +427,7 @@ public class LessonGetTest extends LessonControllerTest {
     @DisplayName("과외 상세페이지 요약 정보 조회 테스트")
     void getLessonTest() throws Exception {
         GetLesson getLesson = GetLesson.builder()
+                .member(member)
                 .lesson(lesson)
                 .build();
 
@@ -442,7 +448,7 @@ public class LessonGetTest extends LessonControllerTest {
                 .andExpect(jsonPath("$.languages[0]").value("Javascript"))
                 .andExpect(jsonPath("$.languages[1]").value("Python"))
                 .andExpect(jsonPath("$.languages[2]").value("Go"))
-                .andExpect(jsonPath("$.name").value(lesson.getName()))
+                .andExpect(jsonPath("$.name").value(data.getMember1().getName()))
                 .andExpect(jsonPath("$.title").value(lesson.getTitle()))
                 .andExpect(jsonPath("$.company").value(lesson.getCompany()))
                 .andExpect(jsonPath("$.career").value(lesson.getCareer()))

@@ -1,6 +1,7 @@
 package com.codueon.boostUp.domain.lesson.dto;
 
 import com.codueon.boostUp.domain.lesson.entity.Lesson;
+import com.codueon.boostUp.domain.member.entity.Member;
 import com.querydsl.core.annotations.QueryProjection;
 import lombok.Builder;
 import lombok.Getter;
@@ -26,13 +27,14 @@ public class GetMainPageLesson {
     @Builder
     @QueryProjection
     public GetMainPageLesson(Lesson lesson,
+                             String name,
                              boolean bookmark) {
         this.lessonId = lesson.getId();
         this.languages = lesson.getLanguageListAsString();
         this.title = lesson.getTitle();
         this.cost = lesson.getCost();
         this.profileImage = lesson.getProfileImage().getFilePath();
-        this.name = lesson.getName();
+        this.name = name;
         this.company = lesson.getCompany();
         this.career = lesson.getCareer();
         this.address = lesson.getAddressListAsString();
