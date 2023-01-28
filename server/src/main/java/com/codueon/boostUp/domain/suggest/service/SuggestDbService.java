@@ -1,6 +1,8 @@
 package com.codueon.boostUp.domain.suggest.service;
 
 import com.codueon.boostUp.domain.lesson.entity.Lesson;
+import com.codueon.boostUp.domain.suggest.dto.GetPaymentInfo;
+import com.codueon.boostUp.domain.suggest.dto.GetPaymentReceipt;
 import com.codueon.boostUp.domain.suggest.dto.GetStudentSuggest;
 import com.codueon.boostUp.domain.suggest.dto.GetTutorSuggest;
 import com.codueon.boostUp.domain.suggest.entity.PaymentInfo;
@@ -95,6 +97,28 @@ public class SuggestDbService {
      */
     public void deleteSuggest(Suggest suggest) {
         suggestRepository.delete(suggest);
+    }
+
+    /**
+     * 결제 페이지 요청 메서드
+     * @param suggestId 신청 식별자
+     * @param memberId 사용자 식별자
+     * @return GetPaymentInfo
+     * @author LeeGoh
+     */
+    public GetPaymentInfo getPaymentInfoOnMyPage(Long suggestId, Long memberId) {
+        return suggestRepository.getPaymentInfoOnMyPage(suggestId, memberId);
+    }
+
+    /**
+     * 결제 영수증 요청 메서드
+     * @param suggestId 신청 식별자
+     * @param memberId 사용자 식별자
+     * @return GetPaymentReceipt
+     * @author LeeGoh
+     */
+    public GetPaymentReceipt getPaymentReceiptOnMyPage(Long suggestId, Long memberId) {
+        return suggestRepository.getPaymentReceiptOnMyPage(suggestId, memberId);
     }
 
     /**

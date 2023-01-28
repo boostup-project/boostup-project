@@ -1,6 +1,7 @@
 package com.codueon.boostUp.domain.suggest.dto;
 
 import com.codueon.boostUp.domain.lesson.entity.Lesson;
+import com.querydsl.core.annotations.QueryProjection;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -21,6 +22,7 @@ public class GetPaymentInfo {
     private Integer quantity;
 
     @Builder
+    @QueryProjection
     public GetPaymentInfo(Lesson lesson,
                           String tutorName,
                           Integer totalCost,

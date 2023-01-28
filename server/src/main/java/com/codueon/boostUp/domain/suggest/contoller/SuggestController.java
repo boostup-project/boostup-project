@@ -93,7 +93,7 @@ public class SuggestController {
 
         JwtAuthenticationToken token = (JwtAuthenticationToken) authentication;
         Long memberId = getMemberIdIfExistToken(token);
-        return ResponseEntity.ok(suggestService.getPaymentInfo(suggestId, memberId));
+        return ResponseEntity.ok(suggestDbService.getPaymentInfoOnMyPage(suggestId, memberId));
     }
 
     /**
@@ -297,7 +297,7 @@ public class SuggestController {
 
         JwtAuthenticationToken token = (JwtAuthenticationToken) authentication;
         Long memberId = getMemberIdIfExistToken(token);
-        return ResponseEntity.ok(suggestService.getPaymentReceipt(suggestId, memberId));
+        return ResponseEntity.ok(suggestDbService.getPaymentReceiptOnMyPage(suggestId, memberId));
     }
 
     /**
