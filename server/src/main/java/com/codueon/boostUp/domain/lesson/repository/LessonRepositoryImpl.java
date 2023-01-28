@@ -50,7 +50,7 @@ public class LessonRepositoryImpl implements CustomLessonRepository {
                         member.name,
                         Expressions.constant(false)
                 ))
-                .from(lesson,member)
+                .from(lesson, member)
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .orderBy(lesson.id.desc())

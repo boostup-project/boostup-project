@@ -58,8 +58,8 @@ public class SuggestDbService {
      * @author Suggest
      * @author mozzi327
      */
-    public Suggest ifNotExistSuggestThrowException(Long suggestId, Long memberId) {
-        return suggestRepository.findByIdAndMemberId(suggestId, memberId)
+    public Suggest ifNotExistSuggestThrowException(Long lessonId, Long suggestId, Long memberId) {
+        return suggestRepository.findByIdAndLessonIdAndMemberId(lessonId, suggestId, memberId)
                 .orElseThrow(() -> new BusinessLogicException(ExceptionCode.SUGGEST_NOT_FOUND));
     }
 
