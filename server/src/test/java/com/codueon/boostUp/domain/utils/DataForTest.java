@@ -96,7 +96,6 @@ public class DataForTest {
     public Lesson getLesson1() {
         Lesson lesson = Lesson.builder()
                 .id(1L)
-                .name("홍자루")
                 .title("자바 숙성 강의")
                 .cost(5000)
                 .memberId(1L)
@@ -123,7 +122,6 @@ public class DataForTest {
     public Lesson getLesson2() {
         Lesson lesson = Lesson.builder()
                 .id(2L)
-                .name("이순신")
                 .title("자바 스크립트 숙성 강의")
                 .cost(5000)
                 .memberId(2L)
