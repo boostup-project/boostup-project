@@ -78,11 +78,13 @@ const DetailExtra = ({ extraData, lessonId }: Props) => {
           lessonId={lessonId}
         />
       )}
-      <div
-        className="w-full h-full flex justify-end pt-6 px-6 text-pointColor font-SCDream3 cursor-pointer hover:underline"
-        onClick={modalOpen}
-      >
-        edit
+      <div className="h-full flex justify-end pt-6 px-6">
+        <span
+          className="text-pointColor font-SCDream3 cursor-pointer hover:underline"
+          onClick={modalOpen}
+        >
+          edit
+        </span>
       </div>
       <div className="w-full h-full pb-6 pt-3 px-6 text-base">
         {!textData ? (
