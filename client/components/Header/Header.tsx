@@ -100,7 +100,7 @@ const Header = () => {
               <IconMagnify fill={textColor} />
             </div>
           </div>
-          <div className="hidden desktop:flex desktop:items-end desktop:w-min-[500px] desktop:w-[648px] desktop:h-full desktop:relative desktop:visible">
+          <div className="hidden desktop:flex desktop:items-end desktop:w-[630px] desktop:h-full desktop:relative desktop:visible">
             <div
               className={`w-full h-[50px] flex justify-center items-center border border-borderColor outline-pointColor font-SCDream2 text-sm text-textColor bg-white 
             ${seek ? `rounded-tr-xl rounded-tl-xl` : `rounded-xl`}`}
@@ -113,13 +113,13 @@ const Header = () => {
           <div className="w-1/5 h-full hidden desktop:flex desktop:flex-row-reverse desktop:items-end">
             <div className="w-full pt-2 desktop:flex desktop:h-[50px] desktop:justify-end text-sm">
               <div
-                className="min-w-fit mr-8 py-1 cursor-pointer hover:underline"
+                className="min-w-fit w-1/3 py-1 cursor-pointer text-center hover:underline"
                 onClick={wordOneEvent}
               >
                 {wordOne}
               </div>
               <div
-                className="min-w-fit mr-8 py-1 cursor-pointer hover:underline"
+                className="min-w-fit w-1/3 py-1 cursor-pointer text-center hover:underline"
                 onClick={wordTwoEvent}
               >
                 {wordTwo}
@@ -127,7 +127,7 @@ const Header = () => {
               {writeBtn.length > 1 && (
                 <div
                   onClick={toWrite}
-                  className="min-w-fit w-1/4 h-fit p-1 rounded-md bg-pointColor text-white text-center cursor-pointer hover:underline"
+                  className="min-w-fit h-fit p-1 rounded-md bg-pointColor text-white text-center cursor-pointer hover:underline"
                 >
                   {writeBtn}
                 </div>
