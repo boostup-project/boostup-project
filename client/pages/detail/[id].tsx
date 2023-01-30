@@ -7,12 +7,12 @@ import DetailBasicInfo from "components/detailComp/DetailBasicInfo";
 import MobileDetailBasicInfo from "components/detailComp/MobileDetailBasicInfo";
 import DetailBasicInfoEditModal from "components/detailComp/DetailBasicInfoEditModal";
 import { useEffect, useState } from "react";
-import DetailExtra from "components/DetailExtra";
-import DetailCurriculum from "components/DetailCurriculum";
 import useGetExtra from "hooks/detail/useGetExtra";
 import useGetCurriculum from "hooks/detail/useGetCurriculum";
 import useGetBasicInfo from "hooks/detail/useGetBasicInfo";
 import useWindowSize from "hooks/useWindowSize";
+import DetailCurriculum from "components/detailComp/DetailCurriculum";
+import DetailExtra from "components/detailComp/DetailExtra";
 
 const Detail = () => {
   // lessonId 받아오기
