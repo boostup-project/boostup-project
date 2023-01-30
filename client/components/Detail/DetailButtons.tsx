@@ -3,14 +3,14 @@ import { IconEmptyheart, IconFullheart } from "assets/icon";
 import ApplyModal from "./ApplyModal";
 import Swal from "sweetalert2";
 import { useState, useCallback } from "react";
-import useDetailDelete from "hooks/detail/useDetailDelete";
+import useDeleteDetail from "hooks/detail/useDeleteDetail";
 import { useRouter } from "next/router";
 const DetailButtons = () => {
   const [isOpenModal, setOpenModal] = useState<boolean>(false);
   const router = useRouter();
   const lessonId = Number(router.query.id);
 
-  const { mutate } = useDetailDelete();
+  const { mutate } = useDeleteDetail();
   const onClickToggleModal = useCallback(() => {
     setOpenModal(!isOpenModal);
   }, [isOpenModal]);

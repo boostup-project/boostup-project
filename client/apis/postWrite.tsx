@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const postWrite = async (object: FormData) => {
-  const url = "/lesson/registration";
+  const url = "/lesson/test/registration";
 
   return await axios.post(url, object, {
     baseURL: process.env.NEXT_PUBLIC_API_URL,

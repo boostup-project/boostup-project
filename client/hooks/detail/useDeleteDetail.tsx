@@ -1,8 +1,8 @@
-import detailDelete from "apis/detail/deleteDetail";
+import deleteDetail from "apis/detail/deleteDetail";
 import { useMutation } from "react-query";
 
-const useDetailDelete = () => {
-  return useMutation(detailDelete, {
+const useDeleteDetail = () => {
+  return useMutation(deleteDetail, {
     onSuccess: res => {
       console.log(res);
     },
@@ -11,4 +11,4 @@ const useDetailDelete = () => {
     },
   });
 };
-export default useDetailDelete;
+export default useDeleteDetail;

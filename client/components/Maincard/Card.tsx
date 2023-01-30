@@ -13,7 +13,7 @@ import Link from "next/link";
 //import useGetMainCard from "./useGetMainCard";
 import getMainCard from "apis/card/getMainCard";
 import { dehydrate, QueryClient, useQuery } from "react-query";
-import useGetLike from "hooks/detail/useGetLike";
+import useGetAllBookmark from "hooks/detail/useGetAllBookmark";
 import Swal from "sweetalert2";
 import useGetMainCard from "hooks/main/useGetMainCard";
 import { useRouter } from "next/router";
@@ -34,7 +34,7 @@ const Card = () => {
   const [cards, setCards] = useState<any>();
   const lessonId = 1;
   const router = useRouter();
-  const { refetch } = useGetLike(lessonId);
+  const { refetch } = useGetAllBookmark(lessonId);
   const [likes, setLikes] = useState(true);
   const { isLoading, isError, data } = useQuery("cards", () => getMainCard(), {
     enabled: true,

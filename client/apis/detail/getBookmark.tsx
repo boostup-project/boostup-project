@@ -1,7 +1,7 @@
 import axios from "axios";
 
-const getLike = async (lessonId: number) => {
-  return await axios.get(`/bookmark/lesson/${lessonId}/modification`, {
+const getBookmark = async (lessonId: number) => {
+  return await axios.get(`/bookmark/lesson/${lessonId}`, {
     baseURL: process.env.NEXT_PUBLIC_API_URL,
     headers: {
       "content-Type": `application/json`,
@@ -11,4 +11,4 @@ const getLike = async (lessonId: number) => {
     },
   });
 };
-export default getLike;
+export default getBookmark;
