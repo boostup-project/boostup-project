@@ -91,8 +91,12 @@ const DetailBasicInfo = (basicInfo: any) => {
               가능지역
             </div>
             <div className="ml-2 pt-1 w-fit h-fit flex flex-row justify-start items-center font-SCDream3 desktop:text-sm text-xs text-textColor">
-              {basicInfo.basicInfo?.address.map((el: string) => {
-                return <div className="w-fit h-fit mr-1">{el}</div>;
+              {basicInfo.basicInfo?.address.map((el: string, idx: number) => {
+                return (
+                  <div key={idx} className="w-fit h-fit mr-1">
+                    {el}
+                  </div>
+                );
               })}
             </div>
           </div>

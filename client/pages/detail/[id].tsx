@@ -39,14 +39,18 @@ const Detail = () => {
     setTab(id);
   };
 
-  const { refetch: basicInfoRefetch, data: basicInfo } =
-    useGetBasicInfo(lessonId);
+  const {
+    refetch: basicInfoRefetch,
+    data: basicInfo,
+    isSuccess: basicInfoSuccess,
+  } = useGetBasicInfo(lessonId);
 
   const widthSize = useWindowSize();
 
   useEffect(() => {
     // refetch 실행위치
     // tab이 바뀔때마다 refetch 실행
+    // console.log(lessonId);
     if (lessonId) {
       // 요약정보 요청
       basicInfoRefetch();
@@ -65,7 +69,11 @@ const Detail = () => {
 
   return (
     <>
-      <div className="flex flex-col bg-bgColor items-center justify-start w-full h-screen pt-28">
+      {basicInfoSuccess ? (
+        <DetailBasicInfoEditModal basicData={basicInfo} />
+      ) : null}
+
+      <div className="flex flex-col bg-bgColor items-center justify-start w-full h-full pt-28">
         {/* 요약정보 */}
         <DetailSummeryContainer>
           {widthSize > 764 ? (
@@ -100,7 +108,7 @@ const Detail = () => {
             과외후기
           </DetailTabBtn>
         </div>
-        <div className="desktop:min-w-[1000px] min-w-[95%] w-3/4 h-fit flex desktop:flex-row flex-col justify-start items-center">
+        <div className="desktop:min-w-[1000px] min-w-[95%] w-3/4 h-full flex desktop:flex-row flex-col justify-start desktop:items-start items-center">
           <DetailContentContainer>
             {tab === 1 && (
               <DetailExtra extraData={extraData} lessonId={lessonId} />

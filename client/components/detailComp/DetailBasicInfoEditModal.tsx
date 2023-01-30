@@ -20,7 +20,6 @@ const DetailBasicInfoEditModal = (basicData: any) => {
   const [isPowerModal, setIsPowerModal] = useRecoilState(powerBasicEditModal);
   const [step, setStep] = useRecoilState(inputStep);
 
-  console.log(basicInfo);
   const toWrite = () => {
     setIsPowerModal(prev => !prev);
   };
@@ -33,7 +32,7 @@ const DetailBasicInfoEditModal = (basicData: any) => {
             <BasicStep />
           </div>
           <BasicInfo
-            basicInfo={basicData.basicData}
+            basicInfo={basicData.basicData.data}
             setBasicInfo={setBasicInfo}
             toWrite={toWrite}
             setStep={setStep}
