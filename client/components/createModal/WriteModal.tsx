@@ -26,10 +26,6 @@ const WriteModal = () => {
     setIsPowerWrite(prev => !prev);
   };
 
-  console.log("basic", basicInfo);
-  console.log("add", extraInfo);
-  console.log("cur", curInfo);
-
   return (
     <ModalBackDrop onClick={toWrite}>
       <CreateModalContainer>

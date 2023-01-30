@@ -31,7 +31,6 @@ const DetailCurModi = ({ textData, setTextData, modalOpen }: Props) => {
       id,
       textData,
     };
-    // console.log(assemble);
     mutate(assemble);
   };
   useEffect(() => {
