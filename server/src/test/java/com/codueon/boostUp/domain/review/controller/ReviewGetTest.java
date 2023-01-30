@@ -103,12 +103,12 @@ public class ReviewGetTest extends ReviewControllerTest {
     public void getMyPageReview() throws Exception {
         LocalDateTime start = LocalDateTime.of(2022, 12, 28, 12, 30, 5);
         LocalDateTime end = LocalDateTime.of(2022, 12, 30, 12, 30, 5);
-        String tutorName = "김선생";
+        String name = "김선생";
 
         GetReviewMyPage reviewMyPage = GetReviewMyPage.builder()
                 .lessonId(review.getLessonId())
                 .lesson(lesson)
-                .name(tutorName)
+                .name(name)
                 .score(review.getScore())
                 .comment(review.getComment())
                 .createdAt(review.getCreatedAt())
@@ -135,7 +135,7 @@ public class ReviewGetTest extends ReviewControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data[0].languages[0]").value(lesson.getLessonLanguages().get(0).getLanguageInfo().getLanguages()))
                 .andExpect(jsonPath("$.data[0].profileImage").value(lesson.getProfileImage().getFilePath()))
-                .andExpect(jsonPath("$.data[0].name").value(tutorName))
+                .andExpect(jsonPath("$.data[0].name").value(name))
                 .andExpect(jsonPath("$.data[0].title").value(lesson.getTitle()))
                 .andExpect(jsonPath("$.data[0].cost").value(lesson.getCost()))
                 .andExpect(jsonPath("$.data[0].startTime").value(start.toString()))

@@ -24,11 +24,11 @@ public class GetPaymentInfo {
     @Builder
     @QueryProjection
     public GetPaymentInfo(Lesson lesson,
-                          String tutorName,
+                          String name,
                           Integer totalCost,
                           Integer quantity ) {
         this.title = lesson.getTitle();
-        this.name = tutorName;
+        this.name = name;
         this.languages = lesson.getLanguageListAsString();
         this.address = lesson.getAddressListAsString();
         this.company = lesson.getCompany();

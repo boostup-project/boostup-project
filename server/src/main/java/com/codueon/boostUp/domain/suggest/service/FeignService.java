@@ -1,9 +1,6 @@
 package com.codueon.boostUp.domain.suggest.service;
 
-import com.codueon.boostUp.domain.lesson.entity.Lesson;
-import com.codueon.boostUp.domain.member.entity.Member;
 import com.codueon.boostUp.domain.suggest.entity.PaymentInfo;
-import com.codueon.boostUp.domain.suggest.entity.Suggest;
 import com.codueon.boostUp.domain.suggest.feign.KakaoPayFeignClient;
 import com.codueon.boostUp.domain.suggest.feign.TossPayFeignClient;
 import com.codueon.boostUp.domain.suggest.kakao.*;
@@ -73,25 +70,33 @@ public class FeignService {
     /**
      * Kakao 결제 전 파라미터 입력 메서드
      * @param requestUrl 요청 URL
-     * @param suggest 신청 정보
-     * @param member 사용자 정보
-     * @param lesson 과외 정보
-     * @param paymentInfo 결제 정보
+     * @param suggestId 신청 식별자
+     * @param totalCost 총 가격
+     * @param memberId 사용자 식별자
+     * @param title 과외 타이틀
+     * @param cost 과외 가격
+     * @param quantity 과외 횟수
      * @return ReadyToKakaoPaymentInfo
      * @author LeeGoh
      */
-    public ReadyToKakaoPayInfo setReadyParams(String requestUrl, Suggest suggest, Member member, Lesson lesson, PaymentInfo paymentInfo) {
+    public ReadyToKakaoPayInfo setReadyParams(String requestUrl,
+                                              Long suggestId,
+                                              Integer totalCost,
+                                              Long memberId,
+                                              String title,
+                                              Integer cost,
+                                              Integer quantity) {
         return ReadyToKakaoPayInfo.builder()
                 .cid(cid)
-                .approval_url(requestUrl + paymentProcessUri + "/" + suggest.getId() + "/kakao/success")
-                .cancel_url(requestUrl + paymentProcessUri + "/" + suggest.getId() + "/kakao/cancellation")
-                .fail_url(requestUrl + paymentProcessUri + "/" + suggest.getId() + "/kakao/failure")
-                .partner_order_id(suggest.getId() + "/" + member.getId() + "/" + lesson.getTitle())
-                .partner_user_id(member.getId().toString())
-                .item_name(lesson.getTitle())
-                .quantity(paymentInfo.getQuantity())
-                .total_amount(paymentInfo.getQuantity() * lesson.getCost())
-                .val_amount(suggest.getTotalCost())
+                .approval_url(requestUrl + paymentProcessUri + "/" + suggestId + "/kakao/success")
+                .cancel_url(requestUrl + paymentProcessUri + "/" + suggestId + "/kakao/cancellation")
+                .fail_url(requestUrl + paymentProcessUri + "/" + suggestId + "/kakao/failure")
+                .partner_order_id(suggestId + "/" + memberId + "/" + title)
+                .partner_user_id(memberId.toString())
+                .item_name(title)
+                .quantity(quantity)
+                .total_amount(quantity * cost)
+                .val_amount(totalCost)
                 .tax_free_amount(taxFreeAmount)
                 .build();
     }
@@ -99,20 +104,26 @@ public class FeignService {
     /**
      * Toss 결제 전 파라미터 입력 메서드
      * @param requestUrl 요청 URL
-     * @param suggest 신청 정보
-     * @param paymentInfo 결제 정보
-     * @param lesson 과외 정보
+     * @param suggestId 신청 식별자
+     * @param cost 과외 가격
+     * @param quantity 과외 횟수
+     * @param title 과외 타이틀
      * @return ReadyToTossPaymentInfo
      * @author LeeGoh
      */
-    public ReadyToTossPayInfo setReadyTossParams(String requestUrl, Suggest suggest, Lesson lesson, PaymentInfo paymentInfo, String method) {
+    public ReadyToTossPayInfo setReadyTossParams(String requestUrl,
+                                                 Long suggestId,
+                                                 Integer cost,
+                                                 String title,
+                                                 Integer quantity,
+                                                 String method) {
         return ReadyToTossPayInfo.builder()
-                .successUrl(requestUrl + paymentProcessUri + "/" + suggest.getId() + "/toss/success")
-                .failUrl(requestUrl + paymentProcessUri + "/" + suggest.getId() + "/toss/failure")
-                .amount(paymentInfo.getQuantity() * lesson.getCost())
+                .successUrl(requestUrl + paymentProcessUri + "/" + suggestId + "/toss/success")
+                .failUrl(requestUrl + paymentProcessUri + "/" + suggestId + "/toss/failure")
+                .amount(quantity * cost)
                 .method(method)
                 .orderId(UUID.randomUUID().toString())
-                .orderName(lesson.getTitle())
+                .orderName(title)
                 .build();
     }
 
