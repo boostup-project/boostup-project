@@ -2,16 +2,17 @@ import CreateModalContainer from "../reuse/container/CreateModalContainer";
 import { useForm } from "react-hook-form";
 import { langDict, dayDict } from "../reuse/dict";
 import SmallBtn from "../reuse/btn/SmallBtn";
-import AuthBtn from "components/reuse/btn/AuthBtn";
 import { useMutation } from "react-query";
 import usePostApply from "hooks/detail/usePostApply";
-import { useState } from "react";
-import { useRecoilState } from "recoil";
+import { useState, useEffect } from "react";
+import Swal from "sweetalert2";
 import { PropsWithChildren } from "react";
-import postApply from "apis/detail/postApply";
-
+import { useRouter } from "next/router";
 interface Application {
-  [index: string]: string | string[];
+  days: string;
+  languages: string;
+  requests: string;
+  id: number;
 }
 interface ModalDefaultType {
   onClickToggleModal: () => void;
@@ -27,19 +28,42 @@ const ApplyModal = ({
     formState: { errors },
   } = useForm<Application>({ mode: "onBlur" });
 
-  const { mutate, error, isSuccess, isError } = usePostApply();
-
-  const onSubmit = (applyData: Application) => {
-    // const data = { day: day };
-    const formData = new FormData();
-
-    const lessonId = 1;
-    postApply(applyData, 1);
-    console.log(applyData);
-  };
+  const router = useRouter();
+  const lessonId = Number(router.query.id);
+  const { mutate, isSuccess, isError } = usePostApply();
 
   const langArr = Object.keys(langDict);
   const dayArr = Object.keys(dayDict);
+
+  const onSubmit = (e: Application) => {
+    const applyData = {
+      days: e.days.toString(),
+      languages: e.languages.toString(),
+      requests: e.requests,
+      id: lessonId,
+    };
+
+    mutate(applyData);
+  };
+
+  useEffect(() => {
+    if (isSuccess) {
+      Swal.fire({
+        text: "신청이 완료되었습니다",
+        icon: "success",
+        confirmButtonColor: "#3085d6",
+      });
+      onClickToggleModal();
+    }
+
+    if (isError) {
+      Swal.fire({
+        text: "다시 신청해주세요",
+        icon: "warning",
+        confirmButtonColor: "#3085d6",
+      });
+    }
+  }, [isSuccess, isError]);
 
   return (
     <>
@@ -96,7 +120,7 @@ const ApplyModal = ({
               })}
             </div>
             <p className="w-11/12 text-xs text-negativeMessage mt-1 tablet:text-sm desktop:w-4/6">
-              {errors?.language && <span>필수 정보입니다</span>}
+              {errors?.days && <span>필수 정보입니다</span>}
             </p>
             <div className="flex w-full desktop:w-4/6 h-fit font-SCDream5 text-lg text-textColor mt-4 mb-2">
               <div>희망언어</div>
@@ -142,7 +166,7 @@ const ApplyModal = ({
               })}
             </div>
             <p className="w-11/12 text-xs text-negativeMessage mt-1 tablet:text-sm desktop:w-4/6">
-              {errors?.language && <span>필수 정보입니다</span>}
+              {errors?.languages && <span>필수 정보입니다</span>}
             </p>
             <div className="flex w-full desktop:w-4/6 h-fit font-SCDream5 text-lg text-textColor mt-4 mb-2">
               요청사항

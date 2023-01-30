@@ -13,6 +13,7 @@ const usePostLogin = () => {
       localStorage.setItem("refresh_token", res.headers.refreshtoken);
       localStorage.setItem("email", res.data.email);
       localStorage.setItem("name", res.data.name);
+
       setLog(prev => !prev);
     },
     onError: (err: any) => {
