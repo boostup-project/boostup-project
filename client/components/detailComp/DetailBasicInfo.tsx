@@ -3,8 +3,16 @@ import NickNameIcon from "assets/icon/detailSummeryIcon/NickNameIcon";
 import AreaIcon from "assets/icon/detailSummeryIcon/AreaIcon";
 import CompanyIcon from "assets/icon/detailSummeryIcon/CompanyIcon";
 import CareerIcon from "assets/icon/detailSummeryIcon/CareerIcon";
+import { useRecoilState } from "recoil";
+import { powerBasicEditModal } from "atoms/detail/detailAtom";
 
 const DetailBasicInfo = (basicInfo: any) => {
+  const [power, setPower] = useRecoilState(powerBasicEditModal);
+
+  const handleClickEdit = () => {
+    setPower(true);
+  };
+
   return (
     <>
       <div className="w-full h-full flex flex-row justify-center items-center">
@@ -106,7 +114,10 @@ const DetailBasicInfo = (basicInfo: any) => {
           <div className="w-full h-fit flex flex-row justify-end items-center font-SCDream5 desktop:text-xl text-sm text-textColor mt-2 mb-14">
             {basicInfo.basicInfo?.cost}원 / 1회
           </div>
-          <div className="w-40 h-fit flex flex-row justify-end items-center font-SCDream3 text-sm text-pointColor cursor-pointer">
+          <div
+            className="w-40 h-fit flex flex-row justify-end items-center font-SCDream3 text-sm text-pointColor cursor-pointer"
+            onClick={handleClickEdit}
+          >
             edit
           </div>
         </div>

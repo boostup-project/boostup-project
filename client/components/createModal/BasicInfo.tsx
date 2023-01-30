@@ -8,6 +8,7 @@ import { modalImgTxt } from "assets/color/color";
 import { SetterOrUpdater } from "recoil";
 import { Info } from "./WriteModal";
 import { useEffect } from "react";
+import { useRouter } from "next/router";
 
 interface BasicInfo {
   [index: string]: string | string[];
@@ -43,6 +44,8 @@ const BasicInfo = ({ basicInfo, setBasicInfo, toWrite, setStep }: Props) => {
     })),
   ];
 
+  const defaultAddress: any = [Object.assign([], basicInfo.address as any)];
+  const router = useRouter();
   /** 미리보기 이미지 생성**/
   const insertImg = (e: any) => {
     let reader = new FileReader();
@@ -63,8 +66,25 @@ const BasicInfo = ({ basicInfo, setBasicInfo, toWrite, setStep }: Props) => {
   };
 
   const onSubmit = (basicData: BasicInfo) => {
-    setBasicInfo(basicData);
-    setStep(prev => prev + 1);
+    if (Object.keys(basicInfo).length) {
+      const lessonId = Number(router.query.id);
+      console.log(lessonId);
+      const json = JSON.stringify({
+        languages: basicData.language,
+        title: basicData.title,
+        company: basicData.company,
+        career: basicData.career,
+        cost: basicData.cost,
+        address: basicData.address,
+      });
+      const blob = new Blob([json], { type: "application/json" });
+      const formData = new FormData();
+
+      formData.append("data", blob);
+    } else {
+      setBasicInfo(basicData);
+      setStep(prev => prev + 1);
+    }
   };
 
   // 페이지 랜더링이 데이터 Fetch 보다 먼저 진행됨에 따른 딜레이 해결
@@ -111,13 +131,23 @@ const BasicInfo = ({ basicInfo, setBasicInfo, toWrite, setStep }: Props) => {
                 </>
               )}
             </div>
-            <input
-              type="file"
-              className="opacity-0 rounded-xl"
-              accept="image/jpeg,.txt"
-              {...register("profileImg", { required: "필수 정보입니다" })}
-              onChange={e => insertImg(e)}
-            />
+            {Object.keys(basicInfo).length ? (
+              <input
+                type="file"
+                className="opacity-0 rounded-xl"
+                accept="image/jpeg,.txt"
+                {...register("profileImg")}
+                onChange={e => insertImg(e)}
+              />
+            ) : (
+              <input
+                type="file"
+                className="opacity-0 rounded-xl"
+                accept="image/jpeg,.txt"
+                {...register("profileImg", { required: "필수 정보입니다" })}
+                onChange={e => insertImg(e)}
+              />
+            )}
           </label>
         </div>
         <p className="w-11/12 text-xs text-negativeMessage mt-1 tablet:text-sm desktop:w-4/6">
@@ -130,7 +160,7 @@ const BasicInfo = ({ basicInfo, setBasicInfo, toWrite, setStep }: Props) => {
           type="text"
           placeholder="타이틀을 입력하세요"
           className="w-11/12 desktop:w-4/6 h-fit p-2 border border-borderColor outline-pointColor rounded-xl font-SCDream4 text-xs text-textColor tablet:text-sm "
-          defaultValue={basicInfo.title as string}
+          defaultValue={basicInfo?.title as string}
           {...register("title", {
             required: "필수 정보입니다.",
           })}
@@ -149,11 +179,24 @@ const BasicInfo = ({ basicInfo, setBasicInfo, toWrite, setStep }: Props) => {
               return (
                 <div key={idx} className="w-1/4 h-fit text-xs">
                   <label className="checkboxLabel">
-                    <input
-                      type="checkbox"
-                      value={el}
-                      {...register("language", { required: "true" })}
-                    />
+                    {Object.keys(basicInfo).length ? (
+                      <input
+                        type="checkbox"
+                        value={el}
+                        {...register("language", { required: "true" })}
+                        defaultChecked={
+                          [...(basicInfo.languages as any)].includes(el)
+                            ? true
+                            : false
+                        }
+                      />
+                    ) : (
+                      <input
+                        type="checkbox"
+                        value={el}
+                        {...register("language", { required: "true" })}
+                      />
+                    )}
                     {el}
                   </label>
                 </div>
@@ -167,11 +210,25 @@ const BasicInfo = ({ basicInfo, setBasicInfo, toWrite, setStep }: Props) => {
               return (
                 <div key={idx} className="w-1/4 h-fit text-xs">
                   <label className="checkboxLabel">
-                    <input
-                      type="checkbox"
-                      value={el}
-                      {...register("language", { required: "true" })}
-                    />
+                    {Object.keys(basicInfo).length ? (
+                      <input
+                        type="checkbox"
+                        value={el}
+                        {...register("language", { required: "true" })}
+                        defaultChecked={
+                          [...(basicInfo.languages as any)].includes(el)
+                            ? true
+                            : false
+                        }
+                      />
+                    ) : (
+                      <input
+                        type="checkbox"
+                        value={el}
+                        {...register("language", { required: "true" })}
+                      />
+                    )}
+
                     {el}
                   </label>
                 </div>
@@ -238,6 +295,15 @@ const BasicInfo = ({ basicInfo, setBasicInfo, toWrite, setStep }: Props) => {
                       message: "3개까지만 넣어주세요",
                     },
                   }}
+                  defaultValue={defaultAddress[0].map(
+                    (el: string, idx: number) => {
+                      return {
+                        key: idx,
+                        value: addDict[el],
+                        label: el,
+                      };
+                    },
+                  )}
                   render={({ field }) => (
                     <Select
                       {...field}
