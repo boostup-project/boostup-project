@@ -35,12 +35,12 @@ public class SuggestGetTest extends SuggestControllerTest{
     void getPaymentInfo() throws Exception {
         Integer quantity = 5;
         Integer totalCost = 250000;
-        String tutorName = "김선생";
+        String name = "김선생";
 
         lesson.addProfileImage(profileImage);
 
         GetPaymentInfo getPaymentInfo =
-                new GetPaymentInfo(lesson, tutorName, totalCost, quantity);
+                new GetPaymentInfo(lesson, name, totalCost, quantity);
 
         given(suggestDbService.getPaymentInfoOnMyPage(Mockito.anyLong(), Mockito.anyLong()))
                 .willReturn(getPaymentInfo);
@@ -112,11 +112,11 @@ public class SuggestGetTest extends SuggestControllerTest{
     @Test
     @DisplayName("GET 환불 영수증 조회")
     void getRefundPaymentInfo() throws Exception {
-        String tutorName = "김선생";
+        String name = "김선생";
 
         GetRefundPayment response = GetRefundPayment.builder()
                 .suggest(suggest)
-                .tutorName(tutorName)
+                .name(name)
                 .lesson(lesson)
                 .paymentInfo(paymentInfo)
                 .build();
@@ -280,9 +280,9 @@ public class SuggestGetTest extends SuggestControllerTest{
         Integer totalCost = 50000;
         Integer quantity = 5;
         String paymentMethod = "카카오페이";
-        String tutorName = "김선생";
+        String name = "김선생";
 
-        GetPaymentReceipt getPaymentInfo = new GetPaymentReceipt(lesson, tutorName, totalCost, quantity, paymentMethod);
+        GetPaymentReceipt getPaymentInfo = new GetPaymentReceipt(lesson, name, totalCost, quantity, paymentMethod);
 
         given(suggestDbService.getPaymentReceiptOnMyPage(Mockito.anyLong(), Mockito.anyLong()))
                 .willReturn(getPaymentInfo);
@@ -385,7 +385,7 @@ public class SuggestGetTest extends SuggestControllerTest{
     @Test
     @DisplayName("GET 마이페이지 신청 내역 조회 - 학생용")
     void getStudentSuggest() throws Exception{
-        String tutorName = "김선생";
+        String name = "김선생";
         lesson.addProfileImage(profileImage);
 
         GetStudentSuggest getStudentSuggest = GetStudentSuggest.builder()
@@ -394,7 +394,7 @@ public class SuggestGetTest extends SuggestControllerTest{
                 .status(suggest.getSuggestStatus())
                 .startTime(suggest.getStartTime())
                 .endTime(suggest.getEndTime())
-                .tutorName(tutorName)
+                .name(name)
                 .build();
 
         List<GetStudentSuggest> suggestList = new ArrayList<>();

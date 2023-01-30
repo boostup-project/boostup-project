@@ -41,6 +41,31 @@ public class SuggestDbService {
     }
 
     /**
+     * 중복 신청 방지 메서드     * @param lessonId 과외 식별자
+     * @param memberId 사용자 식별자
+     */
+    public void ifSuggestExistsReturnException(Long lessonId, Long memberId) {
+        if (suggestRepository.findByLessonIdAndMemberId(lessonId, memberId).isPresent())
+            throw new BusinessLogicException(ExceptionCode.SUGGEST_ALREADY_EXIST);
+    }
+
+    /**
+     * 중복 신청 방지 메서드(Status 확인)
+     * @param lessonId 과외 식별자
+     * @param memberId 사용자 식별자
+     */
+    public void ifEndOfSuggestExistsReturnException(Long lessonId, Long memberId) {
+        List<Suggest> findSuggest = suggestRepository.findAllByLessonIdAndMemberId(lessonId, memberId);
+        if (!findSuggest.isEmpty()) {
+            for (Suggest suggest : findSuggest) {
+                if (!(suggest.getSuggestStatus().equals(END_OF_LESSON) ||
+                        suggest.getSuggestStatus().equals(REFUND_PAYMENT)))
+                    throw new BusinessLogicException(ExceptionCode.SUGGEST_ALREADY_EXIST);
+            }
+        }
+    }
+
+    /**
      * 결제정보 조회 메서드
      * @param suggestId 신청 식별자
      * @return PaymentInfo
