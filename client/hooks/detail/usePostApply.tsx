@@ -3,11 +3,11 @@ import postApply from "apis/detail/postApply";
 
 const usePostApply = () => {
   return useMutation(postApply, {
-    onSuccess: res => {
-      console.log("success");
+    onSuccess: (res: any) => {
+      console.log(res);
     },
-    onError: err => {
-      console.log("");
+    onError: (err: any) => {
+      console.log(err);
     },
   });
 };

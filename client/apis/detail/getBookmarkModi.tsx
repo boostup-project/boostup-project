@@ -1,7 +1,7 @@
 import axios from "axios";
 
-const deleteDetail = async (lessonId: number) => {
-  return await axios.delete(`/lesson/test/${lessonId}`, {
+const getAllBookmark = async (lessonId: number) => {
+  return await axios.get(`/bookmark/lesson/${lessonId}/modification`, {
     baseURL: process.env.NEXT_PUBLIC_API_URL,
     headers: {
       "content-Type": `application/json`,
@@ -10,4 +10,4 @@ const deleteDetail = async (lessonId: number) => {
     },
   });
 };
-export default deleteDetail;
+export default getAllBookmark;
