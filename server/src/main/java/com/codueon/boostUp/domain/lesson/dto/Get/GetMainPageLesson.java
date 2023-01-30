@@ -1,4 +1,4 @@
-package com.codueon.boostUp.domain.lesson.dto;
+package com.codueon.boostUp.domain.lesson.dto.Get;
 
 import com.codueon.boostUp.domain.lesson.entity.Lesson;
 import com.codueon.boostUp.domain.member.entity.Member;
@@ -12,27 +12,32 @@ import java.util.stream.Collectors;
 
 @Getter
 @NoArgsConstructor
-public class GetLesson {
-    private String profileImage;
+public class GetMainPageLesson {
+    private Long lessonId;
     private List<String> languages;
-    private String name;
     private String title;
+    private Integer cost;
+    private String profileImage;
+    private String name;
     private String company;
     private Integer career;
-    private Integer cost;
     private List<String> address;
+    private boolean bookmark;
 
     @Builder
     @QueryProjection
-    public GetLesson(Lesson lesson,
-                     String name) {
-        this.profileImage = lesson.getProfileImage().getFilePath();
+    public GetMainPageLesson(Lesson lesson,
+                             String name,
+                             boolean bookmark) {
+        this.lessonId = lesson.getId();
         this.languages = lesson.getLanguageListAsString();
-        this.name = name;
         this.title = lesson.getTitle();
+        this.cost = lesson.getCost();
+        this.profileImage = lesson.getProfileImage().getFilePath();
+        this.name = name;
         this.company = lesson.getCompany();
         this.career = lesson.getCareer();
-        this.cost = lesson.getCost();
         this.address = lesson.getAddressListAsString();
+        this.bookmark = bookmark;
     }
 }

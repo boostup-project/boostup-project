@@ -1,6 +1,11 @@
 package com.codueon.boostUp.domain.lesson.service;
 import com.codueon.boostUp.domain.bookmark.repository.BookmarkRepository;
-import com.codueon.boostUp.domain.lesson.dto.*;
+import com.codueon.boostUp.domain.lesson.dto.Get.*;
+import com.codueon.boostUp.domain.lesson.dto.Patch.PatchLessonCurriculum;
+import com.codueon.boostUp.domain.lesson.dto.Patch.PostLessonDetailEdit;
+import com.codueon.boostUp.domain.lesson.dto.Patch.PostLessonInfoEdit;
+import com.codueon.boostUp.domain.lesson.dto.Post.PostLesson;
+import com.codueon.boostUp.domain.lesson.dto.Post.PostSearchLesson;
 import com.codueon.boostUp.domain.lesson.entity.*;
 import com.codueon.boostUp.domain.lesson.repository.LessonRepository;
 import com.codueon.boostUp.domain.member.entity.Member;

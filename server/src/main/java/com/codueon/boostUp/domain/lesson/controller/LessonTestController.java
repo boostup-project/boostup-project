@@ -1,8 +1,8 @@
 package com.codueon.boostUp.domain.lesson.controller;
 
-import com.codueon.boostUp.domain.lesson.dto.PostLesson;
-import com.codueon.boostUp.domain.lesson.dto.PostLessonDetailEdit;
-import com.codueon.boostUp.domain.lesson.dto.PostLessonInfoEdit;
+import com.codueon.boostUp.domain.lesson.dto.Post.PostLesson;
+import com.codueon.boostUp.domain.lesson.dto.Patch.PostLessonDetailEdit;
+import com.codueon.boostUp.domain.lesson.dto.Patch.PostLessonInfoEdit;
 import com.codueon.boostUp.domain.lesson.service.LessonService;
 import com.codueon.boostUp.global.security.token.JwtAuthenticationToken;
 import lombok.RequiredArgsConstructor;
