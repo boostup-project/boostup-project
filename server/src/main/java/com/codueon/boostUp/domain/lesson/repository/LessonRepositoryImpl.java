@@ -1,15 +1,16 @@
 package com.codueon.boostUp.domain.lesson.repository;
 
-import com.codueon.boostUp.domain.lesson.dto.*;
+import com.codueon.boostUp.domain.lesson.dto.Get.GetLesson;
+import com.codueon.boostUp.domain.lesson.dto.Get.GetMainPageLesson;
+import com.codueon.boostUp.domain.lesson.dto.Get.QGetLesson;
+import com.codueon.boostUp.domain.lesson.dto.Get.QGetMainPageLesson;
+import com.codueon.boostUp.domain.lesson.dto.Post.PostSearchLesson;
 import com.codueon.boostUp.domain.lesson.entity.AddressInfo;
 import com.codueon.boostUp.domain.lesson.entity.LanguageInfo;
-import com.codueon.boostUp.domain.lesson.entity.QLesson;
 import com.querydsl.core.BooleanBuilder;
-import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.*;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.JPQLQuery;
-import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;

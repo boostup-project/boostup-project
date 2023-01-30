@@ -1,4 +1,4 @@
-package com.codueon.boostUp.domain.lesson.dto;
+package com.codueon.boostUp.domain.lesson.dto.Get;
 
 import com.codueon.boostUp.domain.lesson.entity.Lesson;
 import com.codueon.boostUp.domain.member.entity.Member;

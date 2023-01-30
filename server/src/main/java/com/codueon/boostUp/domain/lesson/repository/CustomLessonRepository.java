@@ -1,12 +1,10 @@
 package com.codueon.boostUp.domain.lesson.repository;
 
-import com.codueon.boostUp.domain.lesson.dto.GetLesson;
-import com.codueon.boostUp.domain.lesson.dto.GetMainPageLesson;
-import com.codueon.boostUp.domain.lesson.dto.PostSearchLesson;
+import com.codueon.boostUp.domain.lesson.dto.Get.GetLesson;
+import com.codueon.boostUp.domain.lesson.dto.Get.GetMainPageLesson;
+import com.codueon.boostUp.domain.lesson.dto.Post.PostSearchLesson;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-
-import java.util.List;
 
 public interface CustomLessonRepository {
 

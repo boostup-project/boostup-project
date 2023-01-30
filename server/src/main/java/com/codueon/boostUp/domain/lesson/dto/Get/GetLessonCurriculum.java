@@ -1,4 +1,4 @@
-package com.codueon.boostUp.domain.lesson.dto;
+package com.codueon.boostUp.domain.lesson.dto.Get;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -6,11 +6,11 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class PatchLessonCurriculum {
+public class GetLessonCurriculum {
     private String curriculum;
 
     @Builder
-    public PatchLessonCurriculum(String curriculum) {
+    public GetLessonCurriculum(String curriculum) {
         this.curriculum = curriculum;
     }
 }

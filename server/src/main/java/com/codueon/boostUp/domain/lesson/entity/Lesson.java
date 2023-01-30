@@ -1,15 +1,11 @@
 package com.codueon.boostUp.domain.lesson.entity;
 
-import com.codueon.boostUp.domain.lesson.dto.PostLesson;
-import com.codueon.boostUp.domain.lesson.dto.PostLessonDetailEdit;
-import com.codueon.boostUp.domain.lesson.dto.PostLessonInfoEdit;
+import com.codueon.boostUp.domain.lesson.dto.Post.PostLesson;
+import com.codueon.boostUp.domain.lesson.dto.Patch.PostLessonInfoEdit;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
-import java.io.CharArrayReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;

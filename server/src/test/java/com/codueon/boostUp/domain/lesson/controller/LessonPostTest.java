@@ -1,8 +1,8 @@
 package com.codueon.boostUp.domain.lesson.controller;
 
-import com.codueon.boostUp.domain.lesson.dto.PostLesson;
-import com.codueon.boostUp.domain.lesson.dto.PostLessonDetailEdit;
-import com.codueon.boostUp.domain.lesson.dto.PostLessonInfoEdit;
+import com.codueon.boostUp.domain.lesson.dto.Post.PostLesson;
+import com.codueon.boostUp.domain.lesson.dto.Patch.PostLessonDetailEdit;
+import com.codueon.boostUp.domain.lesson.dto.Patch.PostLessonInfoEdit;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
