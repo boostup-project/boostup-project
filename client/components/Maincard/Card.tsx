@@ -32,7 +32,7 @@ export async function getStaticProps() {
 
 const Card = () => {
   const [cards, setCards] = useState<any>();
-  const lessonId = 5;
+  const lessonId = 1;
   const router = useRouter();
   const { refetch } = useGetLike(lessonId);
   const [likes, setLikes] = useState(true);
@@ -43,9 +43,7 @@ const Card = () => {
 
       setCards(data.data.data);
     },
-    onError: error => {
-      console.log(error);
-    },
+    onError: error => {},
     retry: 2,
   });
   useEffect(() => {}, [likes]);
@@ -55,7 +53,7 @@ const Card = () => {
       refetch();
       setLikes(prev => !prev);
       console.log(likes);
-      router.push("/");
+      alert("ok!");
     } else {
       return Swal.fire({
         text: "로그인해주세요",
@@ -86,14 +84,14 @@ const Card = () => {
                 </button>
               </div>
             </div>
-            <Link href={`/lesson/${card.lessonId}`}>
+            <Link href={`/detail/${card.lessonId}`}>
               <div className="flex flex-col w-full h-2/3">
                 <div className="flex flex-row whitespace-wrap">
                   <div className="flex">
-                    {card.languages?.map((el: any) => {
+                    {card.languages?.map((el: any, idx: any) => {
                       return (
                         <div
-                          key={el.id}
+                          key={idx}
                           className={`flex justify-center bg-${el} items-center px-1 py-0.5 ml-1 mt-1 border rounded-xl desktop:text-xs tablet:text-[10px] text-[6px]`}
                         >
                           {el}
@@ -124,9 +122,9 @@ const Card = () => {
                   <div className="mr-1 desktop:w-3.5 tablet:w-2.5 w-2 ">
                     <IconPlace />
                   </div>
-                  {card.address?.map((el: any) => {
+                  {card.address?.map((el: any, idx: any) => {
                     return (
-                      <div className="ml-1" key={el.id}>
+                      <div className="ml-1" key={idx}>
                         {el}
                       </div>
                     );
