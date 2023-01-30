@@ -25,6 +25,7 @@ module.exports = {
         modalImgTxt: "#A9C8FA",
         borderColor: "#A8A7A7",
         modalBgColor: "rgba(204, 204, 204, 0.73)",
+        markBgColor: "#F8F8F8",
         Javascript: "#0A83F2",
         Python: "#6ED5F6",
         Java: "#92B7FF",
@@ -42,7 +43,11 @@ module.exports = {
       tablet: "764px",
     },
   },
-  plugins: [require("tailwind-scrollbar"), require("tailwind-scrollbar-hide")],
+  plugins: [
+    require("tailwind-scrollbar"),
+    require("tailwind-scrollbar-hide"),
+    require("@tailwindcss/typography"),
+  ],
   variants: {
     scrollbar: ["rounded"],
   },

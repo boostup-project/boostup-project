@@ -31,7 +31,6 @@ const ExtraInfo = ({ setExtraInfo, setStep }: Props) => {
   const onCickImageUpload = () => {
     imageInput.current.click();
   };
-  console.log("detail", detailImage);
 
   const insertImg = (e: any) => {
     let reader = new FileReader();

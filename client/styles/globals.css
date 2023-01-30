@@ -23,7 +23,7 @@ html, body, div, span, applet, object, iframe,
   } */
 
 /* HTML5 display-role reset for older browsers */
-article,
+/* article,
 aside,
 details,
 figcaption,
@@ -36,22 +36,22 @@ menu,
 nav,
 section {
   display: block;
-}
+} */
+
+/* menu,
+ol,
+ul,
+li {
+  list-style: none;
+} */
 
 /* HTML5 hidden-attribute fix for newer browsers */
-*[hidden] {
+/* *[hidden] {
   display: none;
 }
 
 body {
   line-height: 1;
-}
-
-menu,
-ol,
-ul,
-li {
-  list-style: none;
 }
 
 blockquote,
@@ -82,7 +82,7 @@ button {
   padding: 0;
   font-size: 100%;
   vertical-align: baseline;
-}
+} */
 
 @font-face {
   font-family: "SCDream1";
@@ -139,107 +139,4 @@ button {
 
 .slick-dots li button:before {
   color: orange;
-}
-
-.detailCurriculum .w-md-editor-toolbar {
-  visibility: hidden;
-  height: 100%;
-}
-.detailCurriculum .wmde-markdown-var {
-  width: 100%;
-  height: 100% !important;
-}
-/* .detailCurriculum .w-md-editor-content {
-  height: 80% !important;
-} */
-
-@layer components {
-  .quillBody {
-    p {
-      display: block;
-      margin-block-start: 1em;
-      margin-block-end: 1em;
-      margin-inline-start: 0px;
-      margin-inline-end: 0px;
-    }
-
-    h1 {
-      display: block;
-      font-size: 2em;
-      margin-block-start: 0.67em;
-      margin-block-end: 0.67em;
-      margin-inline-start: 0px;
-      margin-inline-end: 0px;
-      font-weight: bold;
-    }
-
-    h2 {
-      display: block;
-      font-size: 1.5em;
-      margin-block-start: 0.83em;
-      margin-block-end: 0.83em;
-      margin-inline-start: 0px;
-      margin-inline-end: 0px;
-      font-weight: bold;
-    }
-
-    h3 {
-      display: block;
-      font-size: 1.17em;
-      margin-block-start: 1em;
-      margin-block-end: 1em;
-      margin-inline-start: 0px;
-      margin-inline-end: 0px;
-      font-weight: bold;
-    }
-
-    strong {
-      font-weight: bold;
-    }
-
-    em {
-      font-style: italic;
-    }
-
-    u {
-      text-decoration: underline;
-    }
-
-    a:-webkit-any-link {
-      color: -webkit-link;
-      cursor: pointer;
-      text-decoration: underline;
-    }
-
-    li {
-      display: list-item;
-      text-align: -webkit-match-parent;
-    }
-
-    ol {
-      display: block;
-      margin-block-start: 1em;
-      margin-block-end: 1em;
-      margin-inline-start: 0px;
-      margin-inline-end: 0px;
-      padding-inline-start: 40px;
-
-      > li {
-        list-style-type: decimal;
-      }
-    }
-
-    ul {
-      display: block;
-      margin-block-start: 1em;
-      margin-block-end: 1em;
-      margin-inline-start: 0px;
-      margin-inline-end: 0px;
-      padding-inline-start: 40px;
-
-      > li {
-        list-style-type: disc;
-      }
-    }
-  }
 }

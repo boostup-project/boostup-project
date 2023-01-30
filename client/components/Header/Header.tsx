@@ -78,7 +78,7 @@ const Header = () => {
 
   return (
     <header className="bg-bgColor font-SCDream5 w-full fixed top-0 z-[1] h-fit flex justify-center items-center shadow">
-      <div className="pt-5 pb-2 desktop:w-3/4 desktop:min-w-[1000px] desktop:h-[87px] desktop:mt-0">
+      <div className="pt-5 w-full pb-2 desktop:w-3/4 desktop:min-w-[1000px] desktop:h-[87px] desktop:mt-0">
         <nav className="w-full h-full flex tablet:justify-center tablet:items-center desktop:justify-between">
           <div className="w-1/2 flex justify-start items-center ml-4 tablet:h-[40px] desktop:hidden">
             <div className="w-8 tablet:w-[34.5px]" onClick={logOutEvent}>
@@ -86,7 +86,7 @@ const Header = () => {
             </div>
           </div>
           <div className="tablet:w-1/6 h-fit flex justify-center items-center desktop:justify-start desktop:items-end">
-            <div className="flex justify-center items-center w-28 tablet:w-[142px] h-[69px] h-min-[69px]">
+            <div className="flex justify-center items-center w-[142px] w-min-[142px] h-[69px] h-min-[69px]">
               <Link href="/">
                 <Image src={Logo} alt="logo" />
               </Link>
@@ -100,7 +100,7 @@ const Header = () => {
               <IconMagnify fill={textColor} />
             </div>
           </div>
-          <div className="hidden desktop:flex desktop:items-end desktop:w-min-[500px] desktop:w-[648px] desktop:h-full desktop:relative desktop:visible">
+          <div className="hidden desktop:flex desktop:items-end desktop:w-[630px] desktop:h-full desktop:relative desktop:visible">
             <div
               className={`w-full h-[50px] flex justify-center items-center border border-borderColor outline-pointColor font-SCDream2 text-sm text-textColor bg-white 
             ${seek ? `rounded-tr-xl rounded-tl-xl` : `rounded-xl`}`}
@@ -113,13 +113,13 @@ const Header = () => {
           <div className="w-1/5 h-full hidden desktop:flex desktop:flex-row-reverse desktop:items-end">
             <div className="w-full pt-2 desktop:flex desktop:h-[50px] desktop:justify-end text-sm">
               <div
-                className="min-w-fit mr-8 py-1 cursor-pointer hover:underline"
+                className="min-w-fit w-1/3 py-1 cursor-pointer text-center hover:underline"
                 onClick={wordOneEvent}
               >
                 {wordOne}
               </div>
               <div
-                className="min-w-fit mr-8 py-1 cursor-pointer hover:underline"
+                className="min-w-fit w-1/3 py-1 cursor-pointer text-center hover:underline"
                 onClick={wordTwoEvent}
               >
                 {wordTwo}
@@ -127,7 +127,7 @@ const Header = () => {
               {writeBtn.length > 1 && (
                 <div
                   onClick={toWrite}
-                  className="min-w-fit w-1/4 h-fit p-1 rounded-md bg-pointColor text-white text-center cursor-pointer hover:underline"
+                  className="min-w-fit h-fit p-1 rounded-md bg-pointColor text-white text-center cursor-pointer hover:underline"
                 >
                   {writeBtn}
                 </div>

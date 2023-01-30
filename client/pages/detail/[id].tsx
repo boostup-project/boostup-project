@@ -7,13 +7,14 @@ import DetailBasicInfo from "components/detailComp/DetailBasicInfo";
 import MobileDetailBasicInfo from "components/detailComp/MobileDetailBasicInfo";
 import DetailBasicInfoEditModal from "components/detailComp/DetailBasicInfoEditModal";
 import { useEffect, useState } from "react";
-import DetailExtra from "components/DetailExtra";
-import DetailCurriculum from "components/DetailCurriculum";
 import useGetExtra from "hooks/detail/useGetExtra";
 import useGetCurriculum from "hooks/detail/useGetCurriculum";
 import useGetBasicInfo from "hooks/detail/useGetBasicInfo";
 import useWindowSize from "hooks/useWindowSize";
+import DetailCurriculum from "components/detailComp/DetailCurriculum";
+import DetailExtra from "components/detailComp/DetailExtra";
 import DetailButtons from "components/Detail/DetailButtons";
+
 const Detail = () => {
   // lessonId 받아오기
   const router = useRouter();
@@ -56,7 +57,7 @@ const Detail = () => {
       basicInfoRefetch();
     }
 
-    if (tab === 1) {
+    if (tab === 1 && lessonId) {
       // 상세정보 refetch
       refetchGetExtra();
     } else if (tab === 2 && lessonId) {
@@ -118,19 +119,6 @@ const Detail = () => {
             {/* 각 탭별 컴포넌트를 생성하여 넣어주세요! */}
           </DetailContentContainer>
           <div className="w-full h-full flex flex-col justify-start items-center pl-3">
-            {/* <DetailBtn bold={true} remove={false} onClick={() => {}}>
-              신청하기
-            </DetailBtn>
-            <DetailBtn bold={false} remove={false} onClick={() => {}}>
-              실시간채팅
-            </DetailBtn>
-            <DetailBtn bold={false} remove={false} onClick={() => {}}>
-              선생님 찜하기
-            </DetailBtn>
-
-            <DetailBtn bold={false} remove={true} onClick={() => {}}>
-              삭제하기
-            </DetailBtn> */}
             <DetailButtons></DetailButtons>
           </div>
         </div>
