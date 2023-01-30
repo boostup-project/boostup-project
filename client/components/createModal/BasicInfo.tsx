@@ -21,15 +21,10 @@ interface Props {
 }
 
 const BasicInfo = ({ basicInfo, setBasicInfo, toWrite, setStep }: Props) => {
-  console.log(basicInfo);
-  const [previewImg, setPreviewImg] = useState<string>("");
-  const [profileImg, setProfileImg] = useState<any>();
-  const [title, setTitle] = useState<string>("");
-  const [language, setLanguage] = useState<string[]>([]);
-  const [company, setCompany] = useState<string>("");
-  const [career, setCareer] = useState<string>("");
-  const [area, setArea] = useState<string[]>([]);
-  const [cost, setCost] = useState<string>("");
+  const [previewImg, setPreviewImg] = useState<string>(
+    basicInfo ? (basicInfo.profileImage as string) : "",
+  );
+
   const {
     control,
     register,
@@ -73,18 +68,6 @@ const BasicInfo = ({ basicInfo, setBasicInfo, toWrite, setStep }: Props) => {
   };
 
   // 페이지 랜더링이 데이터 Fetch 보다 먼저 진행됨에 따른 딜레이 해결
-  useEffect(() => {
-    if (basicInfo) {
-      setPreviewImg(basicInfo.profileImage as string);
-      setProfileImg(basicInfo.profileImage as string);
-      setTitle(basicInfo.title as string);
-      setLanguage(basicInfo.languages as string[]);
-      setCompany(basicInfo.company as string);
-      setCareer(basicInfo.career as string);
-      setArea(basicInfo.address as string[]);
-      setCost(basicInfo.cost as string);
-    }
-  }, [basicInfo]);
 
   return (
     <>
@@ -147,7 +130,7 @@ const BasicInfo = ({ basicInfo, setBasicInfo, toWrite, setStep }: Props) => {
           type="text"
           placeholder="타이틀을 입력하세요"
           className="w-11/12 desktop:w-4/6 h-fit p-2 border border-borderColor outline-pointColor rounded-xl font-SCDream4 text-xs text-textColor tablet:text-sm "
-          defaultValue={"hello"}
+          defaultValue={basicInfo.title as string}
           {...register("title", {
             required: "필수 정보입니다.",
           })}
@@ -207,7 +190,7 @@ const BasicInfo = ({ basicInfo, setBasicInfo, toWrite, setStep }: Props) => {
           placeholder="현재 회사 또는 학교를 입력하세요"
           className="w-11/12 h-fit p-2 border border-borderColor outline-pointColor rounded-xl font-SCDream4 text-[11px] text-textColor tablet:text-sm desktop:w-4/6"
           {...register("company", { required: "필수 정보입니다." })}
-          defaultValue={company}
+          defaultValue={basicInfo.company as string}
         />
         <p className="w-11/12 text-xs text-negativeMessage mt-1 tablet:text-sm desktop:w-4/6">
           {errors?.company?.message}
@@ -222,7 +205,7 @@ const BasicInfo = ({ basicInfo, setBasicInfo, toWrite, setStep }: Props) => {
           {...register("career", {
             required: "필수 정보입니다.",
           })}
-          // defaultValue={basicInfo.career as any}
+          defaultValue={basicInfo.career as string}
         />
         <p className="w-11/12 text-xs text-negativeMessage mt-1 tablet:text-sm desktop:w-4/6">
           {errors?.career?.message}
@@ -294,7 +277,7 @@ const BasicInfo = ({ basicInfo, setBasicInfo, toWrite, setStep }: Props) => {
           placeholder="회 당 수업료를 입력하세요"
           className="w-11/12 h-fit p-2 border border-borderColor outline-pointColor rounded-xl font-SCDream4 text-[11px] text-textColor tablet:text-sm desktop:w-4/6"
           {...register("cost", { required: "필수 정보입니다." })}
-          // defaultValue={basicInfo.cost as any}
+          defaultValue={basicInfo.cost as string}
         />
         <p className="w-11/12 text-xs text-negativeMessage mt-1 tablet:text-sm desktop:w-4/6">
           {errors?.cost?.message}
