@@ -12,6 +12,10 @@ import { toast, ToastContainer } from "react-toastify";
 import WriteModal from "components/createModal/WriteModal";
 import Link from "next/link";
 import "react-toastify/dist/ReactToastify.css";
+import { logUser } from "atoms/auth/authAtom";
+import Swal from "sweetalert2";
+import { POSITION } from "react-toastify/dist/utils";
+import { useRouter } from "next/router";
 
 const navContents = [
   {
@@ -40,12 +44,23 @@ const navContents = [
 ];
 
 const Navbar = () => {
+  const router = useRouter();
+  const isLog = useRecoilValue(logUser);
   const [isPowerWrite, setIsPowerWrite] = useRecoilState(powerWriteModal);
   const [modal, setModal] = useRecoilState(filterModal);
   const isWritten = useRecoilValue(isWrite);
   const mounted = useRef(false);
   const toWrite = (e: React.MouseEvent<HTMLDivElement>) => {
-    setIsPowerWrite(prev => !prev);
+    if (isLog) {
+      setIsPowerWrite(prev => !prev);
+    }
+    if (!isLog) {
+      toast.info("과외 작성은 로그인 후 이용해주세요", {
+        autoClose: 3000,
+        position: toast.POSITION.TOP_RIGHT,
+      });
+      router.push("/login");
+    }
   };
 
   useEffect(() => {
