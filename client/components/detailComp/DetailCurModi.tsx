@@ -5,9 +5,9 @@ import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { Dispatch, SetStateAction } from "react";
-import SmallBtn from "./reuse/btn/SmallBtn";
-import ModalBackDrop from "./reuse/container/ModalBackDrop";
-import CreateModalContainer from "./reuse/CreateModalContainer";
+import SmallBtn from "../reuse/btn/SmallBtn";
+import ModalBackDrop from "../reuse/container/ModalBackDrop";
+import CreateModalContainer from "../reuse/CreateModalContainer";
 const MDEditor = dynamic(() => import("@uiw/react-md-editor"), {
   ssr: false,
 });
