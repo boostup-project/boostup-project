@@ -25,10 +25,10 @@ public class GetLesson {
     @Builder
     @QueryProjection
     public GetLesson(Lesson lesson,
-                     Member member) {
+                     String name) {
         this.profileImage = lesson.getProfileImage().getFilePath();
         this.languages = lesson.getLanguageListAsString();
-        this.name = member.getName();
+        this.name = name;
         this.title = lesson.getTitle();
         this.company = lesson.getCompany();
         this.career = lesson.getCareer();

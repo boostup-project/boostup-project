@@ -205,12 +205,19 @@ public class LessonRepositoryImpl implements CustomLessonRepository {
         return new PageImpl<>(result, pageable, total);
     }
 
+    /**
+     * 과외 요약 정보 조회 (상세페이지)
+     * @param lessonId 과외 식별자
+     * @return result
+     * @author Qruatz614
+     */
     public GetLesson getDetailLesson(Long lessonId) {
         GetLesson result = queryFactory
                 .select(new QGetLesson(
                         lesson,
-                        member
+                        member.name
                 )).from(lesson, member)
+                .where(lesson.id.eq(lessonId))
                 .fetchOne();
         return result;
     }
