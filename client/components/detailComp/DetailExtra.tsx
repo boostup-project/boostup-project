@@ -1,4 +1,5 @@
 import { AxiosResponse } from "axios";
+import Image from "next/image";
 import { useState } from "react";
 import { useEffect } from "react";
 import DetailExtraModi from "./DetailExtraModi";
@@ -43,7 +44,6 @@ const DetailExtra = ({ extraData, lessonId }: Props) => {
   const [textData, setTextData] = useState<DetailTitles>();
   const [images, setImages] = useState<string[]>([]);
   const [isEdit, setIsEdit] = useState(false);
-  // console.log("extraData", extraData!.data);
   useEffect(() => {
     if (extraData) {
       const prompt = {
@@ -54,14 +54,7 @@ const DetailExtra = ({ extraData, lessonId }: Props) => {
         detailLocation: extraData.data.detailLocation,
       };
       setTextData(prompt);
-      const careerImages = extraData.data.careerImage;
-      if (careerImages) {
-        const extractedImage = careerImages.map((image: CareerImage) => {
-          image.careerImageUrl;
-        });
-        setImages(extractedImage);
-      }
-      setImages(extraData.data.careerImage);
+      setImages(extraData.data.careerImages);
     }
   }, [extraData]);
   const modalOpen = () => {
@@ -95,7 +88,16 @@ const DetailExtra = ({ extraData, lessonId }: Props) => {
               <div className="font-SCDream5">{detailTitles[title]}</div>
               <div className="font-SCDream3">
                 {title === "careerImage" ? (
-                  <></>
+                  <div className="border border-borderColor w-96 h-fit">
+                    {images.map((image: any) => (
+                      <img
+                        className="w-1/3 p-1 rounded-xl"
+                        key={image.careerImageId}
+                        src={image.filePath}
+                        alt="detailImage"
+                      />
+                    ))}
+                  </div>
                 ) : (
                   <div>• {textData[title]}</div>
                 )}

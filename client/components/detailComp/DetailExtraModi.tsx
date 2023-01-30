@@ -1,14 +1,14 @@
-import ModalBackDrop from "./reuse/container/ModalBackDrop";
 import { useForm } from "react-hook-form";
 import { modalImgTxt } from "assets/color/color";
 import { IconImg } from "assets/icon";
 import { useState, useRef } from "react";
-import ExtraInfo from "./createModal/ExtraInfo";
-import CreateModalContainer from "./reuse/CreateModalContainer";
+import ExtraInfo from "../createModal/ExtraInfo";
+import CreateModalContainer from "../reuse/CreateModalContainer";
 import { DetailTitles } from "./DetailExtra";
 import usePostExtraModi from "hooks/detail/usePostExtraModi";
 import { useEffect } from "react";
 import { toast } from "react-toastify";
+import ModalBackDrop from "components/reuse/container/ModalBackDrop";
 
 interface Props {
   modalOpen: () => void;
@@ -20,6 +20,9 @@ interface Props {
 const DetailExtraModi = ({ modalOpen, textData, images, lessonId }: Props) => {
   const [previewImages, setPreviewImages] = useState<string[]>([]);
   const [detailImages, setDetailImages] = useState<string[]>([]);
+  console.log("previewImages", previewImages);
+  console.log("detailImages", detailImages);
+
   const imageInput: any = useRef();
   const { mutate, isError, isSuccess } = usePostExtraModi();
   const {
@@ -37,6 +40,14 @@ const DetailExtraModi = ({ modalOpen, textData, images, lessonId }: Props) => {
     detailCost,
     detailLocation,
   } = textData;
+
+  /** 정보에 이미지 있을 시 집어넣기 **/
+  useEffect(() => {
+    if (images) {
+      setPreviewImages(images);
+      setDetailImages(images);
+    }
+  }, []);
 
   useEffect(() => {
     if (isError) {
@@ -95,7 +106,7 @@ const DetailExtraModi = ({ modalOpen, textData, images, lessonId }: Props) => {
       object: formData,
       id: lessonId,
     };
-    mutate(assemble);
+    // mutate(assemble);
   };
 
   return (
@@ -193,21 +204,40 @@ const DetailExtraModi = ({ modalOpen, textData, images, lessonId }: Props) => {
             <div className="w-full py-3 border flex border-borderColor outline-pointColor rounded-xl font-SCDream4 text-xs text-textColor placeholder:text-center mt-2 tablet:text-smhover:bg-gray-100">
               <div className="w-full flex h-fit items-center justify-center">
                 {previewImages.length >= 1 ? (
-                  previewImages.map((el, idx) => (
-                    <div key={idx} className="relative w-1/4 pr-1">
-                      <img
-                        className="aspect-square rounded-xl relative"
-                        src={el}
-                      />
-                      <span
-                        id={`${idx}`}
-                        className="absolute top-0 right-2 text-negativeMessage text-lg cursor-pointer"
-                        onClick={e => deleteImg(e)}
+                  previewImages.map((el: any, idx) =>
+                    el.careerImageId ? (
+                      <div
+                        key={el.careerImageId}
+                        className="relative w-1/4 pr-1"
                       >
-                        X
-                      </span>
-                    </div>
-                  ))
+                        <img
+                          className="aspect-square rounded-xl relative"
+                          src={el.filePath}
+                        />
+                        <span
+                          id={el.careerImageId}
+                          className="absolute top-0 right-2 text-negativeMessage text-lg cursor-pointer"
+                          onClick={e => deleteImg(e)}
+                        >
+                          X
+                        </span>
+                      </div>
+                    ) : (
+                      <div key={idx} className="relative w-1/4 pr-1">
+                        <img
+                          className="aspect-square rounded-xl relative"
+                          src={el}
+                        />
+                        <span
+                          id={`${idx}`}
+                          className="absolute top-0 right-2 text-negativeMessage text-lg cursor-pointer"
+                          onClick={e => deleteImg(e)}
+                        >
+                          X
+                        </span>
+                      </div>
+                    ),
+                  )
                 ) : (
                   <div className="w-full flex flex-col justify-center items-center">
                     <IconImg width="69px" heigth="62px" fill={modalImgTxt} />
