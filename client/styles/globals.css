@@ -46,7 +46,7 @@ li {
 } */
 
 /* HTML5 hidden-attribute fix for newer browsers */
-*[hidden] {
+/* *[hidden] {
   display: none;
 }
 
@@ -82,7 +82,7 @@ button {
   padding: 0;
   font-size: 100%;
   vertical-align: baseline;
-}
+} */
 
 @font-face {
   font-family: "SCDream1";
