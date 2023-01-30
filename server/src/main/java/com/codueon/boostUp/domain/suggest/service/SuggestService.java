@@ -298,10 +298,10 @@ public class SuggestService {
         Suggest findSuggest = suggestDbService.ifExistsReturnSuggest(suggestId);
         Lesson findLesson = lessonDbService.ifExistsReturnLesson(findSuggest.getLessonId());
 
-//        if (!findSuggest.getSuggestStatus().equals(DURING_LESSON) ||
-//            !findLesson.getMemberId().equals(memberId)) {
-//            throw new BusinessLogicException(INVALID_ACCESS);
-//        }
+        if (!findSuggest.getSuggestStatus().equals(DURING_LESSON) ||
+            !findLesson.getMemberId().equals(memberId)) {
+            throw new BusinessLogicException(INVALID_ACCESS);
+        }
 
         findSuggest.setStatus(END_OF_LESSON);
         findSuggest.setEndTime();
