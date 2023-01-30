@@ -3,36 +3,35 @@ import { useEffect } from "react";
 import { useState } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
+import DetailCurModi from "./DetailCurModi";
 
 interface Props {
   curData: AxiosResponse<any, any> | undefined;
 }
 
-const dummy = `## Title2 
-asdasd asdasdas
-asdasd asdas
-1. asdasd
-- Foo
-- Bar
-  * Baz
-    + Nope?
-  * Hai?
-`;
-
 const DetailCurriculum = ({ curData }: Props) => {
+  const [displayText, setDisplayText] = useState<string>("");
   const [textData, setTextData] = useState<string>("");
   const [isEdit, setIsEdit] = useState(false);
   useEffect(() => {
     if (curData) {
       setTextData(curData.data.curriculum);
+      setDisplayText(curData.data.curriculum);
     }
   }, [curData]);
   const modalOpen = () => {
     setIsEdit(prev => !prev);
   };
+
   return (
     <>
-      {isEdit && <div>hi</div>}
+      {isEdit && (
+        <DetailCurModi
+          textData={textData}
+          setTextData={setTextData}
+          modalOpen={modalOpen}
+        />
+      )}
       <div className="w-full h-full p-6 text-base">
         <div className="flex justify-between mb-3">
           <div className="font-SCDream5">진행방식</div>
@@ -45,7 +44,9 @@ const DetailCurriculum = ({ curData }: Props) => {
         </div>
         <div className="bg-markBgColor rounded-xl p-4">
           <div className="prose">
-            <ReactMarkdown remarkPlugins={[remarkGfm]}>{dummy}</ReactMarkdown>
+            <ReactMarkdown remarkPlugins={[remarkGfm]}>
+              {displayText}
+            </ReactMarkdown>
           </div>
         </div>
       </div>
