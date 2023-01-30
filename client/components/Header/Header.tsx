@@ -146,29 +146,3 @@ const Header = () => {
 };
 
 export default Header;
-
-// {
-//   log ? (
-//     <>
-//       <div className="min-w-fit mr-8 py-1">마이페이지</div>
-//       <div className="min-w-fit mr-8 py-1" onClick={logOutEvent}>
-//         로그아웃
-//       </div>
-//       <div
-//         onClick={toWrite}
-//         className="min-w-fit w-1/4 h-fit p-1 rounded-md bg-pointColor text-white text-center"
-//       >
-//         과외등록
-//       </div>
-//     </>
-//   ) : (
-//     <>
-//       <div className="mr-8">
-//         <Link href="/login">로그인</Link>
-//       </div>
-//       <div>
-//         <Link href="/signup">회원가입</Link>
-//       </div>
-//     </>
-//   );
-// }
