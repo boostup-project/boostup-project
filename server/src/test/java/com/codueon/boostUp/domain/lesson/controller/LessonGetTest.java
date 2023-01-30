@@ -427,7 +427,7 @@ public class LessonGetTest extends LessonControllerTest {
     @DisplayName("과외 상세페이지 요약 정보 조회 테스트")
     void getLessonTest() throws Exception {
         GetLesson getLesson = GetLesson.builder()
-                .member(member)
+                .name(member.getName())
                 .lesson(lesson)
                 .build();
 
