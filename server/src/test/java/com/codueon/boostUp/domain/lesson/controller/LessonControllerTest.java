@@ -1,6 +1,6 @@
 package com.codueon.boostUp.domain.lesson.controller;
 
-import com.codueon.boostUp.domain.lesson.dto.GetMainPageLesson;
+import com.codueon.boostUp.domain.lesson.dto.Get.GetMainPageLesson;
 import com.codueon.boostUp.domain.lesson.entity.*;
 import com.codueon.boostUp.domain.lesson.service.LessonDbService;
 import com.codueon.boostUp.domain.lesson.service.LessonService;

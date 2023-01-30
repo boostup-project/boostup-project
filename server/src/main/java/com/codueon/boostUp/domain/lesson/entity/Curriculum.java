@@ -1,7 +1,6 @@
 package com.codueon.boostUp.domain.lesson.entity;
 
-import com.codueon.boostUp.domain.lesson.dto.PatchLessonCurriculum;
-import com.codueon.boostUp.domain.lesson.dto.PostLessonInfoEdit;
+import com.codueon.boostUp.domain.lesson.dto.Patch.PatchLessonCurriculum;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
