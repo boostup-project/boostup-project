@@ -1,8 +1,8 @@
 import { useQuery } from "react-query";
-import getLike from "apis/detail/getLike";
+import getBookmark from "apis/detail/getBookmark";
 
-const useGetLike = (lessonId: number) => {
-  return useQuery(["getLike"], () => getLike(lessonId), {
+const useGetBookmark = (lessonId: number) => {
+  return useQuery(["getAllBookmark"], () => getBookmark(lessonId), {
     enabled: false,
     onSuccess: res => {
       console.log(res.data.bookmark);
@@ -14,4 +14,4 @@ const useGetLike = (lessonId: number) => {
   });
 };
 
-export default useGetLike;
+export default useGetBookmark;
