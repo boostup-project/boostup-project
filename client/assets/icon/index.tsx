@@ -14,3 +14,4 @@ export { IconWon } from "./IconWon";
 export { IconPlace } from "./IconPlace";
 export { IconFullheart } from "./IconFullheart";
 export { IconEmptyheart } from "./IconEmptyheart";
+export { IconMail } from "./IconMail";

@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const getAllBookmark = async (lessonId: number) => {
+const getBookmarkModi = async (lessonId: number) => {
   return await axios.get(`/bookmark/lesson/${lessonId}/modification`, {
     baseURL: process.env.NEXT_PUBLIC_API_URL,
     headers: {
@@ -10,4 +10,4 @@ const getAllBookmark = async (lessonId: number) => {
     },
   });
 };
-export default getAllBookmark;
+export default getBookmarkModi;

@@ -2,13 +2,34 @@ import DetailBtn from "../reuse/btn/DetailBtn";
 import { IconEmptyheart, IconFullheart } from "assets/icon";
 import ApplyModal from "./ApplyModal";
 import Swal from "sweetalert2";
+import { useQuery } from "react-query";
 import { useState, useCallback } from "react";
 import useDeleteDetail from "hooks/detail/useDeleteDetail";
+import useGetBookmarkModi from "hooks/detail/useGetBookmarkModi";
+import useGetBookmark from "hooks/detail/useGetBookmark";
 import { useRouter } from "next/router";
+import getBookmark from "apis/detail/getBookmark";
 const DetailButtons = () => {
   const [isOpenModal, setOpenModal] = useState<boolean>(false);
   const router = useRouter();
-  const lessonId = Number(router.query.id);
+  const Id = Number(router.query.id);
+  const { refetch } = useGetBookmarkModi(Id);
+
+  const [mark, setMark] = useState<boolean>(true || false);
+  const { isLoading, isError, data } = useQuery(
+    ["getBookmark"],
+    () => getBookmark(2),
+    {
+      enabled: true,
+      onSuccess: data => {
+        // 성공시 호출
+        console.log(data.data.bookmark);
+        setMark(data.data.bookmark);
+      },
+      onError: error => {},
+      retry: 1,
+    },
+  );
 
   const { mutate } = useDeleteDetail();
   const onClickToggleModal = useCallback(() => {
@@ -19,8 +40,9 @@ const DetailButtons = () => {
     return;
   };
 
-  const bookmarking = () => {
-    return;
+  const saveBookmark = () => {
+    setMark(prev => !prev);
+    console.log(mark);
   };
   const deletePost = () => {
     Swal.fire({
@@ -32,7 +54,7 @@ const DetailButtons = () => {
       confirmButtonColor: "#3085d6",
     }).then(result => {
       if (result.isConfirmed) {
-        mutate(lessonId);
+        mutate(Id);
         router.push("/");
         return Swal.fire({
           text: "삭제가 완료되었습니다",
@@ -54,9 +76,9 @@ const DetailButtons = () => {
           실시간 채팅
         </DetailBtn>
         <div className="relative justify-center items-center">
-          <DetailBtn bold={false} remove={false} onClick={bookmarking}>
+          <DetailBtn bold={false} remove={false} onClick={saveBookmark}>
             <div className="flex w-full h-1/3 absolute justify-center items-center">
-              {false ? (
+              {mark ? (
                 <IconFullheart width="25" heigth="25" />
               ) : (
                 <IconEmptyheart width="25" heigth="25" />
