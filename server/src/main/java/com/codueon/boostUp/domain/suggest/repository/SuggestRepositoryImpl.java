@@ -23,6 +23,15 @@ public class SuggestRepositoryImpl implements CustomSuggestRepository {
         this.queryFactory = new JPAQueryFactory(em);
     }
 
+    /**
+     * 마이페이지 선생님 신청 내역 조회 QueryDSL
+     * @param lessonId 과외 식별자
+     * @param memberId 사용자 식별자
+     * @param tabId 탭 번호
+     * @param pageable 페이지 정보
+     * @return Page
+     * @author LeeGoh
+     */
     @Override
     public Page<GetTutorSuggest> getTutorSuggestsOnMyPage(Long lessonId, Long memberId, int tabId, Pageable pageable) {
         List<GetTutorSuggest> results = queryFactory
@@ -52,6 +61,12 @@ public class SuggestRepositoryImpl implements CustomSuggestRepository {
         return new PageImpl<>(results, pageable, total);
     }
 
+    /**
+     * tabId별 조회 Where문 메서드
+     * @param tabId 탭 번호
+     * @return suggestStatus
+     * @author LeeGoh
+     */
     private BooleanExpression changeStatusByTabId(int tabId) {
         switch (tabId) {
             case 1:
@@ -65,6 +80,13 @@ public class SuggestRepositoryImpl implements CustomSuggestRepository {
         }
     }
 
+    /**
+     * 마이페이지 학생 신청 내역 조회 QueryDSL
+     * @param memberId 사용자 식별자
+     * @param pageable 페이지 정보
+     * @return Page
+     * @author LeeGoh
+     */
     @Override
     public Page<GetStudentSuggest> getStudentSuggestsOnMyPage(Long memberId, Pageable pageable) {
         List<GetStudentSuggest> results = queryFactory
@@ -90,6 +112,13 @@ public class SuggestRepositoryImpl implements CustomSuggestRepository {
         return new PageImpl<>(results, pageable, total);
     }
 
+    /**
+     * 결제 상세 정보 조회 QueryDSL
+     * @param suggestId 신청 식별자
+     * @param memberId 사용자 식별자
+     * @return GetPaymentInfo
+     * @author LeeGoh
+     */
     public GetPaymentInfo getPaymentInfoOnMyPage(Long suggestId, Long memberId) {
         GetPaymentInfo result = queryFactory
                 .select(new QGetPaymentInfo(
@@ -106,6 +135,13 @@ public class SuggestRepositoryImpl implements CustomSuggestRepository {
         return result;
     }
 
+    /**
+     * 결제 영수증 조회 QueryDSL
+     * @param suggestId 신청 식별자
+     * @param memberId 사용자 식별자
+     * @return GetPaymentReceipt
+     * @author LeeGoh
+     */
     public GetPaymentReceipt getPaymentReceiptOnMyPage(Long suggestId, Long memberId) {
         GetPaymentReceipt result = queryFactory
                 .select(new QGetPaymentReceipt(

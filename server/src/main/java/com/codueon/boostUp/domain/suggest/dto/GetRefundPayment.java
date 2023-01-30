@@ -27,11 +27,11 @@ public class GetRefundPayment {
 
     @Builder
     public GetRefundPayment(Lesson lesson,
-                            String tutorName,
+                            String name,
                             Suggest suggest,
                             PaymentInfo paymentInfo) {
         this.title = lesson.getTitle();
-        this.name = tutorName;
+        this.name = name;
         this.languages = lesson.getLanguageListAsString();
         this.address = lesson.getAddressListAsString();
         this.company = lesson.getCompany();

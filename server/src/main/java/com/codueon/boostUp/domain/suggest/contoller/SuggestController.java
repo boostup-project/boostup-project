@@ -107,10 +107,8 @@ public class SuggestController {
                                                         HttpServletRequest request,
                                                         Authentication authentication) {
 
-        JwtAuthenticationToken token = (JwtAuthenticationToken) authentication;
-        Long memberId = getMemberIdIfExistToken(token);
         String requestUrl = request.getRequestURL().toString().replace(request.getRequestURI(), "");
-        Message<?> message = suggestService.getKaKapPayUrl(suggestId, memberId, requestUrl);
+        Message<?> message = suggestService.getKaKapPayUrl(suggestId, requestUrl);
         if (message.getData() == null) suggestService.getFailedPayMessage();
         return ResponseEntity.ok().body(message);
     }
@@ -126,7 +124,6 @@ public class SuggestController {
                                                        @PathVariable("payment-id") int paymentId,
                                                        HttpServletRequest request) {
 
-        Long memberId = 1L;
         String requestUrl = request.getRequestURL().toString().replace(request.getRequestURI(), "");
         Message<?> message = suggestService.getTossPayUrl(suggestId, requestUrl, paymentId);
         if (message.getData() == null) suggestService.getFailedPayMessage();

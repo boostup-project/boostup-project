@@ -30,14 +30,14 @@ public class GetStudentSuggest {
     @Builder
     @QueryProjection
     public GetStudentSuggest(Long suggestId,
-                             String tutorName,
+                             String name,
                              SuggestStatus status,
                              LocalDateTime startTime,
                              LocalDateTime endTime,
                              Lesson lesson) {
         this.suggestId = suggestId;
         this.lessonId = lesson.getId();
-        this.name = tutorName;
+        this.name = name;
         this.title = lesson.getTitle();
         this.profileImage = lesson.getProfileImage().getFilePath();
         this.company = lesson.getCompany();

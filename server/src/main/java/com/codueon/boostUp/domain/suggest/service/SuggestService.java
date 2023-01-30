@@ -47,6 +47,8 @@ public class SuggestService {
 //            throw new BusinessLogicException(ExceptionCode.TUTOR_CANNOT_RESERVATION);
 //        }
 
+        suggestDbService.ifEndOfSuggestExistsReturnException(lessonId, memberId);
+
         Suggest suggest = Suggest.builder()
                 .days(post.getDays())
                 .languages(post.getLanguages())
@@ -138,26 +140,25 @@ public class SuggestService {
     /**
      * Kakao 결제 URL 요청 메서드
      * @param suggestId 신청 식별자
-     * @param memberId 사용자 식별자
      * @param requestUrl 요청 URL
      * @return Message
      * @author LeeGoh
      */
     @Transactional
-    public Message getKaKapPayUrl(Long suggestId, Long memberId, String requestUrl) {
+    public Message getKaKapPayUrl(Long suggestId, String requestUrl) {
         Suggest findSuggest = suggestDbService.ifExistsReturnSuggest(suggestId);
 
         if (!findSuggest.getSuggestStatus().equals(PAY_IN_PROGRESS)) {
             throw new BusinessLogicException(INVALID_ACCESS);
         }
 
-        Member findMember = memberDbService.ifExistsReturnMember(memberId);
         Lesson findLesson = lessonDbService.ifExistsReturnLesson(findSuggest.getLessonId());
         PaymentInfo findPaymentInfo = suggestDbService.ifExistsReturnPaymentInfo(suggestId);
 
         KakaoPayHeader headers = feignService.setKakaoHeaders();
-        ReadyToKakaoPayInfo params =
-                feignService.setReadyParams(requestUrl, findSuggest, findMember, findLesson, findPaymentInfo);
+        ReadyToKakaoPayInfo params = feignService.setReadyParams(
+                requestUrl, suggestId, findSuggest.getTotalCost(), findSuggest.getMemberId(),
+                        findLesson.getTitle(), findLesson.getCost(), findPaymentInfo.getQuantity());
 
         KakaoPayReadyInfo payReadyInfo = feignService.getPayReadyInfo(headers, params);
 
@@ -200,7 +201,8 @@ public class SuggestService {
 
         TossPayHeader headers = feignService.setTossHeaders();
         ReadyToTossPayInfo body =
-                feignService.setReadyTossParams(requestUrl, findSuggest, findLesson, findPaymentInfo, method);
+                feignService.setReadyTossParams(requestUrl, suggestId, findLesson.getCost(),
+                        findLesson.getTitle(), findPaymentInfo.getQuantity(), method);
 
         TossPayReadyInfo tossPayReadyInfo = feignService.getTossPayReadyInfo(headers, body);
 
@@ -396,7 +398,7 @@ public class SuggestService {
 
         return GetRefundPayment.builder()
                 .suggest(findSuggest)
-                .tutorName(findTutor.getName())
+                .name(findTutor.getName())
                 .lesson(findLesson)
                 .paymentInfo(findPaymentInfo)
                 .build();
