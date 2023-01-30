@@ -2,10 +2,9 @@ import { useQuery } from "react-query";
 import getBookmarkModi from "apis/detail/getBookmarkModi";
 
 const useGetBookmarkModi = (lessonId: number) => {
-  return useQuery(["getBookmarkModi"], () => getBookmarkModi(lessonId), {
-    enabled: false,
+  return useQuery(["get/BookmarkModi"], () => getBookmarkModi(lessonId), {
     onSuccess: res => {
-      console.log(res.data.bookmark);
+      console.log(res);
     },
     onError: error => {
       console.log(error);
