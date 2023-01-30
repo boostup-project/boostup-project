@@ -25,6 +25,7 @@ public class RedisChat implements Serializable {
     @NotNull
     private String message;
     private MessageType messageType;
+    private String displayName;
 
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
@@ -35,11 +36,23 @@ public class RedisChat implements Serializable {
                      Long senderId,
                      String message,
                      MessageType messageType,
-                     LocalDateTime createdAt) {
+                     String displayName) {
         this.chatRoomId = chatRoomId;
         this.senderId = senderId;
         this.message = message;
         this.messageType = messageType;
-        this.createdAt = createdAt;
+        this.displayName = displayName;
+    }
+
+    public void setEnterMessage() {
+        this.message = "[알림] " + displayName + "님이 입장하셨습니다.";
+    }
+
+    public void setLeaveMessage() {
+        this.message = "[알림] " + displayName + "님이 나가셨습니다.";
+    }
+
+    public void setCurrentTime() {
+        this.createdAt = LocalDateTime.now();
     }
 }

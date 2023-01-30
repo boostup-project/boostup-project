@@ -2,6 +2,7 @@ package com.codueon.boostUp.domain.member.auth;
 
 import com.codueon.boostUp.domain.member.entity.Member;
 import com.codueon.boostUp.global.security.utils.JwtTokenUtils;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.io.Decoders;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -21,10 +22,11 @@ public class JwtTokenUtilsTest {
     private String base64EncodedSecretKey;
     private int accessTokenExpirationsMinutes = 30;
     private int refreshTokenExpirationMinutes = 1440;
+    protected ObjectMapper objectMapper;
 
     @BeforeEach
     public void init() {
-        jwtTokenUtils = new JwtTokenUtils(secretKey, accessTokenExpirationsMinutes, refreshTokenExpirationMinutes);
+        jwtTokenUtils = new JwtTokenUtils(secretKey, accessTokenExpirationsMinutes, refreshTokenExpirationMinutes, objectMapper);
         base64EncodedSecretKey = jwtTokenUtils.encodeBase64SecretKey(secretKey);
     }
 

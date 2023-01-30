@@ -4,8 +4,12 @@ import com.codueon.boostUp.domain.chat.dto.PostMessage;
 import com.codueon.boostUp.domain.chat.dto.RedisChat;
 import com.codueon.boostUp.domain.chat.repository.redis.ChatMessageRepository;
 import com.codueon.boostUp.domain.chat.repository.redis.LastSentScoreRepository;
+import com.codueon.boostUp.domain.chat.utils.MessageType;
+import com.codueon.boostUp.domain.member.entity.Member;
+import com.codueon.boostUp.domain.member.exception.AuthException;
 import com.codueon.boostUp.global.exception.BusinessLogicException;
 import com.codueon.boostUp.global.exception.ExceptionCode;
+import com.codueon.boostUp.global.security.token.JwtAuthenticationToken;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,6 +29,27 @@ public class ChatService {
     private final String SESSION_PREFIX = "SessionId";
 
     /**
+     * 채팅방 입장/퇴장 메시지 생성 메서드
+     * @param messageType 메시지 타입
+     * @param chatRoomId 채팅방 식별자
+     * @param findMember 사용자 정보
+     * @return RedisChat
+     * @author mozzi327
+     */
+    public RedisChat makeEnterOrLeaveChatMessage(MessageType messageType, Long chatRoomId, Member member) {
+        RedisChat chatMessage = RedisChat.builder()
+                .messageType(messageType)
+                .chatRoomId(chatRoomId)
+                .senderId(member.getId())
+                .displayName(member.getName())
+                .build();
+        if (messageType.equals(MessageType.ENTER)) chatMessage.setEnterMessage();
+        else if (messageType.equals(MessageType.LEAVE)) chatMessage.setLeaveMessage();
+        chatMessage.setCurrentTime();
+        return chatMessage;
+    }
+
+    /**
      * 메시지 객체(RedisChat) 생성 및 Redis 저장 메서드
      * @param message 메시지 정보
      * @param user Authentication User 정보
@@ -32,13 +57,15 @@ public class ChatService {
      * @author mozzi327
      */
     @Transactional
-    public RedisChat setRedisChatInfo(PostMessage message, Long memberId) {
+    public RedisChat setRedisChatInfo(PostMessage message, JwtAuthenticationToken token) {
+        if (token == null) throw new AuthException(ExceptionCode.INVALID_AUTH_TOKEN);
         RedisChat createChat = RedisChat.builder()
-                .senderId(memberId)
+                .messageType(MessageType.TALK)
+                .senderId(token.getId())
                 .chatRoomId(message.getChatRoomId())
-                .createdAt(LocalDateTime.now())
                 .message(message.getMessageContent())
                 .build();
+        createChat.setCurrentTime();
         chatMessageRepository.saveChatMessage(createChat);
         return createChat;
     }
@@ -97,5 +124,10 @@ public class ChatService {
 
     private String makeLastSentKey(Long chatRoomId, String sessionId) {
         return CHATROOM_PREFIX + chatRoomId + SESSION_PREFIX + sessionId;
+    }
+
+    public void deleteLastSentInfo(String sessionId) {
+        lastSentScoreRepository.delete(makeLastSentKey(1L, sessionId));
+        lastSentScoreRepository.delete(makeLastSentKey(2L, sessionId));
     }
 }

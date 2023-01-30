@@ -26,7 +26,6 @@ public class CustomAuthorityUtils {
         return USER_ROLES;
     }
 
-
     /**
      * DB에 저장된 Role을 기반으로 권한 정보 생성
      *
