@@ -21,9 +21,12 @@ $(document).ready(function() {
 });
 
 function connect() {
-    var socket = new SockJS('/ws-connect');
+    const socket = new SockJS('/ws-connect');
     stompClient = Stomp.over(socket);
-    stompClient.connect({}, function (frame) {
+    const headers = {
+        "Authorization": $('#authorization'.val())
+    };
+    stompClient.connect(headers, function (frame) {
         console.log('Connected: ' + frame);
         updateNotificationDisplay();
         stompClient.subscribe('user/topic/rooms', function (message) {
