@@ -100,6 +100,12 @@ public class ReviewController {
         return ResponseEntity.noContent().build();
     }
 
+    /**
+     * 로그인 확인 메서드
+     * @param token 토큰 정보
+     * @return Long
+     * @author mozzi327
+     */
     private Long getMemberIdIfExistToken(JwtAuthenticationToken token) {
         if (token == null) return null;
         else return token.getId();

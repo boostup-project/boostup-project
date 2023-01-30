@@ -50,7 +50,8 @@ public class LessonRepositoryImpl implements CustomLessonRepository {
                         member.name,
                         Expressions.constant(false)
                 ))
-                .from(lesson, member)
+                .from(lesson)
+                .leftJoin(member).on(lesson.memberId.eq(member.id))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .orderBy(lesson.id.desc())
@@ -77,7 +78,8 @@ public class LessonRepositoryImpl implements CustomLessonRepository {
                         member.name,
                         isBookmarked(lesson.id, memberId)
                 ))
-                .from(lesson, member)
+                .from(lesson)
+                .leftJoin(member).on(lesson.memberId.eq(member.id))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .orderBy(lesson.id.desc())
@@ -103,7 +105,8 @@ public class LessonRepositoryImpl implements CustomLessonRepository {
                         lessonLanguage.lesson,
                         member.name,
                         Expressions.constant(false)
-                )).from(lessonLanguage, member)
+                )).from(lessonLanguage)
+                .leftJoin(member).on(lessonLanguage.lesson.memberId.eq(member.id))
                 .leftJoin(lessonLanguage).on(lesson.id.eq(lessonLanguage.lesson.id))
                 .where(lessonLanguage.languageInfo.eq(LanguageInfo.findById(languageId)))
                 .offset(pageable.getOffset())
@@ -133,7 +136,8 @@ public class LessonRepositoryImpl implements CustomLessonRepository {
                         lessonLanguage.lesson,
                         member.name,
                         isBookmarked(lessonLanguage.lesson.id, memberId)
-                )).from(lessonLanguage, member)
+                )).from(lessonLanguage)
+                .leftJoin(member).on(lessonLanguage.lesson.memberId.eq(member.id))
                 .leftJoin(lessonLanguage).on(lesson.id.eq(lessonLanguage.lesson.id))
                 .where(lessonLanguage.languageInfo.eq(LanguageInfo.findById(languageId)))
                 .offset(pageable.getOffset())
@@ -161,7 +165,8 @@ public class LessonRepositoryImpl implements CustomLessonRepository {
                         lesson,
                         member.name,
                         Expressions.constant(false)
-                )).from(lesson,member)
+                )).from(lesson)
+                .leftJoin(member).on(lesson.memberId.eq(member.id))
                 .leftJoin(lessonAddress).on(lesson.id.eq(lessonAddress.lesson.id))
                 .leftJoin(lessonLanguage).on(lesson.id.eq(lessonLanguage.lesson.id))
                 .where(makeDetailSearchConditions(postSearchLesson))
@@ -192,7 +197,8 @@ public class LessonRepositoryImpl implements CustomLessonRepository {
                         lesson,
                         member.name,
                         isBookmarked(lesson.id, memberId)
-                )).from(lesson, member)
+                )).from(lesson)
+                .leftJoin(member).on(lesson.memberId.eq(member.id))
                 .leftJoin(lessonAddress).on(lesson.id.eq(lessonAddress.lesson.id))
                 .leftJoin(lessonLanguage).on(lesson.id.eq(lessonLanguage.lesson.id))
                 .where(makeDetailSearchConditions(postSearchLesson))
@@ -216,7 +222,8 @@ public class LessonRepositoryImpl implements CustomLessonRepository {
                 .select(new QGetLesson(
                         lesson,
                         member.name
-                )).from(lesson, member)
+                )).from(lesson)
+                .leftJoin(member).on(lesson.memberId.eq(member.id))
                 .where(lesson.id.eq(lessonId))
                 .fetchOne();
         return result;
