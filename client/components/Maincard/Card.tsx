@@ -86,7 +86,7 @@ const Card = () => {
                 </button>
               </div>
             </div>
-            <Link href={`/lesson/${card.lessonId}`}>
+            <Link href={`/detail/${card.lessonId}`}>
               <div className="flex flex-col w-full h-2/3">
                 <div className="flex flex-row whitespace-wrap">
                   <div className="flex">
