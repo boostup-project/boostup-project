@@ -21,11 +21,9 @@ $(document).ready(function() {
 });
 
 function connect() {
-    const socket = new SockJS('/ws-connect');
+    let socket = new SockJS('/ws-connect');
     stompClient = Stomp.over(socket);
-    const headers = {
-        "Authorization": $('#authorization'.val())
-    };
+    let headers = {Authorization : localStorage.getItem('Authorization')};
     stompClient.connect(headers, function (frame) {
         console.log('Connected: ' + frame);
         updateNotificationDisplay();

@@ -20,6 +20,7 @@ public enum ExceptionCode {
     EMAIL_NOT_FOUND(415, "이메일 정보를 다시 확인해주세요."),
 
 
+
     // 인증 인가
     UNAUTHORIZED_FOR_UPDATE(403, "수정 권한이 없습니다."),
     UNAUTHORIZED_FOR_DELETE(403, "삭제 권한이 없습니다."),
@@ -44,6 +45,10 @@ public enum ExceptionCode {
     TUTOR_CANNOT_RESERVATION(504, "과외 선생님은 자신의 과외를 신청할 수 없습니다."),
     TUTOR_CANNOT_BOOKMARK(504, "과외 선생님은 자신의 과외 북마크를 등록할 수 없습니다."),
     TUTOR_CANNOT_REVIEW(504, "과외 선생님은 자기 과외 리뷰를 남길 수 없습니다."),
+    // 웹소켓
+    INVALID_DESTINATION(504, "매칭되는 채팅방이 존재하지 않습니다."),
+    INVALID_CHAT_ROOM_ID(504, "유효하지 않은 채팅방 식별자입니다."),
+    INVALID_CHAT_ROOM_MEMBER(504, "채팅방 인원 수는 최대 두 명입니다."),
 
     // 인증 코드
     INVALID_EMAIL_CODE(403, "유효하지 않은 인증 코드입니다."),

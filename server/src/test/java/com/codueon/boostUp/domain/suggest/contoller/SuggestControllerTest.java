@@ -12,6 +12,7 @@ import com.codueon.boostUp.global.exception.GlobalAdvice;
 import com.codueon.boostUp.global.security.token.JwtAuthenticationToken;
 import com.codueon.boostUp.global.security.utils.JwtTokenUtils;
 import com.codueon.boostUp.global.utils.RedisUtils;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -71,10 +72,11 @@ class SuggestControllerTest {
     protected String accessToken;
     protected String refreshToken;
     protected Authentication authentication;
+    protected ObjectMapper objectMapper;
 
     @BeforeEach
     void setUp() throws Exception {
-        jwtTokenUtils = new JwtTokenUtils(SECRET_KEY, ACCESS_EXIRATION_MINUTE, REFRESH_EXIRATION_MINUTE);
+        jwtTokenUtils = new JwtTokenUtils(SECRET_KEY, ACCESS_EXIRATION_MINUTE, REFRESH_EXIRATION_MINUTE, objectMapper);
 
         member = data.getMember1();
         suggest = data.getSuggest1();
@@ -94,8 +96,15 @@ class SuggestControllerTest {
         List<GrantedAuthority> authorities = member.getRoles().stream()
                 .map(role -> (GrantedAuthority) () -> "ROLE_" + role)
                 .collect(Collectors.toList());
-
-        authentication = new JwtAuthenticationToken(authorities, member.getName(), null, member.getId(), false, accessToken);
+        authentication = JwtAuthenticationToken.builder()
+                .credential(null)
+                .id(member.getId())
+                .name(member.getName())
+                .principal(member.getEmail())
+                .authorities(authorities)
+                .accessToken(accessToken)
+                .isExpired(false)
+                .build();
         SecurityContextHolder.getContext().setAuthentication(authentication);
     }
 
