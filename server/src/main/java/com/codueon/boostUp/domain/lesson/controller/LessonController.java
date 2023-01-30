@@ -38,13 +38,7 @@ public class LessonController {
                                         @RequestPart(required = false, value = "careerImage") List<MultipartFile> careerImage) {
         JwtAuthenticationToken token = (JwtAuthenticationToken) authentication;
         Long memberId = getMemberIdIfExistToken(token);
-
-        /** 로컬 환경 */
-        lessonService.createLesson(postLesson, memberId, profileImage, careerImage);
-
-        /** S3 환경 */
-//        lessonService.createLessonS3(postLesson, memberId, profileImage, careerImage);
-
+        lessonService.createLessonS3(postLesson, memberId, profileImage, careerImage);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
@@ -63,13 +57,7 @@ public class LessonController {
                                        Authentication authentication,
                                        @RequestPart(required = false, value = "profileImage") MultipartFile profileImage) {
         JwtAuthenticationToken token = (JwtAuthenticationToken) authentication;
-
-        /** 로컬 환경 */
-        lessonService.updateLessonInfo(lessonId, postLessonInfoEdit, profileImage);
-
-        /** S3 환경 */
-//        lessonService.updateLessonInfoS3(lessonId, postLessonInfoEdit, profileImage);
-
+        lessonService.updateLessonInfoS3(lessonId, postLessonInfoEdit, profileImage);
         return ResponseEntity.ok().build();
     }
 
@@ -86,13 +74,7 @@ public class LessonController {
     public ResponseEntity updateLessonDetail(@PathVariable("lesson-id") Long lessonId,
                                              @RequestPart(value = "data") PostLessonDetailEdit postLessonDetailEdit,
                                              @RequestPart(required = false, value = "careerImage") List<MultipartFile> careerImage) {
-
-        /** 로컬 환경 */
-        lessonService.updateLessonDetail(lessonId, postLessonDetailEdit, careerImage);
-
-        /** S3 환경 */
-//        lessonService.updateLessonDetailS3(lessonId, postLessonDetailEdit, careerImage);
-
+        lessonService.updateLessonDetailS3(lessonId, postLessonDetailEdit, careerImage);
         return ResponseEntity.ok().build();
     }
 
@@ -106,7 +88,6 @@ public class LessonController {
     @PatchMapping("/{lesson-id}/curriculum/modification")
     public ResponseEntity updateCurriculum(@PathVariable("lesson-id") Long lessonId,
                                            @RequestBody PatchLessonCurriculum patchLessonCurriculum) {
-
         lessonService.updateCurriculum(lessonId, patchLessonCurriculum);
         return ResponseEntity.ok().build();
     }
@@ -122,13 +103,7 @@ public class LessonController {
                                        Authentication authentication) {
         JwtAuthenticationToken token = (JwtAuthenticationToken) authentication;
         Long memberId = getMemberIdIfExistToken(token);
-
-        /** 로컬 환경 */
-        lessonService.deleteLesson(memberId, lessonId);
-
-        /** S3 환경 */
-//        lessonService.deleteLessonS3(memberId, lessonId);
-
+        lessonService.deleteLessonS3(memberId, lessonId);
         return ResponseEntity.noContent().build();
     }
 
@@ -234,6 +209,12 @@ public class LessonController {
         return ResponseEntity.ok().body(response);
     }
 
+    /**
+     * 로그인 확인 메서드
+     * @param token 토큰 정보
+     * @return Long
+     * @author mozzi327
+     */
     private Long getMemberIdIfExistToken(JwtAuthenticationToken token) {
         if (token == null) return null;
         else return token.getId();
