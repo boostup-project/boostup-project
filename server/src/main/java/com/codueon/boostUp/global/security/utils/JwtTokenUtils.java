@@ -3,6 +3,8 @@ package com.codueon.boostUp.global.security.utils;
 import com.codueon.boostUp.domain.member.entity.Member;
 import com.codueon.boostUp.domain.member.exception.AuthException;
 import com.codueon.boostUp.global.exception.ExceptionCode;
+import com.codueon.boostUp.global.security.dto.ClaimsVO;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.MalformedJwtException;
@@ -11,6 +13,8 @@ import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.io.Encoders;
 import io.jsonwebtoken.security.Keys;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -19,8 +23,8 @@ import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.util.*;
 
-@Component
 @Slf4j
+@Component
 public class JwtTokenUtils {
     @Getter
     private final String secretKey;
@@ -31,13 +35,17 @@ public class JwtTokenUtils {
     @Getter
     private final int refreshTokenExpirationMinutes;
 
+    private final ObjectMapper objectMapper;
+
 
     public JwtTokenUtils(@Value("${jwt.secret-key}") String secretKey,
                          @Value("${jwt.access-token-expiration-minutes}") int accessTokenExpirationsMinutes,
-                         @Value("${jwt.refresh-token-expiration-minutes}") int refreshTokenExpirationMinutes) {
+                         @Value("${jwt.refresh-token-expiration-minutes}") int refreshTokenExpirationMinutes,
+                         ObjectMapper objectMapper) {
         this.secretKey = secretKey;
         this.accessTokenExpirationsMinutes = accessTokenExpirationsMinutes;
         this.refreshTokenExpirationMinutes = refreshTokenExpirationMinutes;
+        this.objectMapper = objectMapper;
     }
 
     /**
@@ -49,10 +57,37 @@ public class JwtTokenUtils {
     public String generateAccessToken(Member member) {
         Map<String, Object> claims = new HashMap<>();
         claims.put("id", member.getId());
-        claims.put("email", member.getEmail());
+        claims.put("name", member.getName());
         claims.put("roles", member.getRoles());
 
         String subject = member.getEmail();
+        Date expiration = getTokenExpiration(getAccessTokenExpirationsMinutes());
+        String base64EncodedSecretKey = encodeBase64SecretKey(getSecretKey());
+
+        Key key = getKeyFromBase64EncodedKey(base64EncodedSecretKey);
+
+        return Jwts.builder()
+                .setClaims(claims)
+                .setSubject(subject)
+                .setIssuedAt(Calendar.getInstance().getTime())
+                .setExpiration(expiration)
+                .signWith(key)
+                .compact();
+    }
+
+    /**
+     * ClaimsVO를 통한 액세스 토큰 발급 메서드
+     * @param claimsVO 파싱된 Claims 정보
+     * @return String
+     * @author mozzi327
+     */
+    public String generateAccessTokenByClaimsVO(ClaimsVO claimsVO) {
+        Map<String, Object> claims = new HashMap<>();
+        claims.put("id", claimsVO.getId());
+        claims.put("name", claimsVO.getName());
+        claims.put("roles", claimsVO.getRoles());
+
+        String subject = claimsVO.getSub();
         Date expiration = getTokenExpiration(getAccessTokenExpirationsMinutes());
         String base64EncodedSecretKey = encodeBase64SecretKey(getSecretKey());
 
@@ -196,5 +231,18 @@ public class JwtTokenUtils {
             log.info("JWT claims string is empty.", e);
         }
         return false;
+    }
+
+    /**
+     * accessToken 파싱 후 이메일 출력
+     * @param token
+     * @return 사용자 email
+     * @author LimJaeminZ
+     */
+    @SneakyThrows
+    public ClaimsVO parseClaims(String token) {
+        final String encodedPayload = token.split("\\.")[1].replace('-', '+').replace('_', '/');
+        final String decoded = new String(Base64.getDecoder().decode(encodedPayload));
+        return objectMapper.readValue(decoded, ClaimsVO.class);
     }
 }

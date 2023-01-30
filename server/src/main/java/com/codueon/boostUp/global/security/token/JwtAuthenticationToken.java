@@ -1,5 +1,6 @@
 package com.codueon.boostUp.global.security.token;
 
+import lombok.Builder;
 import lombok.Getter;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
@@ -13,14 +14,23 @@ public class JwtAuthenticationToken extends AbstractAuthenticationToken {
     private Object credential;
     private Long id;
     private boolean isExpired;
+    private String name;
 
-    public JwtAuthenticationToken(Collection<? extends GrantedAuthority> authorities, Object principal, Object credential, Long id, boolean isExpired, String accessToken) {
+    @Builder
+    public JwtAuthenticationToken(Collection<? extends GrantedAuthority> authorities,
+                                  Object principal,
+                                  Object credential,
+                                  Long id,
+                                  boolean isExpired,
+                                  String accessToken,
+                                  String name) {
         super(authorities);
         this.principal = principal;
         this.credential = credential;
         this.id = id;
         this.isExpired = isExpired;
         this.accessToken = accessToken;
+        this.name = name;
         this.setAuthenticated(true);
     }
 

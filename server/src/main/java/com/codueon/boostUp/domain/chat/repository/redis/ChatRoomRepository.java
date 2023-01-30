@@ -40,7 +40,7 @@ public class ChatRoomRepository {
      * @return Set(String)
      * @author mozzi327
      */
-    public Set<String> findAllChatRoomId() {
+    public Set<String> findAllChatRoomKey() {
         return setOperations.members(chatRoomUtils.KEY_FOR_CHAT_ROOMS);
     }
 
@@ -62,5 +62,4 @@ public class ChatRoomRepository {
     public void deleteChatRoom(Long chatRoomId) {
         setOperations.remove(chatRoomUtils.KEY_FOR_CHAT_ROOMS, chatRoomUtils.makeKey(chatRoomId));
     }
-
 }

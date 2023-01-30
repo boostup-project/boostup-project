@@ -1,12 +1,10 @@
 package com.codueon.boostUp.global.security.config;
 
 import com.codueon.boostUp.domain.member.repository.MemberRepository;
-import com.codueon.boostUp.domain.member.service.MemberDbService;
 import com.codueon.boostUp.global.security.details.OAuth2DetailService;
 import com.codueon.boostUp.global.security.filter.JwtVerificationFilter;
 import com.codueon.boostUp.global.security.handler.OAuth2FailureHandler;
 import com.codueon.boostUp.global.security.handler.OAuth2SuccessHandler;
-import com.codueon.boostUp.global.security.provider.JwtAuthenticationProvider;
 import com.codueon.boostUp.global.security.utils.CustomAuthorityUtils;
 import com.codueon.boostUp.global.security.utils.JwtTokenUtils;
 import com.codueon.boostUp.global.utils.RedisUtils;
@@ -14,8 +12,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -36,12 +32,12 @@ import org.springframework.web.filter.CharacterEncodingFilter;
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
-    private final JwtTokenUtils jwtTokenUtils;
     private final RedisUtils redisUtils;
-    private final OAuth2DetailService oAuth2DetailService;
+    private final ObjectMapper objectMapper;
+    private final JwtTokenUtils jwtTokenUtils;
     private final MemberRepository memberRepository;
     private final CustomAuthorityUtils authorityUtils;
-    private final ObjectMapper objectMapper;
+    private final OAuth2DetailService oAuth2DetailService;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -115,11 +111,10 @@ public class SecurityConfig {
         @Override
         public void configure(HttpSecurity builder) {
             JwtVerificationFilter jwtVerificationFilter =
-                    new JwtVerificationFilter(jwtTokenUtils, redisUtils, authorityUtils, memberRepository, objectMapper);
+                    new JwtVerificationFilter(redisUtils, objectMapper, jwtTokenUtils, authorityUtils);
 
-            builder
-                    .addFilterBefore(jwtVerificationFilter, OAuth2LoginAuthenticationFilter.class)
-                    .addFilterBefore(jwtVerificationFilter, UsernamePasswordAuthenticationFilter.class);
+            builder.addFilterBefore(jwtVerificationFilter, OAuth2LoginAuthenticationFilter.class)
+                   .addFilterBefore(jwtVerificationFilter, UsernamePasswordAuthenticationFilter.class);
         }
     }
 }

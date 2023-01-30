@@ -34,11 +34,10 @@ import static com.codueon.boostUp.global.security.utils.AuthConstants.*;
 
 @RequiredArgsConstructor
 public class JwtVerificationFilter extends OncePerRequestFilter {
-    private final JwtTokenUtils jwtTokenUtils;
     private final RedisUtils redisUtils;
-    private final CustomAuthorityUtils authorityUtils;
-    private final MemberRepository memberRepository;
     private final ObjectMapper objectMapper;
+    private final JwtTokenUtils jwtTokenUtils;
+    private final CustomAuthorityUtils authorityUtils;
 
 
     /**
@@ -89,38 +88,36 @@ public class JwtVerificationFilter extends OncePerRequestFilter {
             Map<String, Object> claims = jwtTokenUtils.getClaims(accessToken);
             String stringId = claims.get("id").toString();
             Long id = Long.valueOf(stringId);
+            String name = (String) claims.get("name");
             String email = (String) claims.get("email");
             List<String> roles = (List<String>) claims.get(ROLES);
             List<GrantedAuthority> authorities = authorityUtils.createAuthorities(roles);
+            return JwtAuthenticationToken.builder()
+                    .credential(null)
+                    .id(id)
+                    .name(name)
+                    .authorities(authorities)
+                    .accessToken(accessToken)
+                    .principal(email)
+                    .isExpired(false)
+                    .build();
 
-            return new JwtAuthenticationToken(authorities, email, null, id, false, accessToken);
         } catch (ExpiredJwtException ee) { // 토큰 만료
-            String email = parseEmail(accessToken);
+            ClaimsVO parseClaims = jwtTokenUtils.parseClaims(accessToken);
+            redisUtils.isExistRefreshToken(parseClaims.getSub());
+            List<GrantedAuthority> authorities = authorityUtils.createAuthorities(parseClaims.getSub());
+            String generateToken = jwtTokenUtils.generateAccessTokenByClaimsVO(parseClaims);
 
-            Member findMember = memberRepository.findByEmail(email).orElseThrow(() ->
-                    new AuthException(ExceptionCode.MEMBER_NOT_FOUND));
-
-            List<GrantedAuthority> authorities = authorityUtils.createAuthorities(findMember.getRoles());
-            redisUtils.isExistRefreshToken(email);
-            String generateToken = jwtTokenUtils.generateAccessToken(findMember);
-
-            return new JwtAuthenticationToken(authorities, email, null, findMember.getId(), true, generateToken);
+            return JwtAuthenticationToken.builder()
+                    .credential(null)
+                    .id(parseClaims.getId())
+                    .name(parseClaims.getName())
+                    .authorities(authorities)
+                    .accessToken(generateToken)
+                    .principal(parseClaims.getSub())
+                    .isExpired(true)
+                    .build();
         }
     }
-
-    /**
-     * accessToken 파싱 후 이메일 출력
-     * @param token
-     * @return 사용자 email
-     * @author LimJaeminZ
-     */
-    @SneakyThrows
-    public String parseEmail(String token) {
-        final String encodedPayload = token.split("\\.")[1] .replace('-', '+').replace('_', '/');
-        final String decoded = new String(Base64.getDecoder().decode(encodedPayload));
-
-        return objectMapper.readValue(decoded, ClaimsVO.class).getEmail();
-    }
-
 }
 
