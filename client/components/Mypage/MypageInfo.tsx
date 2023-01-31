@@ -7,8 +7,8 @@ const MypageInfo = () => {
   };
   return (
     <>
-      <div className="w-full h-full flex flex-row justify-start items-center">
-        <div className="w-1/3 tablet:w-1/2 w-full h-full flex flex-col justify-center items-center p-5">
+      <div className="w-full flex flex-row justify-start items-center">
+        <div className="object-cover desktop:w-[260px] tablet:w-[250px] w-[200px] h-fit flex flex-col justify-start items-start p-5 ">
           <img
             src={
               "https://play-lh.googleusercontent.com/38AGKCqmbjZ9OuWx4YjssAz3Y0DTWbiM5HB0ove1pNBq_o9mtWfGszjZNxZdwt_vgHo=w240-h480-rw"
@@ -17,12 +17,12 @@ const MypageInfo = () => {
             alt="profile Image"
             width={200}
             height={200}
-            className="rounded-xl border border-borderColor"
+            className="object-cover rounded-xl border border-borderColor"
           />
         </div>
-        <div className="w-full h-full flex flex-col justify-start items-start p-5">
+        <div className="w-4/5 h-full flex flex-col justify-start items-start py-5">
           <div className="flex flex-row justify-start items-start w-full h-fit mt-3">
-            <div className="desktop:w-9 tablet:w-7 w-5">
+            <div className="desktop:w-9 tablet:w-7 w-5 fill=#A8A7A7">
               <IconProfile />
             </div>
             <div className="ml-1.5 pt-1 w-fit h-fit flex flex-row justify-start items-center font-SCDream5 desktop:text-xl tablet:text-base text-textColor">

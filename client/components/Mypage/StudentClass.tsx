@@ -5,15 +5,30 @@ const StudentClass = () => {
     <>
       <div className="flex w-full">
         <div className="flex flex-row h-fit w-full rounded-lg border border-borderColor mt-3">
-          <div className="desktop:w-100 border border-pointColor">
+          {/* {Left} */}
+          <div className="flex desktop:w-1/4 justify-center items-center ">
             <img
+              className="flex w-[90%] h-[90%] object-cover border border-borderColor rounded-xl"
               src={
                 "https://play-lh.googleusercontent.com/38AGKCqmbjZ9OuWx4YjssAz3Y0DTWbiM5HB0ove1pNBq_o9mtWfGszjZNxZdwt_vgHo=w240-h480-rw"
               }
             ></img>
           </div>
-          <div className="flex flex-col w-1/2 border border-borderColor  justify-center">
-            <div></div>
+          {/* {center} */}
+          <div className="flex flex-col w-1/2 justify-center desktop:pl-2">
+            <div className="flex">
+              {/* {card.languages?.map((el: any, idx: any) => {
+                      return (
+                        <div
+                          key={idx}
+                          className={`flex justify-center bg-${el} items-center px-1 py-0.5 ml-1 mt-1 border rounded-xl desktop:text-xs tablet:text-[10px] text-[6px]`}
+                        >
+                          {el}
+                        </div>
+                      );
+                    })} */}
+              data.languages
+            </div>
             <div className="flex justify-start items-start w-full h-fit font-SCDream5 desktop:text-xs tablet:text-[12px] text-[8px] text-textColor ml-2  my-1">
               {/* {card.name} */}myname
             </div>
@@ -46,7 +61,8 @@ const StudentClass = () => {
               강북구 강서구
             </div>
           </div>
-          <div className="flex flex-col w-1/3 border border-borderColor justify-center items-end desktop:mr-4 tablet:mr-2 mr-2">
+          {/* {Right} */}
+          <div className="flex flex-col w-1/3 justify-center items-end desktop:mr-4 tablet:mr-2 mr-2">
             <div className="flex  desktop:text-xl tablet:text-lg text-[14px]">
               <div className="mt-1 mr-1 desktop:w-5 tablet:w-4 w-3">
                 <IconWon />
