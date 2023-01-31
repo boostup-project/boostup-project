@@ -214,22 +214,23 @@ public class LessonService {
         Lesson updateLesson = lessonDbService.ifExistsReturnLesson(lessonId);
         updateLesson.editLessonInfo(postLessonInfoEdit);
 
-        updateLesson.editLessonInfo(postLessonInfoEdit);
         List<Integer> languageList = postLessonInfoEdit.getLanguages();
         List<Integer> addressList = postLessonInfoEdit.getAddresses();
 
         lessonDbService.addLanguageList(languageList, updateLesson);
         lessonDbService.addAddressList(addressList, updateLesson);
 
-        UploadFile uploadFile = fileHandler.uploadFile(profileImage);
-        ProfileImage editProfileImage = ProfileImage.builder()
-                .originFileName(uploadFile.getOriginFileName())
-                .fileName(uploadFile.getFileName())
-                .filePath(uploadFile.getFilePath())
-                .fileSize(uploadFile.getFileSize())
-                .build();
+        if (!profileImage.isEmpty()) {
+            UploadFile uploadFile = fileHandler.uploadFile(profileImage);
+            ProfileImage newProfileImage = ProfileImage.builder()
+                    .originFileName(uploadFile.getOriginFileName())
+                    .fileName(uploadFile.getFileName())
+                    .filePath(uploadFile.getFilePath())
+                    .fileSize(uploadFile.getFileSize())
+                    .build();
 
-        updateLesson.addProfileImage(editProfileImage);
+            updateLesson.addProfileImage(newProfileImage);
+        }
         lessonDbService.saveLesson(updateLesson);
     }
 
@@ -259,15 +260,17 @@ public class LessonService {
         lessonDbService.addLanguageList(languageList, updateLesson);
         lessonDbService.addAddressList(addressList, updateLesson);
 
-        UploadFile uploadFile = awsS3Service.uploadfile(profileImage, dir);
-        ProfileImage editProfileImage = ProfileImage.builder()
-                .originFileName(uploadFile.getOriginFileName())
-                .fileName(uploadFile.getFileName())
-                .filePath(uploadFile.getFilePath())
-                .fileSize(uploadFile.getFileSize())
-                .build();
+        if (!profileImage.isEmpty()) {
+            UploadFile uploadFile = awsS3Service.uploadfile(profileImage, dir);
+            ProfileImage editProfileImage = ProfileImage.builder()
+                    .originFileName(uploadFile.getOriginFileName())
+                    .fileName(uploadFile.getFileName())
+                    .filePath(uploadFile.getFilePath())
+                    .fileSize(uploadFile.getFileSize())
+                    .build();
 
-        updateLesson.addProfileImage(editProfileImage);
+            updateLesson.addProfileImage(editProfileImage);
+        }
         lessonDbService.saveLesson(updateLesson);
     }
 
