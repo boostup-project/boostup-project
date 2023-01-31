@@ -64,7 +64,6 @@ const Header = () => {
   const wordTwoEvent = () => {
     if (log) {
       logOutEvent();
-      router.push("/");
     }
     if (!log) {
       router.push("/signup");
@@ -78,6 +77,7 @@ const Header = () => {
       autoClose: 1500,
       position: toast.POSITION.TOP_RIGHT,
     });
+    router.push("/");
   };
 
   return (
