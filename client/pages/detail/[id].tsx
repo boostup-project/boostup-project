@@ -52,8 +52,11 @@ const Detail = () => {
     isSuccess: basicInfoSuccess,
   } = useGetBasicInfo(lessonId);
 
-  const { refetch: reviewRefetch, data: reviewData } =
-    useGetDetailReview(lessonId);
+  const {
+    refetch: reviewRefetch,
+    data: reviewData,
+    isSuccess: reviewSuccess,
+  } = useGetDetailReview(lessonId);
 
   const widthSize = useWindowSize();
 
@@ -125,7 +128,9 @@ const Detail = () => {
               <DetailExtra extraData={extraData} lessonId={lessonId} />
             )}
             {tab === 2 && <DetailCurriculum curData={curData} />}
-            {tab === 3 && <DetailReview reviewData={reviewData} />}
+            {tab === 3 && reviewSuccess && (
+              <DetailReview reviewData={reviewData?.data} />
+            )}
 
             {/* 각 탭별 컴포넌트를 생성하여 넣어주세요! */}
           </DetailContentContainer>
