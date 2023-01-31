@@ -64,6 +64,7 @@ const Header = () => {
   const wordTwoEvent = () => {
     if (log) {
       logOutEvent();
+      router.push("/");
     }
     if (!log) {
       router.push("/signup");
