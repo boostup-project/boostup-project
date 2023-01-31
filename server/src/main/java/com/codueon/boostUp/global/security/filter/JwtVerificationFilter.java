@@ -35,7 +35,6 @@ import static com.codueon.boostUp.global.security.utils.AuthConstants.*;
 @RequiredArgsConstructor
 public class JwtVerificationFilter extends OncePerRequestFilter {
     private final RedisUtils redisUtils;
-    private final ObjectMapper objectMapper;
     private final JwtTokenUtils jwtTokenUtils;
     private final CustomAuthorityUtils authorityUtils;
 
@@ -89,13 +88,14 @@ public class JwtVerificationFilter extends OncePerRequestFilter {
             String stringId = claims.get("id").toString();
             Long id = Long.valueOf(stringId);
             String name = (String) claims.get("name");
-            String email = (String) claims.get("email");
+            String email = (String) claims.get("sub");
             List<String> roles = (List<String>) claims.get(ROLES);
             List<GrantedAuthority> authorities = authorityUtils.createAuthorities(roles);
             return JwtAuthenticationToken.builder()
                     .credential(null)
                     .id(id)
                     .name(name)
+                    .principal(email)
                     .authorities(authorities)
                     .accessToken(accessToken)
                     .principal(email)
