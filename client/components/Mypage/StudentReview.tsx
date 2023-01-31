@@ -11,17 +11,8 @@ const StudentReview = () => {
     <>
       <div className="flex w-full">
         <div className="flex flex-row h-fit w-full rounded-lg border border-borderColor mt-3">
-          {/* {Left} */}
-          <div className="flex desktop:w-1/4 justify-center items-center">
-            <img
-              className="flex w-[90%] h-[90%] object-cover border border-borderColor rounded-xl"
-              src={
-                "https://play-lh.googleusercontent.com/38AGKCqmbjZ9OuWx4YjssAz3Y0DTWbiM5HB0ove1pNBq_o9mtWfGszjZNxZdwt_vgHo=w240-h480-rw"
-              }
-            ></img>
-          </div>
-          {/* {center} */}
-          <div className="flex flex-col w-1/2  justify-center desktop:pl-2">
+          {/* {left} */}
+          <div className="flex flex-col w-2/3  justify-center desktop:pl-2 m-3">
             <div className="flex">
               {/* {card.languages?.map((el: any, idx: any) => {
                       return (
@@ -41,45 +32,26 @@ const StudentReview = () => {
             <div className="flex justify-start items-start w-full h-fit font-SCDream6 desktop:text-lg tablet:text-base text-xs text-textColor ml-1 mb-2 flex-wrap">
               {/* {card.title} */}JavaScript w.Java
             </div>
-            <div className="flex justify-start items-start w-full h-fit font-SCDream5 text-textColor ml-2 mb-2 desktop:text-sm tablet:text-sm text-[12px]">
-              <div className="mr-1 desktop:w-5 tablet:w-3.5 w-3.5">
-                <IconRibbon />
-              </div>
-              {/* {card.company} */}company
+            <div className="flex desktop:text-base tablet:text-sm text-[12px]">
+              만족도 {"★ ".repeat(5)}
             </div>
-            <div className="flex justify-start items-start w-full h-fit font-SCDream5 desktop:text-sm tablet:text-sm text-[12px] text-textColor ml-2  mb-2">
-              <div className="mr-1 desktop:w-5 tablet:w-3.5 w-3.5">
-                <IconPaper />
-              </div>
-              {/* {card.career}년 */}3년
-            </div>
-            <div className="flex justify-start items-start w-full h-fit font-SCDream5 desktop:text-sm tablet:text-sm text-[12px] text-textColor ml-2 desktop:my-1 mb-1">
-              <div className="mr-1 desktop:w-4 tablet:w-3 w-2.5 ">
-                <IconPlace />
-              </div>
-              {/* {card.address?.map((el: any, idx: any) => {
-                    return (
-                      <div className="ml-1" key={idx}>
-                        {el}
-                      </div>
-                    );
-                  })} */}{" "}
-              강북구 강서구
+            <div className="flex desktop:text-base tablet:text-sm text-[12px] desktop:mt-3 tablet:mt-2">
+              만족스러운 과외였습니다 12번의 수업으로 JS에 대해 헷갈렸던
+              개념들이 확실히 잡혔어요! 수업 준비도 잘 해주시고, 필요한 난이도에
+              맞춰서 쉽게 진행해주셨습니다. 입문자분들에게 추천드려요!
             </div>
           </div>
-          <div className="flex flex-col w-1/3 justify-center items-end desktop:mr-4 tablet:mr-2 mr-2">
+          {/* right */}
+          <div className="flex flex-col w-1/2 justify-center items-end desktop:mr-4 tablet:mr-2 mr-2">
             <div className="flex  desktop:text-xl tablet:text-lg text-[14px]">
-              <div className="desktop:mt-1 tablet:mt-2 mt-1 mr-1 desktop:w-5 tablet:w-3.5 w-3">
-                <IconWon />
-              </div>
-              {/* {cost} */}65000원
+              {/* {period} */}2022.10.11~2022.12.26
             </div>
-            <button className="decktop:w-[30px] tablet:w-[28px] w-[25px] my-6">
-              {true ? <IconFullheart /> : <IconEmptyheart />}
-            </button>
             <div className="flex">
               <button className="text text-pointColor m-2 desktop:text-base tablet:text-sm text-[10px]">
-                채팅하기
+                수정하기
+              </button>
+              <button className="text text-negativeMessage m-2 desktop:text-base tablet:text-sm text-[10px]">
+                삭제하기
               </button>
             </div>
           </div>
