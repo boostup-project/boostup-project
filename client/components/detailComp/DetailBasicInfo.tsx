@@ -4,13 +4,15 @@ import AreaIcon from "assets/icon/detailSummeryIcon/AreaIcon";
 import CompanyIcon from "assets/icon/detailSummeryIcon/CompanyIcon";
 import CareerIcon from "assets/icon/detailSummeryIcon/CareerIcon";
 import { useRecoilState } from "recoil";
-import { powerBasicEditModal } from "atoms/detail/detailAtom";
+import { powerBasicEditModal, editMode } from "atoms/detail/detailAtom";
 
 const DetailBasicInfo = (basicInfo: any) => {
   const [power, setPower] = useRecoilState(powerBasicEditModal);
+  const [mode, setMode] = useRecoilState(editMode);
 
   const handleClickEdit = () => {
     setPower(true);
+    setMode(true);
   };
 
   return (

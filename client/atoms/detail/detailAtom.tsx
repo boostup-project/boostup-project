@@ -10,4 +10,9 @@ const powerBasicEditModal = atom({
   default: false,
 });
 
-export { powerApplyModal, powerBasicEditModal };
+const editMode = atom({
+  key: "editMode",
+  default: false,
+});
+
+export { powerApplyModal, powerBasicEditModal, editMode };

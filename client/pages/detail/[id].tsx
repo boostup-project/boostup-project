@@ -12,10 +12,12 @@ import useGetCurriculum from "hooks/detail/useGetCurriculum";
 import useGetBasicInfo from "hooks/detail/useGetBasicInfo";
 import useWindowSize from "hooks/useWindowSize";
 import DetailCurriculum from "components/detailComp/DetailCurriculum";
+import DetailReview from "components/detailComp/DetailReview";
 import DetailExtra from "components/detailComp/DetailExtra";
 import DetailButtons from "components/Detail/DetailButtons";
 import { useRecoilValue } from "recoil";
 import { powerBasicEditModal } from "atoms/detail/detailAtom";
+import useGetDetailReview from "hooks/detail/useGetDetailReview";
 
 const Detail = () => {
   // lessonId 받아오기
@@ -50,6 +52,9 @@ const Detail = () => {
     isSuccess: basicInfoSuccess,
   } = useGetBasicInfo(lessonId);
 
+  const { refetch: reviewRefetch, data: reviewData } =
+    useGetDetailReview(lessonId);
+
   const widthSize = useWindowSize();
 
   useEffect(() => {
@@ -67,8 +72,9 @@ const Detail = () => {
     } else if (tab === 2 && lessonId) {
       // 진행방식 refetch
       refetchGetCur();
-    } else if (tab === 3) {
+    } else if (tab === 3 && lessonId) {
       // 과외후기 refetch
+      reviewRefetch();
     }
   }, [tab, lessonId]);
 
@@ -119,6 +125,7 @@ const Detail = () => {
               <DetailExtra extraData={extraData} lessonId={lessonId} />
             )}
             {tab === 2 && <DetailCurriculum curData={curData} />}
+            {tab === 3 && <DetailReview reviewData={reviewData} />}
 
             {/* 각 탭별 컴포넌트를 생성하여 넣어주세요! */}
           </DetailContentContainer>

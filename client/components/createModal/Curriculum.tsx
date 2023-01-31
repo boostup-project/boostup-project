@@ -64,7 +64,7 @@ const Curriculum = ({
       career,
       company,
       cost,
-      language,
+      languages,
       profileImg,
       title,
     }: BasicSubmit = basicInfo;
@@ -78,7 +78,7 @@ const Curriculum = ({
     } = extraInfo;
     const proImage = profileImg[0];
     const parseAddress = address.map((el: any) => el.value);
-    const parseLang = language.map((el: any) => langDict[el]);
+    const parseLang = languages.map((el: any) => langDict[el]);
     const pre = {
       title,
       language: parseLang,
