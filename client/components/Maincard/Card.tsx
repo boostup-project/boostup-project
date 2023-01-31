@@ -14,8 +14,9 @@ import getMainCard from "apis/card/getMainCard";
 import { dehydrate, QueryClient, useQuery } from "react-query";
 import useGetAllBookmark from "hooks/detail/useGetAllBookmark";
 import Swal from "sweetalert2";
-
+import { mainCardInfo } from "atoms/main/mainAtom";
 import { useRouter } from "next/router";
+import { useSetRecoilState } from "recoil";
 
 export async function getStaticProps() {
   const queryClient = new QueryClient();
@@ -33,13 +34,14 @@ const Card = () => {
   const [cards, setCards] = useState<any>();
   const lessonId = 1;
   const router = useRouter();
+  const setMainCardInfo = useSetRecoilState(mainCardInfo);
   const { refetch } = useGetAllBookmark(lessonId);
   const [likes, setLikes] = useState(true);
   const { isLoading, isError, data } = useQuery("cards", () => getMainCard(), {
     enabled: true,
     onSuccess: data => {
       // 성공시 호출
-
+      setMainCardInfo(data.data.data);
       setCards(data.data.data);
     },
     onError: error => {},
