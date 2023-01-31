@@ -5,7 +5,7 @@ interface Assemble {
   id: number;
 }
 
-const postDetailModi = async (assemble: Assemble) => {
+const postCurModi = async (assemble: Assemble) => {
   const { id, textData } = assemble;
   const object = {
     curriculum: textData,
@@ -22,4 +22,4 @@ const postDetailModi = async (assemble: Assemble) => {
   });
 };
 
-export default postDetailModi;
+export default postCurModi;

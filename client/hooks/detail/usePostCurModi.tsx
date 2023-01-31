@@ -1,11 +1,11 @@
-import postDetailModi from "apis/detail/postDetailModi";
+import postCurModi from "apis/detail/postCurModi";
 import { useMutation, useQueryClient } from "react-query";
 import { toast } from "react-toastify";
 
 export const usePostCurModi = () => {
   const queryClient = useQueryClient();
 
-  return useMutation(postDetailModi, {
+  return useMutation(postCurModi, {
     onSuccess: res => {
       toast.success("진행상황이 수정되었습니다", {
         autoClose: 3000,
