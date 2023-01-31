@@ -1,16 +1,15 @@
 import { useQuery } from "react-query";
 import getBookmark from "apis/detail/getBookmark";
-
 const useGetBookmark = (lessonId: number) => {
-  return useQuery(["getAllBookmark"], () => getBookmark(lessonId), {
+  return useQuery(["get/Bookmark"], () => getBookmark(lessonId), {
     enabled: false,
+    // staleTime: 5 * 60000,
     onSuccess: res => {
-      console.log(res.data.bookmark);
+      console.log("sucess");
     },
-    onError: error => {
-      console.log(error);
+    onError: res => {
+      console.log("failed");
     },
-    retry: 1,
   });
 };
 
