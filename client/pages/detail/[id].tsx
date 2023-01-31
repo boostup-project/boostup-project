@@ -93,7 +93,7 @@ const Detail = () => {
             <MobileDetailBasicInfo basicInfo={basicInfo?.data} />
           )}
         </DetailSummeryContainer>
-        <div className="flex w-3/4 desktop:min-w-[1000px] min-w-[95%] h-fit rounded-xl flex-row justify-start items-center mt-5">
+        <div className="flex w-3/4 desktop:min-w-[1000px] min-w-[95%] h-fit rounded-xl flex-row justify-start mt-5">
           <DetailTabBtn
             bold={tab === 1 ? true : false}
             onClick={() => {

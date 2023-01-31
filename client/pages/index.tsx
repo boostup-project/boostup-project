@@ -2,7 +2,7 @@
 import Carouselcomp from "components/carousel/Carouselcomp";
 import LanguageFilter from "components/filter/LanguageFilter";
 import MoblieLanguageFilter from "components/filter/MobileLanguageFilter";
-import Cards from "./card";
+import Cards from "../components/Maincard/Cards";
 const Home = ({}) => {
   return (
     <>
