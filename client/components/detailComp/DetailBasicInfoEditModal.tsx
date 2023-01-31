@@ -20,25 +20,29 @@ const DetailBasicInfoEditModal = (basicData: any) => {
   const [isPowerModal, setIsPowerModal] = useRecoilState(powerBasicEditModal);
   const [step, setStep] = useRecoilState(inputStep);
 
+  console.log(basicInfo);
   const toWrite = () => {
     setIsPowerModal(prev => !prev);
   };
 
+  const handleClickBackDrop = () => {
+    setIsPowerModal(false);
+  };
+
   return (
     <>
-      <ModalBackDrop onClick={() => {}}>
-        <CreateModalContainer>
-          <div className="w-fit h-fit mb-5">
-            <BasicStep />
-          </div>
-          <BasicInfo
-            basicInfo={basicData.basicData.data}
-            setBasicInfo={setBasicInfo}
-            toWrite={toWrite}
-            setStep={setStep}
-          />
-        </CreateModalContainer>
-      </ModalBackDrop>
+      <ModalBackDrop onClick={handleClickBackDrop}>" "</ModalBackDrop>
+      <CreateModalContainer>
+        <div className="w-fit h-fit mb-5">
+          <BasicStep />
+        </div>
+        <BasicInfo
+          basicInfo={basicData.basicData.data}
+          setBasicInfo={setBasicInfo}
+          toWrite={toWrite}
+          setStep={setStep}
+        />
+      </CreateModalContainer>
     </>
   );
 };

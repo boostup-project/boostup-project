@@ -14,11 +14,15 @@ import useWindowSize from "hooks/useWindowSize";
 import DetailCurriculum from "components/detailComp/DetailCurriculum";
 import DetailExtra from "components/detailComp/DetailExtra";
 import DetailButtons from "components/Detail/DetailButtons";
+import { useRecoilValue } from "recoil";
+import { powerBasicEditModal } from "atoms/detail/detailAtom";
 
 const Detail = () => {
   // lessonId 받아오기
   const router = useRouter();
   const lessonId = Number(router.query.id);
+
+  const basicEditPower = useRecoilValue(powerBasicEditModal);
 
   const [tab, setTab] = useState(1);
 
@@ -69,8 +73,8 @@ const Detail = () => {
   }, [tab, lessonId]);
 
   return (
-    <>
-      {/* {basicInfoSuccess ? (
+
+      {basicInfoSuccess && basicEditPower ? (
         <DetailBasicInfoEditModal basicData={basicInfo} />
       ) : null} */}
 
