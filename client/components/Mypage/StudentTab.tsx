@@ -28,7 +28,7 @@ const StudentTab = () => {
   return (
     <>
       <div className="flex flex-col bg-bgColor items-center justify-center w-full h-full pt-1">
-        <div className="flex w-full h-fit rounded-xl flex-row justify-center items-center mt-5">
+        <div className="flex w-full h-fit rounded-xl flex-row justify-center items-center desktop:mt-5 tablet:mt-3 mt-2">
           <MypageTabBtn
             bold={tab === 1 ? true : false}
             onClick={() => {

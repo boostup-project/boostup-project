@@ -1,12 +1,12 @@
 const ApplicationList = () => {
   return (
     <div className="flex flex-col w-full">
-      <button className="flex flex-col bg-pointColor text-white font-SCDream7 rounded-xl items-start justify-center border border-borderColor w-full h-full py-3 mt-5 pl-5">
+      <button className="flex flex-col bg-pointColor text-white font-SCDream7 desktop:text-lg tablet:text-base text-sm rounded-xl items-start justify-center border border-borderColor w-full desktop:h-[50px] tablet:h-[43px] h-[38px] py-3 desktop:mt-5 tablet:mt-3 mt-2 pl-5">
         나의 과외로 이동하기
       </button>
       {/* {map} 수업신청정보 */}
       <div className="flex flex-col">
-        <div className="flex flex-row w-full h-fit border border-borderColor rounded-xl mt-3 p-3 pl-5">
+        <div className="flex flex-row w-full h-fit border border-borderColor rounded-xl desktop:mt-5 tablet:mt-3 mt-2 p-3 pl-5">
           <div className="flex flex-col w-[43%]">
             <div className="mb-3 ">data.name</div>
             <div className="flex">
