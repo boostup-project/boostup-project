@@ -11,27 +11,15 @@ import useWindowSize from "hooks/useWindowSize";
 import DetailCurriculum from "components/detailComp/DetailCurriculum";
 import DetailExtra from "components/detailComp/DetailExtra";
 import MypageTabBtn from "components/reuse/btn/MypageTabBtn";
-import MypageInfo from "components/mypage/MypageInfo";
-
+import MypageInfo from "components/Mypage/MypageInfo";
+import TeacherTab from "components/Mypage/TeacherTab";
+import StudentTab from "components/Mypage/StudentTab";
 const Mypage = () => {
+  //memberId? memberName?
   const router = useRouter();
   const lessonId = Number(router.query.id);
 
   const [tab, setTab] = useState(1);
-
-  const {
-    refetch: refetchGetExtra,
-    isSuccess: extraSuccess,
-    isError: extraError,
-    data: extraData,
-  } = useGetExtra(lessonId);
-
-  const {
-    refetch: refetchGetCur,
-    isSuccess: curSuccess,
-    isError: curError,
-    data: curData,
-  } = useGetCurriculum(lessonId);
 
   const handleTabClick = (id: number) => {
     setTab(id);
@@ -55,13 +43,11 @@ const Mypage = () => {
     }
 
     if (tab === 1 && lessonId) {
-      // 상세정보 refetch
-      refetchGetExtra();
+      // teacherTab refetch
     } else if (tab === 2 && lessonId) {
-      // 진행방식 refetch
-      refetchGetCur();
+      // StudentTab refetch
     } else if (tab === 3) {
-      // 과외후기 refetch
+      // ChatList refetch
     }
   }, [tab, lessonId]);
 
@@ -70,9 +56,9 @@ const Mypage = () => {
       <div className="flex flex-col bg-bgColor items-center justify-center w-full h-full pt-28">
         {/* 요약정보 */}
         <DetailSummeryContainer>
-          {widthSize > 764 ? <MypageInfo></MypageInfo> : <></>}
+          <MypageInfo></MypageInfo>
         </DetailSummeryContainer>
-        <div className="flex w-full desktop:min-w-[1000px] min-w-[95%] h-fit rounded-xl flex-row justify-center items-center mt-5">
+        <div className="flex w-full h-fit rounded-xl flex-row justify-center mt-5">
           <MypageTabBtn
             bold={tab === 1 ? true : false}
             onClick={() => {
@@ -81,31 +67,27 @@ const Mypage = () => {
           >
             선생님용
           </MypageTabBtn>
-          <DetailTabBtn
+          <MypageTabBtn
             bold={tab === 2 ? true : false}
             onClick={() => {
               handleTabClick(2);
             }}
           >
             학생용
-          </DetailTabBtn>
-          <DetailTabBtn
+          </MypageTabBtn>
+          <MypageTabBtn
             bold={tab === 3 ? true : false}
             onClick={() => {
               handleTabClick(3);
             }}
           >
             채팅목록
-          </DetailTabBtn>
+          </MypageTabBtn>
         </div>
         <div className="desktop:min-w-[1000px] min-w-[95%] w-full h-full flex desktop:flex-row flex-col justify-center desktop:items-start items-center">
           <MypageContentContainer>
-            {tab === 1 && (
-              <DetailExtra extraData={extraData} lessonId={lessonId} />
-            )}
-            {tab === 2 && <DetailCurriculum curData={curData} />}
-
-            {/* 각 탭별 컴포넌트를 생성하여 넣어주세요! */}
+            {tab === 1 && <TeacherTab></TeacherTab>}
+            {tab === 2 && <StudentTab></StudentTab>}
           </MypageContentContainer>
         </div>
       </div>

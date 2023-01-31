@@ -7,7 +7,6 @@ import {
   IconEmptyheart,
 } from "assets/icon/";
 
-import { NextPage, GetStaticProps } from "next";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 //import useGetMainCard from "./useGetMainCard";
@@ -15,7 +14,7 @@ import getMainCard from "apis/card/getMainCard";
 import { dehydrate, QueryClient, useQuery } from "react-query";
 import useGetAllBookmark from "hooks/detail/useGetAllBookmark";
 import Swal from "sweetalert2";
-import useGetMainCard from "hooks/main/useGetMainCard";
+
 import { useRouter } from "next/router";
 
 export async function getStaticProps() {
