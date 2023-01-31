@@ -12,6 +12,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -111,7 +112,7 @@ public class SecurityConfig {
         @Override
         public void configure(HttpSecurity builder) {
             JwtVerificationFilter jwtVerificationFilter =
-                    new JwtVerificationFilter(redisUtils, objectMapper, jwtTokenUtils, authorityUtils);
+                    new JwtVerificationFilter(redisUtils, jwtTokenUtils, authorityUtils);
 
             builder.addFilterBefore(jwtVerificationFilter, OAuth2LoginAuthenticationFilter.class)
                    .addFilterBefore(jwtVerificationFilter, UsernamePasswordAuthenticationFilter.class);
