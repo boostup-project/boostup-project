@@ -9,6 +9,8 @@ import { SetterOrUpdater } from "recoil";
 import { Info } from "./WriteModal";
 import { useEffect } from "react";
 import { useRouter } from "next/router";
+import { useRecoilState } from "recoil";
+import { editMode } from "atoms/detail/detailAtom";
 
 interface BasicInfo {
   [index: string]: string | string[];
@@ -25,6 +27,8 @@ const BasicInfo = ({ basicInfo, setBasicInfo, toWrite, setStep }: Props) => {
   const [previewImg, setPreviewImg] = useState<string>(
     basicInfo ? (basicInfo.profileImage as string) : "",
   );
+
+  const [mode, setMode] = useRecoilState(editMode);
 
   const {
     control,
@@ -65,8 +69,13 @@ const BasicInfo = ({ basicInfo, setBasicInfo, toWrite, setStep }: Props) => {
     setPreviewImg("");
   };
 
+  const handleClickCancel = () => {
+    toWrite();
+    setMode(false);
+  };
+
   const onSubmit = (basicData: BasicInfo) => {
-    if (Object.keys(basicInfo).length) {
+    if (mode) {
       const lessonId = Number(router.query.id);
       console.log(lessonId);
       const json = JSON.stringify({
@@ -183,7 +192,7 @@ const BasicInfo = ({ basicInfo, setBasicInfo, toWrite, setStep }: Props) => {
                       <input
                         type="checkbox"
                         value={el}
-                        {...register("language", { required: "true" })}
+                        {...register("languages", { required: "true" })}
                         defaultChecked={
                           [...(basicInfo.languages as any)].includes(el)
                             ? true
@@ -194,7 +203,7 @@ const BasicInfo = ({ basicInfo, setBasicInfo, toWrite, setStep }: Props) => {
                       <input
                         type="checkbox"
                         value={el}
-                        {...register("language", { required: "true" })}
+                        {...register("languages", { required: "true" })}
                       />
                     )}
                     {el}
@@ -214,7 +223,7 @@ const BasicInfo = ({ basicInfo, setBasicInfo, toWrite, setStep }: Props) => {
                       <input
                         type="checkbox"
                         value={el}
-                        {...register("language", { required: "true" })}
+                        {...register("languages", { required: "true" })}
                         defaultChecked={
                           [...(basicInfo.languages as any)].includes(el)
                             ? true
@@ -225,7 +234,7 @@ const BasicInfo = ({ basicInfo, setBasicInfo, toWrite, setStep }: Props) => {
                       <input
                         type="checkbox"
                         value={el}
-                        {...register("language", { required: "true" })}
+                        {...register("languages", { required: "true" })}
                       />
                     )}
 
@@ -295,15 +304,15 @@ const BasicInfo = ({ basicInfo, setBasicInfo, toWrite, setStep }: Props) => {
                       message: "3개까지만 넣어주세요",
                     },
                   }}
-                  defaultValue={defaultAddress[0].map(
-                    (el: string, idx: number) => {
-                      return {
-                        key: idx,
-                        value: addDict[el],
-                        label: el,
-                      };
-                    },
-                  )}
+                  // defaultValue={defaultAddress[0].map(
+                  //   (el: string, idx: number) => {
+                  //     return {
+                  //       key: idx,
+                  //       value: addDict[el],
+                  //       label: el,
+                  //     };
+                  //   },
+                  // )}
                   render={({ field }) => (
                     <Select
                       {...field}
@@ -349,7 +358,7 @@ const BasicInfo = ({ basicInfo, setBasicInfo, toWrite, setStep }: Props) => {
           {errors?.cost?.message}
         </p>
         <div className="flex flex-row justify-center items-center w-full h-fit mt-10">
-          <SmallBtn onClick={toWrite}>취 소</SmallBtn>
+          <SmallBtn onClick={handleClickCancel}>취 소</SmallBtn>
           <SmallBtn css="ml-5">다 음</SmallBtn>
         </div>
       </form>
