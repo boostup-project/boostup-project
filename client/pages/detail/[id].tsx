@@ -79,10 +79,10 @@ const Detail = () => {
   }, [tab, lessonId]);
 
   return (
-
+    <>
       {basicInfoSuccess && basicEditPower ? (
         <DetailBasicInfoEditModal basicData={basicInfo} />
-      ) : null} */}
+      ) : null}
 
       <div className="flex flex-col bg-bgColor items-center justify-start w-full h-full pt-28">
         {/* 요약정보 */}
