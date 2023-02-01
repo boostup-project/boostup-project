@@ -33,17 +33,17 @@ public class Purchase {
         this.purchaseStatus = purchaseStatus;
     }
 
-    public void setStartTime() {
-        this.startTime = LocalDateTime.now();
-    }
-
-    public void setEndTime(LocalDateTime startTime, Integer validDays) {
-        this.endTime = startTime.plusDays(validDays);
+    public void setEndTime(LocalDateTime endTime, Integer validDays) {
+        this.endTime = endTime.plusHours(validDays);
     }
 
     public void setTicketTimes(Integer validDays) {
         this.startTime = LocalDateTime.now();
-        this.endTime = startTime.plusDays(validDays);
+        this.endTime = startTime.plusHours(validDays);
+    }
+
+    public void setTicketId(Long ticketId) {
+        this.ticketId = ticketId;
     }
 
     @Builder
