@@ -1,4 +1,5 @@
 package com.codueon.boostUp.domain.lesson.service;
+
 import com.codueon.boostUp.domain.bookmark.repository.BookmarkRepository;
 import com.codueon.boostUp.domain.lesson.dto.Get.*;
 import com.codueon.boostUp.domain.lesson.dto.Patch.PatchLessonCurriculum;
@@ -18,16 +19,17 @@ import com.codueon.boostUp.global.exception.ExceptionCode;
 import com.codueon.boostUp.global.file.AwsS3Service;
 import com.codueon.boostUp.global.file.FileHandler;
 import com.codueon.boostUp.global.file.UploadFile;
-import com.codueon.boostUp.global.security.token.JwtAuthenticationToken;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
+
 import static com.codueon.boostUp.domain.suggest.entity.SuggestStatus.*;
 import static com.codueon.boostUp.global.exception.ExceptionCode.NOT_ACCEPT_SUGGEST;
 import static com.codueon.boostUp.global.exception.ExceptionCode.NOT_PAY_SUCCESS;

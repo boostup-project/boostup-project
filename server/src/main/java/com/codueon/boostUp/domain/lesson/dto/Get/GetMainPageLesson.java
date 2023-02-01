@@ -1,14 +1,12 @@
 package com.codueon.boostUp.domain.lesson.dto.Get;
 
 import com.codueon.boostUp.domain.lesson.entity.Lesson;
-import com.codueon.boostUp.domain.member.entity.Member;
 import com.querydsl.core.annotations.QueryProjection;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Getter
 @NoArgsConstructor
@@ -23,12 +21,14 @@ public class GetMainPageLesson {
     private Integer career;
     private List<String> address;
     private boolean bookmark;
+    private Long ticketId;
 
     @Builder
     @QueryProjection
     public GetMainPageLesson(Lesson lesson,
                              String name,
-                             boolean bookmark) {
+                             boolean bookmark,
+                             Long ticketId) {
         this.lessonId = lesson.getId();
         this.languages = lesson.getLanguageListAsString();
         this.title = lesson.getTitle();
@@ -39,5 +39,6 @@ public class GetMainPageLesson {
         this.career = lesson.getCareer();
         this.address = lesson.getAddressListAsString();
         this.bookmark = bookmark;
+        this.ticketId = ticketId;
     }
 }

@@ -16,5 +16,5 @@ public class Ticket {
     private String ticketName;
     private String ticketContent;
     private Integer ticketCost;
-    private Integer validDays;
+    private Integer validHours;
 }

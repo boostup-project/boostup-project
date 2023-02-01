@@ -6,10 +6,7 @@ import com.codueon.boostUp.domain.suggest.dto.GetPaymentReceipt;
 import com.codueon.boostUp.domain.suggest.dto.GetStudentSuggest;
 import com.codueon.boostUp.domain.suggest.dto.GetTutorSuggest;
 import com.codueon.boostUp.domain.suggest.entity.*;
-import com.codueon.boostUp.domain.suggest.repository.PaymentInfoRepository;
-import com.codueon.boostUp.domain.suggest.repository.PurchaseRepository;
-import com.codueon.boostUp.domain.suggest.repository.ReasonRepository;
-import com.codueon.boostUp.domain.suggest.repository.SuggestRepository;
+import com.codueon.boostUp.domain.suggest.repository.*;
 import com.codueon.boostUp.global.exception.BusinessLogicException;
 import com.codueon.boostUp.global.exception.ExceptionCode;
 import lombok.RequiredArgsConstructor;
@@ -30,6 +27,7 @@ public class SuggestDbService {
     private final ReasonRepository reasonRepository;
     private final PaymentInfoRepository paymentInfoRepository;
     private final PurchaseRepository purchaseRepository;
+    private final TicketRepository ticketRepository;
 
     /**
      * 신청 조회 메서드
@@ -49,6 +47,11 @@ public class SuggestDbService {
     public void ifSuggestExistsReturnException(Long lessonId, Long memberId) {
         if (suggestRepository.findByLessonIdAndMemberId(lessonId, memberId).isPresent())
             throw new BusinessLogicException(ExceptionCode.SUGGEST_ALREADY_EXIST);
+    }
+
+    public Ticket ifExistsReturnTicket(Long ticketId) {
+        return ticketRepository.findById(ticketId)
+                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.SUGGEST_ALREADY_EXIST));
     }
 
     /**
