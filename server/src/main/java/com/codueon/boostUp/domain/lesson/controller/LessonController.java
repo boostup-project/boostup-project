@@ -13,6 +13,7 @@ import com.codueon.boostUp.domain.lesson.dto.Post.PostSearchLesson;
 import com.codueon.boostUp.domain.lesson.dto.etc.WrapUrl;
 import com.codueon.boostUp.domain.lesson.service.LessonService;
 import com.codueon.boostUp.global.security.token.JwtAuthenticationToken;
+import io.jsonwebtoken.Jwt;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.data.domain.Page;
@@ -189,8 +190,12 @@ public class LessonController {
      * @author mozzi327
      */
     @GetMapping("/{lesson-id}")
-    public ResponseEntity<?> getLesson(@PathVariable("lesson-id") Long lessonId) {
-        GetLesson response = lessonService.getDetailLesson(lessonId);
+    public ResponseEntity<?> getLesson(@PathVariable("lesson-id") Long lessonId,
+                                       Authentication authentication) {
+        JwtAuthenticationToken token = (JwtAuthenticationToken) authentication;
+        Long memberId = getMemberIdIfExistToken(token);
+
+        GetLesson response = lessonService.getDetailLesson(lessonId, memberId);
         return ResponseEntity.ok().body(response);
     }
 

@@ -7,6 +7,9 @@ import com.codueon.boostUp.domain.lesson.dto.Get.QGetMainPageLesson;
 import com.codueon.boostUp.domain.lesson.dto.Post.PostSearchLesson;
 import com.codueon.boostUp.domain.lesson.entity.AddressInfo;
 import com.codueon.boostUp.domain.lesson.entity.LanguageInfo;
+import com.codueon.boostUp.domain.lesson.entity.Lesson;
+import com.codueon.boostUp.domain.lesson.service.LessonDbService;
+import com.codueon.boostUp.global.security.token.JwtAuthenticationToken;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.dsl.*;
 import com.querydsl.jpa.JPAExpressions;
@@ -28,7 +31,6 @@ import static com.codueon.boostUp.domain.member.entity.QMember.member;
 
 
 public class LessonRepositoryImpl implements CustomLessonRepository {
-
     private final JPAQueryFactory queryFactory;
 
     public LessonRepositoryImpl(EntityManager em) {

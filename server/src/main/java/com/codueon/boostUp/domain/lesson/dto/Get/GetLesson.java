@@ -21,6 +21,11 @@ public class GetLesson {
     private Integer career;
     private Integer cost;
     private List<String> address;
+    private Boolean editable;
+
+    public void setEditable(Boolean editable) {
+        this.editable = editable;
+    }
 
     @Builder
     @QueryProjection
