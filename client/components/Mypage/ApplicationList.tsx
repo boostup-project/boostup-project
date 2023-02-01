@@ -1,7 +1,18 @@
+import useGetMyTutor from "hooks/mypage/useGetMyTutor";
+import { useRouter } from "next/router";
 const ApplicationList = () => {
+  // const { data: myTutorUrl } = useGetMyTutor;
+
+  // const router = useRouter();
+  // const toMyTutor = () => {
+  //   router.push(myTutorUrl);
+  // };
   return (
     <div className="flex flex-col w-full">
-      <button className="flex flex-col bg-pointColor text-white font-SCDream7 desktop:text-lg tablet:text-base text-sm rounded-xl items-start justify-center border border-borderColor w-full desktop:h-[50px] tablet:h-[43px] h-[38px] py-3 desktop:mt-5 tablet:mt-3 mt-2 pl-5">
+      <button
+        className="flex flex-col bg-pointColor text-white font-SCDream7 desktop:text-lg tablet:text-base text-sm rounded-xl items-start justify-center border border-borderColor w-full desktop:h-[50px] tablet:h-[43px] h-[38px] py-3 desktop:mt-5 tablet:mt-3 mt-2 pl-5"
+        // onClick={toMyTutor}
+      >
         나의 과외로 이동하기
       </button>
       {/* {map} 수업신청정보 */}

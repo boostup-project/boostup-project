@@ -3,13 +3,14 @@ import { IconEmptyheart, IconFullheart } from "assets/icon";
 import ApplyModal from "./ApplyModal";
 import Swal from "sweetalert2";
 import { useQuery } from "react-query";
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import useDeleteDetail from "hooks/detail/useDeleteDetail";
 import useGetBookmarkModi from "hooks/detail/useGetBookmarkModi";
 import useGetBookmark from "hooks/detail/useGetBookmark";
 import { useRouter } from "next/router";
 import getBookmark from "apis/detail/getBookmark";
-const DetailButtons = () => {
+const DetailButtons = (basicInfo: any) => {
+  const [editable, setEditable] = useState(false);
   const [isOpenModal, setOpenModal] = useState<boolean>(false);
   const router = useRouter();
   const lessonId = Number(router.query.id);
@@ -32,7 +33,10 @@ const DetailButtons = () => {
     },
   );
 
-  const { mutate } = useDeleteDetail();
+  useEffect(() => {
+    // setEditable(basicInfo.basicInfo.editable);
+    console.log(basicInfo);
+  }, []);
   const onClickToggleModal = useCallback(() => {
     setOpenModal(!isOpenModal);
   }, [isOpenModal]);
@@ -46,7 +50,10 @@ const DetailButtons = () => {
     bookmarkRefetch();
     console.log(mark, bookmarkData?.data.bookmark);
   };
+
+  const { mutate: deleteDetail } = useDeleteDetail();
   const deletePost = () => {
+    console.log(basicInfo.basicInfo.editable);
     Swal.fire({
       title: "과외를 삭제하시겠습니까?",
       text: "다시 되돌릴 수 없습니다.",
@@ -56,7 +63,7 @@ const DetailButtons = () => {
       confirmButtonColor: "#3085d6",
     }).then(result => {
       if (result.isConfirmed) {
-        mutate(lessonId);
+        deleteDetail(lessonId);
         router.push("/");
         return Swal.fire({
           text: "삭제가 완료되었습니다",
@@ -91,11 +98,15 @@ const DetailButtons = () => {
             </div>
           </DetailBtn>
         </div>
+        {/* {editable ? ( */}
         <div className="mt-10">
           <DetailBtn bold={false} remove={true} onClick={deletePost}>
             삭제하기
           </DetailBtn>
         </div>
+        {/* ) : (
+          <></>
+        )} */}
       </div>
     </div>
   );

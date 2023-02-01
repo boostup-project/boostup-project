@@ -2,7 +2,7 @@ import { useQuery } from "react-query";
 import getStudentInfo from "apis/mypage/getStudentInfo";
 
 const useGetStudentInfo = () => {
-  return useQuery(["get/TutorInfo"], () => getStudentInfo(), {
+  return useQuery(["get/StudentInfo"], () => getStudentInfo(), {
     // enabled: false,
     onSuccess: res => {
       console.log(res);

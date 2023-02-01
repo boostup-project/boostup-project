@@ -1,14 +1,15 @@
 import axios from "axios";
 
-const getBasicInfo = (lessonId: number) => {
-  return axios.get(`/lesson/${lessonId}`, {
+const getMyTutor = async () => {
+  const url = `/lesson/tutor/`;
+  return await axios.get(url, {
     baseURL: process.env.NEXT_PUBLIC_API_URL,
     headers: {
       "content-Type": `application/json`,
-      "ngrok-skip-browser-warning": "69420",
+      "ngrok-skip-browser-warning": "63490",
       Authorization: `Bearer ${localStorage.getItem("token")}`,
     },
   });
 };
 
-export default getBasicInfo;
+export default getMyTutor;

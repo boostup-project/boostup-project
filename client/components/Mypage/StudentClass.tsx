@@ -9,6 +9,7 @@ const StudentClass = () => {
 
   const { mutate } = useDeleteApply();
   const deleteApply = (suggestId: number) => {
+    console.log(suggestId);
     Swal.fire({
       title: "신청을 취소하시겠습니까?",
       icon: "question",
