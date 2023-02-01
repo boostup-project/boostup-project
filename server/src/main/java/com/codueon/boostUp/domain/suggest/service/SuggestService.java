@@ -4,8 +4,12 @@ import com.codueon.boostUp.domain.lesson.entity.Lesson;
 import com.codueon.boostUp.domain.lesson.service.LessonDbService;
 import com.codueon.boostUp.domain.member.entity.Member;
 import com.codueon.boostUp.domain.member.service.MemberDbService;
-import com.codueon.boostUp.domain.suggest.dto.*;
+import com.codueon.boostUp.domain.suggest.dto.GetLessonAttendance;
+import com.codueon.boostUp.domain.suggest.dto.GetRefundPayment;
+import com.codueon.boostUp.domain.suggest.dto.PostReason;
+import com.codueon.boostUp.domain.suggest.dto.PostSuggest;
 import com.codueon.boostUp.domain.suggest.entity.PaymentInfo;
+import com.codueon.boostUp.domain.suggest.entity.Purchase;
 import com.codueon.boostUp.domain.suggest.entity.Reason;
 import com.codueon.boostUp.domain.suggest.entity.Suggest;
 import com.codueon.boostUp.domain.suggest.kakao.*;
@@ -17,6 +21,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import static com.codueon.boostUp.domain.suggest.entity.PurchaseStatus.PURCHASE_IN_PROGRESS;
 import static com.codueon.boostUp.domain.suggest.entity.SuggestStatus.*;
 import static com.codueon.boostUp.domain.suggest.utils.PayConstants.ORDER_APPROVED;
 import static com.codueon.boostUp.domain.suggest.utils.PayConstants.REFUND_APPROVED;
@@ -47,7 +52,7 @@ public class SuggestService {
 //            throw new BusinessLogicException(ExceptionCode.TUTOR_CANNOT_RESERVATION);
 //        }
 
-        suggestDbService.ifEndOfSuggestExistsReturnException(lessonId, memberId);
+        suggestDbService.ifUnfinishedSuggestExistsReturnException(lessonId, memberId);
 
         Suggest suggest = Suggest.builder()
                 .days(post.getDays())
@@ -59,6 +64,21 @@ public class SuggestService {
 
         suggest.setStatus(ACCEPT_IN_PROGRESS);
         suggestDbService.saveSuggest(suggest);
+    }
+
+    public void createPurchase(Long ticketId, Long memberId) {
+        Lesson findLesson = lessonDbService.ifExistsReturnLessonByMemberId(memberId);
+        suggestDbService.ifUnfinishedPurchaseExistsReturnException(findLesson.getId(), memberId);
+
+        Purchase purchase = Purchase.builder()
+                .ticketId(ticketId)
+                .lessonId(findLesson.getId())
+                .memberId(memberId)
+                .build();
+
+        purchase.setTicketTimes(3);
+        purchase.setPurchaseStatus(PURCHASE_IN_PROGRESS);
+        suggestDbService.savePurchase(purchase);
     }
 
     /**
@@ -145,10 +165,11 @@ public class SuggestService {
      * @author LeeGoh
      */
     @Transactional
-    public Message getKaKapPayUrl(Long suggestId, String requestUrl) {
+    public Message getKaKapPayUrl(Long suggestId, Long memberId, String requestUrl) {
         Suggest findSuggest = suggestDbService.ifExistsReturnSuggest(suggestId);
 
-        if (!findSuggest.getSuggestStatus().equals(PAY_IN_PROGRESS)) {
+        if (!findSuggest.getSuggestStatus().equals(PAY_IN_PROGRESS) ||
+            !findSuggest.getMemberId().equals(memberId)) {
             throw new BusinessLogicException(INVALID_ACCESS);
         }
 
@@ -180,10 +201,11 @@ public class SuggestService {
      * @author LeeGoh
      */
     @Transactional
-    public Message getTossPayUrl(Long suggestId, String requestUrl, int paymentId) {
+    public Message getTossPayUrl(Long suggestId, Long memberId, String requestUrl, int paymentId) {
         Suggest findSuggest = suggestDbService.ifExistsReturnSuggest(suggestId);
 
-        if (!findSuggest.getSuggestStatus().equals(PAY_IN_PROGRESS)) {
+        if (!findSuggest.getSuggestStatus().equals(PAY_IN_PROGRESS) ||
+            !findSuggest.getMemberId().equals(memberId)) {
             throw new BusinessLogicException(INVALID_ACCESS);
         }
 
@@ -287,6 +309,24 @@ public class SuggestService {
                 .data(tossPaySuccessInfo)
                 .message(INFO_URI_MSG)
                 .build();
+    }
+
+    /**
+     * 결제 여부 확인 메서드
+     * @param suggestId 신청 식별자
+     * @param memberId 사용자 식별자
+     * @return Boolean
+     * @author LeeGoh
+     */
+    public Boolean getPaymentStatusCheck(Long suggestId, Long memberId) {
+        Suggest findSuggest = suggestDbService.ifExistsReturnSuggest(suggestId);
+
+        if (!findSuggest.getMemberId().equals(memberId)) {
+            throw new BusinessLogicException(INVALID_ACCESS);
+        }
+
+        if (findSuggest.getSuggestStatus().equals(DURING_LESSON)) return true;
+        else return false;
     }
 
     /**
