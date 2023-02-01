@@ -62,6 +62,7 @@ public class LessonGetTest extends LessonControllerTest {
 
         actions.andExpect(status().isOk())
                 .andExpect(jsonPath("$.data[0].lessonId").value(lessonList.get(0).getId()))
+                .andExpect(jsonPath("$.data[0].ticketId").value(1L))
                 .andExpect(jsonPath("$.data[0].languages[0]").value("Javascript"))
                 .andExpect(jsonPath("$.data[0].languages[1]").value("Python"))
                 .andExpect(jsonPath("$.data[0].languages[2]").value("Go"))
@@ -77,6 +78,7 @@ public class LessonGetTest extends LessonControllerTest {
                 .andExpect(jsonPath("$.data[0].bookmark").value(false))
 
                 .andExpect(jsonPath("$.data[1].lessonId").value(lessonList.get(1).getId()))
+                .andExpect(jsonPath("$.data[1].ticketId").value(1L))
                 .andExpect(jsonPath("$.data[1].languages[0]").value("Javascript"))
                 .andExpect(jsonPath("$.data[1].languages[1]").value("Python"))
                 .andExpect(jsonPath("$.data[1].languages[2]").value("Go"))
@@ -139,6 +141,7 @@ public class LessonGetTest extends LessonControllerTest {
 
         actions.andExpect(status().isOk())
                 .andExpect(jsonPath("$.data[0].lessonId").value(lessonList.get(0).getId()))
+                .andExpect(jsonPath("$.data[0].ticketId").value(1L))
                 .andExpect(jsonPath("$.data[0].languages[0]").value("Javascript"))
                 .andExpect(jsonPath("$.data[0].languages[1]").value("Python"))
                 .andExpect(jsonPath("$.data[0].languages[2]").value("Go"))
@@ -154,6 +157,7 @@ public class LessonGetTest extends LessonControllerTest {
                 .andExpect(jsonPath("$.data[0].bookmark").value(true))
 
                 .andExpect(jsonPath("$.data[1].lessonId").value(lessonList.get(1).getId()))
+                .andExpect(jsonPath("$.data[1].ticketId").value(1L))
                 .andExpect(jsonPath("$.data[1].languages[0]").value("Javascript"))
                 .andExpect(jsonPath("$.data[1].languages[1]").value("Python"))
                 .andExpect(jsonPath("$.data[1].languages[2]").value("Go"))
@@ -205,6 +209,7 @@ public class LessonGetTest extends LessonControllerTest {
 
         actions.andExpect(status().isOk())
                 .andExpect(jsonPath("$.data[0].lessonId").value(lessonList.get(0).getId()))
+                .andExpect(jsonPath("$.data[0].ticketId").value(1L))
                 .andExpect(jsonPath("$.data[0].languages[0]").value("Javascript"))
                 .andExpect(jsonPath("$.data[0].languages[1]").value("Python"))
                 .andExpect(jsonPath("$.data[0].languages[2]").value("Go"))
@@ -220,6 +225,7 @@ public class LessonGetTest extends LessonControllerTest {
                 .andExpect(jsonPath("$.data[0].bookmark").value(false))
 
                 .andExpect(jsonPath("$.data[1].lessonId").value(lessonList.get(1).getId()))
+                .andExpect(jsonPath("$.data[1].ticketId").value(1L))
                 .andExpect(jsonPath("$.data[1].languages[0]").value("Javascript"))
                 .andExpect(jsonPath("$.data[1].languages[1]").value("Python"))
                 .andExpect(jsonPath("$.data[1].languages[2]").value("Go"))
@@ -259,6 +265,7 @@ public class LessonGetTest extends LessonControllerTest {
         actions
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data[0].lessonId").value(lessonList.get(0).getId()))
+                .andExpect(jsonPath("$.data[0].ticketId").value(1L))
                 .andExpect(jsonPath("$.data[0].languages[0]").value("Javascript"))
                 .andExpect(jsonPath("$.data[0].languages[1]").value("Python"))
                 .andExpect(jsonPath("$.data[0].languages[2]").value("Go"))
@@ -274,6 +281,7 @@ public class LessonGetTest extends LessonControllerTest {
                 .andExpect(jsonPath("$.data[0].bookmark").value(true))
 
                 .andExpect(jsonPath("$.data[1].lessonId").value(lessonList.get(1).getId()))
+                .andExpect(jsonPath("$.data[1].ticketId").value(1L))
                 .andExpect(jsonPath("$.data[1].languages[0]").value("Javascript"))
                 .andExpect(jsonPath("$.data[1].languages[1]").value("Python"))
                 .andExpect(jsonPath("$.data[1].languages[2]").value("Go"))
@@ -318,6 +326,7 @@ public class LessonGetTest extends LessonControllerTest {
         actions
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data[0].lessonId").value(lessonList.get(0).getId()))
+                .andExpect(jsonPath("$.data[0].ticketId").value(1L))
                 .andExpect(jsonPath("$.data[0].languages[0]").value("Javascript"))
                 .andExpect(jsonPath("$.data[0].languages[1]").value("Python"))
                 .andExpect(jsonPath("$.data[0].languages[2]").value("Go"))
@@ -333,6 +342,7 @@ public class LessonGetTest extends LessonControllerTest {
                 .andExpect(jsonPath("$.data[0].bookmark").value(false))
 
                 .andExpect(jsonPath("$.data[1].lessonId").value(lessonList.get(1).getId()))
+                .andExpect(jsonPath("$.data[1].ticketId").value(1L))
                 .andExpect(jsonPath("$.data[1].languages[0]").value("Javascript"))
                 .andExpect(jsonPath("$.data[1].languages[1]").value("Python"))
                 .andExpect(jsonPath("$.data[1].languages[2]").value("Go"))
@@ -378,6 +388,7 @@ public class LessonGetTest extends LessonControllerTest {
         actions
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data[0].lessonId").value(lessonList.get(0).getId()))
+                .andExpect(jsonPath("$.data[0].ticketId").value(1L))
                 .andExpect(jsonPath("$.data[0].languages[0]").value("Javascript"))
                 .andExpect(jsonPath("$.data[0].languages[1]").value("Python"))
                 .andExpect(jsonPath("$.data[0].languages[2]").value("Go"))
@@ -393,6 +404,7 @@ public class LessonGetTest extends LessonControllerTest {
                 .andExpect(jsonPath("$.data[0].bookmark").value(true))
 
                 .andExpect(jsonPath("$.data[1].lessonId").value(lessonList.get(1).getId()))
+                .andExpect(jsonPath("$.data[1].ticketId").value(1L))
                 .andExpect(jsonPath("$.data[1].languages[0]").value("Javascript"))
                 .andExpect(jsonPath("$.data[1].languages[1]").value("Python"))
                 .andExpect(jsonPath("$.data[1].languages[2]").value("Go"))
@@ -430,6 +442,7 @@ public class LessonGetTest extends LessonControllerTest {
                 .name(member.getName())
                 .lesson(lesson)
                 .build();
+        getLesson.setEditable(true);
 
         given(lessonService.getDetailLesson(Mockito.anyLong(), Mockito.anyLong())).willReturn(getLesson);
 
@@ -453,6 +466,7 @@ public class LessonGetTest extends LessonControllerTest {
                 .andExpect(jsonPath("$.company").value(lesson.getCompany()))
                 .andExpect(jsonPath("$.career").value(lesson.getCareer()))
                 .andExpect(jsonPath("$.cost").value(lesson.getCost()))
+                .andExpect(jsonPath("$.editable").value(getLesson.getEditable()))
                 .andExpect(jsonPath("$.address[0]").value("강남구"))
                 .andExpect(jsonPath("$.address[1]").value("강동구"))
                 .andExpect(jsonPath("$.address[2]").value("강북구"))
@@ -473,6 +487,7 @@ public class LessonGetTest extends LessonControllerTest {
                                         fieldWithPath("company").type(JsonFieldType.STRING).description("강사 대표회사"),
                                         fieldWithPath("career").type(JsonFieldType.NUMBER).description("강사 경력"),
                                         fieldWithPath("cost").type(JsonFieldType.NUMBER).description("과외 가격"),
+                                        fieldWithPath("editable").type(JsonFieldType.BOOLEAN).description("수정 가능 여부"),
                                         fieldWithPath("profileImage").type(JsonFieldType.STRING).description("섬네일 이미지"),
                                         fieldWithPath("languages").type(JsonFieldType.ARRAY).description("과외 가능 언어"),
                                         fieldWithPath("address").type(JsonFieldType.ARRAY).description("과외 가능 지역")

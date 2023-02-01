@@ -87,6 +87,7 @@ public class LessonControllerTest {
                         .name(member.getName())
                         .lesson(lessons)
                         .bookmark(false)
+                        .ticketId(1L)
                         .build())
                 .collect(Collectors.toList());
 
@@ -95,6 +96,7 @@ public class LessonControllerTest {
                         .name(member.getName())
                         .lesson(lessons)
                         .bookmark(true)
+                        .ticketId(1L)
                         .build())
                 .collect(Collectors.toList());
 
@@ -121,6 +123,7 @@ public class LessonControllerTest {
         return List.of(
                 fieldWithPath("data").type(JsonFieldType.ARRAY).description("장소 데이터"),
                 fieldWithPath("data[0].lessonId").type(JsonFieldType.NUMBER).description("과외 식별자"),
+                fieldWithPath("data[0].ticketId").type(JsonFieldType.NUMBER).description("이용권 식별자"),
                 fieldWithPath("data[0].name").type(JsonFieldType.STRING).description("닉네임"),
                 fieldWithPath("data[0].title").type(JsonFieldType.STRING).description("과외 타이틀"),
                 fieldWithPath("data[0].cost").type(JsonFieldType.NUMBER).description("과외 가격"),

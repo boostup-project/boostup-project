@@ -8,10 +8,7 @@ import com.codueon.boostUp.domain.suggest.dto.GetLessonAttendance;
 import com.codueon.boostUp.domain.suggest.dto.GetRefundPayment;
 import com.codueon.boostUp.domain.suggest.dto.PostReason;
 import com.codueon.boostUp.domain.suggest.dto.PostSuggest;
-import com.codueon.boostUp.domain.suggest.entity.PaymentInfo;
-import com.codueon.boostUp.domain.suggest.entity.Purchase;
-import com.codueon.boostUp.domain.suggest.entity.Reason;
-import com.codueon.boostUp.domain.suggest.entity.Suggest;
+import com.codueon.boostUp.domain.suggest.entity.*;
 import com.codueon.boostUp.domain.suggest.kakao.*;
 import com.codueon.boostUp.domain.suggest.response.Message;
 import com.codueon.boostUp.domain.suggest.toss.*;
@@ -76,7 +73,9 @@ public class SuggestService {
                 .memberId(memberId)
                 .build();
 
-        purchase.setTicketTimes(3);
+        Ticket findTicket = suggestDbService.ifExistsReturnTicket(ticketId);
+
+        purchase.setTicketTimes(findTicket.getValidHours());
         purchase.setPurchaseStatus(PURCHASE_IN_PROGRESS);
         suggestDbService.savePurchase(purchase);
     }
