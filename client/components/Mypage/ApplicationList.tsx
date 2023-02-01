@@ -1,14 +1,36 @@
 import useGetMyTutor from "hooks/mypage/useGetMyTutor";
 import { useRouter } from "next/router";
+import AcceptModal from "./AcceptModal";
+import DeclineModal from "./DeclineModal";
+import { useState, useCallback, useEffect } from "react";
 const ApplicationList = () => {
+  const [OpenModal, setOpenModal] = useState<boolean>(false);
+  const [openDeclineModal, setOpenDeclineModal] = useState<boolean>(false);
+
   // const { data: myTutorUrl } = useGetMyTutor;
 
   // const router = useRouter();
   // const toMyTutor = () => {
   //   router.push(myTutorUrl);
   // };
+
+  const onClickAcceptModal = useCallback(() => {
+    setOpenModal(!OpenModal);
+  }, [OpenModal]);
+
+  const onClickDeclineModal = useCallback(() => {
+    setOpenDeclineModal(!openDeclineModal);
+  }, [openDeclineModal]);
+
   return (
     <div className="flex flex-col w-full">
+      {!openDeclineModal && OpenModal && (
+        <AcceptModal onClickToggleModal={onClickAcceptModal} />
+      )}
+      {!OpenModal && openDeclineModal && (
+        <DeclineModal onClickToggleModal={onClickDeclineModal} />
+      )}
+
       <button
         className="flex flex-col bg-pointColor text-white font-SCDream7 desktop:text-lg tablet:text-base text-sm rounded-xl items-start justify-center border border-borderColor w-full desktop:h-[50px] tablet:h-[43px] h-[38px] py-3 desktop:mt-5 tablet:mt-3 mt-2 pl-5"
         // onClick={toMyTutor}
@@ -34,9 +56,19 @@ const ApplicationList = () => {
             </div>
           </div>
           <div className="flex flex-col w-[60%] justify-end items-end">
-            <button className="text text-pointColor m-2">수락하기</button>
+            <button
+              className="text text-pointColor m-2"
+              onClick={onClickAcceptModal}
+            >
+              수락하기
+            </button>
             <button className="text text-pointColor m-2">채팅하기</button>
-            <button className="text text-negativeMessage m-2">거절하기 </button>
+            <button
+              className="text text-negativeMessage m-2"
+              onClick={onClickDeclineModal}
+            >
+              거절하기
+            </button>
           </div>
         </div>
       </div>

@@ -3,6 +3,7 @@ import useGetStudentInfo from "hooks/mypage/useGetStudentInfo";
 import { useEffect } from "react";
 import useDeleteApply from "hooks/mypage/useDeleteApply";
 import Swal from "sweetalert2";
+import Link from "next/link";
 const StudentClass = () => {
   const { refetch: refetchStudentInfo, data: studentInfoData } =
     useGetStudentInfo();
@@ -35,7 +36,10 @@ const StudentClass = () => {
           {studentInfoData?.data.data.map((tutor: any) => (
             <div className="flex flex-row h-fit w-full rounded-lg border border-borderColor mt-3">
               {/* {Left} */}
-              <div className="flex desktop:w-1/4 justify-center items-center ">
+              <Link
+                href={`/detail/${tutor.lessonId}`}
+                className="flex desktop:w-1/4 justify-center items-center "
+              >
                 {tutor.profileImage ? (
                   <img
                     className="flex desktop:w-[200px] tablet:w-[150px] w-[100px] object-cover border border-borderColor rounded-xl m-3"
@@ -49,7 +53,7 @@ const StudentClass = () => {
                     }
                   />
                 )}
-              </div>
+              </Link>
               {/* {center} */}
               <div className="flex flex-col w-1/2 justify-center desktop:pl-2">
                 <div className="flex">
@@ -95,6 +99,7 @@ const StudentClass = () => {
                   })}
                 </div>
               </div>
+
               {/* {Right} */}
               <div className="flex flex-col w-1/3 justify-center items-end desktop:mr-4 tablet:mr-2 mr-2">
                 <div className="flex  desktop:text-xl tablet:text-lg text-[14px]">

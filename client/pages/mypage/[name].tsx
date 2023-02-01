@@ -23,12 +23,6 @@ const Mypage = () => {
 
   const [tab, setTab] = useState(1);
 
-  const {
-    refetch: basicInfoRefetch,
-    data: basicInfo,
-    isSuccess: basicInfoSuccess,
-  } = useGetBasicInfo(lessonId);
-
   const { refetch: refetchStudentInfo, data: studentInfoData } =
     useGetStudentInfo();
   const { refetch: refetchTutorInfo, data: tuturInfoData } = useGetTutorInfo(
@@ -46,7 +40,6 @@ const Mypage = () => {
     // console.log(lessonId);
     if (lessonId) {
       // 요약정보 요청
-      basicInfoRefetch();
     }
 
     if (tab === 1 && lessonId) {
