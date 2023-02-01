@@ -34,9 +34,6 @@ public class MemberService {
     @Value("${default.image.address}")
     private String defaultImageAddress;
 
-    @Value("${default.image.name}")
-    private String defaultImageName;
-
     /**
      * 회원가입 메서드
      *
