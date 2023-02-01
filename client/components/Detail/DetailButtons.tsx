@@ -12,13 +12,14 @@ import getBookmark from "apis/detail/getBookmark";
 const DetailButtons = () => {
   const [isOpenModal, setOpenModal] = useState<boolean>(false);
   const router = useRouter();
-  const Id = Number(router.query.id);
-  const { refetch } = useGetBookmarkModi(Id);
+  const lessonId = Number(router.query.id);
+  const { refetch: bookmarkRefetch, data: bookmarkData } =
+    useGetBookmarkModi(lessonId);
 
   const [mark, setMark] = useState<boolean>(true || false);
   const { isLoading, isError, data } = useQuery(
     ["getBookmark"],
-    () => getBookmark(2),
+    () => getBookmark(lessonId),
     {
       enabled: true,
       onSuccess: data => {
@@ -41,8 +42,9 @@ const DetailButtons = () => {
   };
 
   const saveBookmark = () => {
-    setMark(prev => !prev);
-    console.log(mark);
+    setMark(bookmarkData?.data.bookmark);
+    bookmarkRefetch();
+    console.log(mark, bookmarkData?.data.bookmark);
   };
   const deletePost = () => {
     Swal.fire({
@@ -54,7 +56,7 @@ const DetailButtons = () => {
       confirmButtonColor: "#3085d6",
     }).then(result => {
       if (result.isConfirmed) {
-        mutate(Id);
+        mutate(lessonId);
         router.push("/");
         return Swal.fire({
           text: "삭제가 완료되었습니다",
@@ -65,7 +67,9 @@ const DetailButtons = () => {
     });
   };
 
-  return (
+  return isLoading ? (
+    <></>
+  ) : (
     <div className="flex w-full h-full flex-col ">
       {isOpenModal && <ApplyModal onClickToggleModal={onClickToggleModal} />}
       <div className="flex flex-col desktop:w-full desktop:h-fit tablet:w-[97%] w-[97%] justify-center">
