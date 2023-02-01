@@ -21,6 +21,7 @@ import com.codueon.boostUp.global.file.FileHandler;
 import com.codueon.boostUp.global.file.UploadFile;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
+import org.apache.tomcat.jni.File;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -219,11 +220,11 @@ public class LessonService {
 
         List<Integer> languageList = postLessonInfoEdit.getLanguages();
         List<Integer> addressList = postLessonInfoEdit.getAddresses();
-        String editState = postLessonInfoEdit.getEditState();
         lessonDbService.addLanguageList(languageList, updateLesson);
         lessonDbService.addAddressList(addressList, updateLesson);
+        String editState = postLessonInfoEdit.getEditState();
 
-        if (editState == "true") {
+        if (editState.equals("true")) {
             UploadFile uploadFile = fileHandler.uploadFile(profileImage);
             ProfileImage newProfileImage = ProfileImage.builder()
                     .originFileName(uploadFile.getOriginFileName())
@@ -236,6 +237,7 @@ public class LessonService {
         } else if (editState == "false") {
             lessonDbService.saveLesson(updateLesson);
         }
+        lessonDbService.saveLesson(updateLesson);
     }
 
     /**
@@ -263,8 +265,9 @@ public class LessonService {
 
         lessonDbService.addLanguageList(languageList, updateLesson);
         lessonDbService.addAddressList(addressList, updateLesson);
+        String editState = postLessonInfoEdit.getEditState();
 
-        if (!profileImage.isEmpty()) {
+        if (editState.equals("true")) {
             UploadFile uploadFile = awsS3Service.uploadfile(profileImage, dir);
             ProfileImage editProfileImage = ProfileImage.builder()
                     .originFileName(uploadFile.getOriginFileName())
@@ -274,6 +277,8 @@ public class LessonService {
                     .build();
 
             updateLesson.addProfileImage(editProfileImage);
+        } else if (editState == "false") {
+            lessonDbService.saveLesson(updateLesson);
         }
         lessonDbService.saveLesson(updateLesson);
     }
@@ -396,7 +401,8 @@ public class LessonService {
 
         reviewService.removeAllByReviews(lessonId);
         bookmarkRepository.deleteByLessonId(lessonId);
-
+        fileHandler.delete(findLesson.getProfileImage().getFilePath());
+        findLessonInfo.getCareerImages().forEach(careerImage -> fileHandler.delete(careerImage.getFilePath()));
         lessonDbService.deleteLesson(findLesson);
         lessonDbService.deleteLessonInfo(findLessonInfo);
         lessonDbService.deleteCurriculum(findCurriculum);
