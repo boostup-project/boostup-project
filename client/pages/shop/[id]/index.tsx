@@ -1,8 +1,11 @@
-import useGetPaymentInfo from "hooks/shop/useGetPaymentInfo";
+import { Assemble } from "apis/shop/getKakaoNTossPay";
 import { useRouter } from "next/router";
-import { useEffect } from "react";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
+import useGetKakaoNTossPay from "hooks/shop/useGetKakaoNTossPay";
+import useGetPaymentCheck from "hooks/shop/useGetPaymentCheck";
+import useGetPaymentInfo from "hooks/shop/useGetPaymentInfo";
+import { toast } from "react-toastify";
 
 interface FetchedData {
   address: string[];
@@ -39,14 +42,11 @@ const costInfo: StringToString = {
 const teacherInfoKeys = Object.keys(teacherInfo);
 const costInfoKeys = Object.keys(costInfo);
 
-const payMethod = ["카카오페이", "토스 - 계좌", "토스 - 카드", "토스 - 휴대폰"];
+const payMethod = ["카카오페이", "토스 - 카드", "토스 - 휴대폰", "토스 - 계좌"];
 
 const shop = () => {
   const router = useRouter();
   const suggestId = Number(router.query.id);
-
-  /** React-query로 데이터 가져오기 */
-  const { refetch, data } = useGetPaymentInfo(suggestId);
 
   /** 유저 정보 hydration error 방지를 위하여 state로 처리 **/
   const [userName, setUserName] = useState<string | null>("");
@@ -55,9 +55,79 @@ const shop = () => {
   const [costInfoData, setCostInfoData] = useState<StringToString>();
   const [title, setTitle] = useState<string>("");
   const [teacherImg, setTeacherImg] = useState<string>("");
+  const [assemble, setAssemble] = useState<Assemble>();
+  const [isPayClicked, setIsPayClicked] = useState(false);
+  const mounted = useRef(false);
+
+  /** React-query로 데이터 가져오기 */
+  const { refetch, data } = useGetPaymentInfo(suggestId);
+  const {
+    refetch: getPayURL,
+    isSuccess,
+    data: dataPayURL,
+  } = useGetKakaoNTossPay(assemble!);
+  const {
+    refetch: getPayCheck,
+    isSuccess: payStatus,
+    data: dataPayCheck,
+  } = useGetPaymentCheck(suggestId);
 
   /** hook-form 삽입 **/
   const { handleSubmit, register } = useForm<OnSubmit>();
+
+  /** 결제클릭시 url받아오기 */
+  useEffect(() => {
+    if (mounted.current) {
+      getPayURL();
+    }
+  }, [assemble]);
+
+  useEffect(() => {
+    const width = 800;
+    const height = 800;
+    const left = window.screenX + (window.outerWidth - width) / 2;
+    const top = window.screenY + (window.outerHeight - height) / 2;
+    if (isSuccess) {
+      console.log(dataPayURL.data.data);
+      window.open(
+        dataPayURL.data.data,
+        "payPop",
+        `width=${width},height=${height},left=${left},top=${top}`,
+      );
+    }
+  }, [isSuccess]);
+
+  /** 결제여부 확인 */
+  useEffect(() => {
+    if (payStatus) {
+      const isPay = dataPayCheck.data.paymentCheck;
+      if (isPay) {
+        toast.success("결제가 확인되었습니다! 결제 내역을 불러옵니다", {
+          autoClose: 3000,
+          position: toast.POSITION.TOP_RIGHT,
+        });
+        setTimeout(() => {
+          router.push(`/shop/${suggestId}/receipt`);
+        }, 1500);
+      } else if (!isPay) {
+        toast.error(
+          "결제가 정상적으로 처리되지 않았습니다. 다시 결제해주세요",
+          {
+            autoClose: 3000,
+            position: toast.POSITION.TOP_RIGHT,
+          },
+        );
+      }
+    }
+  }, [payStatus]);
+
+  /** 초기 렌더링 방지 */
+  useEffect(() => {
+    mounted.current = true;
+    return () => {
+      mounted.current = false;
+    };
+  }, []);
 
   /** suggestId값이 있다면 로컬스토리지 값을 저장하고 refetch하기 */
   useEffect(() => {
@@ -104,7 +174,15 @@ const shop = () => {
   }, [data]);
 
   const onSubmit = (e: OnSubmit) => {
-    console.log(e);
+    setAssemble({
+      suggestId: suggestId,
+      paymentId: e.pay,
+    });
+    setIsPayClicked(prev => !prev);
+  };
+
+  const paymentCheck = () => {
+    getPayCheck();
   };
 
   if (!data) {
@@ -133,7 +211,7 @@ const shop = () => {
                       />
                     </div>
                     <div className="w-1/2 flex flex-col justify-evenly text-sm ml-7 tablet:text-lg tablet:ml-16">
-                      <div className="w-full bold">{title}</div>
+                      <div className="w-fit bold">{title}</div>
                       {teacherInfoKeys.map((key, i) => (
                         <div
                           key={i}
@@ -199,6 +277,7 @@ const shop = () => {
                         <input
                           type="radio"
                           value={i}
+                          disabled={isPayClicked ? true : false}
                           {...register("pay", {
                             required: true,
                           })}
@@ -211,19 +290,31 @@ const shop = () => {
               </div>
             </div>
           </div>
-          <div className="w-11/12 font-SCDream5 desktop:full">
-            <div className="w-full text-center mt-10 tablet:text-base">
-              <label className="w-full justify-center items-center">
-                <input type="checkbox" required={true} /> 모든 결제 정보에
-                대해서 확인하였습니다
-              </label>
-            </div>
-            <div className="w-full text-center mt-7 tablet:text-base">
-              <button className="rounded-xl bg-pointColor text-white px-4 py-2">
-                결제하기
+          {isPayClicked && (
+            <div className="w-full font-SCDream5 text-center mt-7 tablet:text-base">
+              <button
+                className="rounded-xl bg-pointColor text-white px-4 py-2"
+                onClick={paymentCheck}
+              >
+                결제 확인
               </button>
             </div>
-          </div>
+          )}
+          {!isPayClicked && (
+            <div className="w-11/12 font-SCDream5 desktop:full">
+              <div className="w-full text-center mt-10 tablet:text-base">
+                <label className="w-full justify-center items-center">
+                  <input type="checkbox" required={true} /> 모든 결제 정보에
+                  대해서 확인하였습니다
+                </label>
+              </div>
+              <div className="w-full text-center mt-7 tablet:text-base">
+                <button className="rounded-xl bg-pointColor text-white px-4 py-2">
+                  결제하기
+                </button>
+              </div>
+            </div>
+          )}
         </form>
       </div>
     );
