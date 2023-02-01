@@ -1,4 +1,4 @@
-import { useMutation } from "react-query";
+import { useMutation } from "@tanstack/react-query";
 import postLogin from "apis/auth/postLogin";
 import { useRecoilState, useSetRecoilState } from "recoil";
 import { loginErrorMessage, logUser } from "atoms/auth/authAtom";

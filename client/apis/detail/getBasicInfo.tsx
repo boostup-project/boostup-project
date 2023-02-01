@@ -1,7 +1,7 @@
 import axios from "axios";
 
-const getBasicInfo = (lessonId: number) => {
-  return axios.get(`/lesson/${lessonId}`, {
+const getBasicInfo = async (lessonId: number) => {
+  return await axios.get(`/lesson/${lessonId}`, {
     baseURL: process.env.NEXT_PUBLIC_API_URL,
     headers: {
       "content-Type": `application/json`,

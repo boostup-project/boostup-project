@@ -1,4 +1,4 @@
-import { useMutation } from "react-query";
+import { useMutation } from "@tanstack/react-query";
 import postAuthCode from "apis/auth/postAuthCode";
 // import { useRecoilState } from "recoil";
 // import { resetPwStep } from "atoms/auth/authAtom";

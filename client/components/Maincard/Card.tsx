@@ -11,7 +11,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 //import useGetMainCard from "./useGetMainCard";
 import getMainCard from "apis/card/getMainCard";
-import { dehydrate, QueryClient, useQuery } from "react-query";
+import { dehydrate, QueryClient, useQuery } from "@tanstack/react-query";
 import useGetAllBookmark from "hooks/detail/useGetAllBookmark";
 import Swal from "sweetalert2";
 
@@ -20,7 +20,7 @@ import { useRouter } from "next/router";
 export async function getStaticProps() {
   const queryClient = new QueryClient();
 
-  await queryClient.prefetchQuery("cards", () => getMainCard());
+  await queryClient.prefetchQuery(["cards"], () => getMainCard());
 
   return {
     props: {
@@ -35,16 +35,20 @@ const Card = () => {
   const router = useRouter();
   const { refetch } = useGetAllBookmark(lessonId);
   const [likes, setLikes] = useState(true);
-  const { isLoading, isError, data } = useQuery("cards", () => getMainCard(), {
-    enabled: true,
-    onSuccess: data => {
-      // 성공시 호출
+  const { isLoading, isError, data } = useQuery(
+    ["cards"],
+    () => getMainCard(),
+    {
+      enabled: true,
+      onSuccess: data => {
+        // 성공시 호출
 
-      setCards(data.data.data);
+        setCards(data.data.data);
+      },
+      onError: error => {},
+      retry: 2,
     },
-    onError: error => {},
-    retry: 2,
-  });
+  );
   useEffect(() => {}, [likes]);
 
   const handleLike = () => {

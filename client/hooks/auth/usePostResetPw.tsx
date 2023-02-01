@@ -1,4 +1,4 @@
-import { useMutation } from "react-query";
+import { useMutation } from "@tanstack/react-query";
 import postResetPw from "apis/auth/postResetPw";
 
 const usePostResetPw = () => {

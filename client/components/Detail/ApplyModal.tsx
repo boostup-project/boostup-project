@@ -2,7 +2,7 @@ import CreateModalContainer from "../reuse/container/CreateModalContainer";
 import { useForm } from "react-hook-form";
 import { langDict, dayDict } from "../reuse/dict";
 import SmallBtn from "../reuse/btn/SmallBtn";
-import { useMutation } from "react-query";
+import { useMutation } from "@tanstack/react-query";
 import usePostApply from "hooks/detail/usePostApply";
 import { useState, useEffect } from "react";
 import Swal from "sweetalert2";

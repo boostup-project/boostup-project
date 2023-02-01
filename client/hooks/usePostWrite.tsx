@@ -1,4 +1,4 @@
-import { useMutation, useQueryClient } from "react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import postWrite from "apis/postWrite";
 import { toast } from "react-toastify";
 import { AxiosError, AxiosResponse } from "axios";
