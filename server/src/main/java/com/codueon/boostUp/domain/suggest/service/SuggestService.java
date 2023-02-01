@@ -118,9 +118,8 @@ public class SuggestService {
      */
     public void cancelSuggest(Long suggestId, Long memberId) {
         Suggest findSuggest = suggestDbService.ifExistsReturnSuggest(suggestId);
-        Lesson findLesson = lessonDbService.ifExistsReturnLesson(findSuggest.getLessonId());
 
-        if (!memberId.equals(findLesson.getMemberId())) {
+        if (!memberId.equals(findSuggest.getMemberId())) {
             throw new BusinessLogicException(INVALID_ACCESS);
         }
 
