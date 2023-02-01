@@ -217,11 +217,11 @@ public class LessonService {
 
         List<Integer> languageList = postLessonInfoEdit.getLanguages();
         List<Integer> addressList = postLessonInfoEdit.getAddresses();
-
+        String editState = postLessonInfoEdit.getEditState();
         lessonDbService.addLanguageList(languageList, updateLesson);
         lessonDbService.addAddressList(addressList, updateLesson);
 
-        if (!profileImage.isEmpty()) {
+        if (editState == "true") {
             UploadFile uploadFile = fileHandler.uploadFile(profileImage);
             ProfileImage newProfileImage = ProfileImage.builder()
                     .originFileName(uploadFile.getOriginFileName())
@@ -231,8 +231,9 @@ public class LessonService {
                     .build();
 
             updateLesson.addProfileImage(newProfileImage);
+        } else if (editState == "false") {
+            lessonDbService.saveLesson(updateLesson);
         }
-        lessonDbService.saveLesson(updateLesson);
     }
 
     /**
@@ -556,6 +557,12 @@ public class LessonService {
                 .build();
     }
 
+    /**
+     * 등록한 과외가 현재 로그인한 유저의 과외인지 확인하는 메서드
+     * @param lessonId 과외 식별자
+     * @param memberId 회원 식별자
+     * @author Quartz614
+     */
     private Boolean editable(Long lessonId, Long memberId) {
         Lesson lesson = lessonDbService.ifExistsReturnLesson(lessonId);
         if (lesson.getMemberId() == memberId) {

@@ -16,6 +16,7 @@ public class PostLessonInfoEdit {
     private Integer career;
     private Integer cost;
     private List<Integer> addresses;
+    private String editState;
 
     @Builder
     public PostLessonInfoEdit(List<Integer> languages,
@@ -24,7 +25,8 @@ public class PostLessonInfoEdit {
                               String company,
                               Integer career,
                               Integer cost,
-                              List<Integer> addresses) {
+                              List<Integer> addresses,
+                              String editState) {
         this.languages = languages;
         this.name = name;
         this.title = title;
@@ -32,5 +34,6 @@ public class PostLessonInfoEdit {
         this.career = career;
         this.cost = cost;
         this.addresses = addresses;
+        this.editState = editState;
     }
 }
