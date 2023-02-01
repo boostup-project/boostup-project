@@ -431,7 +431,7 @@ public class LessonGetTest extends LessonControllerTest {
                 .lesson(lesson)
                 .build();
 
-        given(lessonService.getDetailLesson(Mockito.anyLong())).willReturn(getLesson);
+        given(lessonService.getDetailLesson(Mockito.anyLong(), Mockito.anyLong())).willReturn(getLesson);
 
         ResultActions actions =
                 mockMvc.perform(

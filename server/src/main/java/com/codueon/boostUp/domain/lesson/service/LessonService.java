@@ -18,6 +18,7 @@ import com.codueon.boostUp.global.exception.ExceptionCode;
 import com.codueon.boostUp.global.file.AwsS3Service;
 import com.codueon.boostUp.global.file.FileHandler;
 import com.codueon.boostUp.global.file.UploadFile;
+import com.codueon.boostUp.global.security.token.JwtAuthenticationToken;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.data.domain.Page;
@@ -505,9 +506,12 @@ public class LessonService {
      * @return GetLesson
      * @author mozzi327
      */
-    public GetLesson getDetailLesson(Long lessonId) {
+    public GetLesson getDetailLesson(Long lessonId,Long memberId) {
+        GetLesson getLesson = lessonRepository.getDetailLesson(lessonId);
+        getLesson.setEditable(editable(lessonId, memberId));
 
-        return lessonRepository.getDetailLesson(lessonId);
+        return getLesson;
+
     }
 
     /**
@@ -550,5 +554,12 @@ public class LessonService {
         return GetTutorLesson.builder()
                 .lesson(findLesson)
                 .build();
+    }
+
+    private Boolean editable(Long lessonId, Long memberId) {
+        Lesson lesson = lessonDbService.ifExistsReturnLesson(lessonId);
+        if (lesson.getMemberId() == memberId) {
+            return true;
+        } else return false;
     }
 }
