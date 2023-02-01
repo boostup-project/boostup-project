@@ -45,6 +45,16 @@ public class SuggestController {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
+    @PostMapping("suggest/ticket/{ticket-id}")
+    public ResponseEntity createAdvertisement(@PathVariable("ticket-id") Long ticketId,
+                                              Authentication authentication) {
+
+        JwtAuthenticationToken token = (JwtAuthenticationToken) authentication;
+        Long memberId = getMemberIdIfExistToken(token);
+        suggestService.createPurchase(ticketId, memberId);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
+
     /**
      * 신청 프로세스 2-1 신청 수락 컨트롤러 메서드
      * @param suggestId 신청 식별자
@@ -107,8 +117,11 @@ public class SuggestController {
                                                         HttpServletRequest request,
                                                         Authentication authentication) {
 
+        JwtAuthenticationToken token = (JwtAuthenticationToken) authentication;
+        Long memberId = getMemberIdIfExistToken(token);
+
         String requestUrl = request.getRequestURL().toString().replace(request.getRequestURI(), "");
-        Message<?> message = suggestService.getKaKapPayUrl(suggestId, requestUrl);
+        Message<?> message = suggestService.getKaKapPayUrl(suggestId, memberId, requestUrl);
         if (message.getData() == null) suggestService.getFailedPayMessage();
         return ResponseEntity.ok().body(message);
     }
@@ -122,13 +135,19 @@ public class SuggestController {
     @GetMapping("/suggest/{suggest-id}/toss/payment/{payment-id}")
     public ResponseEntity<Message<?>> orderTossPayment(@PathVariable("suggest-id") Long suggestId,
                                                        @PathVariable("payment-id") int paymentId,
-                                                       HttpServletRequest request) {
+                                                       HttpServletRequest request,
+                                                       Authentication authentication) {
+
+        JwtAuthenticationToken token = (JwtAuthenticationToken) authentication;
+        Long memberId = getMemberIdIfExistToken(token);
 
         String requestUrl = request.getRequestURL().toString().replace(request.getRequestURI(), "");
-        Message<?> message = suggestService.getTossPayUrl(suggestId, requestUrl, paymentId);
+        Message<?> message = suggestService.getTossPayUrl(suggestId, memberId, requestUrl, paymentId);
         if (message.getData() == null) suggestService.getFailedPayMessage();
         return ResponseEntity.ok().body(message);
     }
+
+
 
     /**
      * 신청 프로세스 5-1 결제 성공 컨트롤러 메서드 Kakao
@@ -194,7 +213,23 @@ public class SuggestController {
     }
 
     /**
-     * 신청 프로세스 8 과외 종료 컨트롤러 메서드
+     * 신청 프로세스 8 결제 여부 확인
+     * @param suggestId 신청 식별자
+     * @return WrapPaymentStatusCheck
+     * @author LeeGoh
+     */
+    @GetMapping("suggest/{suggest-id}/payment/check")
+    public ResponseEntity paymentStatusCheck(@PathVariable("suggest-id") Long suggestId,
+                                             Authentication authentication) {
+
+        JwtAuthenticationToken token = (JwtAuthenticationToken) authentication;
+        Long memberId = getMemberIdIfExistToken(token);
+        Boolean paymentCheck = suggestService.getPaymentStatusCheck(suggestId, memberId);
+        return ResponseEntity.ok().body(new WrapPaymentStatusCheck(paymentCheck));
+    }
+
+    /**
+     * 신청 프로세스 9 과외 종료 컨트롤러 메서드
      * @param suggestId 신청 식별자
      * @return ResponseEntity
      * @author LeeGoh
@@ -210,7 +245,7 @@ public class SuggestController {
     }
 
     /**
-     * 신청 프로세스 9 환불 컨트롤러 메서드
+     * 신청 프로세스 10 환불 컨트롤러 메서드
      * @param suggestId 신청 식별자
      * @author LeeGoh
      */
@@ -264,7 +299,7 @@ public class SuggestController {
         JwtAuthenticationToken token = (JwtAuthenticationToken) authentication;
         Long memberId = getMemberIdIfExistToken(token);
         Integer quantityCount = suggestService.teacherChecksAttendance(suggestId, memberId);
-        return ResponseEntity.ok().body(new GetQuantityCount(quantityCount));
+        return ResponseEntity.ok().body(new WrapQuantityCount(quantityCount));
     }
 
     /**
@@ -279,7 +314,7 @@ public class SuggestController {
         JwtAuthenticationToken token = (JwtAuthenticationToken) authentication;
         Long memberId = getMemberIdIfExistToken(token);
         Integer quantityCount = suggestService.teacherCancelAttendance(suggestId, memberId);
-        return ResponseEntity.ok().body(new GetQuantityCount(quantityCount));
+        return ResponseEntity.ok().body(new WrapQuantityCount(quantityCount));
     }
 
     /**

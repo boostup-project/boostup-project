@@ -5,10 +5,9 @@ import com.codueon.boostUp.domain.suggest.dto.GetPaymentInfo;
 import com.codueon.boostUp.domain.suggest.dto.GetPaymentReceipt;
 import com.codueon.boostUp.domain.suggest.dto.GetStudentSuggest;
 import com.codueon.boostUp.domain.suggest.dto.GetTutorSuggest;
-import com.codueon.boostUp.domain.suggest.entity.PaymentInfo;
-import com.codueon.boostUp.domain.suggest.entity.Reason;
-import com.codueon.boostUp.domain.suggest.entity.Suggest;
+import com.codueon.boostUp.domain.suggest.entity.*;
 import com.codueon.boostUp.domain.suggest.repository.PaymentInfoRepository;
+import com.codueon.boostUp.domain.suggest.repository.PurchaseRepository;
 import com.codueon.boostUp.domain.suggest.repository.ReasonRepository;
 import com.codueon.boostUp.domain.suggest.repository.SuggestRepository;
 import com.codueon.boostUp.global.exception.BusinessLogicException;
@@ -20,6 +19,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+import static com.codueon.boostUp.domain.suggest.entity.PurchaseStatus.END_OF_TICKET;
+import static com.codueon.boostUp.domain.suggest.entity.PurchaseStatus.REFUND_TICKET;
 import static com.codueon.boostUp.domain.suggest.entity.SuggestStatus.*;
 
 @Service
@@ -28,6 +29,7 @@ public class SuggestDbService {
     private final SuggestRepository suggestRepository;
     private final ReasonRepository reasonRepository;
     private final PaymentInfoRepository paymentInfoRepository;
+    private final PurchaseRepository purchaseRepository;
 
     /**
      * 신청 조회 메서드
@@ -54,13 +56,24 @@ public class SuggestDbService {
      * @param lessonId 과외 식별자
      * @param memberId 사용자 식별자
      */
-    public void ifEndOfSuggestExistsReturnException(Long lessonId, Long memberId) {
+    public void ifUnfinishedSuggestExistsReturnException(Long lessonId, Long memberId) {
         List<Suggest> findSuggest = suggestRepository.findAllByLessonIdAndMemberId(lessonId, memberId);
         if (!findSuggest.isEmpty()) {
             for (Suggest suggest : findSuggest) {
                 if (!(suggest.getSuggestStatus().equals(END_OF_LESSON) ||
                         suggest.getSuggestStatus().equals(REFUND_PAYMENT)))
                     throw new BusinessLogicException(ExceptionCode.SUGGEST_ALREADY_EXIST);
+            }
+        }
+    }
+
+    public void ifUnfinishedPurchaseExistsReturnException(Long lessonId, Long memberId) {
+        List<Purchase> findPurchase = purchaseRepository.findAllByLessonIdAndMemberId(lessonId, memberId);
+        if (!findPurchase.isEmpty()) {
+            for (Purchase purchase : findPurchase) {
+                if (!(purchase.getPurchaseStatus().equals(END_OF_TICKET) ||
+                        purchase.getPurchaseStatus().equals(REFUND_TICKET)))
+                    throw new BusinessLogicException(ExceptionCode.PURCHASE_ALREADY_EXIST);
             }
         }
     }
@@ -104,6 +117,10 @@ public class SuggestDbService {
      */
     public void saveReason(Reason reason) {
         reasonRepository.save(reason);
+    }
+
+    public void savePurchase(Purchase purchase) {
+        purchaseRepository.save(purchase);
     }
 
     /**

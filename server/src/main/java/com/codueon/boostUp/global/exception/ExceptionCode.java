@@ -39,6 +39,7 @@ public enum ExceptionCode {
     RESOURCE_ALREADY_EXIST(504, "이미 존재하는 데이터입니다."),
     LESSON_ALREADY_EXIST(504, "한 회원 당 하나의 과외만 등록 가능합니다."),
     SUGGEST_ALREADY_EXIST(504, "한 과외 당 하나의 신청만 가능합니다."),
+    PURCHASE_ALREADY_EXIST(504, "한 과외 당 하나의 이용권 구매만 가능합니다."),
     // 요청 실패
     UPLOAD_FAILED(504, "업로드가 실패했습니다."),
     PAYMENT_URL_REQUEST_FAILED(504, "결제 URL 요청을 실패했습니다."),
