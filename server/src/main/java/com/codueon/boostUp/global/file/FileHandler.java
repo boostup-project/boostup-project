@@ -101,21 +101,39 @@ public class FileHandler {
         return fileList;
     }
     public UploadFile uploadFile(MultipartFile multipartFile) throws  IOException {
-        String fileName = createFileName(multipartFile.getOriginalFilename());
-        String path = "images";
+        String absolutePath = new File("").getAbsolutePath() + File.separator + File.separator;
+        String path = "images"; //+ File.pathSeparator + current_date;
         File file = new File(path);
+
         //디렉터리가 존재하지 않을 경우
         if (!file.exists()) {
             file.mkdir();
         }
-        return UploadFile.builder()
+        //파일 원래 이름
+        String originFileName = multipartFile.getOriginalFilename();
+        // 파일 이름으로 쓸 uuid 생성
+        String uuid = UUID.randomUUID().toString();
+        // 확장자 추출(ex : .png)
+        String extension = originFileName.substring(originFileName.lastIndexOf("."));
+        // uuid와 확장자 결함
+        String savedName = uuid + extension;
+
+        UploadFile uploadFile = UploadFile.builder()
                 .originFileName(multipartFile.getOriginalFilename())
-                .fileName(fileName)
-                .filePath(path)
+                .fileName(savedName)
+                .filePath(path + File.separator + savedName)
                 .fileSize(multipartFile.getSize())
                 .build();
+
+        file = new File(absolutePath + path + File.separator + savedName);
+        multipartFile.transferTo(file);
+
+        file.setWritable(true);
+        file.setReadable(true);
+        return uploadFile;
     }
-    private String createFileName(String fileName) {
-        return UUID.randomUUID().toString().concat(getFileExtension(fileName));
+    public void delete(String absolutePath) {
+        File file = new File(absolutePath);
+        file.delete();
     }
 }
