@@ -121,7 +121,7 @@ public class SuggestController {
         Long memberId = getMemberIdIfExistToken(token);
 
         String requestUrl = request.getRequestURL().toString().replace(request.getRequestURI(), "");
-        Message<?> message = suggestService.getKaKapPayUrl(suggestId, memberId, requestUrl);
+        Message<?> message = suggestService.getKaKapPayUrl(suggestId, requestUrl);
         if (message.getData() == null) suggestService.getFailedPayMessage();
         return ResponseEntity.ok().body(message);
     }
@@ -142,7 +142,7 @@ public class SuggestController {
         Long memberId = getMemberIdIfExistToken(token);
 
         String requestUrl = request.getRequestURL().toString().replace(request.getRequestURI(), "");
-        Message<?> message = suggestService.getTossPayUrl(suggestId, memberId, requestUrl, paymentId);
+        Message<?> message = suggestService.getTossPayUrl(suggestId, requestUrl, paymentId);
         if (message.getData() == null) suggestService.getFailedPayMessage();
         return ResponseEntity.ok().body(message);
     }
