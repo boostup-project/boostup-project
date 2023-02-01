@@ -31,9 +31,11 @@ public class MemberService {
     private final FileHandler fileHandler;
     private final AwsS3Service awsS3Service;
 
-
     @Value("${default.image.address}")
     private String defaultImageAddress;
+
+    @Value("${default.image.name}")
+    private String defaultImageName;
 
     /**
      * 회원가입 메서드
@@ -130,11 +132,16 @@ public class MemberService {
         if (file.isEmpty() && name.getName().isEmpty()) return null;
 
         Member findMember = memberDbService.ifExistsReturnMember(memberId);
-        UploadFile uploadFile = fileHandler.uploadFile(file);
+//        UploadFile uploadFile = fileHandler.uploadFile(file);
 
         if (!file.isEmpty()) {
-//            String dir = "memberImage";
-//            UploadFile uploadFile = awsS3Service.uploadfile(file, dir);
+            String dir = "memberImage";
+            UploadFile uploadFile = awsS3Service.uploadfile(file, dir);
+
+            if (!findMember.getMemberImage().getFilePath().equals(defaultImageAddress)){
+                awsS3Service.delete(findMember.getMemberImage().getFileName(), dir);
+            }
+
             MemberImage memberImage = MemberImage.builder()
                     .filePath(uploadFile.getFilePath())
                     .fileName(uploadFile.getFileName())

@@ -165,11 +165,10 @@ public class SuggestService {
      * @author LeeGoh
      */
     @Transactional
-    public Message getKaKapPayUrl(Long suggestId, Long memberId, String requestUrl) {
+    public Message getKaKapPayUrl(Long suggestId, String requestUrl) {
         Suggest findSuggest = suggestDbService.ifExistsReturnSuggest(suggestId);
 
-        if (!findSuggest.getSuggestStatus().equals(PAY_IN_PROGRESS) ||
-            !findSuggest.getMemberId().equals(memberId)) {
+        if (!findSuggest.getSuggestStatus().equals(PAY_IN_PROGRESS)) {
             throw new BusinessLogicException(INVALID_ACCESS);
         }
 
@@ -201,11 +200,10 @@ public class SuggestService {
      * @author LeeGoh
      */
     @Transactional
-    public Message getTossPayUrl(Long suggestId, Long memberId, String requestUrl, int paymentId) {
+    public Message getTossPayUrl(Long suggestId, String requestUrl, int paymentId) {
         Suggest findSuggest = suggestDbService.ifExistsReturnSuggest(suggestId);
 
-        if (!findSuggest.getSuggestStatus().equals(PAY_IN_PROGRESS) ||
-            !findSuggest.getMemberId().equals(memberId)) {
+        if (!findSuggest.getSuggestStatus().equals(PAY_IN_PROGRESS)) {
             throw new BusinessLogicException(INVALID_ACCESS);
         }
 
