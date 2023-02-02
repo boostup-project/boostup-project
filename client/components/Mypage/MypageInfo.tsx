@@ -1,9 +1,11 @@
 import { IconMail, IconProfile } from "assets/icon";
+import { useState } from "react";
+import EditUserDataModal from "./EditUserData";
 
 const MypageInfo = () => {
+  const [isEditOpen, setIsEditOpen] = useState(false);
   const editProfile = () => {
-    console.log(localStorage);
-    return;
+    setIsEditOpen(prev => !prev);
   };
   return (
     <>
@@ -30,7 +32,7 @@ const MypageInfo = () => {
               myname
             </div>
           </div>
-          <div className="flex flex-row justify-start items-center w-full h-fit mt-8 tablet:mt-6 mt-2">
+          <div className="flex flex-row justify-start items-center w-full h-fit desktop:mt-8 tablet:mt-6 mt-2">
             <div className="desktop:w-9 tablet:w-7 w-5">
               <IconMail />
             </div>
@@ -39,13 +41,14 @@ const MypageInfo = () => {
               wjdgksmf11@daum.net
             </div>
           </div>
-          <div className="flex mt-8 tablet:mt-6 mt-2">
+          <div className="flex desktop:mt-8 tablet:mt-6 mt-2">
             <button className="mr-8 text text-pointColor" onClick={editProfile}>
               Edit
             </button>
             <button className="mr-8 text text-pointColor">비밀번호수정</button>
           </div>
         </div>
+        {isEditOpen && <EditUserDataModal editProfile={editProfile} />}
       </div>
     </>
   );
