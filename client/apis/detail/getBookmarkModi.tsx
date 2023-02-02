@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const getBookmarkModi = async (lessonId: number) => {
+const getBookmarkModi = async (lessonId: Number) => {
   return await axios.get(`/bookmark/lesson/${lessonId}/modification`, {
     baseURL: process.env.NEXT_PUBLIC_API_URL,
     headers: {

@@ -14,6 +14,8 @@ import MypageTabBtn from "components/reuse/btn/MypageTabBtn";
 import MypageInfo from "components/Mypage/MypageInfo";
 import TeacherTab from "components/Mypage/TeacherTab";
 import StudentTab from "components/Mypage/StudentTab";
+import useGetStudentInfo from "hooks/mypage/useGetStudentInfo";
+import useGetTutorInfo from "hooks/mypage/useGetTutorInfo";
 const Mypage = () => {
   //memberId? memberName?
   const router = useRouter();
@@ -21,16 +23,15 @@ const Mypage = () => {
 
   const [tab, setTab] = useState(1);
 
+  const { refetch: refetchStudentInfo, data: studentInfoData } =
+    useGetStudentInfo();
+  const { refetch: refetchTutorInfo, data: tuturInfoData } = useGetTutorInfo(
+    lessonId,
+    tab,
+  );
   const handleTabClick = (id: number) => {
     setTab(id);
   };
-
-  const {
-    refetch: basicInfoRefetch,
-    data: basicInfo,
-    isSuccess: basicInfoSuccess,
-  } = useGetBasicInfo(lessonId);
-
   const widthSize = useWindowSize();
 
   useEffect(() => {
@@ -39,7 +40,6 @@ const Mypage = () => {
     // console.log(lessonId);
     if (lessonId) {
       // 요약정보 요청
-      basicInfoRefetch();
     }
 
     if (tab === 1 && lessonId) {
@@ -54,7 +54,7 @@ const Mypage = () => {
   return (
     <>
       <div className="flex flex-col bg-bgColor items-center justify-center w-full h-full pt-28">
-        {/* 요약정보 */}
+        {/* 내요약정보 */}
         <DetailSummeryContainer>
           <MypageInfo></MypageInfo>
         </DetailSummeryContainer>

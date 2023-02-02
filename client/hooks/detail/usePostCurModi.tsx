@@ -1,5 +1,5 @@
 import postCurModi from "apis/detail/postCurModi";
-import { useMutation, useQueryClient } from "react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 
 export const usePostCurModi = () => {
@@ -11,7 +11,7 @@ export const usePostCurModi = () => {
         autoClose: 3000,
         position: toast.POSITION.TOP_RIGHT,
       });
-      queryClient.invalidateQueries("useGetCurriculum");
+      // queryClient.invalidateQueries("get/Extra");
     },
     onError: res => {
       toast.error("전송이 실패되었습니다. 다시 작성해주세요", {

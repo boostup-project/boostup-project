@@ -1,8 +1,9 @@
-import { useQuery } from "react-query";
+import { useQuery } from "@tanstack/react-query";
 import getBookmarkModi from "apis/detail/getBookmarkModi";
 
 const useGetBookmarkModi = (lessonId: number) => {
   return useQuery(["get/BookmarkModi"], () => getBookmarkModi(lessonId), {
+    enabled: false,
     onSuccess: res => {
       console.log(res);
     },

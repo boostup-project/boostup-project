@@ -1,6 +1,6 @@
 import "../styles/globals.css";
 import type { AppProps } from "next/app";
-import { QueryClient, QueryClientProvider } from "react-query";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { RecoilRoot } from "recoil";
 import Header from "components/Header/Header";
 import Footer from "components/Footer/Footer";
@@ -13,7 +13,7 @@ export default function App({ Component, pageProps }: AppProps) {
     <>
       <QueryClientProvider client={queryClient}>
         <RecoilRoot>
-          <div className="flex flex-col h-full justify-center items-center bg-bgColor">
+          <div className="flex flex-col max-h-full justify-center items-center bg-bgColor">
             <Header />
             <Component {...pageProps} />
             <Footer />

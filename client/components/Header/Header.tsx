@@ -81,7 +81,8 @@ const Header = () => {
   };
 
   return (
-    <header className="bg-bgColor font-SCDream5 w-full fixed top-0 z-[1] h-fit flex justify-center items-center shadow">
+    // sticky로 해야 따로 margin을 안잡아도 헤더공간이 유효해질 것 같습니다.
+    <header className="bg-bgColor font-SCDream5 w-full sticky top-0 z-[1] h-fit flex justify-center items-center shadow">
       <div className="pt-5 w-full pb-2 desktop:w-3/4 desktop:min-w-[1000px] desktop:h-[87px] desktop:mt-0">
         <nav className="w-full h-full flex tablet:justify-center tablet:items-center desktop:justify-between">
           <div className="w-1/2 flex justify-start items-center ml-4 tablet:h-[40px] desktop:hidden">

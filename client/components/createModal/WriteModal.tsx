@@ -25,7 +25,6 @@ const WriteModal = () => {
   const toWrite = () => {
     setIsPowerWrite(prev => !prev);
   };
-  console.log(basicInfo);
 
   return (
     <ModalBackDrop onClick={toWrite}>
