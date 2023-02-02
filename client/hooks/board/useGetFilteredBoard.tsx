@@ -1,4 +1,4 @@
-import { useQuery } from "react-query";
+import { useQuery } from "@tanstack/react-query";
 import getFilteredBoard from "apis/board/getFilteredBoard";
 
 const useGetFilteredBoard = (languageId: number) => {

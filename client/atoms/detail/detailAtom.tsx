@@ -15,4 +15,9 @@ const editMode = atom({
   default: false,
 });
 
-export { powerApplyModal, powerBasicEditModal, editMode };
+const refetchToggle = atom({
+  key: "refetchToggle",
+  default: false,
+});
+
+export { powerApplyModal, powerBasicEditModal, editMode, refetchToggle };

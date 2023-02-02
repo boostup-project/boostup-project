@@ -1,5 +1,5 @@
 import deleteDetail from "apis/detail/deleteDetail";
-import { useMutation } from "react-query";
+import { useMutation } from "@tanstack/react-query";
 
 const useDeleteDetail = () => {
   return useMutation(deleteDetail, {

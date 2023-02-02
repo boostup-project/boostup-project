@@ -83,7 +83,7 @@ const Signup = () => {
   return (
     <>
       <ToastContainer />
-      <div className="flex flex-col bg-bgColor items-center mt-36 w-full h-screen">
+      <div className="flex flex-col bg-bgColor items-center justify-center w-full h-screen">
         <div className="flex flex-col w-full h-fit justify-center items-center font-SCDream5 text-xl text-textColor mb-2">
           회원가입
         </div>

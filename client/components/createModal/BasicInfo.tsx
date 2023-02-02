@@ -11,6 +11,7 @@ import { useEffect } from "react";
 import { useRouter } from "next/router";
 import { useRecoilState } from "recoil";
 import { editMode } from "atoms/detail/detailAtom";
+import usePostBasicModi from "hooks/detail/usePostBasicModi";
 
 interface BasicInfo {
   [index: string]: string | string[];
@@ -74,22 +75,42 @@ const BasicInfo = ({ basicInfo, setBasicInfo, toWrite, setStep }: Props) => {
     setMode(false);
   };
 
+  const { mutate: basicModiMutate } = usePostBasicModi();
+
   const onSubmit = (basicData: BasicInfo) => {
     if (mode) {
       const lessonId = Number(router.query.id);
-      console.log(lessonId);
+      const { address, languages, profileImg } = basicData;
+      const parseAddress = [...address].map((el: any) => el.value);
+      const parseLang = [...languages].map((el: any) => langDict[el]);
+      const proImage = profileImg[0];
+      const formData = new FormData();
+
+      let editState = "";
+
+      if (proImage) {
+        editState = "true";
+        formData.append("profileImage", proImage);
+      } else {
+        editState = "false";
+      }
+
       const json = JSON.stringify({
-        languages: basicData.language,
+        languages: parseLang,
         title: basicData.title,
         company: basicData.company,
         career: basicData.career,
         cost: basicData.cost,
-        address: basicData.address,
+        addresses: parseAddress,
+        // editState : true(수정) false(수정X)
+        editState: editState,
       });
       const blob = new Blob([json], { type: "application/json" });
-      const formData = new FormData();
 
       formData.append("data", blob);
+      // 사진 수정 안했을 시는 false / 사진 수정 했을 시에는 새로운 File 전달
+
+      basicModiMutate({ formData, lessonId });
     } else {
       setBasicInfo(basicData);
       setStep(prev => prev + 1);

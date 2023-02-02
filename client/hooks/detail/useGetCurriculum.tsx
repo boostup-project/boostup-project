@@ -1,5 +1,5 @@
 import getCurriculum from "apis/detail/getCurriculum";
-import { useQuery } from "react-query";
+import { useQuery } from "@tanstack/react-query";
 
 const useGetCurriculum = (lessonId: number) => {
   return useQuery(["get/Extra"], () => getCurriculum(lessonId), {

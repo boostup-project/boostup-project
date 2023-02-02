@@ -16,7 +16,7 @@ import DetailReview from "components/detailComp/DetailReview";
 import DetailExtra from "components/detailComp/DetailExtra";
 import DetailButtons from "components/Detail/DetailButtons";
 import { useRecoilValue } from "recoil";
-import { powerBasicEditModal } from "atoms/detail/detailAtom";
+import { powerBasicEditModal, refetchToggle } from "atoms/detail/detailAtom";
 import useGetDetailReview from "hooks/detail/useGetDetailReview";
 
 const Detail = () => {
@@ -25,6 +25,7 @@ const Detail = () => {
   const lessonId = Number(router.query.id);
 
   const basicEditPower = useRecoilValue(powerBasicEditModal);
+  const toggle = useRecoilValue(refetchToggle);
 
   const [tab, setTab] = useState(1);
 
@@ -53,8 +54,11 @@ const Detail = () => {
     isSuccess: basicInfoSuccess,
   } = useGetBasicInfo(lessonId);
 
-  const { refetch: reviewRefetch, data: reviewData } =
-    useGetDetailReview(lessonId);
+  const {
+    refetch: reviewRefetch,
+    data: reviewData,
+    isSuccess: reviewSuccess,
+  } = useGetDetailReview(lessonId);
 
   const widthSize = useWindowSize();
 
@@ -76,7 +80,7 @@ const Detail = () => {
       // 과외후기 refetch
       reviewRefetch();
     }
-  }, [tab, lessonId]);
+  }, [tab, lessonId, toggle]);
 
   return (
     <>
@@ -84,7 +88,7 @@ const Detail = () => {
         <DetailBasicInfoEditModal basicData={basicInfo} />
       ) : null}
 
-      <div className="flex flex-col bg-bgColor items-center justify-start w-full h-full pt-28">
+      <div className="flex flex-col bg-bgColor items-center justify-start w-full h-full pt-4">
         {/* 요약정보 */}
         <DetailSummeryContainer>
           {widthSize > 764 ? (
@@ -125,7 +129,9 @@ const Detail = () => {
               <DetailExtra extraData={extraData} lessonId={lessonId} />
             )}
             {tab === 2 && <DetailCurriculum curData={curData} />}
-            {tab === 3 && <DetailReview reviewData={reviewData} />}
+            {tab === 3 && reviewSuccess && (
+              <DetailReview reviewData={reviewData?.data} />
+            )}
 
             {/* 각 탭별 컴포넌트를 생성하여 넣어주세요! */}
           </DetailContentContainer>

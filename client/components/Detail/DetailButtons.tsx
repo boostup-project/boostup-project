@@ -2,7 +2,7 @@ import DetailBtn from "../reuse/btn/DetailBtn";
 import { IconEmptyheart, IconFullheart } from "assets/icon";
 import ApplyModal from "./ApplyModal";
 import Swal from "sweetalert2";
-import { useQuery } from "react-query";
+import { useQuery } from "@tanstack/react-query";
 import { useState, useCallback, useEffect } from "react";
 import useDeleteDetail from "hooks/detail/useDeleteDetail";
 import useGetBookmarkModi from "hooks/detail/useGetBookmarkModi";

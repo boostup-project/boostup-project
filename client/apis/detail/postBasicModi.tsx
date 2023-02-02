@@ -1,18 +1,20 @@
 import axios from "axios";
 
-const postWrite = async (object: FormData) => {
-  // const url = "/lesson/test/registration";
-  const url = "/lesson/registration";
+interface Props {
+  formData: FormData;
+  lessonId: number;
+}
 
-  return await axios.post(url, object, {
+const postBasicModi = ({ formData, lessonId }: Props) => {
+  console.log(formData);
+  return axios.post(`lesson/${lessonId}/modification`, formData, {
     baseURL: process.env.NEXT_PUBLIC_API_URL,
     headers: {
       "Content-Type": "multipart/form-data",
       "ngrok-skip-browser-warning": "63490",
       Authorization: `Bearer ${localStorage.getItem("token")}`,
-      RefreshToken: localStorage.getItem("refresh_token"),
     },
   });
 };
 
-export default postWrite;
+export default postBasicModi;
