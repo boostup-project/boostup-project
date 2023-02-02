@@ -8,7 +8,7 @@ import { Dispatch, SetStateAction } from "react";
 import { SetterOrUpdater, useSetRecoilState } from "recoil";
 import { Info } from "./WriteModal";
 import { langDict } from "components/reuse/dict";
-import usePostWrite from "hooks/usePostWrite";
+import usePostWrite from "hooks/main/usePostWrite";
 import { useEffect } from "react";
 import { isWrite } from "atoms/main/mainAtom";
 import { toast, ToastContainer } from "react-toastify";

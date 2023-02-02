@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import postWrite from "apis/postWrite";
+import postWrite from "apis/main/postWrite";
 import { toast } from "react-toastify";
 import { AxiosError, AxiosResponse } from "axios";
 
