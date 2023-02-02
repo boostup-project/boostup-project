@@ -114,11 +114,7 @@ public class SuggestController {
      */
     @GetMapping("/suggest/{suggest-id}/kakao/payment")
     public ResponseEntity<Message<?>> orderKakaoPayment(@PathVariable("suggest-id") Long suggestId,
-                                                        HttpServletRequest request,
-                                                        Authentication authentication) {
-
-        JwtAuthenticationToken token = (JwtAuthenticationToken) authentication;
-        Long memberId = getMemberIdIfExistToken(token);
+                                                        HttpServletRequest request) {
 
         String requestUrl = request.getRequestURL().toString().replace(request.getRequestURI(), "");
         Message<?> message = suggestService.getKaKapPayUrl(suggestId, requestUrl);
@@ -135,11 +131,7 @@ public class SuggestController {
     @GetMapping("/suggest/{suggest-id}/toss/payment/{payment-id}")
     public ResponseEntity<Message<?>> orderTossPayment(@PathVariable("suggest-id") Long suggestId,
                                                        @PathVariable("payment-id") int paymentId,
-                                                       HttpServletRequest request,
-                                                       Authentication authentication) {
-
-        JwtAuthenticationToken token = (JwtAuthenticationToken) authentication;
-        Long memberId = getMemberIdIfExistToken(token);
+                                                       HttpServletRequest request) {
 
         String requestUrl = request.getRequestURL().toString().replace(request.getRequestURI(), "");
         Message<?> message = suggestService.getTossPayUrl(suggestId, requestUrl, paymentId);
