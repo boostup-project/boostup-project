@@ -18,7 +18,7 @@ export const SearchPop = ({ onSubmit }: Props) => {
 
   return (
     <div
-      className={`fixed h-fit border visible border-borderColor rounded-br-xl rounded-bl-xl bg-white tablet:left-[100px] tablet:top-[100px] desktop:absolute desktop:top-[70px] desktop:w-full`}
+      className={`h-fit border visible border-borderColor rounded-br-xl rounded-bl-xl bg-white`}
     >
       <form
         className="flex flex-col justify-center items-center"
