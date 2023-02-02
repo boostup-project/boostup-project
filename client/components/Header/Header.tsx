@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useRecoilState } from "recoil";
 import { SubmitHandler } from "react-hook-form";
 import { textColor } from "assets/color/color";
-import { IconExit, IconMagnify } from "assets/icon/";
+import { IconExit, IconLogIn, IconMagnify } from "assets/icon/";
 import { SearchPop } from "./SearchPop";
 import { powerWriteModal } from "atoms/main/mainAtom";
 import Image from "next/image";
@@ -29,6 +29,7 @@ const Header = () => {
   const [wordOne, setWordOne] = useState<string>("");
   const [wordTwo, setWordTwo] = useState<string>("");
   const [writeBtn, setWriteBtn] = useState<string>("");
+  const [mobLogExitIcon, setMobLogExitIcon] = useState<any>("");
   const [seek, setSeek] = useState(false);
   const [isPowerWrite, setIsPowerWrite] = useRecoilState(powerWriteModal);
 
@@ -37,11 +38,13 @@ const Header = () => {
       setWordOne("마이페이지");
       setWordTwo("로그아웃");
       setWriteBtn("과외 등록");
+      setMobLogExitIcon(<IconExit />);
     }
     if (!log) {
       setWordOne("로그인");
       setWordTwo("회원가입");
       setWriteBtn("");
+      setMobLogExitIcon(<IconLogIn />);
     }
   }, [log]);
 
@@ -63,21 +66,26 @@ const Header = () => {
   };
   const wordTwoEvent = () => {
     if (log) {
-      logOutEvent();
+      logInNOutEvent();
     }
     if (!log) {
       router.push("/signup");
     }
   };
 
-  const logOutEvent = () => {
-    localStorage.clear();
-    setLog(prev => !prev);
-    toast.success("로그아웃이 되었습니다", {
-      autoClose: 1500,
-      position: toast.POSITION.TOP_RIGHT,
-    });
-    router.push("/");
+  const logInNOutEvent = () => {
+    if (log) {
+      localStorage.clear();
+      setLog(prev => !prev);
+      toast.success("로그아웃이 되었습니다", {
+        autoClose: 1500,
+        position: toast.POSITION.TOP_RIGHT,
+      });
+      router.push("/");
+    }
+    if (!log) {
+      router.push("/login");
+    }
   };
 
   return (
@@ -86,8 +94,8 @@ const Header = () => {
       <div className="pt-5 w-full pb-2 desktop:w-3/4 desktop:min-w-[1000px] desktop:h-[87px] desktop:mt-0">
         <nav className="w-full h-full flex tablet:justify-center tablet:items-center desktop:justify-between">
           <div className="w-1/2 flex justify-start items-center ml-4 tablet:h-[40px] desktop:hidden">
-            <div className="w-8 tablet:w-[34.5px]" onClick={logOutEvent}>
-              <IconExit />
+            <div className="w-8 tablet:w-[34.5px]" onClick={logInNOutEvent}>
+              {mobLogExitIcon}
             </div>
           </div>
           <div className="tablet:w-1/6 h-fit flex justify-center items-center desktop:justify-start desktop:items-end">
