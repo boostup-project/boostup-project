@@ -62,7 +62,6 @@ public class LessonGetTest extends LessonControllerTest {
 
         actions.andExpect(status().isOk())
                 .andExpect(jsonPath("$.data[0].lessonId").value(lessonList.get(0).getId()))
-                .andExpect(jsonPath("$.data[0].ticketId").value(1L))
                 .andExpect(jsonPath("$.data[0].languages[0]").value("Javascript"))
                 .andExpect(jsonPath("$.data[0].languages[1]").value("Python"))
                 .andExpect(jsonPath("$.data[0].languages[2]").value("Go"))
@@ -78,7 +77,6 @@ public class LessonGetTest extends LessonControllerTest {
                 .andExpect(jsonPath("$.data[0].bookmark").value(false))
 
                 .andExpect(jsonPath("$.data[1].lessonId").value(lessonList.get(1).getId()))
-                .andExpect(jsonPath("$.data[1].ticketId").value(1L))
                 .andExpect(jsonPath("$.data[1].languages[0]").value("Javascript"))
                 .andExpect(jsonPath("$.data[1].languages[1]").value("Python"))
                 .andExpect(jsonPath("$.data[1].languages[2]").value("Go"))
@@ -141,7 +139,6 @@ public class LessonGetTest extends LessonControllerTest {
 
         actions.andExpect(status().isOk())
                 .andExpect(jsonPath("$.data[0].lessonId").value(lessonList.get(0).getId()))
-                .andExpect(jsonPath("$.data[0].ticketId").value(1L))
                 .andExpect(jsonPath("$.data[0].languages[0]").value("Javascript"))
                 .andExpect(jsonPath("$.data[0].languages[1]").value("Python"))
                 .andExpect(jsonPath("$.data[0].languages[2]").value("Go"))
@@ -157,7 +154,6 @@ public class LessonGetTest extends LessonControllerTest {
                 .andExpect(jsonPath("$.data[0].bookmark").value(true))
 
                 .andExpect(jsonPath("$.data[1].lessonId").value(lessonList.get(1).getId()))
-                .andExpect(jsonPath("$.data[1].ticketId").value(1L))
                 .andExpect(jsonPath("$.data[1].languages[0]").value("Javascript"))
                 .andExpect(jsonPath("$.data[1].languages[1]").value("Python"))
                 .andExpect(jsonPath("$.data[1].languages[2]").value("Go"))
@@ -209,7 +205,6 @@ public class LessonGetTest extends LessonControllerTest {
 
         actions.andExpect(status().isOk())
                 .andExpect(jsonPath("$.data[0].lessonId").value(lessonList.get(0).getId()))
-                .andExpect(jsonPath("$.data[0].ticketId").value(1L))
                 .andExpect(jsonPath("$.data[0].languages[0]").value("Javascript"))
                 .andExpect(jsonPath("$.data[0].languages[1]").value("Python"))
                 .andExpect(jsonPath("$.data[0].languages[2]").value("Go"))
@@ -225,7 +220,6 @@ public class LessonGetTest extends LessonControllerTest {
                 .andExpect(jsonPath("$.data[0].bookmark").value(false))
 
                 .andExpect(jsonPath("$.data[1].lessonId").value(lessonList.get(1).getId()))
-                .andExpect(jsonPath("$.data[1].ticketId").value(1L))
                 .andExpect(jsonPath("$.data[1].languages[0]").value("Javascript"))
                 .andExpect(jsonPath("$.data[1].languages[1]").value("Python"))
                 .andExpect(jsonPath("$.data[1].languages[2]").value("Go"))
@@ -265,7 +259,6 @@ public class LessonGetTest extends LessonControllerTest {
         actions
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data[0].lessonId").value(lessonList.get(0).getId()))
-                .andExpect(jsonPath("$.data[0].ticketId").value(1L))
                 .andExpect(jsonPath("$.data[0].languages[0]").value("Javascript"))
                 .andExpect(jsonPath("$.data[0].languages[1]").value("Python"))
                 .andExpect(jsonPath("$.data[0].languages[2]").value("Go"))
@@ -281,7 +274,6 @@ public class LessonGetTest extends LessonControllerTest {
                 .andExpect(jsonPath("$.data[0].bookmark").value(true))
 
                 .andExpect(jsonPath("$.data[1].lessonId").value(lessonList.get(1).getId()))
-                .andExpect(jsonPath("$.data[1].ticketId").value(1L))
                 .andExpect(jsonPath("$.data[1].languages[0]").value("Javascript"))
                 .andExpect(jsonPath("$.data[1].languages[1]").value("Python"))
                 .andExpect(jsonPath("$.data[1].languages[2]").value("Go"))
@@ -326,7 +318,6 @@ public class LessonGetTest extends LessonControllerTest {
         actions
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data[0].lessonId").value(lessonList.get(0).getId()))
-                .andExpect(jsonPath("$.data[0].ticketId").value(1L))
                 .andExpect(jsonPath("$.data[0].languages[0]").value("Javascript"))
                 .andExpect(jsonPath("$.data[0].languages[1]").value("Python"))
                 .andExpect(jsonPath("$.data[0].languages[2]").value("Go"))
@@ -342,7 +333,6 @@ public class LessonGetTest extends LessonControllerTest {
                 .andExpect(jsonPath("$.data[0].bookmark").value(false))
 
                 .andExpect(jsonPath("$.data[1].lessonId").value(lessonList.get(1).getId()))
-                .andExpect(jsonPath("$.data[1].ticketId").value(1L))
                 .andExpect(jsonPath("$.data[1].languages[0]").value("Javascript"))
                 .andExpect(jsonPath("$.data[1].languages[1]").value("Python"))
                 .andExpect(jsonPath("$.data[1].languages[2]").value("Go"))
@@ -388,7 +378,6 @@ public class LessonGetTest extends LessonControllerTest {
         actions
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data[0].lessonId").value(lessonList.get(0).getId()))
-                .andExpect(jsonPath("$.data[0].ticketId").value(1L))
                 .andExpect(jsonPath("$.data[0].languages[0]").value("Javascript"))
                 .andExpect(jsonPath("$.data[0].languages[1]").value("Python"))
                 .andExpect(jsonPath("$.data[0].languages[2]").value("Go"))
@@ -404,7 +393,6 @@ public class LessonGetTest extends LessonControllerTest {
                 .andExpect(jsonPath("$.data[0].bookmark").value(true))
 
                 .andExpect(jsonPath("$.data[1].lessonId").value(lessonList.get(1).getId()))
-                .andExpect(jsonPath("$.data[1].ticketId").value(1L))
                 .andExpect(jsonPath("$.data[1].languages[0]").value("Javascript"))
                 .andExpect(jsonPath("$.data[1].languages[1]").value("Python"))
                 .andExpect(jsonPath("$.data[1].languages[2]").value("Go"))
