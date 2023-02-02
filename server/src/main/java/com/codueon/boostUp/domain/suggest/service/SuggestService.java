@@ -8,7 +8,9 @@ import com.codueon.boostUp.domain.suggest.dto.GetLessonAttendance;
 import com.codueon.boostUp.domain.suggest.dto.GetRefundPayment;
 import com.codueon.boostUp.domain.suggest.dto.PostReason;
 import com.codueon.boostUp.domain.suggest.dto.PostSuggest;
-import com.codueon.boostUp.domain.suggest.entity.*;
+import com.codueon.boostUp.domain.suggest.entity.PaymentInfo;
+import com.codueon.boostUp.domain.suggest.entity.Reason;
+import com.codueon.boostUp.domain.suggest.entity.Suggest;
 import com.codueon.boostUp.domain.suggest.kakao.*;
 import com.codueon.boostUp.domain.suggest.response.Message;
 import com.codueon.boostUp.domain.suggest.toss.*;
@@ -18,7 +20,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import static com.codueon.boostUp.domain.suggest.entity.PurchaseStatus.PURCHASE_IN_PROGRESS;
 import static com.codueon.boostUp.domain.suggest.entity.SuggestStatus.*;
 import static com.codueon.boostUp.domain.suggest.utils.PayConstants.ORDER_APPROVED;
 import static com.codueon.boostUp.domain.suggest.utils.PayConstants.REFUND_APPROVED;
@@ -61,23 +62,6 @@ public class SuggestService {
 
         suggest.setStatus(ACCEPT_IN_PROGRESS);
         suggestDbService.saveSuggest(suggest);
-    }
-
-    public void createPurchase(Long ticketId, Long memberId) {
-        Lesson findLesson = lessonDbService.ifExistsReturnLessonByMemberId(memberId);
-        suggestDbService.ifUnfinishedPurchaseExistsReturnException(findLesson.getId(), memberId);
-
-        Purchase purchase = Purchase.builder()
-                .ticketId(ticketId)
-                .lessonId(findLesson.getId())
-                .memberId(memberId)
-                .build();
-
-        Ticket findTicket = suggestDbService.ifExistsReturnTicket(ticketId);
-
-        purchase.setTicketTimes(findTicket.getValidHours());
-        purchase.setPurchaseStatus(PURCHASE_IN_PROGRESS);
-        suggestDbService.savePurchase(purchase);
     }
 
     /**

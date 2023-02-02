@@ -53,16 +53,8 @@ public class PaymentInfo {
     @JoinColumn(name = "SUGGEST_ID")
     private Suggest suggest;
 
-    @OneToOne
-    @JsonManagedReference
-    @JoinColumn(name = "PURCHASE_ID")
-    private Purchase purchase;
-
     public void setSuggest(Suggest suggest) {
         this.suggest = suggest;
-    }
-    public void setPurchase(Purchase purchase) {
-        this.purchase = purchase;
     }
 
     public void setPaymentKey(String paymentKey) {
