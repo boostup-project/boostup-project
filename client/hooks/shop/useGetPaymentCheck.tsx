@@ -1,8 +1,8 @@
 import getPaymentCheck from "apis/shop/getPaymentCheck";
-import { useQuery } from "react-query";
+import { useQuery } from "@tanstack/react-query";
 
 const useGetPaymentCheck = (suggestId: number) => {
-  return useQuery("get/PaymentCheck", () => getPaymentCheck(suggestId), {
+  return useQuery(["get/PaymentCheck"], () => getPaymentCheck(suggestId), {
     enabled: false,
     cacheTime: 5 * 10000,
     staleTime: 5 * 10000,

@@ -1,5 +1,5 @@
 import getPaymentInfo from "apis/shop/getPaymentInfo";
-import { useQuery } from "react-query";
+import { useQuery } from "@tanstack/react-query";
 
 const useGetPaymentInfo = (suggestId: number) => {
   return useQuery(["get/PaymentInfo"], () => getPaymentInfo(suggestId), {
