@@ -33,7 +33,7 @@ const navContents = [
     image: <IconPlus />,
   },
   {
-    type: "Link",
+    type: "Chat",
     image: <IconChat />,
     link: "/",
   },
@@ -68,6 +68,18 @@ const Navbar = () => {
     }
     if (!isLog) {
       toast.info("마이페이지는 로그인 후 이용해주세요", {
+        autoClose: 3000,
+        position: toast.POSITION.TOP_RIGHT,
+      });
+      router.push("/login");
+    }
+  };
+  const toChat = () => {
+    if (isLog) {
+      console.log("toChat");
+    }
+    if (!isLog) {
+      toast.info("채팅은 로그인 후 이용해주세요", {
         autoClose: 3000,
         position: toast.POSITION.TOP_RIGHT,
       });
@@ -117,11 +129,18 @@ const Navbar = () => {
                 <div className="w-5">{content.image}</div>
               </div>
             ) : content.type === "Profile" ? (
-              <div className="w-7" onClick={toProfile}>
+              <div className="w-7 tablet:cursor-pointer" onClick={toProfile}>
                 {content.image}
               </div>
+            ) : content.type === "Chat" ? (
+              <div className="w-7 tablet:cursor-pointer" onClick={toChat}>
+                <div>{content.image}</div>
+              </div>
             ) : (
-              <div className="w-7" onClick={handleModalClick}>
+              <div
+                className="w-7 tablet:cursor-pointer"
+                onClick={handleModalClick}
+              >
                 <div>{content.image}</div>
               </div>
             )}
