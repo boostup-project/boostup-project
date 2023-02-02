@@ -44,7 +44,7 @@ cloud:
     s3:
       bucket: ${AWS_S3_BUCKET_NAME}
     credentials:
-      accesskey: ${AWS_S3_BUCKET_ACCESS_KEY}
+      accessKey: ${AWS_S3_BUCKET_ACCESS_KEY}
       secretKey: ${AWS_S3_BUCKET_SECRET_KEY}
     region:
       static: ${AWS_S3_BUCKET_REGION}
