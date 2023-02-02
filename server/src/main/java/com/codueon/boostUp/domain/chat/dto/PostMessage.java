@@ -1,5 +1,6 @@
 package com.codueon.boostUp.domain.chat.dto;
 
+import com.codueon.boostUp.domain.chat.utils.MessageType;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,8 +16,7 @@ public class PostMessage {
     private String messageContent;
 
     @Builder
-    public PostMessage(Long chatRoomId,
-                       String messageContent) {
+    public PostMessage(Long chatRoomId, String messageContent) {
         this.chatRoomId = chatRoomId;
         this.messageContent = messageContent;
     }

@@ -1,64 +1,51 @@
 
 
-var stompClient = null;
-var notificationCount = 0;
+let stompClient = null;
+let notificationCount = 0;
 
 $(document).ready(function() {
     console.log("Index page is ready");
-    connect();
-
-    $("#send").click(function() {
-        sendMessage();
-    });
-
-    $("#send-private").click(function() {
-        sendPrivateMessage();
-    });
-
-    $("#notifications").click(function() {
-        resetNotificationCount();
-    });
 });
 
-function connect() {
-    let socket = new SockJS('/ws-connect');
+function setAuthorization() {
+    let auth = $('#authorization').val();
+    let token = "Bearer " + auth;
+    console.log(token);
+    localStorage.setItem("access_token", token);
+}
+
+function clickButton() {
+    let socket = new SockJS('http://localhost:8080/ws/chat');
     stompClient = Stomp.over(socket);
-    let headers = {Authorization : localStorage.getItem('Authorization')};
-    stompClient.connect(headers, function (frame) {
-        console.log('Connected: ' + frame);
-        updateNotificationDisplay();
-        stompClient.subscribe('user/topic/rooms', function (message) {
-            showMessage(JSON.parse(message.body).content);
-        });
+    let headers = {Authorization : localStorage.getItem('access_token')};
+    stompClient.connect(headers, (frame) => {});
+}
 
-        stompClient.subscribe('/user/topic/private/messages', function (message) {
-            showMessage(JSON.parse(message.body).content);
-        });
-
-        stompClient.subscribe('/topic/global/notifications', function (message) {
-            notificationCount = notificationCount + 1;
-            updateNotificationDisplay();
-        });
-
-        stompClient.subscribe('/user/topic/private/notifications', function (message) {
-            notificationCount = notificationCount + 1;
-            updateNotificationDisplay();
-        });
+function clickGudokButton() {
+    let chatRoomId = $("#chatRoomId").val();
+    stompClient.subscribe('/topic/rooms/' + chatRoomId, (message) => {
+        const data = JSON.parse(message.body);
+        showMessage(data);
+        console.log(data);
     });
 }
 
 function showMessage(message) {
-    $("#messages").append("<tr><td>" + message + "</td></tr>");
+    $("#messages").append(
+        "<tr>"
+        + "<td>" + message.displayName +"</td>"
+        + "<td>" + message.message +"</td>"
+        + "<td>" + message.createdAt +"</td>"
+        + "</tr>");
 }
 
 function sendMessage() {
     console.log("sending message");
-    stompClient.send("/pub/rooms", {}, JSON.stringify({
-        'chatRoomId': $("#id").val(),
-        'messageContent': $("#content").val(),
-        'name': $("#name").val(),
-        'memberImage': $("#image").val()
-    }));
+    const newMsg = {
+        chatRoomId: $("#chatRoomId").val(),
+        messageContent: $("#messageContent").val()
+    }
+    stompClient.send("/app/rooms", {}, JSON.stringify(newMsg));
 }
 
 function sendPrivateMessage() {

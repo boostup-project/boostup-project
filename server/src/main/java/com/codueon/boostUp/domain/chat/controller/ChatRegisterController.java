@@ -1,23 +1,18 @@
 package com.codueon.boostUp.domain.chat.controller;
 
-import com.codueon.boostUp.domain.chat.dto.RedisChat;
-import com.codueon.boostUp.domain.chat.entity.MemberInChatRoom;
-import com.codueon.boostUp.domain.chat.entity.MemberInfoInChatRoom;
-import com.codueon.boostUp.domain.chat.service.ChatRoomService;
-import com.codueon.boostUp.domain.chat.service.ChatService;
-import com.codueon.boostUp.domain.chat.service.WebSocketAuthService;
-import com.codueon.boostUp.domain.chat.utils.MessageType;
-import com.codueon.boostUp.domain.member.entity.Member;
-import com.codueon.boostUp.domain.member.service.MemberDbService;
-import com.codueon.boostUp.global.security.token.JwtAuthenticationToken;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.listener.ChannelTopic;
-import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
-import org.springframework.stereotype.Component;
-
 import java.security.Principal;
+
+import com.codueon.boostUp.domain.chat.service.ChatService;
+import lombok.extern.slf4j.Slf4j;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
+import com.codueon.boostUp.global.exception.ExceptionCode;
+import com.codueon.boostUp.domain.member.exception.AuthException;
+import com.codueon.boostUp.global.exception.BusinessLogicException;
+import com.codueon.boostUp.domain.chat.service.WebSocketAuthService;
+import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
+import com.codueon.boostUp.domain.chat.repository.redis.RedisChatRoom;
+import com.codueon.boostUp.global.security.token.JwtAuthenticationToken;
 
 @Slf4j
 @Component
@@ -25,43 +20,21 @@ import java.security.Principal;
 public class ChatRegisterController {
     // **** StompHandler에서 사용할 인증 및 메시지 처리 컨트롤러 클래스 ****
     private final ChatService chatService;
-    private final ChannelTopic channelTopic;
-    private final ChatRoomService chatRoomService;
-    private final MemberDbService memberDbService;
+    private final RedisChatRoom redisChatRoom;
     private final WebSocketAuthService webSocketAuthService;
-    private final RedisTemplate<Object, Object> redisTemplate;
 
     /**
      * 구독 시 유저 방 생성/저장 메서드
      * @param sessionId 세션 식별자
      * @param chatRoomId 채팅방 식별자
-     * @param Principal Principal
+     * @param principal Principal
      * @author mozzi327
      */
-    public void registerUserAndSendEnterMessage(String sessionId, Long chatRoomId, Principal principal) {
-        if (chatRoomId == null && principal == null) return;
+    public void registerUserAndSendEnterMessage(Long chatRoomId, Principal principal) {
+        if (principal == null) throw new AuthException(ExceptionCode.INVALID_ACCESS);
         JwtAuthenticationToken token = (JwtAuthenticationToken) principal;
-        Member findMember = memberDbService.ifExistsReturnMember(token.getId());
-        chatRoomService.saveMemberInChatRoom(chatRoomId, sessionId, findMember);
-        if (chatRoomService.isMemberInChatRoom(chatRoomId, token.getName())) {
-            RedisChat makeChat = chatService.makeEnterOrLeaveChatMessage(MessageType.ENTER, chatRoomId, findMember);
-            redisTemplate.convertAndSend(channelTopic.getTopic(), makeChat);
-        }
-    }
-
-    /**
-     * 구독 취소/커넥션 끊김 시 처리 메서드
-     * @param sessionId 세션 식별자
-     * @author mozzi327
-     */
-    public void unregisterUserAndSendLeaveMessage(String sessionId) {
-        MemberInfoInChatRoom memberInfo = chatRoomService.deleteMemberFromChatRoom(sessionId);
-        chatService.deleteLastSentInfo(sessionId);
-        if (memberInfo.getMember() != null) {
-            RedisChat messageToMember =
-                    chatService.makeEnterOrLeaveChatMessage(MessageType.LEAVE, memberInfo.getChatRoomId(), memberInfo.getMember());
-            redisTemplate.convertAndSend(channelTopic.getTopic(), messageToMember);
-        }
+        boolean isExistMember = redisChatRoom.isExistMemberInChatRoom(chatRoomId, token.getId());
+        if (!isExistMember) throw new BusinessLogicException(ExceptionCode.CHATROOM_NOT_FOUND);
     }
 
     /**

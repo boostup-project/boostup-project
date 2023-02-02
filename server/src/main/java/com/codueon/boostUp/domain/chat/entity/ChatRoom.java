@@ -1,16 +1,12 @@
 package com.codueon.boostUp.domain.chat.entity;
 
-import com.codueon.boostUp.domain.member.entity.Member;
-import com.codueon.boostUp.global.utils.Auditable;
 import lombok.AccessLevel;
 import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
+import com.codueon.boostUp.global.utils.Auditable;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
@@ -21,32 +17,15 @@ public class ChatRoom extends Auditable implements Serializable {
     @Column(name = "CHAT_ROOM_ID")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(nullable = false, foreignKey = @ForeignKey(name = "fk_room_to_sender"))
-    private Member sender;
-
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(nullable = false, foreignKey = @ForeignKey(name = "fk_room_to_receiver"))
-    private Member receiver;
-
-    @OneToMany(mappedBy = "chatRoom", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<ChatMessage> chatMessages = new ArrayList<>();
+    private Long senderId;
+    private Long receiverId;
 
     @Builder
-    public ChatRoom(Long id, Member tutor, Member student) {
+    public ChatRoom(Long id,
+                    Long senderId,
+                    Long receiverId) {
         this.id = id;
-        this.sender = tutor;
-        this.receiver = student;
-    }
-
-    public void addChatMessage(ChatMessage chatMessage) {
-        if (chatMessage.getChatRoom() != this) chatMessage.addChatRoom(this);
-        chatMessages.add(chatMessage);
-    }
-
-    public Member getPartner(Long memberId) {
-        if (receiver.getId() == memberId) return sender;
-        return receiver;
+        this.senderId = senderId;
+        this.receiverId = receiverId;
     }
 }
