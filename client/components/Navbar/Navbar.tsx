@@ -99,7 +99,7 @@ const Navbar = () => {
               </div>
             ) : content.type === "Write" ? (
               <div
-                className="w-12 h-12 rounded-3xl bg-pointColor flex justify-center items-center"
+                className="w-12 h-12 rounded-3xl bg-pointColor flex justify-center items-center tablet:cursor-pointer"
                 onClick={e => toWrite(e)}
               >
                 <div className="w-5">{content.image}</div>
