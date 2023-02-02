@@ -24,7 +24,7 @@ const navContents = [
     link: "/",
   },
   {
-    type: "Link",
+    type: "Profile",
     image: <IconProfile />,
     link: "/",
   },
@@ -56,6 +56,18 @@ const Navbar = () => {
     }
     if (!isLog) {
       toast.info("과외 작성은 로그인 후 이용해주세요", {
+        autoClose: 3000,
+        position: toast.POSITION.TOP_RIGHT,
+      });
+      router.push("/login");
+    }
+  };
+  const toProfile = () => {
+    if (isLog) {
+      router.push(`mypage/${localStorage.name}`);
+    }
+    if (!isLog) {
+      toast.info("마이페이지는 로그인 후 이용해주세요", {
         autoClose: 3000,
         position: toast.POSITION.TOP_RIGHT,
       });
@@ -103,6 +115,10 @@ const Navbar = () => {
                 onClick={e => toWrite(e)}
               >
                 <div className="w-5">{content.image}</div>
+              </div>
+            ) : content.type === "Profile" ? (
+              <div className="w-7" onClick={toProfile}>
+                {content.image}
               </div>
             ) : (
               <div className="w-7" onClick={handleModalClick}>
