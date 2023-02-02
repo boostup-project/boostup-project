@@ -1,10 +1,10 @@
 import { useState } from "react";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useSetRecoilState } from "recoil";
 import { SubmitHandler } from "react-hook-form";
 import { textColor } from "assets/color/color";
 import { IconExit, IconLogIn, IconMagnify } from "assets/icon/";
 import { SearchPop } from "./SearchPop";
-import { powerWriteModal } from "atoms/main/mainAtom";
+import { mainCardInfo, powerWriteModal } from "atoms/main/mainAtom";
 import Image from "next/image";
 import Logo from "../../public/images/logo.png";
 import Link from "next/link";
@@ -39,6 +39,7 @@ const Header = () => {
   const [mobLogExitIcon, setMobLogExitIcon] = useState<any>("");
   const [seek, setSeek] = useState(false);
   const [isPowerWrite, setIsPowerWrite] = useRecoilState(powerWriteModal);
+  const setMainCardInfo = useSetRecoilState(mainCardInfo);
 
   const { mutate, isSuccess, data } = usePostSearch();
 
@@ -76,6 +77,8 @@ const Header = () => {
   useEffect(() => {
     if (isSuccess && data) {
       console.log(data);
+      setSeek(prev => !prev);
+      setMainCardInfo(data.data.data);
     }
   }, [isSuccess]);
 
