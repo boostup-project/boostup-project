@@ -77,6 +77,7 @@ const Header = () => {
       autoClose: 1500,
       position: toast.POSITION.TOP_RIGHT,
     });
+    router.push("/");
   };
 
   return (
