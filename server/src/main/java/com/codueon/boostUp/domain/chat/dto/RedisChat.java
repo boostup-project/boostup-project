@@ -15,7 +15,7 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 public class RedisChat implements Serializable {
 
     @NotNull
@@ -44,15 +44,15 @@ public class RedisChat implements Serializable {
         this.displayName = displayName;
     }
 
-    public void setEnterMessage() {
+    public void addEnterMessage() {
         this.message = "[알림] " + displayName + "님이 입장하셨습니다.";
     }
 
-    public void setLeaveMessage() {
+    public void addLeaveMessage() {
         this.message = "[알림] " + displayName + "님이 나가셨습니다.";
     }
 
-    public void setCurrentTime() {
+    public void settingCurrentTime() {
         this.createdAt = LocalDateTime.now();
     }
 }

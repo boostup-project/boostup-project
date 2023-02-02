@@ -50,6 +50,9 @@ public enum ExceptionCode {
     INVALID_DESTINATION(504, "매칭되는 채팅방이 존재하지 않습니다."),
     INVALID_CHAT_ROOM_ID(504, "유효하지 않은 채팅방 식별자입니다."),
     INVALID_CHAT_ROOM_MEMBER(504, "채팅방 인원 수는 최대 두 명입니다."),
+    FAIL_TO_SERIALIZE(504, "잘못된 JSON 정보입니다."),
+    CHATROOM_ALREADY_EXIST(504, "채팅방이 이미 존재합니다."),
+    NO_CHAT_IN_CACHE_EXIST(504, "메시지 캐시가 존재하지 않습니다."),
 
     // 인증 코드
     INVALID_EMAIL_CODE(403, "유효하지 않은 인증 코드입니다."),

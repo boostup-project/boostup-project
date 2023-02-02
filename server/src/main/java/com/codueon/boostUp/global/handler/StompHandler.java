@@ -1,6 +1,7 @@
 package com.codueon.boostUp.global.handler;
 
 import com.codueon.boostUp.domain.chat.controller.ChatRegisterController;
+import com.codueon.boostUp.domain.chat.vo.ChatRoomIdVO;
 import com.codueon.boostUp.domain.member.entity.Member;
 import com.codueon.boostUp.global.exception.BusinessLogicException;
 import com.codueon.boostUp.global.exception.ExceptionCode;
@@ -8,6 +9,8 @@ import com.codueon.boostUp.global.security.utils.JwtTokenUtils;
 import com.codueon.boostUp.global.utils.RedisUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageChannel;
 import org.springframework.messaging.simp.stomp.StompCommand;
@@ -15,10 +18,12 @@ import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.messaging.support.ChannelInterceptor;
 import org.springframework.messaging.support.MessageHeaderAccessor;
 
+import java.util.Arrays;
+
 @Slf4j
 @RequiredArgsConstructor
 public class StompHandler implements ChannelInterceptor {
-    ChatRegisterController chatRegisterController;
+    private final ChatRegisterController chatRegisterController;
 
     /**
      * 권한 인증 및 방 생성을 위한 핸들러 필터 메서드
@@ -39,15 +44,13 @@ public class StompHandler implements ChannelInterceptor {
         } else if (StompCommand.SUBSCRIBE.equals(command)) {
             log.info("[SUBSCRIBE] start {}", sessionId);
             Long chatRoomId = parseRoomIdFromHeader(accessor);
-            chatRegisterController.registerUserAndSendEnterMessage(sessionId, chatRoomId, accessor.getUser());
+            chatRegisterController.registerUserAndSendEnterMessage(chatRoomId, accessor.getUser());
             log.info("[SUBSCRIBE] end {}", sessionId);
         } else if (StompCommand.UNSUBSCRIBE.equals(command)) {
             log.info("[UNSUBSCRIBE] start {}", sessionId);
-            chatRegisterController.unregisterUserAndSendLeaveMessage(sessionId);
             log.info("[UNSUBSCRIBE] end {}", sessionId);
         } else if (StompCommand.DISCONNECT.equals(command)) {
             log.info("[DISCONNECT] start {}", sessionId);
-            chatRegisterController.unregisterUserAndSendLeaveMessage(sessionId);
             log.info("[DISCONNECT] end {}", sessionId);
         }
         return message;
@@ -61,10 +64,12 @@ public class StompHandler implements ChannelInterceptor {
      */
     private Long parseRoomIdFromHeader(StompHeaderAccessor accessor) {
         try {
+            // /topic/rooms/{chatRoomId}
             String destination = accessor.getDestination();
+            log.info("destination : {}", destination);
             String[] parseDestination = destination.split("/");
-            if (!parseDestination[parseDestination.length - 2].equals("rooms")) return null;
-            return Long.parseLong(parseDestination[parseDestination.length - 1]);
+            if(!parseDestination[2].equals("rooms")) throw new Exception();
+            return Long.parseLong(parseDestination[3]);
         } catch (Exception e) {
             throw new BusinessLogicException(ExceptionCode.INVALID_DESTINATION);
         }

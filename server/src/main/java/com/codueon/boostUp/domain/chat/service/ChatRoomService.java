@@ -1,88 +1,119 @@
 package com.codueon.boostUp.domain.chat.service;
 
-import com.codueon.boostUp.domain.chat.entity.MemberInChatRoom;
-import com.codueon.boostUp.domain.chat.entity.MemberInfoInChatRoom;
-import com.codueon.boostUp.domain.chat.repository.redis.ChatRoomRepository;
-import com.codueon.boostUp.domain.chat.repository.redis.MemberInChatRoomRepository;
-import com.codueon.boostUp.domain.chat.utils.ChatRoomUtils;
+import com.codueon.boostUp.domain.chat.dto.RedisChat;
+import com.codueon.boostUp.domain.chat.entity.ChatRoom;
+import com.codueon.boostUp.domain.chat.event.SendMessageEvent;
+import com.codueon.boostUp.domain.chat.repository.querydsl.ChatRoomRepository;
+import com.codueon.boostUp.domain.chat.repository.redis.RedisChatMessage;
+import com.codueon.boostUp.domain.chat.repository.redis.RedisChatRoom;
+import com.codueon.boostUp.domain.chat.utils.MessageType;
 import com.codueon.boostUp.domain.member.entity.Member;
-import com.codueon.boostUp.global.exception.BusinessLogicException;
-import com.codueon.boostUp.global.exception.ExceptionCode;
+import com.codueon.boostUp.domain.member.service.MemberDbService;
 import com.codueon.boostUp.global.security.token.JwtAuthenticationToken;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
-import java.util.Set;
 
 @Service
 @Transactional
 @RequiredArgsConstructor
 public class ChatRoomService {
-    private final ChatRoomUtils chatRoomUtils;
+    private final RedisChatRoom redisChatRoom;
+    private final MemberDbService memberDbService;
+    private final RedisChatMessage redisChatMessage;
     private final ChatRoomRepository chatRoomRepository;
-    private final MemberInChatRoomRepository memberInChatRoomRepository;
+    private final ApplicationEventPublisher eventPublisher;
 
     /**
-     * 사용자 채팅방 정보 저장 메서드
-     * @param chatRoomId 채팅방 식별자
-     * @param sessionId 세션 식별자
-     * @param member 사용자 정보
+     * 채팅방 생성 메서드
+     * @param token 사용자 인증 정보
+     * @param lessonId 과외 식별자
      * @author mozzi327
      */
-    public void saveMemberInChatRoom(Long chatRoomId, String sessionId, Member member) {
-        boolean isValid = chatRoomRepository.isExistChatRoom(chatRoomId); // 채팅방 존재 유무 확인
-        if (!isValid) makeChatRoom(chatRoomId);
-        MemberInChatRoom memberInChatRoom = MemberInChatRoom.builder()
-                .displayName(member.getName())
-                .email(member.getEmail())
-                .build();
-        memberInChatRoomRepository.addMember(chatRoomId, sessionId, memberInChatRoom);
+    public void createChatRoom(JwtAuthenticationToken token, Long lessonId) {
+        Member receiver = memberDbService.ifExistsReturnMemberByLessonId(lessonId);
+        Long senderId = token.getId();
+        Long receiverId = receiver.getId();
+        String senderName = token.getName();
+        String receiverName = receiver.getName();
+        if (isExistRoom(senderId, receiverId)) return;
+        saveChatRoomAndSendEnterMessage(senderId, receiverId, senderName, receiverName);
     }
 
     /**
-     * 채팅방 중복 여부 확인한 후 채팅방을 생성해주는 메서드
-     * @param chatRoomId 채팅방 식별자
-     * @author mozzi327
-     */
-    private void makeChatRoom(Long chatRoomId) {
-        Set<String> chatRooms = chatRoomRepository.findAllChatRoomKey();
-        int numberOfChatRooms = chatRooms.size();
-        if (numberOfChatRooms + 1 != chatRoomId)
-            throw new BusinessLogicException(ExceptionCode.INVALID_CHAT_ROOM_ID);
-        chatRoomRepository.createChatRoom(chatRoomId);
-    }
-
-    /**
-     * 채팅방에 해당 유저가 존재하는지 확인하는 메서드
-     * @param chatRoomId 채팅방 식별자
-     * @param email 이메일 정보
+     * 채팅방 존재 유무 확인 메서드
+     * @param firstId 첫번째 사용자 식별자
+     * @param secondId 두번째 사용자 식별자
      * @return boolean
      * @author mozzi327
      */
-    public boolean isMemberInChatRoom(Long chatRoomId, String email) {
-        List<MemberInChatRoom> members = memberInChatRoomRepository.findAllByChatRoomId(chatRoomId);
-        for (MemberInChatRoom member : members) {
-            if (member.getEmail().equals(email)) return true;
-        }
-        return false;
+    private boolean isExistRoom(Long firstId, Long secondId) {
+        boolean findFirst = chatRoomRepository.existsBySenderIdAndReceiverId(firstId, secondId);
+        boolean findSecond = chatRoomRepository.existsBySenderIdAndReceiverId(secondId, firstId);
+        return findFirst || findSecond;
     }
 
-    public MemberInfoInChatRoom deleteMemberFromChatRoom(String sessionId) {
-        Set<String> chatRoomKeys = chatRoomRepository.findAllChatRoomKey();
-        MemberInfoInChatRoom memberInfo = new MemberInfoInChatRoom();
-        chatRoomKeys.stream().forEach(chatRoomKey -> {
-            boolean isContained = memberInChatRoomRepository.contain(chatRoomKey, sessionId);
-            if (isContained) {
-                MemberInChatRoom member = memberInChatRoomRepository.findBySessionId(chatRoomKey, sessionId);
-                memberInfo.setChatRoomId(chatRoomUtils.parseChatRoomId(chatRoomKey));
-                memberInfo.setMember(member);
-            }
-        });
-        return memberInfo;
+    /**
+     * 채팅방 저장 후 입장 메시지 전송 메서드
+     * @param senderId 사용자 식별자(sender)
+     * @param receiverId 사용자 식별자(receiver)
+     * @param senderName 닉네임(sender)
+     * @param receiverName 닉네임(receiver)
+     * @author mozzi327
+     */
+    @Transactional
+    public void saveChatRoomAndSendEnterMessage(Long senderId, Long receiverId, String senderName,
+                                                String receiverName) {
+        ChatRoom chatRoom = ChatRoom.builder()
+                .senderId(senderId)
+                .receiverId(receiverId)
+                .build();
+        ChatRoom savedChatRoom = chatRoomRepository.save(chatRoom);
+        RedisChat senderChat = makeChat(savedChatRoom.getId(), senderId, senderName, MessageType.ENTER);
+        RedisChat receiverChat = makeChat(savedChatRoom.getId(), receiverId, receiverName, MessageType.ENTER);
+        redisChatRoom.isNotExistMemberInChatRoomMakeRoomInfo(savedChatRoom.getId(), senderId);
+        redisChatRoom.isNotExistMemberInChatRoomMakeRoomInfo(savedChatRoom.getId(), receiverId);
+        SendMessageEvent sendMessageEvent = SendMessageEvent.builder()
+                .chatRoomId(savedChatRoom.getId())
+                .senderChat(senderChat)
+                .receiverChat(receiverChat)
+                .build();
+        eventPublisher.publishEvent(sendMessageEvent);
+    }
+
+    /**
+     * 채팅방 목록 조회 메서드
+     * @param memberId 사용자 식별자
+     * @return List(RedisChat)
+     * @author mozzi327
+     */
+    public List<RedisChat> findAllChatRoom(Long memberId) {
+        List<String> chatRooms = redisChatRoom.findAllChatRoom(memberId);
+        return redisChatMessage.findAllByRoomKey(chatRooms);
+    }
+
+    /**
+     * RedisChat 생성 메서드
+     * @param chatRoomId 채팅방 식별자
+     * @param memberId 사용자 식별자
+     * @param displayName 닉네임
+     * @param messageType 메시지 타입
+     * @return RedisChat
+     * @author mozzi327
+     */
+    public RedisChat makeChat(Long chatRoomId, Long memberId, String displayName,
+                              MessageType messageType) {
+        RedisChat makeChat = RedisChat.builder()
+                .chatRoomId(chatRoomId)
+                .messageType(messageType)
+                .senderId(memberId)
+                .displayName(displayName)
+                .build();
+        makeChat.settingCurrentTime();
+        makeChat.addEnterMessage();
+        return makeChat;
     }
 }

@@ -26,6 +26,7 @@ public class ChatController {
         JwtAuthenticationToken token = (JwtAuthenticationToken) headerAccessor.getUser();
         RedisChat convertedRedisChat = chatService.setRedisChatInfo(message, token);
         redisTemplate.convertAndSend(channelTopic.getTopic(), convertedRedisChat);
+        redisTemplate.convertAndSend("/topic/alarm/member/" + 1L, convertedRedisChat);
         log.info("[SEND] complete {}", headerAccessor.getSessionId());
     }
 }

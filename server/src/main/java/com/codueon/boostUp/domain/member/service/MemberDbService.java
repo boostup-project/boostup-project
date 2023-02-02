@@ -131,4 +131,15 @@ public class MemberDbService {
         if (memberRepository.existsByName(name))
             throw new BusinessLogicException(ExceptionCode.NICKNAME_ALREADY_EXIST);
     }
+
+    /**
+     * 사용자 조회 메서드(과외 식별자)
+     * @param lessonId 과외 식별자
+     * @return Member
+     * @author mozzi327
+     */
+    public Member ifExistsReturnMemberByLessonId(Long lessonId) {
+        return memberRepository.getNicknameByLessonId(lessonId)
+                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
+    }
 }

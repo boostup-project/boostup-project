@@ -23,10 +23,6 @@ public class ChatMessage {
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "CHAT_ROOM_ID")
-    private ChatRoom chatRoom;
-
     @Builder
     public ChatMessage(Long id,
                        String content,
@@ -34,9 +30,5 @@ public class ChatMessage {
         this.id = id;
         this.content = content;
         this.createdAt = createdAt;
-    }
-
-    public void addChatRoom(ChatRoom chatRoom) {
-        this.chatRoom = chatRoom;
     }
 }

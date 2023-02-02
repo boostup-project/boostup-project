@@ -1,13 +1,14 @@
 package com.codueon.boostUp.domain.chat.utils;
 
+import com.codueon.boostUp.domain.chat.vo.ParseMemberVO;
 import org.springframework.stereotype.Component;
 
 @Component
 public class ChatRoomUtils {
     public final String  KEY_FOR_CHAT_ROOMS = "ChatRooms";
     private final String PREFIX_OF_KEY = "ChatRoom";
-    private final String SUFFIX_OF_KEY = "Session";
-    private final String SUFFIX_OF_LAST_CHAT_KEY = "LastSavedKey";
+    private final String SUFFIX_OF_KEY = "Message";
+    private final String PREFIX_OF_MEMBER = "Member";
 
     /**
      * chatRoom key 형변환 메서드(조회용)
@@ -32,13 +33,7 @@ public class ChatRoomUtils {
         return PREFIX_OF_KEY + chatRoomId + SUFFIX_OF_KEY;
     }
 
-    /**
-     * 가장 최근 메시지 식별자 조회 메서드
-     * @param chatRoomId 채팅방 식별자
-     * @return String
-     * @author mozzi327
-     */
-    public String makeLastChatMessageKey(Long chatRoomId) {
-        return PREFIX_OF_KEY + chatRoomId + SUFFIX_OF_LAST_CHAT_KEY;
+    public String makeMemberKey(Long memberId) {
+        return PREFIX_OF_MEMBER + memberId + SUFFIX_OF_KEY;
     }
 }
