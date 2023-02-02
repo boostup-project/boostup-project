@@ -1,28 +1,20 @@
 package com.codueon.boostUp.domain.chat.service;
 
-import com.codueon.boostUp.domain.member.entity.Member;
-import com.codueon.boostUp.domain.member.exception.AuthException;
-import com.codueon.boostUp.domain.member.repository.MemberRepository;
-import com.codueon.boostUp.global.exception.ExceptionCode;
 import com.codueon.boostUp.global.security.dto.ClaimsVO;
 import com.codueon.boostUp.global.security.token.JwtAuthenticationToken;
 import com.codueon.boostUp.global.security.utils.CustomAuthorityUtils;
 import com.codueon.boostUp.global.security.utils.JwtTokenUtils;
 import com.codueon.boostUp.global.utils.RedisUtils;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.ExpiredJwtException;
 import lombok.RequiredArgsConstructor;
-import lombok.SneakyThrows;
 import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import java.util.Base64;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 import static com.codueon.boostUp.global.security.utils.AuthConstants.ROLES;
 
@@ -30,7 +22,6 @@ import static com.codueon.boostUp.global.security.utils.AuthConstants.ROLES;
 @RequiredArgsConstructor
 public class WebSocketAuthService {
     private final RedisUtils redisUtils;
-    private final ObjectMapper objectMapper;
     private final JwtTokenUtils jwtTokenUtils;
     private final CustomAuthorityUtils authorityUtils;
     private final String AUTHORIZATION = "Authorization";
@@ -43,7 +34,7 @@ public class WebSocketAuthService {
     public void authenticate(StompHeaderAccessor accessor) {
         String getAccessHeader = accessor.getFirstNativeHeader(AUTHORIZATION);
         String accessToken = jwtTokenUtils.parseAccessToken(getAccessHeader);
-        if (redisUtils.isBlackList(accessToken) == null) return;
+        if (redisUtils.isBlackList(accessToken) != null) return;
         try {
             Map<String, Object> claims = jwtTokenUtils.getClaims(accessToken);
             Authentication authentication = getAuthentication(claims, accessToken);
@@ -88,14 +79,5 @@ public class WebSocketAuthService {
                 .accessToken(accessToken)
                 .isExpired(false)
                 .build();
-    }
-
-    /**
-     * Security Context Authentication 저장 메서드
-     * @param authentication Authentication
-     * @author mozzi327
-     */
-    private void setAuthentication(Authentication authentication) {
-        SecurityContextHolder.getContext().setAuthentication(authentication);
     }
 }

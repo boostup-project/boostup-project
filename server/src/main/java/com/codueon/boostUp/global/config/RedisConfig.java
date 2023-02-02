@@ -30,7 +30,7 @@ public class RedisConfig {
 
     @Bean
     public ChannelTopic channelTopic() {
-        return new ChannelTopic("chatroom");
+        return new ChannelTopic("chat");
     }
 
     @Bean
@@ -61,20 +61,22 @@ public class RedisConfig {
      * @author mozzi327
      */
     @Bean
-    public RedisMessageListenerContainer redisMessageListenerContainer(RedisConnectionFactory factory) {
+    public RedisMessageListenerContainer redisMessageListenerContainer(RedisConnectionFactory factory,
+                                                                       MessageListenerAdapter listenerAdapter,
+                                                                       ChannelTopic channelTopic) {
         RedisMessageListenerContainer container = new RedisMessageListenerContainer();
         container.setConnectionFactory(factory);
+        container.addMessageListener(listenerAdapter, channelTopic);
         return container;
     }
 
     /**
      * RedisTemplete 등록 빈 메서드
-     * @param connectionFactory RedisConnectionFactory
      * @return RedisTemplete(Object, Object)
      * @author mozzi327
      */
     @Bean
-    public RedisTemplate<?, ?> redisTemplate(RedisConnectionFactory connectionFactory) {
+    public RedisTemplate<?, ?> redisTemplate() {
         RedisTemplate<?, ?> redisTemplate = new RedisTemplate<>();
         redisTemplate.setConnectionFactory(redisConnectionFactory());
         redisTemplate.setKeySerializer(new StringRedisSerializer());
