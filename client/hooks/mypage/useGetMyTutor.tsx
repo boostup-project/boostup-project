@@ -1,8 +1,9 @@
-import { useQuery } from "react-query";
+import { useQuery } from "@tanstack/react-query";
 import getMyTutor from "apis/mypage/getMyTutor";
 
 const useGetMyTutor = () => {
   return useQuery(["get/MyTutor"], () => getMyTutor(), {
+    // enabled: true,
     onSuccess: res => {
       console.log(res);
     },

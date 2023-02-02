@@ -10,7 +10,6 @@ import useGetBookmark from "hooks/detail/useGetBookmark";
 import { useRouter } from "next/router";
 import getBookmark from "apis/detail/getBookmark";
 const DetailButtons = (basicInfo: any) => {
-  const [editable, setEditable] = useState(false);
   const [isOpenModal, setOpenModal] = useState<boolean>(false);
   const router = useRouter();
   const lessonId = Number(router.query.id);
@@ -98,15 +97,13 @@ const DetailButtons = (basicInfo: any) => {
             </div>
           </DetailBtn>
         </div>
-        {/* {editable ? ( */}
-        <div className="mt-10">
-          <DetailBtn bold={false} remove={true} onClick={deletePost}>
-            삭제하기
-          </DetailBtn>
-        </div>
-        {/* ) : (
-          <></>
-        )} */}
+        {basicInfo.basicInfo?.editable ? (
+          <div className="mt-10">
+            <DetailBtn bold={false} remove={true} onClick={deletePost}>
+              삭제하기
+            </DetailBtn>
+          </div>
+        ) : null}
       </div>
     </div>
   );

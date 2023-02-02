@@ -1,18 +1,27 @@
 import useGetMyTutor from "hooks/mypage/useGetMyTutor";
 import { useRouter } from "next/router";
 import AcceptModal from "./AcceptModal";
+import Swal from "sweetalert2";
 import DeclineModal from "./DeclineModal";
 import { useState, useCallback, useEffect } from "react";
 const ApplicationList = () => {
   const [OpenModal, setOpenModal] = useState<boolean>(false);
   const [openDeclineModal, setOpenDeclineModal] = useState<boolean>(false);
 
-  // const { data: myTutorUrl } = useGetMyTutor;
-
-  // const router = useRouter();
-  // const toMyTutor = () => {
-  //   router.push(myTutorUrl);
-  // };
+  const { data: myTutorUrl } = useGetMyTutor();
+  const router = useRouter();
+  const toMyTutor = () => {
+    if (myTutorUrl) {
+      router.push(myTutorUrl?.data.lessonUrl);
+    } else {
+      Swal.fire({
+        title: "등록하신 과외가 없습니다",
+        text: "과외를 등록해보세요",
+        icon: "warning",
+        confirmButtonColor: "#3085d6",
+      });
+    }
+  };
 
   const onClickAcceptModal = useCallback(() => {
     setOpenModal(!OpenModal);
@@ -33,7 +42,7 @@ const ApplicationList = () => {
 
       <button
         className="flex flex-col bg-pointColor text-white font-SCDream7 desktop:text-lg tablet:text-base text-sm rounded-xl items-start justify-center border border-borderColor w-full desktop:h-[50px] tablet:h-[43px] h-[38px] py-3 desktop:mt-5 tablet:mt-3 mt-2 pl-5"
-        // onClick={toMyTutor}
+        onClick={toMyTutor}
       >
         나의 과외로 이동하기
       </button>
