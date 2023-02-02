@@ -45,16 +45,6 @@ public class SuggestController {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    @PostMapping("suggest/ticket/{ticket-id}")
-    public ResponseEntity createAdvertisement(@PathVariable("ticket-id") Long ticketId,
-                                              Authentication authentication) {
-
-        JwtAuthenticationToken token = (JwtAuthenticationToken) authentication;
-        Long memberId = getMemberIdIfExistToken(token);
-        suggestService.createPurchase(ticketId, memberId);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
-    }
-
     /**
      * 신청 프로세스 2-1 신청 수락 컨트롤러 메서드
      * @param suggestId 신청 식별자

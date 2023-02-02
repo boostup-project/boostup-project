@@ -26,7 +26,6 @@ import static com.codueon.boostUp.domain.lesson.entity.QLesson.lesson;
 import static com.codueon.boostUp.domain.lesson.entity.QLessonAddress.lessonAddress;
 import static com.codueon.boostUp.domain.lesson.entity.QLessonLanguage.lessonLanguage;
 import static com.codueon.boostUp.domain.member.entity.QMember.member;
-import static com.codueon.boostUp.domain.suggest.entity.QPurchase.purchase;
 
 
 public class LessonRepositoryImpl implements CustomLessonRepository {
@@ -50,16 +49,14 @@ public class LessonRepositoryImpl implements CustomLessonRepository {
                 .select(new QGetMainPageLesson(
                         lesson,
                         member.name,
-                        Expressions.constant(false),
-                        purchase.ticketId.coalesce(0L).as("ticket_id")
+                        Expressions.constant(false)
                 ))
                 .from(lesson)
                 .leftJoin(member).on(lesson.memberId.eq(member.id))
-                .leftJoin(purchase).on(lesson.id.eq(purchase.lessonId))
+                .distinct()
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
-                .orderBy(purchase.ticketId.desc(),
-                        lesson.id.desc())
+                .orderBy(lesson.id.desc())
                 .fetch();
 
         long total = result.size();
@@ -81,16 +78,14 @@ public class LessonRepositoryImpl implements CustomLessonRepository {
                 .select(new QGetMainPageLesson(
                         lesson,
                         member.name,
-                        isBookmarked(lesson.id, memberId),
-                        purchase.ticketId.coalesce(0L).as("ticket_id")
+                        isBookmarked(lesson.id, memberId)
                 ))
                 .from(lesson)
                 .leftJoin(member).on(lesson.memberId.eq(member.id))
-                .leftJoin(purchase).on(lesson.id.eq(purchase.lessonId))
+                .distinct()
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
-                .orderBy(purchase.ticketId.desc(),
-                        lesson.id.desc())
+                .orderBy(lesson.id.desc())
                 .fetch();
 
         long total = result.size();
@@ -112,17 +107,15 @@ public class LessonRepositoryImpl implements CustomLessonRepository {
                 .select(new QGetMainPageLesson(
                         lessonLanguage.lesson,
                         member.name,
-                        Expressions.constant(false),
-                        purchase.ticketId.coalesce(0L).as("ticket_id")
+                        Expressions.constant(false)
                 )).from(lessonLanguage)
                 .leftJoin(member).on(lessonLanguage.lesson.memberId.eq(member.id))
                 .leftJoin(lesson).on(lessonLanguage.lesson.id.eq(lesson.id))
-                .leftJoin(purchase).on(lesson.id.eq(purchase.lessonId))
+                .distinct()
                 .where(lessonLanguage.languageInfo.eq(LanguageInfo.findById(languageId)))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
-                .orderBy(purchase.ticketId.desc(),
-                        lessonLanguage.lesson.id.desc())
+                .orderBy(lessonLanguage.lesson.id.desc())
                 .fetch();
 
         long total = result.size();
@@ -146,17 +139,15 @@ public class LessonRepositoryImpl implements CustomLessonRepository {
                 .select(new QGetMainPageLesson(
                         lessonLanguage.lesson,
                         member.name,
-                        isBookmarked(lessonLanguage.lesson.id, memberId),
-                        purchase.ticketId.coalesce(0L).as("ticket_id")
+                        isBookmarked(lessonLanguage.lesson.id, memberId)
                 )).from(lessonLanguage)
                 .leftJoin(member).on(lessonLanguage.lesson.memberId.eq(member.id))
                 .leftJoin(lesson).on(lessonLanguage.lesson.id.eq(lesson.id))
-                .leftJoin(purchase).on(lesson.id.eq(purchase.lessonId))
+                .distinct()
                 .where(lessonLanguage.languageInfo.eq(LanguageInfo.findById(languageId)))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
-                .orderBy(purchase.ticketId.desc(),
-                        lessonLanguage.lesson.id.desc())
+                .orderBy(lessonLanguage.lesson.id.desc())
                 .fetch();
 
         long total = result.size();
@@ -178,18 +169,16 @@ public class LessonRepositoryImpl implements CustomLessonRepository {
                 .select(new QGetMainPageLesson(
                         lesson,
                         member.name,
-                        Expressions.constant(false),
-                        purchase.ticketId.coalesce(0L).as("ticket_id")
+                        Expressions.constant(false)
                 )).from(lesson)
                 .leftJoin(member).on(lesson.memberId.eq(member.id))
                 .leftJoin(lessonAddress).on(lesson.id.eq(lessonAddress.lesson.id))
                 .leftJoin(lessonLanguage).on(lesson.id.eq(lessonLanguage.lesson.id))
-                .leftJoin(purchase).on(lesson.id.eq(purchase.lessonId))
+                .distinct()
                 .where(makeDetailSearchConditions(postSearchLesson))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
-                .orderBy(purchase.ticketId.desc(),
-                        lesson.id.desc())
+                .orderBy(lesson.id.desc())
                 .fetch();
 
         long total = result.size();
@@ -213,18 +202,16 @@ public class LessonRepositoryImpl implements CustomLessonRepository {
                 .select(new QGetMainPageLesson(
                         lesson,
                         member.name,
-                        isBookmarked(lesson.id, memberId),
-                        purchase.ticketId.coalesce(0L).as("ticket_id")
+                        isBookmarked(lesson.id, memberId)
                 )).from(lesson)
                 .leftJoin(member).on(lesson.memberId.eq(member.id))
                 .leftJoin(lessonAddress).on(lesson.id.eq(lessonAddress.lesson.id))
                 .leftJoin(lessonLanguage).on(lesson.id.eq(lessonLanguage.lesson.id))
-                .leftJoin(purchase).on(lesson.id.eq(purchase.lessonId))
+                .distinct()
                 .where(makeDetailSearchConditions(postSearchLesson))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
-                .orderBy(purchase.ticketId.desc(),
-                        lesson.id.desc())
+                .orderBy(lesson.id.desc())
                 .fetch();
 
         long total = result.size();

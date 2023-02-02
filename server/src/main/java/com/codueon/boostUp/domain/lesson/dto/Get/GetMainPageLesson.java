@@ -21,14 +21,12 @@ public class GetMainPageLesson {
     private Integer career;
     private List<String> address;
     private boolean bookmark;
-    private Long ticketId;
 
     @Builder
     @QueryProjection
     public GetMainPageLesson(Lesson lesson,
                              String name,
-                             boolean bookmark,
-                             Long ticketId) {
+                             boolean bookmark) {
         this.lessonId = lesson.getId();
         this.languages = lesson.getLanguageListAsString();
         this.title = lesson.getTitle();
@@ -39,6 +37,5 @@ public class GetMainPageLesson {
         this.career = lesson.getCareer();
         this.address = lesson.getAddressListAsString();
         this.bookmark = bookmark;
-        this.ticketId = ticketId;
     }
 }
