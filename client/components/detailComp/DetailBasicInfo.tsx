@@ -7,6 +7,7 @@ import { useRecoilState } from "recoil";
 import { powerBasicEditModal, editMode } from "atoms/detail/detailAtom";
 
 const DetailBasicInfo = (basicInfo: any) => {
+  console.log(basicInfo);
   const [power, setPower] = useRecoilState(powerBasicEditModal);
   const [mode, setMode] = useRecoilState(editMode);
   const handleClickEdit = () => {
@@ -115,12 +116,14 @@ const DetailBasicInfo = (basicInfo: any) => {
           <div className="w-full h-fit flex flex-row justify-end items-center font-SCDream5 desktop:text-xl text-sm text-textColor mt-2 mb-14">
             {basicInfo.basicInfo?.cost}원 / 1회
           </div>
-          <div
-            className="w-40 h-fit flex flex-row justify-end items-center font-SCDream3 text-sm text-pointColor cursor-pointer"
-            onClick={handleClickEdit}
-          >
-            edit
-          </div>
+          {basicInfo.basicInfo?.editable ? (
+            <div
+              className="w-40 h-fit flex flex-row justify-end items-center font-SCDream3 text-sm text-pointColor cursor-pointer"
+              onClick={handleClickEdit}
+            >
+              edit
+            </div>
+          ) : null}
         </div>
       </div>
     </>

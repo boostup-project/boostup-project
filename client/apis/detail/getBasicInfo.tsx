@@ -6,6 +6,11 @@ const getBasicInfo = async (lessonId: number) => {
     headers: {
       "content-Type": `application/json`,
       "ngrok-skip-browser-warning": "69420",
+      Authorization: `${
+        localStorage.getItem("token")
+          ? `Bearer ${localStorage.getItem("token")}`
+          : null
+      }`,
     },
   });
 };

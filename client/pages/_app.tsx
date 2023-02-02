@@ -13,7 +13,7 @@ export default function App({ Component, pageProps }: AppProps) {
     <>
       <QueryClientProvider client={queryClient}>
         <RecoilRoot>
-          <div className="flex flex-col h-full justify-center items-center bg-bgColor">
+          <div className="flex flex-col max-h-full justify-center items-center bg-bgColor">
             <Header />
             <Component {...pageProps} />
             <Footer />

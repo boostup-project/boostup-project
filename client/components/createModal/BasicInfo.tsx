@@ -84,6 +84,16 @@ const BasicInfo = ({ basicInfo, setBasicInfo, toWrite, setStep }: Props) => {
       const parseAddress = [...address].map((el: any) => el.value);
       const parseLang = [...languages].map((el: any) => langDict[el]);
       const proImage = profileImg[0];
+      const formData = new FormData();
+
+      let editState = "";
+
+      if (proImage) {
+        editState = "true";
+        formData.append("profileImage", proImage);
+      } else {
+        editState = "false";
+      }
 
       const json = JSON.stringify({
         languages: parseLang,
@@ -92,13 +102,13 @@ const BasicInfo = ({ basicInfo, setBasicInfo, toWrite, setStep }: Props) => {
         career: basicData.career,
         cost: basicData.cost,
         addresses: parseAddress,
+        // editState : true(수정) false(수정X)
+        editState: editState,
       });
       const blob = new Blob([json], { type: "application/json" });
-      const formData = new FormData();
 
       formData.append("data", blob);
       // 사진 수정 안했을 시는 false / 사진 수정 했을 시에는 새로운 File 전달
-      formData.append("profileImage", proImage);
 
       basicModiMutate({ formData, lessonId });
     } else {

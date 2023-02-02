@@ -88,7 +88,7 @@ const Detail = () => {
         <DetailBasicInfoEditModal basicData={basicInfo} />
       ) : null}
 
-      <div className="flex flex-col bg-bgColor items-center justify-start w-full h-full pt-28">
+      <div className="flex flex-col bg-bgColor items-center justify-start w-full h-full pt-4">
         {/* 요약정보 */}
         <DetailSummeryContainer>
           {widthSize > 764 ? (

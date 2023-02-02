@@ -3,8 +3,18 @@ import AreaIcon from "../../assets/icon/detailSummeryIcon/AreaIcon";
 import CareerIcon from "../../assets/icon/detailSummeryIcon/CareerIcon";
 import CompanyIcon from "../../assets/icon/detailSummeryIcon/CompanyIcon";
 import NickNameIcon from "assets/icon/detailSummeryIcon/NickNameIcon";
+import { useRecoilState } from "recoil";
+import { powerBasicEditModal, editMode } from "atoms/detail/detailAtom";
 
 const MobileDetailBasicInfo = (basicInfo: any) => {
+  const [power, setPower] = useRecoilState(powerBasicEditModal);
+  const [mode, setMode] = useRecoilState(editMode);
+
+  const handleClickEdit = () => {
+    setPower(true);
+    setMode(true);
+  };
+
   return (
     <>
       <div className="w-full h-fit flex flex-col justify-center items-center p-5">
@@ -98,6 +108,14 @@ const MobileDetailBasicInfo = (basicInfo: any) => {
               })}
             </div>
           </div>
+          {basicInfo.basicInfo?.editable ? (
+            <div
+              className="w-[90%] h-fit flex flex-row justify-end items-center font-SCDream3 text-sm text-pointColor cursor-pointer"
+              onClick={handleClickEdit}
+            >
+              edit
+            </div>
+          ) : null}
         </div>
       </div>
     </>
