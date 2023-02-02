@@ -22,7 +22,7 @@ import useGetBookmarkModi from "hooks/detail/useGetBookmarkModi";
 import Swal from "sweetalert2";
 import { mainCardInfo } from "atoms/main/mainAtom";
 import { useRouter } from "next/router";
-import { useSetRecoilState } from "recoil";
+import { useSetRecoilState, useRecoilState } from "recoil";
 const client = new QueryClient();
 
 // export async function getStaticProps() {
@@ -37,9 +37,9 @@ const client = new QueryClient();
 // }
 
 const Card = () => {
-  const [cards, setCards] = useState<any>();
+  // const [cards, setCards] = useState<any>();
   const router = useRouter();
-  const setMainCardInfo = useSetRecoilState(mainCardInfo);
+  const [cards, setMainCardInfo] = useRecoilState(mainCardInfo);
 
   const queryClient = useQueryClient();
   const { isLoading, isError, data, isFetching } = useQuery(
@@ -50,7 +50,7 @@ const Card = () => {
       onSuccess: data => {
         // 성공시 호출
         setMainCardInfo(data.data.data);
-        setCards(data.data.data);
+        // setCards(data.data.data);
       },
       onError: error => {},
       retry: 2,

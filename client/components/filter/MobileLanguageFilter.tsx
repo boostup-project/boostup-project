@@ -17,13 +17,13 @@ const MoblieLanguageFilter = () => {
   }, [langId]);
 
   // 하단 Navbar의 필터 버튼 클릭시 20~26줄 코드를 넣어주시면 됩니다!
-  const handleModalClick = () => {
-    if (modal === 0) {
-      setModal(48);
-    } else {
-      setModal(0);
-    }
-  };
+  // const handleModalClick = () => {
+  //   if (modal === 0) {
+  //     setModal(48);
+  //   } else {
+  //     setModal(0);
+  //   }
+  // };
 
   const handleFilterClick = (languageId: number) => {
     setLangId(languageId);
