@@ -1,5 +1,5 @@
 import getReceipt from "apis/shop/getReceipt";
-import { useQuery } from "react-query";
+import { useQuery } from "@tanstack/react-query";
 
 const useGetReceipt = (suggestId: number) => {
   return useQuery(["get/Receipt"], () => getReceipt(suggestId), {

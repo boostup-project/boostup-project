@@ -1,5 +1,6 @@
+import { useQuery } from "@tanstack/react-query";
 import getKakaoNTossPay from "apis/shop/getKakaoNTossPay";
-import { useQuery } from "react-query";
+
 import { toast } from "react-toastify";
 
 interface Assemble {
