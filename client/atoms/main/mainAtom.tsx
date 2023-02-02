@@ -9,6 +9,10 @@ const powerWriteModal = atom({
   key: "powerWriteModal",
   default: false,
 });
+const mainCardInfo = atom({
+  key: "mainCardInfo",
+  default: undefined,
+});
 
 const isWrite = atom({
   key: "isWrite",
@@ -22,4 +26,4 @@ const filterModal = atom({
   default: 48,
 });
 
-export { inputStep, powerWriteModal, filterModal, isWrite };
+export { inputStep, powerWriteModal, filterModal, isWrite, mainCardInfo };

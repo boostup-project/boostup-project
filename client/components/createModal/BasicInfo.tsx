@@ -153,7 +153,9 @@ const BasicInfo = ({ basicInfo, setBasicInfo, toWrite, setStep }: Props) => {
                 type="file"
                 className="opacity-0 rounded-xl"
                 accept="image/jpeg,.txt"
-                {...register("profileImg", { required: "필수 정보입니다" })}
+                {...register("profileImg", {
+                  required: "필수 정보입니다",
+                })}
                 onChange={e => insertImg(e)}
               />
             )}
@@ -172,6 +174,10 @@ const BasicInfo = ({ basicInfo, setBasicInfo, toWrite, setStep }: Props) => {
           defaultValue={basicInfo?.title as string}
           {...register("title", {
             required: "필수 정보입니다.",
+            maxLength: {
+              value: 12,
+              message: "타이틀을 12자 이하로 입력하여 주시길 바랍니다.",
+            },
           })}
         />
         <p className="w-11/12 text-xs text-negativeMessage mt-1 tablet:text-sm desktop:w-4/6">

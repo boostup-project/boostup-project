@@ -43,10 +43,13 @@ const StudentReview = () => {
           </div>
           {/* right */}
           <div className="flex flex-col w-1/2 justify-center items-end desktop:mr-4 tablet:mr-2 mr-2">
-            <div className="flex  desktop:text-xl tablet:text-lg text-[14px]">
+            <div className="flex  desktop:text-lg tablet:text-base text-[14px]">
               {/* {period} */}2022.10.11~2022.12.26
             </div>
-            <div className="flex">
+            <div className="flex text-borderColor desktop:text-lg tablet:text-base text-[14px]">
+              {/* {createdAt} */}2022.12.31
+            </div>
+            <div className="flex mt-5">
               <button className="text text-pointColor m-2 desktop:text-base tablet:text-sm text-[10px]">
                 수정하기
               </button>
