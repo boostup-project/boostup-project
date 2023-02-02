@@ -45,6 +45,7 @@ const Detail = () => {
 
   const handleTabClick = (id: number) => {
     setTab(id);
+    console.log(basicInfo);
   };
 
   const {
@@ -64,7 +65,6 @@ const Detail = () => {
   useEffect(() => {
     // refetch 실행위치
     // tab이 바뀔때마다 refetch 실행
-    // console.log(lessonId);
     if (lessonId) {
       // 요약정보 요청
       basicInfoRefetch();
@@ -136,7 +136,7 @@ const Detail = () => {
             {/* 각 탭별 컴포넌트를 생성하여 넣어주세요! */}
           </DetailContentContainer>
           <div className="w-full h-full flex flex-col justify-start items-center pl-3">
-            <DetailButtons></DetailButtons>
+            <DetailButtons basicInfo={basicInfo} />
           </div>
         </div>
       </div>

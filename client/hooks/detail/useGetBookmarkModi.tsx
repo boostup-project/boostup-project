@@ -3,6 +3,7 @@ import getBookmarkModi from "apis/detail/getBookmarkModi";
 
 const useGetBookmarkModi = (lessonId: number) => {
   return useQuery(["get/BookmarkModi"], () => getBookmarkModi(lessonId), {
+    enabled: false,
     onSuccess: res => {
       console.log(res);
     },
