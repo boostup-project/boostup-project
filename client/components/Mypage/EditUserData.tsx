@@ -2,6 +2,7 @@ import { modalImgTxt } from "assets/color/color";
 import { IconImg } from "assets/icon";
 import CreateModalContainer from "components/reuse/container/CreateModalContainer";
 import ModalBackDrop from "components/reuse/container/ModalBackDrop";
+import { ChangeEvent } from "react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 
@@ -10,9 +11,10 @@ interface Props {
 }
 
 const EditUserDataModal = ({ editProfile }: Props) => {
+  const [duplicationName, setDuplicationName] = useState("");
   const [previewImg, setPreviewImg] = useState<string>("");
   const { register, handleSubmit } = useForm();
-
+  console.log("이름채크", duplicationName);
   const insertImg = (e: any) => {
     let reader = new FileReader();
 
@@ -29,6 +31,10 @@ const EditUserDataModal = ({ editProfile }: Props) => {
   };
   const deleteImg = () => {
     setPreviewImg("");
+  };
+
+  const nameReciever = (e: ChangeEvent<HTMLInputElement>) => {
+    console.log(e.target.value);
   };
 
   const editSubmit = () => {
@@ -86,8 +92,23 @@ const EditUserDataModal = ({ editProfile }: Props) => {
             </label>
           </div>
           <div className="mt-4">닉네임</div>
-          <div>
-            닉네임 <button>중복검사</button>
+          <div className="w-full flex">
+            <label className="w-9/12">
+              <input
+                id="duplicationName"
+                type="text"
+                placeholder="닉네임 중복검사를 해주세요"
+                className="w-full desktop:w-4/6 h-fit p-2 border border-borderColor outline-pointColor rounded-l-xl font-SCDream4 text-xs text-textColor tablet:text-sm "
+                {...register("name")}
+                onChange={e => nameReciever(e)}
+              />
+            </label>
+            <button
+              className="w-3/12 text-xs border border-l-0 bg-borderColor border-borderColor rounded-r-xl text-bgColor"
+              // onClick={duplicationCheck}
+            >
+              중복검사
+            </button>
           </div>
           <div>
             <button>취소하기</button>
