@@ -1,5 +1,5 @@
 import { IconMail, IconProfile } from "assets/icon";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import EditUserDataModal from "./EditUserData";
 
 const MypageInfo = () => {
@@ -7,6 +7,7 @@ const MypageInfo = () => {
   const editProfile = () => {
     setIsEditOpen(prev => !prev);
   };
+
   return (
     <>
       <div className="w-full flex flex-row justify-start items-center">
@@ -28,8 +29,7 @@ const MypageInfo = () => {
               <IconProfile />
             </div>
             <div className="ml-1.5 pt-1 w-fit h-fit flex flex-row justify-start items-center font-SCDream5 desktop:text-xl tablet:text-base text-textColor">
-              {/* {localStorage.name} */}
-              myname
+              {localStorage ? localStorage.name : <></>}
             </div>
           </div>
           <div className="flex flex-row justify-start items-center w-full h-fit desktop:mt-8 tablet:mt-6 mt-2">
@@ -37,8 +37,7 @@ const MypageInfo = () => {
               <IconMail />
             </div>
             <div className="ml-1.5 pt-1 w-fit h-fit flex flex-row justify-start items-center font-SCDream5 desktop:text-xl text-base text-textColor">
-              {/* {localStorage.email} */}
-              wjdgksmf11@daum.net
+              {localStorage ? localStorage.email : <></>}
             </div>
           </div>
           <div className="flex desktop:mt-8 tablet:mt-6 mt-2">

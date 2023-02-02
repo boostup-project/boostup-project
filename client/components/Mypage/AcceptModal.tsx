@@ -8,15 +8,18 @@ import { PropsWithChildren } from "react";
 import { useRouter } from "next/router";
 interface Accept {
   quantity: number;
-  suggestId: number;
+  suggestId: any;
 }
 
 interface ModalDefaultType {
-  onClickToggleModal: () => void;
+  onClickToggleModal: (suggestId: number) => void;
+  suggestId: number;
+  //   SuggestId: any;
 }
 
 const AcceptModal = ({
   onClickToggleModal,
+  suggestId,
 }: PropsWithChildren<ModalDefaultType>) => {
   const {
     control,
@@ -25,8 +28,7 @@ const AcceptModal = ({
     formState: { errors },
   } = useForm<Accept>({ mode: "onBlur" });
   //SuggestId 입력필요
-  const router = useRouter();
-  const suggestId = Number(router.query.id);
+
   const { mutate, isSuccess, isError } = usePostAccept();
 
   const onSubmit = (e: Accept) => {
@@ -45,7 +47,7 @@ const AcceptModal = ({
         icon: "success",
         confirmButtonColor: "#3085d6",
       });
-      onClickToggleModal();
+      onClickToggleModal(suggestId);
     }
 
     if (isError) {
@@ -82,7 +84,7 @@ const AcceptModal = ({
               {errors?.quantity && <span>필수 정보입니다</span>}
             </p>
             <div className="flex flex-row justify-center items-center w-full h-fit mt-10">
-              <SmallBtn css="mr-4" onClick={onClickToggleModal}>
+              <SmallBtn css="mr-4" onClick={e => onClickToggleModal(suggestId)}>
                 취 소
               </SmallBtn>
               <SmallBtn>수 락</SmallBtn>

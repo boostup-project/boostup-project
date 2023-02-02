@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const deleteDetail = async (lessonId: number) => {
-  return await axios.delete(`/lesson/test/${lessonId}`, {
+  return await axios.delete(`/lesson/${lessonId}`, {
     baseURL: process.env.NEXT_PUBLIC_API_URL,
     headers: {
       "content-Type": `application/json`,
