@@ -9,7 +9,7 @@ const powerWriteModal = atom({
   key: "powerWriteModal",
   default: false,
 });
-const mainCardInfo = atom({
+const mainCardInfo = atom<any>({
   key: "mainCardInfo",
   default: undefined,
 });
