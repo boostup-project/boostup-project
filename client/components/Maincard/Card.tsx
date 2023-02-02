@@ -11,7 +11,13 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 //import useGetMainCard from "./useGetMainCard";
 import getMainCard from "apis/card/getMainCard";
-import { dehydrate, QueryClient, QueryClientProvider, useQuery, useQueryClient } from "@tanstack/react-query";
+import {
+  dehydrate,
+  QueryClient,
+  QueryClientProvider,
+  useQuery,
+  useQueryClient,
+} from "@tanstack/react-query";
 import useGetBookmarkModi from "hooks/detail/useGetBookmarkModi";
 import Swal from "sweetalert2";
 import { mainCardInfo } from "atoms/main/mainAtom";
@@ -37,7 +43,7 @@ const Card = () => {
 
   const queryClient = useQueryClient();
   const { isLoading, isError, data, isFetching } = useQuery(
-    "cards",
+    ["cards"],
     getMainCard,
     {
       enabled: true,
@@ -63,7 +69,7 @@ const Card = () => {
     if (localStorage.getItem("token")) {
       setLessonId(lessonId);
       bookmarkRefetch();
-      queryClient.invalidateQueries("get/Bookmark");
+      queryClient.invalidateQueries(["get/Bookmark"]);
     } else {
       return Swal.fire({
         text: "로그인해주세요",
