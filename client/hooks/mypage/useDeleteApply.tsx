@@ -1,5 +1,5 @@
 import deleteApply from "apis/mypage/deleteApply";
-import { useMutation } from "react-query";
+import { useMutation } from "@tanstack/react-query";
 
 const useDeleteApply = () => {
   return useMutation(deleteApply, {

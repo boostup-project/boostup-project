@@ -1,4 +1,4 @@
-import { useQuery } from "react-query";
+import { useQuery } from "@tanstack/react-query";
 import getTutorInfo from "apis/mypage/getTutorInfo";
 
 const useGetTutorInfo = (lessonId: Number, tabId: Number) => {
