@@ -7,9 +7,6 @@ const MypageInfo = () => {
     return;
   };
 
-  const name = localStorage.name;
-  const email = localStorage.email;
-
   return (
     <>
       <div className="w-full flex flex-row justify-start items-center">
@@ -31,7 +28,7 @@ const MypageInfo = () => {
               <IconProfile />
             </div>
             <div className="ml-1.5 pt-1 w-fit h-fit flex flex-row justify-start items-center font-SCDream5 desktop:text-xl tablet:text-base text-textColor">
-              {name}
+              {localStorage ? localStorage.name : <></>}
             </div>
           </div>
           <div className="flex flex-row justify-start items-center w-full h-fit mt-8 tablet:mt-6 mt-2">
@@ -39,7 +36,7 @@ const MypageInfo = () => {
               <IconMail />
             </div>
             <div className="ml-1.5 pt-1 w-fit h-fit flex flex-row justify-start items-center font-SCDream5 desktop:text-xl text-base text-textColor">
-              {email}
+              {localStorage ? localStorage.email : <></>}
             </div>
           </div>
           <div className="flex mt-8 tablet:mt-6 mt-2">

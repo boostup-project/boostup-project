@@ -111,9 +111,7 @@ const StudentClass = () => {
                 <div className="mt-5 tablet:mt-3 desktop:text-sm tablet:text-xs text-[8px]">
                   {tutor.status}
                 </div>
-                <div className="mb-5 tablet:mb-3 desktop:text-sm tablet:text-xs text-[8px]">
-                  CreatedAt
-                </div>
+
                 <div className="flex">
                   <button className="text text-pointColor m-2 desktop:text-base tablet:text-sm text-[10px]">
                     채팅하기

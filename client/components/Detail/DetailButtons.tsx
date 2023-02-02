@@ -64,6 +64,7 @@ const DetailButtons = (basicInfo: any) => {
       if (result.isConfirmed) {
         deleteDetail(lessonId);
         router.push("/");
+        console.log(lessonId);
         return Swal.fire({
           text: "삭제가 완료되었습니다",
           icon: "success",
