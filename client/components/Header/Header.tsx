@@ -91,7 +91,7 @@ const Header = () => {
       router.push("/login");
     }
     if (log) {
-      router.push(`mypage/${localStorage.name}`);
+      router.push(`/mypage/${localStorage.name}`);
     }
   };
   const wordTwoEvent = () => {

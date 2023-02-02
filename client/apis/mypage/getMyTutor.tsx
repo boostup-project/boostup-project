@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const getMyTutor = async () => {
-  const url = `/lesson/tutor/`;
+  const url = `/lesson/tutor`;
   return await axios.get(url, {
     baseURL: process.env.NEXT_PUBLIC_API_URL,
     headers: {

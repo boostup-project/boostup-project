@@ -136,7 +136,7 @@ const Detail = () => {
             {/* 각 탭별 컴포넌트를 생성하여 넣어주세요! */}
           </DetailContentContainer>
           <div className="w-full h-full flex flex-col justify-start items-center pl-3">
-            <DetailButtons basicInfo={basicInfo} />
+            <DetailButtons basicInfo={basicInfo?.data} />
           </div>
         </div>
       </div>

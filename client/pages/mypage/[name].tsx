@@ -16,28 +16,33 @@ import TeacherTab from "components/Mypage/TeacherTab";
 import StudentTab from "components/Mypage/StudentTab";
 import useGetStudentInfo from "hooks/mypage/useGetStudentInfo";
 import useGetTutorInfo from "hooks/mypage/useGetTutorInfo";
+import useGetMyTutor from "hooks/mypage/useGetMyTutor";
 const Mypage = () => {
   //memberId? memberName?
   const router = useRouter();
-  const lessonId = Number(router.query.id);
+
+  const { data: myTutorUrl } = useGetMyTutor();
+  const lessonId = Number(myTutorUrl?.data.lessonUrl.slice(29));
 
   const [tab, setTab] = useState(1);
 
   const { refetch: refetchStudentInfo, data: studentInfoData } =
     useGetStudentInfo();
-  const { refetch: refetchTutorInfo, data: tuturInfoData } = useGetTutorInfo(
+  const { refetch: refetchTutorInfo, data: tutorInfoData } = useGetTutorInfo(
     lessonId,
     tab,
   );
   const handleTabClick = (id: number) => {
     setTab(id);
+    refetchTutorInfo;
+    console.log(tutorInfoData);
   };
   const widthSize = useWindowSize();
 
   useEffect(() => {
     // refetch 실행위치
     // tab이 바뀔때마다 refetch 실행
-    // console.log(lessonId);
+    console.log(lessonId, tab);
     if (lessonId) {
       // 요약정보 요청
     }

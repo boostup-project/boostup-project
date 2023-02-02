@@ -1,7 +1,7 @@
 import axios from "axios";
 
-const getTutorInfo = async (lessonId: number, tabId: number) => {
-  const url = `/suggest/lesson/${lessonId}/tutor/tab/${tabId}`;
+const getCloseClass = async (suggestId: number) => {
+  const url = `/suggest/${suggestId}/done`;
   return await axios.get(url, {
     baseURL: process.env.NEXT_PUBLIC_API_URL,
     headers: {
@@ -12,4 +12,4 @@ const getTutorInfo = async (lessonId: number, tabId: number) => {
   });
 };
 
-export default getTutorInfo;
+export default getCloseClass;

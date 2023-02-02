@@ -1,10 +1,12 @@
 import { IconMail, IconProfile } from "assets/icon";
+import { useEffect } from "react";
 
 const MypageInfo = () => {
   const editProfile = () => {
     console.log(localStorage);
     return;
   };
+
   return (
     <>
       <div className="w-full flex flex-row justify-start items-center">
@@ -26,8 +28,7 @@ const MypageInfo = () => {
               <IconProfile />
             </div>
             <div className="ml-1.5 pt-1 w-fit h-fit flex flex-row justify-start items-center font-SCDream5 desktop:text-xl tablet:text-base text-textColor">
-              {/* {localStorage.name} */}
-              myname
+              {localStorage ? localStorage.name : <></>}
             </div>
           </div>
           <div className="flex flex-row justify-start items-center w-full h-fit mt-8 tablet:mt-6 mt-2">
@@ -35,8 +36,7 @@ const MypageInfo = () => {
               <IconMail />
             </div>
             <div className="ml-1.5 pt-1 w-fit h-fit flex flex-row justify-start items-center font-SCDream5 desktop:text-xl text-base text-textColor">
-              {/* {localStorage.email} */}
-              wjdgksmf11@daum.net
+              {localStorage ? localStorage.email : <></>}
             </div>
           </div>
           <div className="flex mt-8 tablet:mt-6 mt-2">
