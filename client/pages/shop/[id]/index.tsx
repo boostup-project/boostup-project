@@ -19,7 +19,7 @@ interface FetchedData {
   totalCost: number;
 }
 
-interface StringToString {
+export interface StringToString {
   [index: string]: string;
 }
 
@@ -27,20 +27,20 @@ interface OnSubmit {
   pay: string;
 }
 
-const teacherInfo: StringToString = {
+export const teacherInfo: StringToString = {
   name: "이름",
-  language: "가능언어",
+  languages: "가능언어",
   address: "가능지역",
   company: "경력 / 학력",
 };
-const costInfo: StringToString = {
+export const costInfo: StringToString = {
   cost: "회차별 금액",
   quantity: "횟수",
   totalCost: "총 금액",
 };
 
-const teacherInfoKeys = Object.keys(teacherInfo);
-const costInfoKeys = Object.keys(costInfo);
+export const teacherInfoKeys = Object.keys(teacherInfo);
+export const costInfoKeys = Object.keys(costInfo);
 
 const payMethod = ["카카오페이", "토스 - 카드", "토스 - 휴대폰", "토스 - 계좌"];
 
@@ -159,7 +159,7 @@ const shop = () => {
 
       setTeacherInfoData({
         name,
-        language: toRenderLang,
+        languages: toRenderLang,
         address: toRenderAdd,
         company,
       });
@@ -189,7 +189,7 @@ const shop = () => {
     <div className="mt-28 desktop:mt-12">Loading</div>;
   } else {
     return (
-      <div className="flex flex-col bg-bgColor items-center mt-28 w-full h-screen text-base tablet:text-2xl desktop:mt-12 desktop:w-3/4 desktop:min-w-[1000px]">
+      <div className="flex flex-col bg-bgColor items-center w-full h-screen text-base tablet:text-2xl desktop:w-3/4 desktop:min-w-[1000px]">
         <form
           className="w-full h-full flex flex-col justify-center items-center"
           onSubmit={handleSubmit(onSubmit)}
@@ -210,7 +210,7 @@ const shop = () => {
                         src={teacherImg as string}
                       />
                     </div>
-                    <div className="w-1/2 flex flex-col justify-evenly text-sm ml-7 tablet:text-lg tablet:ml-16">
+                    <div className="w-2/3 flex flex-col justify-evenly text-sm ml-7 tablet:text-xl tablet:ml-16">
                       <div className="w-fit bold">{title}</div>
                       {teacherInfoKeys.map((key, i) => (
                         <div
@@ -237,8 +237,18 @@ const shop = () => {
                   <div className="text-sm flex flex-col h-full justify-between my-4 tablet:text-sm desktop:h-2/5">
                     {costInfoKeys.map((key, i) => (
                       <div key={i} className="w-full flex">
-                        <div className="w-24">{costInfo[key]}</div>
-                        <div className="w-24 text-center">
+                        <div
+                          className={`w-24 ${
+                            key === "totalCost" && `font-SCDream7 font-bold`
+                          }`}
+                        >
+                          {costInfo[key]}
+                        </div>
+                        <div
+                          className={`w-24 text-center ${
+                            key === "totalCost" && `font-SCDream7 font-bold`
+                          }`}
+                        >
                           {typeof costInfoData === "undefined" ? (
                             <div>loading</div>
                           ) : (
