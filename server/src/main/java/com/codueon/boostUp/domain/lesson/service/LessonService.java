@@ -572,8 +572,11 @@ public class LessonService {
      * @author Quartz614
      */
     private Boolean editable(Long lessonId, Long memberId) {
+        if (memberId == null) {
+            return false;
+        }
         Lesson lesson = lessonDbService.ifExistsReturnLesson(lessonId);
-        if (lesson.getMemberId() == memberId) {
+        if (lesson.getMemberId().equals(memberId)) {
             return true;
         } else return false;
     }

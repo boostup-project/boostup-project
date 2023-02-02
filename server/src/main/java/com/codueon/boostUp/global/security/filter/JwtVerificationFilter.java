@@ -70,6 +70,7 @@ public class JwtVerificationFilter extends OncePerRequestFilter {
      */
     private String resolveToken(HttpServletRequest request) {
         String bearerToken = request.getHeader(AUTHORIZATION);
+        if (bearerToken == "null") return null;
         if (StringUtils.hasText(bearerToken) && bearerToken.startsWith(BEARER)) {
             return jwtTokenUtils.parseAccessToken(bearerToken);
         }
