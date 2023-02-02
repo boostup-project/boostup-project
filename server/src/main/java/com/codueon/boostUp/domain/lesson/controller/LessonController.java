@@ -192,6 +192,7 @@ public class LessonController {
     @GetMapping("/{lesson-id}")
     public ResponseEntity<?> getLesson(@PathVariable("lesson-id") Long lessonId,
                                        Authentication authentication) {
+
         JwtAuthenticationToken token = (JwtAuthenticationToken) authentication;
         Long memberId = getMemberIdIfExistToken(token);
 
