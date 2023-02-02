@@ -171,12 +171,12 @@ public class SuggestService {
         }
 
         Lesson findLesson = lessonDbService.ifExistsReturnLesson(findSuggest.getLessonId());
+        Member findMember = memberDbService.ifExistsReturnMember(findSuggest.getMemberId());
         PaymentInfo findPaymentInfo = suggestDbService.ifExistsReturnPaymentInfo(suggestId);
 
         KakaoPayHeader headers = feignService.setKakaoHeaders();
-        ReadyToKakaoPayInfo params = feignService.setReadyParams(
-                requestUrl, suggestId, findSuggest.getTotalCost(), findSuggest.getMemberId(),
-                        findLesson.getTitle(), findLesson.getCost(), findPaymentInfo.getQuantity());
+        ReadyToKakaoPayInfo params =
+                feignService.setReadyParams(requestUrl, findSuggest, findMember, findLesson, findPaymentInfo);
 
         KakaoPayReadyInfo payReadyInfo = feignService.getPayReadyInfo(headers, params);
 
