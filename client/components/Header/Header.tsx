@@ -13,12 +13,19 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useEffect } from "react";
 import { useRouter } from "next/router";
+import usePostSearch from "hooks/main/usePostSearch";
+
+interface SelectData {
+  key: number;
+  label: string;
+  value: number;
+}
 
 interface SearchData {
   name: string;
-  address: number;
+  address: SelectData;
   career: string;
-  language: number;
+  language: SelectData;
   startCost: string;
   endCost: string;
 }
@@ -32,6 +39,8 @@ const Header = () => {
   const [mobLogExitIcon, setMobLogExitIcon] = useState<any>("");
   const [seek, setSeek] = useState(false);
   const [isPowerWrite, setIsPowerWrite] = useRecoilState(powerWriteModal);
+
+  const { mutate, isSuccess, data } = usePostSearch();
 
   useEffect(() => {
     if (log) {
@@ -49,8 +58,26 @@ const Header = () => {
   }, [log]);
 
   const onSubmit: SubmitHandler<SearchData> = data => {
-    console.log(data);
+    const { address, career, endCost, language, name, startCost } = data;
+    const parseAdd = address?.value;
+    const parseLang = language?.value;
+    const toSendInput = {
+      name: name ? name : "",
+      address: parseAdd ? parseAdd : "",
+      career: career ? Number(career) : "",
+      language: language ? parseLang : "",
+      startCost: startCost ? Number(startCost) : "",
+      endCost: endCost ? Number(endCost) : "",
+    };
+    console.log(toSendInput);
+    mutate(toSendInput);
   };
+
+  useEffect(() => {
+    if (isSuccess && data) {
+      console.log(data);
+    }
+  }, [isSuccess]);
 
   const toWrite = (e: React.MouseEvent<HTMLDivElement>) => {
     setIsPowerWrite(prev => !prev);
