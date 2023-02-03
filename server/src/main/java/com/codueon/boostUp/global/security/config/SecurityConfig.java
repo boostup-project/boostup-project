@@ -94,7 +94,7 @@ public class SecurityConfig {
         configuration.addAllowedOrigin("https://d12vhbt0xdnnpo.cloudfront.net");
         configuration.addAllowedHeader("*");
         configuration.addAllowedMethod("*");
-//        configuration.setAllowCredentials(true);
+        configuration.setAllowCredentials(true);
         configuration.addExposedHeader("Authorization");
         configuration.addExposedHeader("RefreshToken");
 
