@@ -139,7 +139,9 @@ const Detail = () => {
                 editable={editable}
               />
             )}
-            {tab === 2 && <DetailCurriculum curData={curData} />}
+            {tab === 2 && (
+              <DetailCurriculum curData={curData} editable={editable} />
+            )}
             {tab === 3 && reviewSuccess && (
               <DetailReview reviewData={reviewData?.data} />
             )}
