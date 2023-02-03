@@ -47,82 +47,86 @@ const receipt = () => {
   const [costInfoData, setCostInfoData] = useState<StringToString>();
   const [paymentMethod, setPaymentMethod] = useState("");
 
+  // useEffect(() => {
+  //   const nameFrom = localStorage.getItem("name");
+  //   const emailFrom = localStorage.getItem("email");
+  //   setUserName(nameFrom);
+  //   setUserEmail(emailFrom);
+  //   const {
+  //     address,
+  //     company,
+  //     cost,
+  //     languages,
+  //     name,
+  //     profileImage,
+  //     quantity,
+  //     title,
+  //     totalCost,
+  //     paymentMethod,
+  //   } = dummy;
+  //   const toRenderAdd = address.join(", ");
+  //   const toRenderLang = languages.join(", ");
+  //   setTeacherInfoData({
+  //     name,
+  //     languages: toRenderLang,
+  //     address: toRenderAdd,
+  //     company,
+  //   });
+  //   setCostInfoData({
+  //     cost: cost.toLocaleString("ko-KR") + " 원",
+  //     quantity: String(quantity),
+  //     totalCost: totalCost.toLocaleString("ko-KR") + " 원",
+  //   });
+  //   setTeacherImg(profileImage);
+  //   setTitle(title);
+  //   setPaymentMethod(paymentMethod);
+  // }, []);
+
+  const { refetch, isSuccess, isError, data } = useGetReceipt(queryId);
+  console.log(data);
   useEffect(() => {
-    const nameFrom = localStorage.getItem("name");
-    const emailFrom = localStorage.getItem("email");
-    setUserName(nameFrom);
-    setUserEmail(emailFrom);
-    const {
-      address,
-      company,
-      cost,
-      languages,
-      name,
-      profileImage,
-      quantity,
-      title,
-      totalCost,
-      paymentMethod,
-    } = dummy;
-    const toRenderAdd = address.join(", ");
-    const toRenderLang = languages.join(", ");
-    setTeacherInfoData({
-      name,
-      languages: toRenderLang,
-      address: toRenderAdd,
-      company,
-    });
-    setCostInfoData({
-      cost: cost.toLocaleString("ko-KR") + " 원",
-      quantity: String(quantity),
-      totalCost: totalCost.toLocaleString("ko-KR") + " 원",
-    });
-    setTeacherImg(profileImage);
-    setTitle(title);
-    setPaymentMethod(paymentMethod);
-  }, []);
+    if (queryId) {
+      refetch();
+    }
+  }, [queryId]);
+  useEffect(() => {
+    if (data) {
+      const {
+        address,
+        company,
+        cost,
+        languages,
+        name,
+        profileImage,
+        quantity,
+        title,
+        totalCost,
+        paymentMethod,
+      } = data?.data as FetchedData;
 
-  // const { refetch, isSuccess, isError, data } = useGetReceipt(queryId);
-  // console.log(data);
-  // useEffect(() => {
-  //   if (queryId) {
-  //     refetch();
-  //   }
-  // }, [queryId]);
-  // useEffect(() => {
-  //   if (data) {
-  //     const {
-  //       address,
-  //       company,
-  //       cost,
-  //       languages,
-  //       name,
-  //       profileImage,
-  //       quantity,
-  //       title,
-  //       totalCost,
-  //       paymentMethod,
-  //     } = data?.data as FetchedData;
+      const toRenderAdd = address.join(", ");
+      const toRenderLang = languages.join(", ");
 
-  //     const toRenderAdd = address.join(", ");
-  //     const toRenderLang = languages.join(", ");
-
-  //     setTeacherInfoData({
-  //       name,
-  //       language: toRenderLang,
-  //       address: toRenderAdd,
-  //       company,
-  //     });
-  //     setCostInfoData({
-  //       cost: cost.toLocaleString("ko-KR") + " 원",
-  //       quantity: String(quantity),
-  //       totalCost: totalCost.toLocaleString("ko-KR") + " 원",
-  //     });
-  //     setTeacherImg(profileImage);
-  //     setTitle(title);
-  //     setPaymentMethod(paymentMethod);
-  //   }
-  // }, [data]);
+      setTeacherInfoData({
+        name,
+        language: toRenderLang,
+        address: toRenderAdd,
+        company,
+      });
+      setCostInfoData({
+        cost: cost.toLocaleString("ko-KR") + " 원",
+        quantity: String(quantity),
+        totalCost: totalCost.toLocaleString("ko-KR") + " 원",
+      });
+      setTeacherImg(profileImage);
+      setTitle(title);
+      setPaymentMethod(paymentMethod);
+      const nameFrom = localStorage.getItem("name");
+      const emailFrom = localStorage.getItem("email");
+      setUserName(nameFrom);
+      setUserEmail(emailFrom);
+    }
+  }, [data]);
 
   return (
     <div className="flex flex-col bg-bgColor items-center w-full h-screen text-base tablet:text-2xl desktop:w-3/4 desktop:min-w-[1000px]">

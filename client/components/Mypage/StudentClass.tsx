@@ -4,23 +4,23 @@ import { useEffect } from "react";
 import useDeleteApply from "hooks/mypage/useDeleteApply";
 import Swal from "sweetalert2";
 import Link from "next/link";
+import { useRouter } from "next/router";
 const StudentClass = () => {
+  const router = useRouter();
+
   const { refetch: refetchStudentInfo, data: studentInfoData } =
     useGetStudentInfo();
 
   const { mutate } = useDeleteApply();
   const deleteApply = (suggestId: number) => {
-    console.log(suggestId);
     Swal.fire({
       title: "신청을 취소하시겠습니까?",
       icon: "question",
-
       showCancelButton: true,
       confirmButtonColor: "#3085d6",
     }).then(result => {
       if (result.isConfirmed) {
         mutate(suggestId);
-
         return Swal.fire({
           text: "삭제가 완료되었습니다",
           icon: "success",
@@ -29,15 +29,21 @@ const StudentClass = () => {
       }
     });
   };
+  const toPayment = (suggestId: number) => {
+    router.push(`/shop/${suggestId}`);
+  };
+  const toReceipt = (suggestId: number) => {
+    router.push(`/shop/${suggestId}/receipt`);
+  };
   return (
     <>
-      <div className="mt-6 flex flex-row w-full">
+      <div className="mt-6 flex  flex-row w-full">
         <div className="w-full">
           {studentInfoData?.data.data.map((tutor: any) => (
             <div className="flex flex-row h-fit w-full rounded-lg border border-borderColor mt-3">
               {/* {Left} */}
               <Link
-                href={`/detail/${tutor.lessonId}`}
+                href={`/lesson/${tutor.lessonId}`}
                 className="flex desktop:w-1/4 justify-center items-center "
               >
                 {tutor.profileImage ? (
@@ -55,7 +61,7 @@ const StudentClass = () => {
                 )}
               </Link>
               {/* {center} */}
-              <div className="flex flex-col w-1/2 justify-center desktop:pl-2">
+              <div className="flex flex-col w-[45%] justify-center desktop:pl-2 mt-2">
                 <div className="flex">
                   {tutor.languages?.map((el: any, idx: any) => {
                     return (
@@ -101,27 +107,52 @@ const StudentClass = () => {
               </div>
 
               {/* {Right} */}
-              <div className="flex flex-col w-1/3 justify-center items-end desktop:mr-4 tablet:mr-2 mr-2">
+              <div className="flex flex-col w-[40%] justify-center items-end desktop:mr-4 tablet:mr-2 mr-2">
                 <div className="flex  desktop:text-xl tablet:text-lg text-[14px]">
                   <div className="mt-1 mr-1 desktop:w-5 tablet:w-4 w-3">
                     <IconWon />
                   </div>
                   {tutor.cost}원
                 </div>
-                <div className="mt-5 tablet:mt-3 desktop:text-sm tablet:text-xs text-[8px]">
+                <div className="flex flex-col font-SCDream5 mt-5 tablet:mt-3 desktop:text-sm tablet:text-xs text-[8px] items-center">
                   {tutor.status}
+                  <div className="text text-borderColor">
+                    {tutor.startTime?.slice(0, 10)}
+                  </div>
+                  {tutor.status === "결제 대기 중" ? (
+                    <button
+                      className="text text-pointColor m-2 desktop:text-base tablet:text-sm text-[10px]"
+                      onClick={() => toPayment(tutor.suggestId)}
+                    >
+                      결제하기
+                    </button>
+                  ) : tutor.status === "과외 중" ? (
+                    <button
+                      className="text text-pointColor m-2 desktop:text-base tablet:text-sm text-[10px]"
+                      onClick={() => toReceipt(tutor.suggestId)}
+                    >
+                      영수증 보기
+                    </button>
+                  ) : (
+                    <></>
+                  )}
                 </div>
 
                 <div className="flex">
-                  <button className="text text-pointColor m-2 desktop:text-base tablet:text-sm text-[10px]">
+                  <button className="text text-pointColor font-SCDream3 m-2 desktop:text-base tablet:text-sm text-[10px]">
                     채팅하기
                   </button>
-                  <button
-                    className="text text-negativeMessage m-2 desktop:text-base tablet:text-sm text-[10px]"
-                    onClick={() => deleteApply(tutor.suggestId)}
-                  >
-                    신청취소
-                  </button>
+                  {tutor.status === "수락 대기 중" ||
+                  tutor.status === "결제 대기 중" ? (
+                    <button
+                      className="text text-negativeMessage font-SCDream3 m-2 desktop:text-base tablet:text-sm text-[10px]"
+                      onClick={() => deleteApply(tutor.suggestId)}
+                    >
+                      신청취소
+                    </button>
+                  ) : (
+                    <></>
+                  )}
                 </div>
               </div>
             </div>

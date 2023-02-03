@@ -6,8 +6,14 @@ import {
   IconEmptyheart,
   IconFullheart,
 } from "assets/icon";
+import useGetAllBookmark from "hooks/mypage/useGetAllBookmark";
+import { useEffect } from "react";
 
 const StudentBookmark = () => {
+  const { data, isSuccess } = useGetAllBookmark();
+  useEffect(() => {
+    console.log(data);
+  });
   return (
     <>
       <div className="flex w-full">
@@ -22,7 +28,7 @@ const StudentBookmark = () => {
             ></img>
           </div>
           {/* {center} */}
-          <div className="flex flex-col w-1/2  justify-center desktop:pl-2">
+          <div className="flex flex-col w-[45%]  justify-center desktop:pl-2 mt-2">
             <div className="flex">
               {/* {card.languages?.map((el: any, idx: any) => {
                       return (
@@ -68,7 +74,7 @@ const StudentBookmark = () => {
               강북구 강서구
             </div>
           </div>
-          <div className="flex flex-col w-1/3 justify-center items-end desktop:mr-4 tablet:mr-2 mr-2">
+          <div className="flex flex-col w-[40%] justify-center items-end desktop:mr-4 tablet:mr-2 mr-2">
             <div className="flex  desktop:text-xl tablet:text-lg text-[14px]">
               <div className="desktop:mt-1 tablet:mt-2 mt-1 mr-1 desktop:w-5 tablet:w-3.5 w-3">
                 <IconWon />
@@ -79,7 +85,7 @@ const StudentBookmark = () => {
               {true ? <IconFullheart /> : <IconEmptyheart />}
             </button>
             <div className="flex">
-              <button className="text text-pointColor m-2 desktop:text-base tablet:text-sm text-[10px]">
+              <button className="text text-pointColor font-SCDream3 m-2 desktop:text-base tablet:text-sm text-[10px]">
                 채팅하기
               </button>
             </div>

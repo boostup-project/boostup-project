@@ -7,9 +7,9 @@ const useGetStudentInfo = () => {
     onSuccess: res => {
       console.log(res);
     },
-    onError: error => {
-      console.log(error);
-    },
+    // onError: error => {
+    //   console.log(error);
+    // },
     retry: 1,
   });
 };
