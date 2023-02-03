@@ -28,6 +28,7 @@ const Detail = () => {
   const toggle = useRecoilValue(refetchToggle);
 
   const [tab, setTab] = useState(1);
+  const [editable, setEditable] = useState<boolean>();
 
   const {
     refetch: refetchGetExtra,
@@ -61,6 +62,12 @@ const Detail = () => {
   } = useGetDetailReview(lessonId);
 
   const widthSize = useWindowSize();
+
+  useEffect(() => {
+    if (basicInfo) {
+      setEditable(basicInfo.data.editable);
+    }
+  }, [basicInfoSuccess]);
 
   useEffect(() => {
     // refetch 실행위치
@@ -126,9 +133,15 @@ const Detail = () => {
         <div className="desktop:min-w-[1000px] min-w-[95%] w-3/4 h-full flex desktop:flex-row flex-col justify-start desktop:items-start items-center">
           <DetailContentContainer>
             {tab === 1 && (
-              <DetailExtra extraData={extraData} lessonId={lessonId} />
+              <DetailExtra
+                extraData={extraData}
+                lessonId={lessonId}
+                editable={editable}
+              />
             )}
-            {tab === 2 && <DetailCurriculum curData={curData} />}
+            {tab === 2 && (
+              <DetailCurriculum curData={curData} editable={editable} />
+            )}
             {tab === 3 && reviewSuccess && (
               <DetailReview reviewData={reviewData?.data} />
             )}

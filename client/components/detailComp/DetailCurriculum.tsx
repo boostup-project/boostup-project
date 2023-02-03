@@ -7,9 +7,10 @@ import DetailCurModi from "./DetailCurModi";
 
 interface Props {
   curData: AxiosResponse<any, any> | undefined;
+  editable: boolean | undefined;
 }
 
-const DetailCurriculum = ({ curData }: Props) => {
+const DetailCurriculum = ({ curData, editable }: Props) => {
   const [displayText, setDisplayText] = useState<string>("");
   const [textData, setTextData] = useState<string>("");
   const [isEdit, setIsEdit] = useState(false);
@@ -35,12 +36,14 @@ const DetailCurriculum = ({ curData }: Props) => {
       <div className="w-full h-full p-6 text-base">
         <div className="flex justify-between mb-3">
           <div className="font-SCDream5">진행방식</div>
-          <div
-            onClick={modalOpen}
-            className="text-pointColor font-SCDream3 cursor-pointer hover:underline"
-          >
-            edit
-          </div>
+          {editable && (
+            <div
+              onClick={modalOpen}
+              className="text-pointColor font-SCDream3 cursor-pointer hover:underline"
+            >
+              edit
+            </div>
+          )}
         </div>
         <div className="bg-markBgColor rounded-xl p-4">
           <div className="prose">
