@@ -39,9 +39,7 @@ public class FileHandler {
             //프로젝트 디렉토리 내 저장을 위한 절대 경로
             //경로 구분자 File.separator 사용
             String absolutePath = new File("").getAbsolutePath() + File.separator + File.separator;
-
-            //파일 저장 세부 경로
-            String path = "images"; //+ File.pathSeparator + current_date;
+            String path = "images";
             File file = new File(path);
 
             //디렉터리가 존재하지 않을 경우
@@ -73,10 +71,11 @@ public class FileHandler {
                 }
 
                 //파일명 중복을 피하고자 나노초까지 얻어와 지정
-                String new_file_name = System.nanoTime() + originalFileExtension;
-
-                //UUID uuid = UUID.randomUUID();
-                //String new_file_name = uuid + originalFileExtention;
+                String new_file_name = Long.toString(System.nanoTime()) + originalFileExtension;
+                String originFileName = multipartFile.getOriginalFilename();
+                String extension = originFileName.substring(originFileName.lastIndexOf("."));
+                String uuid = UUID.randomUUID().toString();
+                new_file_name = uuid + extension;
 
                 //파일 DTO 생성
                 UploadFile uploadFile = UploadFile.builder()
@@ -102,7 +101,7 @@ public class FileHandler {
     }
     public UploadFile uploadFile(MultipartFile multipartFile) throws  IOException {
         String absolutePath = new File("").getAbsolutePath() + File.separator + File.separator;
-        String path = "images"; //+ File.pathSeparator + current_date;
+        String path = "images";
         File file = new File(path);
 
         //디렉터리가 존재하지 않을 경우
