@@ -6,8 +6,14 @@ import {
   IconEmptyheart,
   IconFullheart,
 } from "assets/icon";
+import useGetAllBookmark from "hooks/mypage/useGetAllBookmark";
+import { useEffect } from "react";
 
 const StudentBookmark = () => {
+  const { data, isSuccess } = useGetAllBookmark();
+  useEffect(() => {
+    console.log(data);
+  });
   return (
     <>
       <div className="flex w-full">

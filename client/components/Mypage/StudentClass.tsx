@@ -32,6 +32,9 @@ const StudentClass = () => {
   const toPayment = (suggestId: number) => {
     router.push(`/shop/${suggestId}`);
   };
+  const toReceipt = (suggestId: number) => {
+    router.push(`/shop/${suggestId}/receipt`);
+  };
   return (
     <>
       <div className="mt-6 flex  flex-row w-full">
@@ -111,10 +114,10 @@ const StudentClass = () => {
                   </div>
                   {tutor.cost}원
                 </div>
-                <div className="flex flex-col font-SCDream5 mt-5 tablet:mt-3 desktop:text-sm tablet:text-xs text-[8px]">
+                <div className="flex flex-col font-SCDream5 mt-5 tablet:mt-3 desktop:text-sm tablet:text-xs text-[8px] items-center">
                   {tutor.status}
                   <div className="text text-borderColor">
-                    {tutor.startTime.slice(0, 10)}
+                    {tutor.startTime?.slice(0, 10)}
                   </div>
                   {tutor.status === "결제 대기 중" ? (
                     <button
@@ -122,6 +125,13 @@ const StudentClass = () => {
                       onClick={() => toPayment(tutor.suggestId)}
                     >
                       결제하기
+                    </button>
+                  ) : tutor.status === "과외 중" ? (
+                    <button
+                      className="text text-pointColor m-2 desktop:text-base tablet:text-sm text-[10px]"
+                      onClick={() => toReceipt(tutor.suggestId)}
+                    >
+                      영수증 보기
                     </button>
                   ) : (
                     <></>
@@ -132,12 +142,17 @@ const StudentClass = () => {
                   <button className="text text-pointColor font-SCDream3 m-2 desktop:text-base tablet:text-sm text-[10px]">
                     채팅하기
                   </button>
-                  <button
-                    className="text text-negativeMessage font-SCDream3 m-2 desktop:text-base tablet:text-sm text-[10px]"
-                    onClick={() => deleteApply(tutor.suggestId)}
-                  >
-                    신청취소
-                  </button>
+                  {tutor.status === "수락 대기 중" ||
+                  tutor.status === "결제 대기 중" ? (
+                    <button
+                      className="text text-negativeMessage font-SCDream3 m-2 desktop:text-base tablet:text-sm text-[10px]"
+                      onClick={() => deleteApply(tutor.suggestId)}
+                    >
+                      신청취소
+                    </button>
+                  ) : (
+                    <></>
+                  )}
                 </div>
               </div>
             </div>

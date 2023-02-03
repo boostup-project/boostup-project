@@ -74,8 +74,8 @@ const ClassList = () => {
                   {curStu.status}
                 </div>
                 <div className="text text-textColor">
-                  {curStu.startTime.slice(0, 10)}/
-                  {curStu.startTime.slice(11, 19)}
+                  {curStu.startTime?.slice(0, 10)}
+                  {curStu.startTime?.slice(11, 19)}
                 </div>
                 <button className="text text-pointColor m-2">채팅하기</button>
                 <button

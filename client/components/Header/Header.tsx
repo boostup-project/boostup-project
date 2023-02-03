@@ -123,7 +123,7 @@ const Header = () => {
     <header className="bg-bgColor font-SCDream5 w-full sticky top-0 z-[1] h-fit flex flex-col justify-center items-center shadow">
       <div className="relative pt-5 w-full pb-2 flex flex-col justify-center items-center desktop:w-3/4 desktop:min-w-[1000px] desktop:h-[87px] desktop:mt-0">
         <nav className="w-full h-full flex tablet:justify-center tablet:items-center desktop:justify-between">
-          <div className="w-1/2 flex justify-start items-center ml-4 tablet:h-[40px] desktop:hidden">
+          <div className="w-1/2 flex justify-start items-center ml-4 tablet:h-[40px] desktop:hidden ">
             <div className="w-8 tablet:w-[34.5px]" onClick={logInNOutEvent}>
               {mobLogExitIcon}
             </div>
@@ -137,7 +137,7 @@ const Header = () => {
           </div>
           <div className="w-1/2 flex justify-end items-center mr-4 tablet:h-[40px] desktop:hidden">
             <div
-              className="w-9 tablet:w-[34.5px]"
+              className="w-9 tablet:w-[34.5px] w-[20px]"
               onClick={e => setSeek(!seek)}
             >
               <IconMagnify fill={textColor} />
@@ -180,7 +180,7 @@ const Header = () => {
       </div>
       {seek && (
         <div className="w-full flex justify-center items-center">
-          <div className="absolute top-36 tablet:w-[500px] desktop:w-[630px] desktop:top-[78px]">
+          <div className="absolute top-36 tablet:w-[500px] desktop:w-[630px]">
             <SearchPop onSubmit={onSubmit} />
           </div>
         </div>

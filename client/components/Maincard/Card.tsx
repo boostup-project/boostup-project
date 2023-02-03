@@ -72,7 +72,7 @@ const Card = () => {
       queryClient.invalidateQueries(["get/Bookmark"]);
     } else {
       return Swal.fire({
-        text: "로그인해주세요",
+        text: "로그인 후 원하는 선생님을 찜 해보세요",
         icon: "warning",
         confirmButtonColor: "#3085d6",
       });
@@ -84,7 +84,7 @@ const Card = () => {
         {cards?.map((card: any) => (
           <div
             key={card.lessonId}
-            className="h-fit m-1 desktop:w-[24%] tablet:w-[32%] w-[48%] rounded-lg"
+            className="h-fit m-1 desktop:w-[24%] tablet:w-[32%] w-[47%] rounded-lg"
           >
             <div className="flex flex-col w-full h-1/4 border border-borderColor rounded-lg">
               <div className="relative">

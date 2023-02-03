@@ -18,7 +18,6 @@ import useGetStudentInfo from "hooks/mypage/useGetStudentInfo";
 import useGetTutorInfo from "hooks/mypage/useGetTutorInfo";
 import useGetMyTutor from "hooks/mypage/useGetMyTutor";
 const Mypage = () => {
-  //memberId? memberName?
   const router = useRouter();
 
   const { data: myTutorUrl } = useGetMyTutor();
