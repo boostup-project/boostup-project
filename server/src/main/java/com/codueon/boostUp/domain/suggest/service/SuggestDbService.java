@@ -1,6 +1,5 @@
 package com.codueon.boostUp.domain.suggest.service;
 
-import com.codueon.boostUp.domain.lesson.entity.Lesson;
 import com.codueon.boostUp.domain.suggest.dto.GetPaymentInfo;
 import com.codueon.boostUp.domain.suggest.dto.GetPaymentReceipt;
 import com.codueon.boostUp.domain.suggest.dto.GetStudentSuggest;
@@ -8,6 +7,7 @@ import com.codueon.boostUp.domain.suggest.dto.GetTutorSuggest;
 import com.codueon.boostUp.domain.suggest.entity.PaymentInfo;
 import com.codueon.boostUp.domain.suggest.entity.Reason;
 import com.codueon.boostUp.domain.suggest.entity.Suggest;
+import com.codueon.boostUp.domain.suggest.entity.SuggestStatus;
 import com.codueon.boostUp.domain.suggest.repository.PaymentInfoRepository;
 import com.codueon.boostUp.domain.suggest.repository.ReasonRepository;
 import com.codueon.boostUp.domain.suggest.repository.SuggestRepository;
@@ -21,6 +21,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 import static com.codueon.boostUp.domain.suggest.entity.SuggestStatus.*;
+import static com.codueon.boostUp.global.exception.ExceptionCode.*;
 
 @Service
 @RequiredArgsConstructor
@@ -66,7 +67,7 @@ public class SuggestDbService {
     }
 
     /**
-     * 결제정보 조회 메서드
+     * 결제 정보 조회 메서드
      * @param suggestId 신청 식별자
      * @return PaymentInfo
      * @author LeeGoh
@@ -84,7 +85,7 @@ public class SuggestDbService {
      * @author mozzi327
      */
     public Suggest ifNotExistSuggestThrowException(Long lessonId, Long suggestId, Long memberId) {
-        return suggestRepository.findByIdAndLessonIdAndMemberId(lessonId, suggestId, memberId)
+        return suggestRepository.findByIdAndLessonIdAndMemberId(suggestId, lessonId, memberId)
                 .orElseThrow(() -> new BusinessLogicException(ExceptionCode.SUGGEST_NOT_FOUND));
     }
 
@@ -188,7 +189,7 @@ public class SuggestDbService {
      */
     public PaymentInfo checkQuantityCount(PaymentInfo paymentInfo) {
         if (paymentInfo.getQuantityCount() >= paymentInfo.getQuantity()) {
-            throw new BusinessLogicException(ExceptionCode.INVALID_ACCESS);
+            throw new BusinessLogicException(INVALID_ACCESS);
         }
         paymentInfo.addQuantityCount();
         return paymentInfoRepository.save(paymentInfo);
@@ -203,7 +204,7 @@ public class SuggestDbService {
     public PaymentInfo cancelQuantityCount(PaymentInfo paymentInfo) {
         paymentInfo.reduceQuantityCount();
         if (paymentInfo.getQuantityCount() < 0) {
-            throw new BusinessLogicException(ExceptionCode.INVALID_ACCESS);
+            throw new BusinessLogicException(INVALID_ACCESS);
         }
         return paymentInfoRepository.save(paymentInfo);
     }
@@ -215,23 +216,26 @@ public class SuggestDbService {
      * @author LeeGoh
      */
     public void suggestGetMemberIdAndStatusIsDuringLesson(Suggest suggest, Long memberId) {
-        if (!suggest.getSuggestStatus().equals(DURING_LESSON) ||
-                !suggest.getMemberId().equals(memberId)) {
-            throw new BusinessLogicException(ExceptionCode.INVALID_ACCESS);
-        }
+        if (!suggest.getMemberId().equals(memberId))
+            throw new BusinessLogicException(INVALID_ACCESS);
+
+        if (!suggest.getSuggestStatus().equals(DURING_LESSON))
+            throw new BusinessLogicException(NOT_DURING_LESSON);
     }
 
     /**
      * 예외처리 - Lesson memberId, Suggest status 비교
-     * @param suggest 신청 정보
-     * @param lesson 과외 정보
+     * @param status 신청 상태
+     * @param tutorMemberId 과외 등록한 사용자 식별자
      * @param memberId 회원 식별자
      * @author LeeGoh
      */
-    public void lessonGetMemberIdAndStatusIsDuringLesson(Suggest suggest, Lesson lesson, Long memberId) {
-        if (!lesson.getMemberId().equals(memberId) ||
-                !suggest.getSuggestStatus().equals(DURING_LESSON) ) {
-            throw new BusinessLogicException(ExceptionCode.INVALID_ACCESS);
+    public void lessonGetMemberIdAndStatusIsDuringLesson(SuggestStatus status, Long tutorMemberId, Long memberId) {
+        if (!tutorMemberId.equals(memberId))
+            throw new BusinessLogicException(INVALID_ACCESS);
+
+        if (!status.equals(DURING_LESSON)) {
+            throw new BusinessLogicException(NOT_DURING_LESSON);
         }
     }
 
@@ -242,10 +246,11 @@ public class SuggestDbService {
      * @author LeeGoh
      */
     public void suggestGetMemberIdAndStatusIsNotInProgress(Suggest suggest, Long memberId) {
+        if (!suggest.getMemberId().equals(memberId))
+            throw new BusinessLogicException(INVALID_ACCESS);
+
         if (suggest.getSuggestStatus().equals(ACCEPT_IN_PROGRESS) ||
-                suggest.getSuggestStatus().equals(PAY_IN_PROGRESS) ||
-                !suggest.getMemberId().equals(memberId)) {
-            throw new BusinessLogicException(ExceptionCode.INVALID_ACCESS);
-        }
+                suggest.getSuggestStatus().equals(PAY_IN_PROGRESS))
+            throw new BusinessLogicException(NOT_SUGGEST_OR_NOT_ACCEPT);
     }
 }

@@ -50,7 +50,7 @@ public class ReviewGetTest extends ReviewControllerTest {
 
         List<GetReview> reviewList = new ArrayList<>();
         reviewList.add(reviewRes);
-        given(reviewService.findAllDetailInfoReviews(Mockito.anyLong(), Mockito.any(Pageable.class)))
+        given(reviewDbService.findAllDetailInfoReviews(Mockito.anyLong(), Mockito.any(Pageable.class)))
                 .willReturn(new PageImpl<>(reviewList));
 
         ResultActions actions =
@@ -119,7 +119,7 @@ public class ReviewGetTest extends ReviewControllerTest {
         List<GetReviewMyPage> reviewMyPageList = new ArrayList<>();
         reviewMyPageList.add(reviewMyPage);
 
-        given(reviewService.findAllMyPageReviews(Mockito.anyLong(), Mockito.any(Pageable.class)))
+        given(reviewDbService.findAllMyPageReviews(Mockito.anyLong(), Mockito.any(Pageable.class)))
                 .willReturn(new PageImpl<>(reviewMyPageList));
 
         ResultActions actions = mockMvc.perform(
