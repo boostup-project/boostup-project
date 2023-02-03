@@ -22,14 +22,14 @@ const Carouselcomp = () => {
   };
   return (
     <>
-      <div className="w-full desktop:w-3/4 desktop:min-w-[1000px] h-[250px]  mt-4 rounded-xl">
+      <div className="w-full desktop:w-3/4 desktop:min-w-[1000px] h-fit  mt-4 rounded-xl">
         {/* <Image src={"/images/temp_image.png"}  width={250} height={100} alt="photo1" priority={true} /> */}
         <Slider {...settings} className="w-full h-full">
-          <div className="flex items-center justify-center w-full h-[250px] bg-slate-400 rounded-xl"></div>
-          <div className="w-full h-[250px] flex flex-col justify-center items-center bg-slate-500 rounded-xl"></div>
-          <div className="w-full h-[250px] flex flex-col justify-center items-center bg-slate-600 rounded-xl"></div>
-          <div className="w-full h-[250px] flex flex-col justify-center items-center bg-slate-700 rounded-xl"></div>
-          <div className="w-full h-[250px] flex flex-col justify-center items-center bg-slate-800 rounded-xl"></div>
+          <div className="flex items-center justify-center w-full h-[250px] rounded-xl bg-cover bg-[url('/images/carousel/1.png')]"></div>
+          <div className="w-full h-[250px] flex flex-col justify-center items-center bg-cover bg-[url('/images/carousel/2.png')] rounded-xl"></div>
+          <div className="w-full h-[250px] flex flex-col justify-center items-center bg-cover bg-[url('/images/carousel/3.png')] rounded-xl"></div>
+          <div className="w-full h-[250px] flex flex-col justify-center items-center bg-cover bg-[url('/images/carousel/4.png')] rounded-xl"></div>
+          <div className="w-full h-[250px] flex flex-col justify-center items-center bg-cover bg-[url('/images/carousel/5.png')] rounded-xl"></div>
         </Slider>
       </div>
     </>

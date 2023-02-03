@@ -15,7 +15,9 @@ export default function App({ Component, pageProps }: AppProps) {
         <RecoilRoot>
           <div className="flex flex-col max-h-full justify-center items-center bg-bgColor">
             <Header />
-            <Component {...pageProps} />
+            <div className="flex flex-col justify-center items-center desktop:max-w-[1139px] w-full h-full bg-bgColor">
+              <Component {...pageProps} />
+            </div>
             <Footer />
             <Navbar />
           </div>

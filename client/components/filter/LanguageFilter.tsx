@@ -24,7 +24,7 @@ const LanguageFilter = () => {
           return (
             <div
               key={lang.id}
-              className="desktop:w-[100px] desktop:h-[100px] w-[50px] h-[50px] desktop:my-0 my-3"
+              className="desktop:w-[100px] desktop:h-[100px] w-[50px] h-[50px] desktop:active:w-[90px] desktop:active:h-[90px] desktop:my-0 my-3 duration-200"
               onClick={() => handleFilterClick(lang.id)}
             >
               <Image

@@ -65,16 +65,16 @@ const DetailButtons = (basicInfo: any) => {
   return isLoading ? (
     <></>
   ) : (
-    <div className="flex w-full h-full flex-col ">
+    <div className="flex w-full h-full flex-col desktop:mt-0 mt-3">
       {isOpenModal && <ApplyModal onClickToggleModal={onClickToggleModal} />}
-      <div className="flex flex-col desktop:w-full desktop:h-fit tablet:w-[97%] w-[97%] justify-center">
+      <div className="flex flex-col desktop:w-full desktop:h-fit tablet:w-[97%] w-[97%] justify-center items-center">
         <DetailBtn bold={true} remove={false} onClick={onClickToggleModal}>
           신청하기
         </DetailBtn>
         <DetailBtn bold={false} remove={false} onClick={chatNow}>
           실시간 채팅
         </DetailBtn>
-        <div className="relative justify-center items-center">
+        <div className="relative justify-center items-center w-full flex flex-col">
           <DetailBtn bold={false} remove={false} onClick={saveBookmark}>
             <div className="flex w-full h-1/3 absolute justify-center items-center">
               {mark ? (
@@ -87,7 +87,7 @@ const DetailButtons = (basicInfo: any) => {
           </DetailBtn>
         </div>
         {basicInfo.basicInfo?.editable ? (
-          <div className="mt-10">
+          <div className="mt-10 w-full flex flex-col justify-center items-center">
             <DetailBtn
               bold={false}
               remove={true}

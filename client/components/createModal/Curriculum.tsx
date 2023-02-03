@@ -13,6 +13,7 @@ import { useEffect } from "react";
 import { isWrite } from "atoms/main/mainAtom";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import imageCompression from "browser-image-compression";
 
 interface Props {
   basicInfo: Info;
@@ -58,7 +59,20 @@ const Curriculum = ({
   }),
     [isSuccess, isError];
 
-  const onClick = () => {
+  // 이미지 압축 함수
+  const compressImage = async (image: any) => {
+    try {
+      const options = {
+        maxSizeMb: 2,
+        maxWidthOrHeight: 300,
+      };
+      return await imageCompression(image, options);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  const onClick = async () => {
     const {
       address,
       career,
@@ -111,8 +125,18 @@ const Curriculum = ({
     const blob = new Blob([json], { type: "application/json" });
     const formData = new FormData();
     formData.append("data", blob);
-    formData.append("profileImage", proImage);
-    formData.append("careerImage", proImage);
+
+    const compressImg = await compressImage(proImage);
+    let compressFile;
+
+    if (compressImg) {
+      compressFile = new File([compressImg], compressImg?.name);
+      console.log(compressFile);
+      formData.append("profileImage", compressFile);
+      // 확인필요
+      formData.append("careerImage", compressFile);
+    }
+
     mutate(formData);
   };
 
