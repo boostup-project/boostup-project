@@ -3,22 +3,32 @@ import { IconImg } from "assets/icon";
 import AuthBtn from "components/reuse/btn/AuthBtn";
 import CreateModalContainer from "components/reuse/container/CreateModalContainer";
 import ModalBackDrop from "components/reuse/container/ModalBackDrop";
+import usePostMemberModi from "hooks/mypage/usePostMemberModi";
 import usePostNameCheck from "hooks/mypage/usePostNameCheck";
 import { useEffect } from "react";
 import { ChangeEvent } from "react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { ToastContainer } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 
 interface Props {
   editProfile: () => void;
+}
+interface MemberEditData {
+  name: string;
+  profileImg: FileList;
 }
 
 const EditUserDataModal = ({ editProfile }: Props) => {
   const [duplicationName, setDuplicationName] = useState("");
   const [previewImg, setPreviewImg] = useState<string>("");
   const { mutate, data, isSuccess } = usePostNameCheck();
-  const { register, handleSubmit } = useForm();
+  const {
+    mutate: memberModi,
+    isSuccess: isMemberSuccess,
+    isError: isMemberError,
+  } = usePostMemberModi();
+  const { register, handleSubmit } = useForm<MemberEditData>();
 
   useEffect(() => {
     if (isSuccess && data) {
@@ -51,26 +61,46 @@ const EditUserDataModal = ({ editProfile }: Props) => {
     console.log(duplicationName);
     mutate(duplicationName);
   };
-  const editSubmit = () => {
+  const editSubmit = (e: any) => {
     console.log("submit");
+    const json = JSON.stringify({
+      name: e.name,
+    });
+    const memberImage = e.profileImg[0];
+    const blob = new Blob([json], { type: "application/json" });
+    const formData = new FormData();
+    formData.append("data", blob);
+    formData.append("profileImage", memberImage);
+    memberModi(formData);
   };
+  useEffect(() => {
+    if (isMemberError) {
+      toast.error("정보 수정이 되지 않았습니다. 다시 작성부탁드립니다", {
+        autoClose: 2000,
+        position: toast.POSITION.TOP_RIGHT,
+      });
+    }
+    if (isMemberSuccess) {
+      editProfile();
+    }
+  }, [isMemberError, isMemberSuccess]);
 
   return (
     <>
       <ModalBackDrop onClick={editProfile}>
         <CreateModalContainer>
-          <div className="w-full font-SCDream7 text-borderColor">
+          <div className="w-full font-SCDream7 text-borderColor desktop:w-4/5">
             개인정보 수정하기
           </div>
           <form
-            className="w-full font-SCDream5 text-sm"
+            className="w-full font-SCDream5 text-sm desktop:w-4/5"
             onSubmit={handleSubmit(editSubmit)}
           >
             <div className="mt-4">
               프로필 사진<span className="text-pointColor">*</span>
             </div>
-            <div className="w-full flex items-center rounded-xl justify-center h-fit border desktop:w-4/6">
-              <label className="flex flex-col w-full h-32 border-borderColor hover:bg-gray-100 hover:border-gray-300">
+            <div className="w-full flex items-center rounded-xl justify-center h-fit border tablet:w-full">
+              <label className="flex flex-col w-full h-32 border-borderColor hover:bg-gray-100 hover:border-gray-300 tablet:w-full">
                 <div className="relative flex flex-col h-fit  items-center justify-center pt-7">
                   {previewImg ? (
                     <>
@@ -107,28 +137,31 @@ const EditUserDataModal = ({ editProfile }: Props) => {
               </label>
             </div>
             <div className="mt-4">닉네임</div>
-            <div className="w-full flex">
+            <div className="w-full flex tablet:w-full">
               <label className="w-9/12">
                 <input
                   id="duplicationName"
                   type="text"
                   placeholder="닉네임 중복검사를 해주세요"
-                  className="w-full desktop:w-4/6 h-fit p-2 border border-borderColor outline-pointColor rounded-l-xl font-SCDream4 text-xs text-textColor tablet:text-sm "
+                  className="w-full h-fit p-2 border border-borderColor outline-pointColor rounded-l-xl font-SCDream4 text-xs text-textColor tablet:text-sm"
                   {...register("name")}
                   onChange={e => nameReciever(e)}
                 />
               </label>
-              <button
-                className="w-3/12 text-xs border border-l-0 bg-borderColor border-borderColor rounded-r-xl text-bgColor"
+              <div
+                className="w-3/12 flex justify-center items-center text-sm border border-l-0 bg-borderColor border-borderColor rounded-r-xl text-bgColor cursor-pointer"
                 onClick={duplicationCheck}
               >
                 중복검사
-              </button>
+              </div>
             </div>
-            <div className="mt-7 flex justify-center">
-              <button className="font-SCDream4 w-1/4 py-2 bg-borderColor rounded-xl text-pointColor text-sm mr-5">
+            <div className="mt-7 flex justify-center w-full tablet:w-full">
+              <div
+                className="flex justify-center items-center w-1/4 py-2 bg-borderColor rounded-xl text-negativeMessage text-sm mr-5 cursor-pointer"
+                onClick={editProfile}
+              >
                 취소하기
-              </button>
+              </div>
               <AuthBtn>변경하기</AuthBtn>
             </div>
           </form>
