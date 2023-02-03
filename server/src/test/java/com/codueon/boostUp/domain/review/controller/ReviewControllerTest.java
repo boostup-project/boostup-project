@@ -4,6 +4,7 @@ import com.codueon.boostUp.domain.lesson.entity.*;
 import com.codueon.boostUp.domain.member.entity.Member;
 import com.codueon.boostUp.domain.reveiw.controller.ReviewController;
 import com.codueon.boostUp.domain.reveiw.entity.Review;
+import com.codueon.boostUp.domain.reveiw.service.ReviewDbService;
 import com.codueon.boostUp.domain.reveiw.service.ReviewService;
 import com.codueon.boostUp.domain.suggest.entity.Suggest;
 import com.codueon.boostUp.domain.suggest.service.SuggestDbService;
@@ -44,6 +45,9 @@ public class ReviewControllerTest {
 
     @MockBean
     protected ReviewService reviewService;
+
+    @MockBean
+    protected ReviewDbService reviewDbService;
 
     @MockBean
     protected SuggestDbService suggestDbService;

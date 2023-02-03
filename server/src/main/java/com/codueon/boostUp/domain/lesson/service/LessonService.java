@@ -11,7 +11,7 @@ import com.codueon.boostUp.domain.lesson.entity.*;
 import com.codueon.boostUp.domain.lesson.repository.LessonRepository;
 import com.codueon.boostUp.domain.member.entity.Member;
 import com.codueon.boostUp.domain.member.service.MemberDbService;
-import com.codueon.boostUp.domain.reveiw.service.ReviewService;
+import com.codueon.boostUp.domain.reveiw.service.ReviewDbService;
 import com.codueon.boostUp.domain.suggest.entity.Suggest;
 import com.codueon.boostUp.domain.suggest.service.SuggestDbService;
 import com.codueon.boostUp.global.exception.BusinessLogicException;
@@ -21,7 +21,6 @@ import com.codueon.boostUp.global.file.FileHandler;
 import com.codueon.boostUp.global.file.UploadFile;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
-import org.apache.tomcat.jni.File;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -32,7 +31,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.codueon.boostUp.domain.suggest.entity.SuggestStatus.*;
-import static com.codueon.boostUp.global.exception.ExceptionCode.NOT_ACCEPT_SUGGEST;
+import static com.codueon.boostUp.global.exception.ExceptionCode.NOT_PAY_IN_PROGRESS;
 import static com.codueon.boostUp.global.exception.ExceptionCode.NOT_PAY_SUCCESS;
 
 @Service
@@ -43,7 +42,7 @@ public class LessonService {
     private final AwsS3Service awsS3Service;
     private final MemberDbService memberDbService;
     private final SuggestDbService suggestDbService;
-    private final ReviewService reviewService;
+    private final ReviewDbService reviewDbService;
     private final BookmarkRepository bookmarkRepository;
     private final LessonRepository lessonRepository;
 
@@ -388,7 +387,7 @@ public class LessonService {
 
         for (Suggest suggest : findSuggest) {
             if (suggest.getSuggestStatus().equals(ACCEPT_IN_PROGRESS)) {
-                throw new BusinessLogicException(NOT_ACCEPT_SUGGEST);
+                throw new BusinessLogicException(NOT_PAY_IN_PROGRESS);
             } else if (suggest.getSuggestStatus().equals(DURING_LESSON)) {
                 throw new BusinessLogicException(NOT_PAY_SUCCESS);
             } else if (suggest.getSuggestStatus().equals(PAY_IN_PROGRESS)) {
@@ -399,7 +398,7 @@ public class LessonService {
         LessonInfo findLessonInfo = lessonDbService.ifExsitsReturnLessonInfo(lessonId);
         Curriculum findCurriculum = lessonDbService.ifExsistsReturnCurriculum(lessonId);
 
-        reviewService.removeAllByReviews(lessonId);
+        reviewDbService.removeAllByReviews(lessonId);
         bookmarkRepository.deleteByLessonId(lessonId);
         fileHandler.delete(findLesson.getProfileImage().getFilePath());
         findLessonInfo.getCareerImages().forEach(careerImage -> fileHandler.delete(careerImage.getFilePath()));
@@ -427,7 +426,7 @@ public class LessonService {
 
         for (Suggest suggest : findSuggest) {
             if (suggest.getSuggestStatus().equals(ACCEPT_IN_PROGRESS)) {
-                throw new BusinessLogicException(NOT_ACCEPT_SUGGEST);
+                throw new BusinessLogicException(NOT_PAY_IN_PROGRESS);
             } else if (suggest.getSuggestStatus().equals(DURING_LESSON)) {
                 throw new BusinessLogicException(NOT_PAY_SUCCESS);
             } else if (suggest.getSuggestStatus().equals(PAY_IN_PROGRESS)) {
@@ -438,7 +437,7 @@ public class LessonService {
         LessonInfo findLessonInfo = lessonDbService.ifExsitsReturnLessonInfo(lessonId);
         Curriculum findCurriculum = lessonDbService.ifExsistsReturnCurriculum(lessonId);
 
-        reviewService.removeAllByReviews(lessonId);
+        reviewDbService.removeAllByReviews(lessonId);
         bookmarkRepository.deleteByLessonId(lessonId);
 
         String dir = "profileImage";

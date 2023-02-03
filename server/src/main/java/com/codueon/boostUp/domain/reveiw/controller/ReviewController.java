@@ -3,6 +3,7 @@ package com.codueon.boostUp.domain.reveiw.controller;
 
 import com.codueon.boostUp.domain.dto.MultiResponseDto;
 import com.codueon.boostUp.domain.reveiw.dto.*;
+import com.codueon.boostUp.domain.reveiw.service.ReviewDbService;
 import com.codueon.boostUp.domain.reveiw.service.ReviewService;
 import com.codueon.boostUp.global.security.token.JwtAuthenticationToken;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/review")
 public class ReviewController {
     private final ReviewService reviewService;
+    private final ReviewDbService reviewDbService;
 
     /**
      * 사용자 리뷰 생성 컨트롤러 메서드
@@ -33,7 +35,6 @@ public class ReviewController {
                                         Authentication authentication) {
         JwtAuthenticationToken token = (JwtAuthenticationToken) authentication;
         Long memberId = getMemberIdIfExistToken(token);
-
         reviewService.createStudentReview(memberId, lessonId, suggestId, postReview);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
@@ -48,7 +49,7 @@ public class ReviewController {
     @GetMapping("/lesson/{lesson-id}")
     public ResponseEntity<GetAllDetailReviews> getDetailInfoReviews(@PathVariable("lesson-id") Long lessonId,
                                                                     Pageable pageable) {
-        Page<GetReview> getReviews = reviewService.findAllDetailInfoReviews(lessonId, pageable);
+        Page<GetReview> getReviews = reviewDbService.findAllDetailInfoReviews(lessonId, pageable);
         return ResponseEntity.ok().body(new GetAllDetailReviews(getReviews));
     }
 
@@ -64,7 +65,7 @@ public class ReviewController {
         JwtAuthenticationToken token = (JwtAuthenticationToken) authentication;
         Long memberId = getMemberIdIfExistToken(token);
 
-        Page<GetReviewMyPage> getReviews = reviewService.findAllMyPageReviews(memberId, pageable);
+        Page<GetReviewMyPage> getReviews = reviewDbService.findAllMyPageReviews(memberId, pageable);
         return ResponseEntity.ok().body(new MultiResponseDto<>(getReviews));
     }
 
@@ -95,7 +96,6 @@ public class ReviewController {
                                           Authentication authentication) {
         JwtAuthenticationToken token = (JwtAuthenticationToken) authentication;
         Long memberId = getMemberIdIfExistToken(token);
-
         reviewService.removeReview(memberId, reviewId);
         return ResponseEntity.noContent().build();
     }
