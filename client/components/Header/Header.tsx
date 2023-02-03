@@ -124,7 +124,10 @@ const Header = () => {
       <div className="relative pt-2 max-w-[1000px] w-full pb-2 flex flex-col justify-center items-center desktop:w-3/4 desktop:min-w-[1000px] desktop:h-[87px] desktop:mt-0">
         <nav className="w-full h-full flex tablet:justify-center tablet:items-center desktop:justify-between">
           <div className="w-1/2 flex justify-start items-center ml-4 tablet:h-[40px] desktop:hidden">
-            <div className="w-5 tablet:w-[25px]" onClick={logInNOutEvent}>
+            <div
+              className="w-5 tablet:w-[25px] cursor-pointer"
+              onClick={logInNOutEvent}
+            >
               {mobLogExitIcon}
             </div>
           </div>
@@ -136,7 +139,10 @@ const Header = () => {
             </div>
           </div>
           <div className="w-1/2 flex justify-end items-center mr-4 tablet:h-[40px] desktop:hidden">
-            <div className="w-5 tablet:w-[25px]" onClick={e => setSeek(!seek)}>
+            <div
+              className="w-5 tablet:w-[25px] cursor-pointer"
+              onClick={e => setSeek(!seek)}
+            >
               <IconMagnify fill={textColor} />
             </div>
           </div>
