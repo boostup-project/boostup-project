@@ -91,7 +91,7 @@ const DetailExtra = ({ extraData, lessonId, editable }: Props) => {
               <div className="font-SCDream5">{detailTitles[title]}</div>
               <div className="font-SCDream3">
                 {title === "careerImage" ? (
-                  <div className="border border-borderColor w-72 h-fit">
+                  <div className="border border-borderColor w-72 h-fit flex">
                     {images?.map((image: any) => (
                       <img
                         className="w-1/3 p-1 rounded-xl"
