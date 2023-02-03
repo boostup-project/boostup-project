@@ -3,7 +3,7 @@ import useGetTutorInfo from "hooks/mypage/useGetTutorInfo";
 import { useRouter } from "next/router";
 import AcceptModal from "./AcceptModal";
 import Swal from "sweetalert2";
-import DeclineModal from "./DeclineModal";
+
 import { useState, useCallback, useEffect } from "react";
 const ApplicationList = () => {
   const [OpenModal, setOpenModal] = useState<boolean>(false);

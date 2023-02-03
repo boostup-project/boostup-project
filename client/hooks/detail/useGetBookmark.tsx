@@ -2,10 +2,10 @@ import { useQuery } from "@tanstack/react-query";
 import getBookmark from "apis/detail/getBookmark";
 const useGetBookmark = (lessonId: number) => {
   return useQuery(["get/Bookmark"], () => getBookmark(lessonId), {
-    enabled: false,
+    // enabled: true,
     // staleTime: 5 * 60000,
     onSuccess: res => {
-      console.log("sucess");
+      console.log(res);
     },
     onError: res => {
       console.log("failed");

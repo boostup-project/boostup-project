@@ -1,7 +1,7 @@
 import axios from "axios";
 
-const getAllBookmark = async (lessonId: number) => {
-  return await axios.get(`/bookmark/`, {
+const getAllBookmark = async () => {
+  return await axios.get(`/bookmark`, {
     baseURL: process.env.NEXT_PUBLIC_API_URL,
     headers: {
       "content-Type": `application/json`,
