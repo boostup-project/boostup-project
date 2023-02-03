@@ -8,22 +8,30 @@ import useDeleteDetail from "hooks/detail/useDeleteDetail";
 import useGetBookmarkModi from "hooks/detail/useGetBookmarkModi";
 import useGetBookmark from "hooks/detail/useGetBookmark";
 import { useRouter } from "next/router";
-
+import { useRecoilValue } from "recoil";
+import { refetchBookmark } from "atoms/detail/detailAtom";
 const DetailButtons = (basicInfo: any) => {
   const [isOpenModal, setOpenModal] = useState<boolean>(false);
   const [islessonId, setIsLessonId] = useState(0);
+
+  const toggle = useRecoilValue(refetchBookmark);
 
   const router = useRouter();
   const lessonId = Number(router.query.id);
   const { refetch: bookmarkRefetch, data: bookmarkModiData } =
     useGetBookmarkModi(lessonId);
-  const { data: bookmarkData, isLoading } = useGetBookmark(lessonId);
+  const {
+    data: bookmarkData,
+    isLoading,
+    refetch: getBookmark,
+  } = useGetBookmark(lessonId);
   const [mark, setMark] = useState<boolean>(false);
 
   useEffect(() => {
+    getBookmark();
     setMark(bookmarkData?.data.bookmark);
     console.log(mark);
-  }, [mark, bookmarkData]);
+  }, [mark, bookmarkData, toggle]);
 
   const onClickToggleModal = useCallback(() => {
     setOpenModal(!isOpenModal);
