@@ -1,6 +1,6 @@
 import ModalBackDrop from "components/reuse/container/ModalBackDrop";
 import StepNavWrapper from "components/reuse/container/StepNavWrapper";
-import CreateModalContainer from "components/reuse/CreateModalContainer";
+import CreateModalContainer from "components/reuse/container/CreateModalContainer";
 import ExtraInfo from "./ExtraInfo";
 import BasicInfo from "./BasicInfo";
 import Curriculum from "./Curriculum";
