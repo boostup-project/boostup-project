@@ -383,7 +383,7 @@ public class SuggestController {
     }
 
     /**
-     * 강사 종료 과외 삭제
+     * 학생 종료 과외 삭제
      * @param suggestId 신청 식별자
      * @return ResponseEntity
      * @author LeeGoh
