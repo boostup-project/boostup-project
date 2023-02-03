@@ -71,7 +71,7 @@ public class SecurityConfig {
                 //.antMatchers(HttpMethod.POST, "/lesson/registration").hasAuthority("ROLE_USER")
                 .antMatchers("/suggest/**").permitAll()
                 .antMatchers("/api/**").permitAll()
-                .antMatchers("/ws-connect/**").permitAll()
+                .antMatchers("/ws/chat/**").permitAll()
                 .anyRequest().permitAll()
                 .and()
                 .exceptionHandling()
@@ -89,12 +89,12 @@ public class SecurityConfig {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.addAllowedOrigin("http://localhost:8080");
         configuration.addAllowedOrigin("http://localhost:3000");
-        configuration.addAllowedOrigin("ws://localhost:8080");
+        configuration.addAllowedOrigin("https://6016-182-226-233-7.jp.ngrok.io");
         configuration.addAllowedOrigin("http://codeuon.s3-website.ap-northeast-2.amazonaws.com");
         configuration.addAllowedOrigin("https://d12vhbt0xdnnpo.cloudfront.net");
         configuration.addAllowedHeader("*");
         configuration.addAllowedMethod("*");
-        configuration.setAllowCredentials(true);
+//        configuration.setAllowCredentials(true);
         configuration.addExposedHeader("Authorization");
         configuration.addExposedHeader("RefreshToken");
 
@@ -106,7 +106,6 @@ public class SecurityConfig {
 
     /**
      * 커스텀 필터 클래스
-     *
      */
     public class CustomFilterConfig extends AbstractHttpConfigurer<CustomFilterConfig, HttpSecurity> {
         @Override
@@ -115,7 +114,7 @@ public class SecurityConfig {
                     new JwtVerificationFilter(redisUtils, jwtTokenUtils, authorityUtils);
 
             builder.addFilterBefore(jwtVerificationFilter, OAuth2LoginAuthenticationFilter.class)
-                   .addFilterBefore(jwtVerificationFilter, UsernamePasswordAuthenticationFilter.class);
+                    .addFilterBefore(jwtVerificationFilter, UsernamePasswordAuthenticationFilter.class);
         }
     }
 }
