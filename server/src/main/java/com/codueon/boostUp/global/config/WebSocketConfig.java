@@ -31,6 +31,10 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
         // [/ws/chat] 엔드포인트로 들어온 http를 웹소켓 통신으로 전환해주는 역할을 함.
         registry.addEndpoint("/ws/chat")
                 .setAllowedOriginPatterns("*")
+                .setAllowedOrigins(
+//                        "http://localhost:3000", "https://codueon.shop", "https://d12vhbt0xdnnpo.cloudfront.net"
+                        "*"
+                )
                 .withSockJS();
     }
 
