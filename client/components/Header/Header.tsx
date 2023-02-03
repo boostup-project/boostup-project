@@ -45,7 +45,7 @@ const Header = () => {
 
   useEffect(() => {
     if (log) {
-      setWordOne("마이페이지");
+      setWordOne("내정보");
       setWordTwo("로그아웃");
       setWriteBtn("과외 등록");
       setMobLogExitIcon(<IconExit />);
@@ -121,25 +121,22 @@ const Header = () => {
   return (
     // sticky로 해야 따로 margin을 안잡아도 헤더공간이 유효해질 것 같습니다.
     <header className="bg-bgColor font-SCDream5 w-full sticky top-0 z-[1] h-fit flex flex-col justify-center items-center shadow">
-      <div className="relative pt-5 w-full pb-2 flex flex-col justify-center items-center desktop:w-3/4 desktop:min-w-[1000px] desktop:h-[87px] desktop:mt-0">
+      <div className="relative pt-2 max-w-[1000px] w-full pb-2 flex flex-col justify-center items-center desktop:w-3/4 desktop:min-w-[1000px] desktop:h-[87px] desktop:mt-0">
         <nav className="w-full h-full flex tablet:justify-center tablet:items-center desktop:justify-between">
           <div className="w-1/2 flex justify-start items-center ml-4 tablet:h-[40px] desktop:hidden">
-            <div className="w-8 tablet:w-[34.5px]" onClick={logInNOutEvent}>
+            <div className="w-5 tablet:w-[25px]" onClick={logInNOutEvent}>
               {mobLogExitIcon}
             </div>
           </div>
           <div className="tablet:w-1/5 h-fit flex justify-center items-center desktop:justify-start desktop:items-end">
-            <div className="flex justify-center items-center w-[142px] w-min-[142px] h-[69px] h-min-[69px]">
+            <div className="flex justify-center items-center tablet:w-[100px] w-[80px] tablet:h-[69px] h-[50px]">
               <Link href="/">
                 <Image src={Logo} alt="logo" />
               </Link>
             </div>
           </div>
           <div className="w-1/2 flex justify-end items-center mr-4 tablet:h-[40px] desktop:hidden">
-            <div
-              className="w-9 tablet:w-[34.5px]"
-              onClick={e => setSeek(!seek)}
-            >
+            <div className="w-5 tablet:w-[25px]" onClick={e => setSeek(!seek)}>
               <IconMagnify fill={textColor} />
             </div>
           </div>
@@ -161,7 +158,7 @@ const Header = () => {
                 {wordOne}
               </div>
               <div
-                className="min-w-fit w-1/3 py-1 cursor-pointer text-center hover:underline"
+                className="min-w-fit w-1/3 py-1 cursor-pointer text-center hover:underline mr-2"
                 onClick={wordTwoEvent}
               >
                 {wordTwo}
