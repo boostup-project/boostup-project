@@ -7,7 +7,7 @@ import { useEffect } from "react";
 import { Dispatch, SetStateAction } from "react";
 import SmallBtn from "../reuse/btn/SmallBtn";
 import ModalBackDrop from "../reuse/container/ModalBackDrop";
-import CreateModalContainer from "../reuse/CreateModalContainer";
+import CreateModalContainer from "../reuse/container/CreateModalContainer";
 const MDEditor = dynamic(() => import("@uiw/react-md-editor"), {
   ssr: false,
 });

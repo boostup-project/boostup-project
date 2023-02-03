@@ -3,7 +3,7 @@ import { modalImgTxt } from "assets/color/color";
 import { IconImg } from "assets/icon";
 import { useState, useRef } from "react";
 import ExtraInfo from "../createModal/ExtraInfo";
-import CreateModalContainer from "../reuse/CreateModalContainer";
+import CreateModalContainer from "../reuse/container/CreateModalContainer";
 import { DetailTitles } from "./DetailExtra";
 import usePostExtraModi from "hooks/detail/usePostExtraModi";
 import { useEffect } from "react";
