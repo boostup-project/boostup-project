@@ -12,6 +12,7 @@ import { useRouter } from "next/router";
 import { useRecoilState } from "recoil";
 import { editMode } from "atoms/detail/detailAtom";
 import usePostBasicModi from "hooks/detail/usePostBasicModi";
+import imageCompression from "browser-image-compression";
 
 interface BasicInfo {
   [index: string]: string | string[];
@@ -49,10 +50,9 @@ const BasicInfo = ({ basicInfo, setBasicInfo, toWrite, setStep }: Props) => {
     })),
   ];
 
-  const defaultAddress: any = [Object.assign([], basicInfo.address as any)];
   const router = useRouter();
   /** 미리보기 이미지 생성**/
-  const insertImg = (e: any) => {
+  const insertImg = async (e: any) => {
     let reader = new FileReader();
 
     if (e.target.files[0]) {
@@ -75,9 +75,22 @@ const BasicInfo = ({ basicInfo, setBasicInfo, toWrite, setStep }: Props) => {
     setMode(false);
   };
 
+  // 이미지 압축 함수
+  const compressImage = async (image: any) => {
+    try {
+      const options = {
+        maxSizeMb: 2,
+        maxWidthOrHeight: 300,
+      };
+      return await imageCompression(image, options);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
   const { mutate: basicModiMutate } = usePostBasicModi();
 
-  const onSubmit = (basicData: BasicInfo) => {
+  const onSubmit = async (basicData: BasicInfo) => {
     if (mode) {
       const lessonId = Number(router.query.id);
       const { address, languages, profileImg } = basicData;
@@ -90,7 +103,17 @@ const BasicInfo = ({ basicInfo, setBasicInfo, toWrite, setStep }: Props) => {
 
       if (proImage) {
         editState = "true";
-        formData.append("profileImage", proImage);
+
+        console.log(proImage);
+
+        const compressImg = await compressImage(proImage);
+        let compressFile;
+
+        if (compressImg) {
+          compressFile = new File([compressImg], compressImg?.name);
+          console.log(compressFile);
+          formData.append("profileImage", compressFile);
+        }
       } else {
         editState = "false";
       }
