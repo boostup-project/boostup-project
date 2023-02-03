@@ -4,9 +4,11 @@ import com.codueon.boostUp.domain.member.dto.PostEmail;
 import com.codueon.boostUp.domain.member.dto.PostPassword;
 import com.codueon.boostUp.domain.member.dto.*;
 import com.codueon.boostUp.domain.member.service.MemberService;
+import com.codueon.boostUp.global.security.token.JwtAuthenticationToken;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -35,9 +37,11 @@ public class MemberController {
      */
     @PostMapping("/modification")
     public ResponseEntity postChangeMemberInfoInMyPage(@RequestPart(value = "data") PostName name,
-                                                       @RequestPart(value = "profileImage") MultipartFile file ) {
+                                                       @RequestPart(value = "profileImage") MultipartFile file,
+                                                       Authentication authentication) {
 
-        Long memberId = 1L;
+        JwtAuthenticationToken token = (JwtAuthenticationToken) authentication;
+        Long memberId = getMemberIdIfExistToken(token);
         return ResponseEntity.ok().body(memberService.changeMemberInfo(name, file, memberId));
     }
 
@@ -80,8 +84,10 @@ public class MemberController {
      * @author mozzi327
      */
     @PostMapping("/password/check")
-    public ResponseEntity postCheckIsRightPassword(@RequestBody PostPassword checkPassword) {
-        Long memberId = 1L;
+    public ResponseEntity postCheckIsRightPassword(@RequestBody PostPassword checkPassword,
+                                                   Authentication authentication) {
+        JwtAuthenticationToken token = (JwtAuthenticationToken) authentication;
+        Long memberId = getMemberIdIfExistToken(token);
         memberService.checkIsRightPassword(checkPassword.getPassword(), memberId);
         return ResponseEntity.ok().build();
     }
@@ -104,8 +110,10 @@ public class MemberController {
      * @author mozzi327
      */
     @PostMapping("/password/resetting/my-page")
-    public ResponseEntity postChangePasswordInMyPage(@RequestBody PostPasswordInMyPage changePassword) {
-        Long memberId = 1L;
+    public ResponseEntity postChangePasswordInMyPage(@RequestBody PostPasswordInMyPage changePassword,
+                                                     Authentication authentication) {
+        JwtAuthenticationToken token = (JwtAuthenticationToken) authentication;
+        Long memberId = getMemberIdIfExistToken(token);
         memberService.changePasswordInMyPage(memberId, changePassword);
         return ResponseEntity.ok().build();
     }
@@ -114,5 +122,16 @@ public class MemberController {
     public ResponseEntity deleteMember() {
         // TODO : 시큐리티 적용 시 Authentication 객체 추가 요
         return ResponseEntity.noContent().build();
+    }
+
+    /**
+     * 로그인 확인 메서드
+     * @param token 토큰 정보
+     * @return Long
+     * @author mozzi327
+     */
+    private Long getMemberIdIfExistToken(JwtAuthenticationToken token) {
+        if (token == null) return null;
+        else return token.getId();
     }
 }
