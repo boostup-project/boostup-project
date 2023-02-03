@@ -27,6 +27,7 @@ export interface DetailTitles {
 interface Props {
   extraData: AxiosResponse<any, any> | undefined;
   lessonId: number;
+  editable: boolean | undefined;
 }
 
 const detailTitles: DetailTitles = {
@@ -40,7 +41,7 @@ const detailTitles: DetailTitles = {
 
 const detailTitlesArray = Object.keys(detailTitles);
 
-const DetailExtra = ({ extraData, lessonId }: Props) => {
+const DetailExtra = ({ extraData, lessonId, editable }: Props) => {
   const [textData, setTextData] = useState<DetailTitles>();
   const [images, setImages] = useState<string[]>([]);
   const [isEdit, setIsEdit] = useState(false);
@@ -71,14 +72,16 @@ const DetailExtra = ({ extraData, lessonId }: Props) => {
           lessonId={lessonId}
         />
       )}
-      <div className="h-full flex justify-end pt-6 px-6">
-        <span
-          className="text-pointColor font-SCDream3 cursor-pointer hover:underline"
-          onClick={modalOpen}
-        >
-          edit
-        </span>
-      </div>
+      {editable && (
+        <div className="h-full flex justify-end pt-6 px-6">
+          <span
+            className={`text-pointColor font-SCDream3 cursor-pointer hover:underline`}
+            onClick={modalOpen}
+          >
+            edit
+          </span>
+        </div>
+      )}
       <div className="w-full h-full pb-6 pt-3 px-6 text-base">
         {!textData ? (
           <div>Loading</div>
