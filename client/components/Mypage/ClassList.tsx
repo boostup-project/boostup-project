@@ -22,7 +22,6 @@ const ClassList = () => {
 
   const closeClass = (suggestId: any) => {
     setASuggestId(suggestId);
-    console.log(suggestId);
   };
   useEffect(() => {
     if (aSuggestId !== 0) {
@@ -38,7 +37,6 @@ const ClassList = () => {
         confirmButtonColor: "#3085d6",
       });
     }
-
     if (isError) {
       Swal.fire({
         text: "다시 시도해주세요",

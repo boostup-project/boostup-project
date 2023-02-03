@@ -1,4 +1,5 @@
 import ApplicationList from "./ApplicationList";
+import useGetMyTutor from "hooks/mypage/useGetMyTutor";
 import { useState, useEffect } from "react";
 import MypageTabBtn from "components/reuse/btn/MypageTabBtn";
 import DetailTabBtn from "components/reuse/btn/DetailTabBtn";
@@ -6,23 +7,29 @@ import MypageContentContainer from "components/reuse/container/MypageContentCont
 import MypageUnderContainer from "components/reuse/container/MypageUnderContainer";
 import ClassList from "./ClassList";
 import FinishedClass from "./FinishedClass";
+import useGetTutorInfo from "hooks/mypage/useGetTutorInfo";
 const TeacherTab = () => {
   const [tab, setTab] = useState(1);
+
+  const [islessonId, setIsLessonId] = useState(0);
+  const { data: myTutorUrl } = useGetMyTutor();
+  const lessonId = Number(myTutorUrl?.data.lessonUrl.slice(29));
+
+  const { refetch: refetchApplyInfo } = useGetTutorInfo(lessonId, 1);
+  const { refetch: refetchClassInfo } = useGetTutorInfo(lessonId, 2);
+  const { refetch: refetchFinishedClass } = useGetTutorInfo(lessonId, 3);
 
   const handleTabClick = (id: number) => {
     setTab(id);
   };
   useEffect(() => {
-    // refetch 실행위치
     // tab이 바뀔때마다 refetch 실행
-    // console.log(lessonId);
-
     if (tab === 1) {
-      // teacherTab refetch
+      refetchApplyInfo();
     } else if (tab === 2) {
-      // StudentTab refetch
+      refetchClassInfo();
     } else if (tab === 3) {
-      // ChatList refetch
+      refetchFinishedClass();
     }
   }, [tab]);
 
@@ -44,7 +51,7 @@ const TeacherTab = () => {
               handleTabClick(2);
             }}
           >
-            과외내역
+            진행과외
           </MypageTabBtn>
           <MypageTabBtn
             bold={tab === 3 ? true : false}

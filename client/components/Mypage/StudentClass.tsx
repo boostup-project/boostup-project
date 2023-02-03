@@ -126,7 +126,8 @@ const StudentClass = () => {
                     >
                       결제하기
                     </button>
-                  ) : tutor.status === "과외 중" ? (
+                  ) : tutor.status === "과외 중" ||
+                    tutor.status === "과외 종료" ? (
                     <button
                       className="text text-pointColor m-2 desktop:text-base tablet:text-sm text-[10px]"
                       onClick={() => toReceipt(tutor.suggestId)}
@@ -149,6 +150,10 @@ const StudentClass = () => {
                       onClick={() => deleteApply(tutor.suggestId)}
                     >
                       신청취소
+                    </button>
+                  ) : tutor.status === "과외 종료" ? (
+                    <button className="text text-pointColor m-2 desktop:text-base tablet:text-sm text-[10px]">
+                      후기 작성
                     </button>
                   ) : (
                     <></>

@@ -61,7 +61,7 @@ const AcceptModal = ({
 
   return (
     <>
-      <div className="fixed z-10 top-0 left-0 bottom-0 right-0 bg-modalBgColor grid place-items-center">
+      <div className="fixed z-10 top-0 left-0 bottom-0 right-0 bg-modalBgColor/30 grid place-items-center">
         <CreateModalContainer>
           <form
             className="flex flex-col items-center w-full text-sm z-20"
