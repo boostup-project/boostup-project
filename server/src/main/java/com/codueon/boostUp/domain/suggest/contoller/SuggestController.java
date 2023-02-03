@@ -367,6 +367,38 @@ public class SuggestController {
     }
 
     /**
+     * 강사 종료 과외 삭제
+     * @param suggestId 신청 식별자
+     * @return ResponseEntity
+     * @author LeeGoh
+     */
+    @DeleteMapping("/suggest/{suggest-id}/tutor")
+    public ResponseEntity deleteTutorEndOfSuggest(@PathVariable("suggest-id") Long suggestId,
+                                                  Authentication authentication) {
+
+        JwtAuthenticationToken token = (JwtAuthenticationToken) authentication;
+        Long memberId = getMemberIdIfExistToken(token);
+        suggestService.deleteTutorEndOfSuggest(suggestId, memberId);
+        return ResponseEntity.noContent().build();
+    }
+
+    /**
+     * 학생 종료 과외 삭제
+     * @param suggestId 신청 식별자
+     * @return ResponseEntity
+     * @author LeeGoh
+     */
+    @DeleteMapping("/suggest/{suggest-id}/student")
+    public ResponseEntity deleteStudentEndOfSuggest(@PathVariable("suggest-id") Long suggestId,
+                                                  Authentication authentication) {
+
+        JwtAuthenticationToken token = (JwtAuthenticationToken) authentication;
+        Long memberId = getMemberIdIfExistToken(token);
+        suggestService.deleteStudentEndOfSuggest(suggestId, memberId);
+        return ResponseEntity.noContent().build();
+    }
+
+    /**
      * 로그인 확인 메서드
      * @param token 토큰 정보
      * @return Long

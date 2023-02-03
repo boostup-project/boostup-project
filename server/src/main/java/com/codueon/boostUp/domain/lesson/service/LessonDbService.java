@@ -1,18 +1,18 @@
 package com.codueon.boostUp.domain.lesson.service;
 
 import com.codueon.boostUp.domain.lesson.entity.*;
-import com.codueon.boostUp.domain.lesson.repository.*;
+import com.codueon.boostUp.domain.lesson.repository.CurriculumRepository;
+import com.codueon.boostUp.domain.lesson.repository.LessonInfoRepository;
+import com.codueon.boostUp.domain.lesson.repository.LessonRepository;
 import com.codueon.boostUp.global.exception.BusinessLogicException;
 import com.codueon.boostUp.global.exception.ExceptionCode;
 import com.codueon.boostUp.global.file.AwsS3Service;
 import com.codueon.boostUp.global.file.UploadFile;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.util.CollectionUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -176,6 +176,16 @@ public class LessonDbService {
     public Curriculum ifExsistsReturnCurriculum(Long lessonId) {
         return curriculumRepository.findByLessonId(lessonId)
                 .orElseThrow(() -> new BusinessLogicException(ExceptionCode.CURRICULUM_NOT_FOUND));
+    }
+
+    /**
+     * 과외 등록한 사용자 식별자 조회 메서드
+     * @param lessonId 과외 식별자
+     * @return Long
+     * @author LeeGoh
+     */
+    public Long getMemberIdByLessonId(Long lessonId) {
+        return lessonRepository.getMemberIdByLessonId(lessonId);
     }
 
     /*--------------------------------------- DB Update 메서드 --------------------------------------*/

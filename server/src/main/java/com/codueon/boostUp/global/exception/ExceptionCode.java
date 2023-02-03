@@ -59,9 +59,14 @@ public enum ExceptionCode {
     ALREADY_EXPIRED_EMAIL_CODE(403, "인증 코드가 만료되었습니다."),
 
 
-    // TODO: 과외 신청 - 결제 관련
-    NOT_ACCEPT_SUGGEST(504, "과외 수락 상태가 아닙니다."),
+    // 과외 신청
+    NOT_ACCEPT_IN_PROGRESS(504, "과외 수락 대기중 상태가 아닙니다."),
+    NOT_PAY_IN_PROGRESS(504, "결제 대기중 상태가 아닙니다."),
     NOT_PAY_SUCCESS(504, "결제 완료 상태가 아닙니다."),
+    NOT_END_OF_LESSON(504, "과외 종료 상태가 아닙니다."),
+    NOT_DURING_LESSON(504, "과외 중 상태가 아닙니다."),
+    NOT_REFUND_PAYMENT(504, "환불 완료 상태가 아닙니다."),
+    NOT_SUGGEST_OR_NOT_ACCEPT(504, "과외 수락 대기중 또는 결제 대기중 상태가 아닙니다."),
 
     // 리뷰 관련
     REVIEW_ONLY_ONE(504, "리뷰는 한 번만 가능합니다."),

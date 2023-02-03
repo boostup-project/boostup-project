@@ -288,4 +288,20 @@ public class LessonRepositoryImpl implements CustomLessonRepository {
                 ).from(bookmark)
                 .where(bookmark.lessonId.eq(lessonId).and(bookmark.memberId.eq(memberId)));
     }
+
+    /**
+     * 과외 등록한 사용자 식별자 조회 쿼라
+     * @param lessonId 과외 식별자
+     * @return Long
+     * @author LeeGoh
+     */
+    public Long getMemberIdByLessonId(Long lessonId) {
+        Long memberId = queryFactory
+                .select(member.id)
+                .from(member)
+                .leftJoin(lesson).on(member.id.eq(lesson.memberId))
+                .where(lesson.id.eq(lessonId))
+                .fetchOne();
+        return memberId;
+    }
 }
