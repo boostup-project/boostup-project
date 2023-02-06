@@ -14,6 +14,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/review")
@@ -31,7 +33,7 @@ public class ReviewController {
     @PostMapping("/lesson/{lesson-id}/suggest/{suggest-id}")
     public ResponseEntity<?> postReview(@PathVariable("lesson-id") Long lessonId,
                                         @PathVariable("suggest-id") Long suggestId,
-                                        @RequestBody PostReview postReview,
+                                        @RequestBody @Valid PostReview postReview,
                                         Authentication authentication) {
         JwtAuthenticationToken token = (JwtAuthenticationToken) authentication;
         Long memberId = getMemberIdIfExistToken(token);
@@ -77,7 +79,7 @@ public class ReviewController {
      */
     @PatchMapping("/{review-id}/modification")
     public ResponseEntity<?> updateReview(@PathVariable("review-id") Long reviewId,
-                                          @RequestBody PatchReview patchReview,
+                                          @RequestBody @Valid PatchReview patchReview,
                                           Authentication authentication) {
         JwtAuthenticationToken token = (JwtAuthenticationToken) authentication;
         Long memberId = getMemberIdIfExistToken(token);
