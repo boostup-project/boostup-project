@@ -9,14 +9,14 @@ jobs:
     steps:
       - name: 소스 코드 체크
         uses: actions/checkout@v2
-      - name: 프로젝트에서 사용하는 모든 디펜던시 설치
-        run: npm install
-        working-directory: ./client
       - name: access to secrets
         run: |
           echo "NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL" >> .env
         env:
           NEXT_PUBLIC_API_URL: ${{secrets.NEXT_PUBLIC_API_URL}}
+      - name: 프로젝트에서 사용하는 모든 디펜던시 설치
+        run: npm install
+        working-directory: ./client
       - name: 프로젝트 빌드
         run: npm run build
         working-directory: ./client 
