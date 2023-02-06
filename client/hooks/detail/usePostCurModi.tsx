@@ -11,7 +11,7 @@ export const usePostCurModi = () => {
         autoClose: 3000,
         position: toast.POSITION.TOP_RIGHT,
       });
-      // queryClient.invalidateQueries("get/Extra");
+      // queryClient.invalidateQueries(["get/Curriculum"]);
     },
     onError: res => {
       toast.error("전송이 실패되었습니다. 다시 작성해주세요", {
