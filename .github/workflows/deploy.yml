@@ -11,7 +11,7 @@ jobs:
         uses: actions/checkout@v2
       - name: access to secrets
         run: |
-          echo "NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL" >> .env
+          echo "NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL" >> .env.production
         env:
           NEXT_PUBLIC_API_URL: ${{ secrets.NEXT_PUBLIC_API_URL }}
       - name: 프로젝트에서 사용하는 모든 디펜던시 설치
