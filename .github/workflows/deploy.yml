@@ -14,6 +14,7 @@ jobs:
           echo "NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL" >> .env.production
         env:
           NEXT_PUBLIC_API_URL: ${{ secrets.NEXT_PUBLIC_API_URL }}
+        working-directory: ./client 
       - name: 프로젝트에서 사용하는 모든 디펜던시 설치
         run: npm install
         working-directory: ./client
