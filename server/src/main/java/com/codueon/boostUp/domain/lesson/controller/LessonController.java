@@ -13,7 +13,6 @@ import com.codueon.boostUp.domain.lesson.dto.Post.PostSearchLesson;
 import com.codueon.boostUp.domain.lesson.dto.etc.WrapUrl;
 import com.codueon.boostUp.domain.lesson.service.LessonService;
 import com.codueon.boostUp.global.security.token.JwtAuthenticationToken;
-import io.jsonwebtoken.Jwt;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.data.domain.Page;
@@ -24,6 +23,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -42,7 +42,7 @@ public class LessonController {
      * @author Quartz614
      */
     @PostMapping(value = "/registration")
-    public ResponseEntity<?> postLesson(@RequestPart(value = "data") PostLesson postLesson,
+    public ResponseEntity<?> postLesson(@RequestPart(value = "data") @Valid PostLesson postLesson,
                                         Authentication authentication,
                                         @RequestPart(required = false, value = "profileImage") MultipartFile profileImage,
                                         @RequestPart(required = false, value = "careerImage") List<MultipartFile> careerImage) {
@@ -63,7 +63,7 @@ public class LessonController {
     @SneakyThrows
     @PostMapping("/{lesson-id}/modification")
     public ResponseEntity updateLesson(@PathVariable("lesson-id") Long lessonId,
-                                       @RequestPart(value = "data") PostLessonInfoEdit postLessonInfoEdit,
+                                       @RequestPart(value = "data") @Valid PostLessonInfoEdit postLessonInfoEdit,
                                        Authentication authentication,
                                        @RequestPart(required = false, value = "profileImage") MultipartFile profileImage) {
         JwtAuthenticationToken token = (JwtAuthenticationToken) authentication;
@@ -82,7 +82,7 @@ public class LessonController {
     @SneakyThrows
     @PostMapping("/{lesson-id}/detailInfo/modification")
     public ResponseEntity updateLessonDetail(@PathVariable("lesson-id") Long lessonId,
-                                             @RequestPart(value = "data") PostLessonDetailEdit postLessonDetailEdit,
+                                             @RequestPart(value = "data") @Valid PostLessonDetailEdit postLessonDetailEdit,
                                              @RequestPart(required = false, value = "careerImage") List<MultipartFile> careerImage) {
         lessonService.updateLessonDetailS3(lessonId, postLessonDetailEdit, careerImage);
         return ResponseEntity.ok().build();
@@ -155,7 +155,7 @@ public class LessonController {
      * @author mozzi327
      */
     @PostMapping("/search")
-    public ResponseEntity<?> getDetailSearchForLesson(@RequestBody PostSearchLesson postSearchLesson,
+    public ResponseEntity<?> getDetailSearchForLesson(@RequestBody @Valid PostSearchLesson postSearchLesson,
                                                       Pageable pageable,
                                                       Authentication authentication) {
         JwtAuthenticationToken token = (JwtAuthenticationToken) authentication;

@@ -54,7 +54,7 @@ public class SuggestController {
      */
     @PostMapping("/suggest/{suggest-id}/accept")
     public ResponseEntity acceptSuggest(@PathVariable("suggest-id") Long suggestId,
-                                        @RequestBody PostPaymentUrl post,
+                                        @RequestBody @Valid PostPaymentUrl post,
                                         Authentication authentication) {
 
         JwtAuthenticationToken token = (JwtAuthenticationToken) authentication;
@@ -72,7 +72,7 @@ public class SuggestController {
      */
     @PostMapping("/suggest/{suggest-id}/decline")
     public ResponseEntity declineSuggest(@PathVariable("suggest-id") Long suggestId,
-                                         @RequestBody PostReason postReason,
+                                         @RequestBody @Valid PostReason postReason,
                                          Authentication authentication) {
 
         JwtAuthenticationToken token = (JwtAuthenticationToken) authentication;
@@ -276,7 +276,7 @@ public class SuggestController {
      */
     @GetMapping("/suggest/{suggest-id}/attendance/check")
     public ResponseEntity lessonAttendanceCheck(@PathVariable("suggest-id") Long suggestId,
-                                                         Authentication authentication) {
+                                                Authentication authentication) {
 
         JwtAuthenticationToken token = (JwtAuthenticationToken) authentication;
         Long memberId = getMemberIdIfExistToken(token);
@@ -291,7 +291,7 @@ public class SuggestController {
      */
     @GetMapping("/suggest/{suggest-id}/attendance/cancel")
     public ResponseEntity lessonAttendanceCancel(@PathVariable("suggest-id") Long suggestId,
-                                                          Authentication authentication) {
+                                                 Authentication authentication) {
 
         JwtAuthenticationToken token = (JwtAuthenticationToken) authentication;
         Long memberId = getMemberIdIfExistToken(token);
@@ -390,7 +390,7 @@ public class SuggestController {
      */
     @DeleteMapping("/suggest/{suggest-id}/student")
     public ResponseEntity deleteStudentEndOfSuggest(@PathVariable("suggest-id") Long suggestId,
-                                                  Authentication authentication) {
+                                                    Authentication authentication) {
 
         JwtAuthenticationToken token = (JwtAuthenticationToken) authentication;
         Long memberId = getMemberIdIfExistToken(token);
