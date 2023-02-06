@@ -12,6 +12,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.validation.Valid;
+
 @RestController
 @RequestMapping("/member")
 @RequiredArgsConstructor
@@ -24,7 +26,7 @@ public class MemberController {
      * @author LimJaeMinZ
      */
     @PostMapping("/join")
-    public ResponseEntity postMember(@RequestBody PostMember postMember) {
+    public ResponseEntity postMember(@RequestBody @Valid PostMember postMember) {
         memberService.createMember(postMember);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
@@ -62,7 +64,7 @@ public class MemberController {
      * @author mozzi327
      */
     @PostMapping("/email/check")
-    public ResponseEntity postCheckIsExistEmailInDb(@RequestBody PostEmail checkEmail) {
+    public ResponseEntity postCheckIsExistEmailInDb(@RequestBody @Valid PostEmail checkEmail) {
         memberService.checkIsExistEmailInDb(checkEmail.getEmail());
         return ResponseEntity.ok().build();
     }
@@ -73,7 +75,7 @@ public class MemberController {
      * @author mozzi327
      */
     @PostMapping("/name/overlap/check")
-    public ResponseEntity postCheckIsOverlappedName(@RequestBody PostName checkName) {
+    public ResponseEntity postCheckIsOverlappedName(@RequestBody @Valid PostName checkName) {
         memberService.checkIsOverLappedName(checkName.getName());
         return ResponseEntity.ok().build();
     }
@@ -98,7 +100,7 @@ public class MemberController {
      * @author mozzi327
      */
     @PostMapping("/password/resetting")
-    public ResponseEntity postChangePasswordInLoginPage(@RequestBody PostPasswordInLoginPage changePassword) {
+    public ResponseEntity postChangePasswordInLoginPage(@RequestBody @Valid PostPasswordInLoginPage changePassword) {
         memberService.changePasswordInLoginPage(changePassword);
         return ResponseEntity.ok().build();
     }
@@ -110,7 +112,7 @@ public class MemberController {
      * @author mozzi327
      */
     @PostMapping("/password/resetting/my-page")
-    public ResponseEntity postChangePasswordInMyPage(@RequestBody PostPasswordInMyPage changePassword,
+    public ResponseEntity postChangePasswordInMyPage(@RequestBody @Valid PostPasswordInMyPage changePassword,
                                                      Authentication authentication) {
         JwtAuthenticationToken token = (JwtAuthenticationToken) authentication;
         Long memberId = getMemberIdIfExistToken(token);

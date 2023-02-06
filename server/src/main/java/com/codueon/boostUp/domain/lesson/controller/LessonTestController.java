@@ -13,6 +13,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -31,7 +32,7 @@ public class LessonTestController {
      * @author Quartz614
      */
     @PostMapping(value = "/registration")
-    public ResponseEntity<?> testPostLesson(@RequestPart(value = "data") PostLesson postLesson,
+    public ResponseEntity<?> testPostLesson(@RequestPart(value = "data") @Valid PostLesson postLesson,
                                         Authentication authentication,
                                         @RequestPart(required = false, value = "profileImage") MultipartFile profileImage,
                                         @RequestPart(required = false, value = "careerImage") List<MultipartFile> careerImage) {
@@ -52,7 +53,7 @@ public class LessonTestController {
     @SneakyThrows
     @PostMapping("/{lesson-id}/modification")
     public ResponseEntity testUpdateLesson(@PathVariable("lesson-id") Long lessonId,
-                                       @RequestPart(value = "data") PostLessonInfoEdit postLessonInfoEdit,
+                                       @RequestPart(value = "data") @Valid PostLessonInfoEdit postLessonInfoEdit,
                                        Authentication authentication,
                                        @RequestPart(required = false, value = "profileImage") MultipartFile profileImage) {
         JwtAuthenticationToken token = (JwtAuthenticationToken) authentication;
@@ -71,7 +72,7 @@ public class LessonTestController {
     @SneakyThrows
     @PostMapping("/{lesson-id}/detailInfo/modification")
     public ResponseEntity testUpdateLessonDetail(@PathVariable("lesson-id") Long lessonId,
-                                             @RequestPart(value = "data") PostLessonDetailEdit postLessonDetailEdit,
+                                             @RequestPart(value = "data") @Valid PostLessonDetailEdit postLessonDetailEdit,
                                              @RequestPart(required = false, value = "careerImage") List<MultipartFile> careerImage) {
         lessonService.updateLessonDetail(lessonId, postLessonDetailEdit, careerImage);
         return ResponseEntity.ok().build();

@@ -9,6 +9,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import com.codueon.boostUp.domain.member.dto.PostLogin;
 
+import javax.validation.Valid;
+
 @RestController
 @RequestMapping("/member")
 @RequiredArgsConstructor
@@ -23,7 +25,7 @@ public class AuthController {
      * @author LimJaeminZ
      */
     @PostMapping("/login")
-    public ResponseEntity postLoginMember(@RequestBody PostLogin login) {
+    public ResponseEntity postLoginMember(@RequestBody @Valid PostLogin login) {
         TokenDto.Response response = authService.loginMember(login);
         return ResponseEntity.ok()
                 .headers(response.getHeaders())
