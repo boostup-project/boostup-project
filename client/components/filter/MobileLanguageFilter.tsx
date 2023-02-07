@@ -33,8 +33,8 @@ const MoblieLanguageFilter = () => {
       <div
         className={
           modal === 0
-            ? `right-0 ease-in-out translate-x-0 duration-500 flex flex-col justify-between items-center fixed overflow-auto scrollbar-hide w-[120px] h-[75%]  top-24 bg-white/90 border border-borderColor rounded-2xl `
-            : `right-0 ease-in-out translate-x-48 duration-500 flex flex-col justify-between items-center fixed overflow-auto scrollbar-hide w-[120px] h-[75%]  top-24 bg-white/90 border border-borderColor rounded-2xl `
+            ? `right-0 ease-in-out translate-x-0 duration-500 flex flex-col justify-between items-center fixed overflow-auto scrollbar-hide w-[120px] h-[75%]  top-24 bg-white/90 border border-borderColor rounded-2xl z-[1]`
+            : `right-0 ease-in-out translate-x-48 duration-500 flex flex-col justify-between items-center fixed overflow-auto scrollbar-hide w-[120px] h-[75%]  top-24 bg-white/90 border border-borderColor rounded-2xl`
         }
       >
         {detailLangDict.map((el, idx) => {
