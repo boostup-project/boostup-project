@@ -1,37 +1,19 @@
 package com.codueon.boostUp.domain.reveiw.repository;
 
-import com.codueon.boostUp.domain.lesson.entity.Lesson;
-import com.codueon.boostUp.domain.lesson.entity.LessonLanguage;
-import com.codueon.boostUp.domain.lesson.entity.QLesson;
-import com.codueon.boostUp.domain.lesson.entity.QLessonLanguage;
-import com.codueon.boostUp.domain.member.entity.QMember;
 import com.codueon.boostUp.domain.reveiw.dto.GetReview;
 import com.codueon.boostUp.domain.reveiw.dto.GetReviewMyPage;
 import com.codueon.boostUp.domain.reveiw.dto.QGetReview;
 import com.codueon.boostUp.domain.reveiw.dto.QGetReviewMyPage;
-import com.querydsl.core.types.dsl.*;
-import com.querydsl.jpa.JPAExpressions;
-import com.querydsl.jpa.JPQLQuery;
-import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.querydsl.jpa.sql.JPASQLQuery;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.repository.support.Querydsl;
 
 import javax.persistence.EntityManager;
-import javax.persistence.TypedQuery;
-import java.time.DayOfWeek;
 import java.util.List;
 
-import static com.codueon.boostUp.domain.bookmark.entity.QBookmark.bookmark;
 import static com.codueon.boostUp.domain.lesson.entity.QLesson.lesson;
-import static com.codueon.boostUp.domain.lesson.entity.QLessonAddress.lessonAddress;
-import static com.codueon.boostUp.domain.lesson.entity.QLessonLanguage.lessonLanguage;
-import static com.codueon.boostUp.domain.lesson.entity.QProfileImage.profileImage;
 import static com.codueon.boostUp.domain.member.entity.QMember.member;
-import static com.codueon.boostUp.domain.member.entity.QMemberImage.memberImage;
 import static com.codueon.boostUp.domain.reveiw.entity.QReview.review;
 import static com.codueon.boostUp.domain.suggest.entity.QSuggest.suggest;
 
@@ -76,17 +58,15 @@ public class ReviewRepositoryImpl implements CustomReviewRepository {
                         lesson,
                         suggest.startTime,
                         suggest.endTime
-                )).from(review, lesson)
+                )).from(review)
                 .leftJoin(lesson).on(lesson.id.eq(review.lessonId))
                 .leftJoin(member).on(lesson.memberId.eq(member.id))
-                .leftJoin(suggest).on(suggest.memberId.eq(review.memberId))
-                .where(review.memberId.eq(memberId),
-                       member.id.eq(lesson.memberId),
-                       suggest.memberId.eq(memberId))
-                .distinct()
+                .leftJoin(suggest).on(review.suggestId.eq(suggest.id))
+                .where(review.memberId.eq(memberId))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .orderBy(review.lessonId.desc())
+                .distinct()
                 .fetch();
 
         long total2 = result.size();
