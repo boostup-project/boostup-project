@@ -39,22 +39,20 @@ const MoblieLanguageFilter = () => {
       >
         {detailLangDict.map((el, idx) => {
           return (
-            <>
-              <div
+            <div
+              key={el.id}
+              className="desktop:w-[100px] desktop:h-[100px] w-[50px] h-[50px] desktop:my-0 my-3"
+              onClick={() => handleFilterClick(el.id)}
+            >
+              <Image
                 key={el.id}
-                className="desktop:w-[100px] desktop:h-[100px] w-[50px] h-[50px] desktop:my-0 my-3"
-                onClick={() => handleFilterClick(el.id)}
-              >
-                <Image
-                  key={el.id}
-                  width={100}
-                  height={100}
-                  src={el.img}
-                  alt={el.name}
-                  className="border border-borderColor rounded-full w-full h-full cursor-pointer bg-white"
-                />
-              </div>
-            </>
+                width={100}
+                height={100}
+                src={el.img}
+                alt={el.name}
+                className="border border-borderColor rounded-full w-full h-full cursor-pointer bg-white"
+              />
+            </div>
           );
         })}
       </div>
