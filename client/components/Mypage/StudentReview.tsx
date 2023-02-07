@@ -15,7 +15,10 @@ const StudentReview = () => {
       <div className="mt-6 flex flex-col w-full font-SCDream4">
         <div className="w-full">
           {MyReview?.data.data.map((review: any) => (
-            <div className="flex flex-row h-fit w-full rounded-lg border border-borderColor mt-3">
+            <div
+              key={review.lessonId}
+              className="flex flex-row h-fit w-full rounded-lg border border-borderColor mt-3"
+            >
               {/* {left} */}
               <div className="flex flex-col w-2/3  justify-center desktop:pl-2 m-3">
                 <div className="flex">
