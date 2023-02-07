@@ -2,6 +2,10 @@ package com.codueon.boostUp.domain.suggest.repository;
 
 import com.codueon.boostUp.domain.suggest.dto.*;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.types.dsl.CaseBuilder;
+import com.querydsl.core.types.dsl.NumberPath;
+import com.querydsl.jpa.JPAExpressions;
+import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -12,6 +16,7 @@ import java.util.List;
 
 import static com.codueon.boostUp.domain.lesson.entity.QLesson.lesson;
 import static com.codueon.boostUp.domain.member.entity.QMember.member;
+import static com.codueon.boostUp.domain.reveiw.entity.QReview.review;
 import static com.codueon.boostUp.domain.suggest.entity.QPaymentInfo.paymentInfo;
 import static com.codueon.boostUp.domain.suggest.entity.QSuggest.suggest;
 import static com.codueon.boostUp.domain.suggest.entity.SuggestStatus.*;
@@ -96,7 +101,8 @@ public class SuggestRepositoryImpl implements CustomSuggestRepository {
                         suggest.suggestStatus,
                         suggest.startTime,
                         suggest.endTime,
-                        lesson
+                        lesson,
+                        isReviewed(suggest.id, memberId)
                 ))
                 .from(suggest)
                 .leftJoin(lesson).on(suggest.lessonId.eq(lesson.id))
@@ -110,6 +116,16 @@ public class SuggestRepositoryImpl implements CustomSuggestRepository {
 
         long total = results.size();
         return new PageImpl<>(results, pageable, total);
+    }
+
+    private JPQLQuery<Boolean> isReviewed(NumberPath<Long> suggestId,
+                                          Long memberId) {
+        return JPAExpressions.select(
+                        new CaseBuilder()
+                                .when(review.isNotNull()).then(true)
+                                .otherwise(false).as("reviewCheck")
+                ).from(review)
+                .where(review.suggestId.eq(suggestId).and(review.memberId.eq(memberId)));
     }
 
     /**
