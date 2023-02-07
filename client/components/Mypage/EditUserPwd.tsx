@@ -1,6 +1,7 @@
 import AuthBtn from "components/reuse/btn/AuthBtn";
 import CreateModalContainer from "components/reuse/container/CreateModalContainer";
 import ModalBackDrop from "components/reuse/container/ModalBackDrop";
+import usePostPwdChange from "hooks/mypage/usePostPwdChange";
 import usePostPwdCheck from "hooks/mypage/usePostPwdCheck";
 import { useEffect } from "react";
 import { ChangeEvent, useState } from "react";
@@ -8,6 +9,10 @@ import { useForm } from "react-hook-form";
 
 interface Props {
   editPWd: () => void;
+}
+
+interface PwdEditData {
+  [index: string]: string;
 }
 
 const EditUserPwd = ({ editPWd }: Props) => {
@@ -18,25 +23,32 @@ const EditUserPwd = ({ editPWd }: Props) => {
     handleSubmit,
     watch,
     formState: { errors },
-  } = useForm({ mode: "onBlur" });
+  } = useForm<PwdEditData>({ mode: "onBlur" });
 
+  /** 비밀번호 확인 로직 */
   const currentPwdReciever = (e: ChangeEvent<HTMLInputElement>) => {
     setCurrentPwd(e.target.value);
   };
-  const { mutate, isSuccess } = usePostPwdCheck();
+  const { mutate: mutatePwdCheck, isSuccess: successPwdCheck } =
+    usePostPwdCheck();
   const pwdCheck = () => {
     console.log(currentPwd);
-    mutate(currentPwd);
+    mutatePwdCheck(currentPwd);
   };
   useEffect(() => {
-    if (isSuccess) {
+    if (successPwdCheck) {
       setIsEditable(prev => !prev);
     }
-  }, [isSuccess]);
+  }, [successPwdCheck]);
 
-  const editSubmit = (e: any) => {
-    console.log(e);
+  /** 비밀번호 변경 로직 */
+  const { mutate: mutatePwdChange, isSuccess: sucessPwdChange } =
+    usePostPwdChange();
+  const editSubmit = (e: PwdEditData) => {
+    mutatePwdChange(e.password);
+    editPWd();
   };
+
   return (
     <ModalBackDrop onClick={editPWd}>
       <CreateModalContainer>
