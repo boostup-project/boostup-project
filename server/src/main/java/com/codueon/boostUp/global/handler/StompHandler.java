@@ -44,7 +44,7 @@ public class StompHandler implements ChannelInterceptor {
         } else if (StompCommand.SUBSCRIBE.equals(command)) {
             log.info("[SUBSCRIBE] start {}", sessionId);
             Long chatRoomId = parseRoomIdFromHeader(accessor);
-            chatRegisterController.registerUserAndSendEnterMessage(chatRoomId, accessor.getUser());
+            if (chatRoomId != null) chatRegisterController.registerUserAndSendEnterMessage(chatRoomId, accessor.getUser());
             log.info("[SUBSCRIBE] end {}", sessionId);
         } else if (StompCommand.UNSUBSCRIBE.equals(command)) {
             log.info("[UNSUBSCRIBE] start {}", sessionId);
@@ -65,10 +65,11 @@ public class StompHandler implements ChannelInterceptor {
     private Long parseRoomIdFromHeader(StompHeaderAccessor accessor) {
         try {
             // /topic/rooms/{chatRoomId}
+            // /topic/alarm/member/{memberId}
             String destination = accessor.getDestination();
             log.info("destination : {}", destination);
             String[] parseDestination = destination.split("/");
-            if(!parseDestination[2].equals("rooms")) throw new Exception();
+            if(!parseDestination[2].equals("rooms")) return null;
             return Long.parseLong(parseDestination[3]);
         } catch (Exception e) {
             throw new BusinessLogicException(ExceptionCode.INVALID_DESTINATION);
