@@ -34,7 +34,7 @@ public class ReviewService {
 //        if(!suggest.getStatus().equals(END_OF_LESSON))
 //            throw new BusinessLogicException(ExceptionCode.NOT_PAY_SUCCESS);
 
-        reviewDbService.ifExistReviewThrowException(lessonId, memberId);
+//        reviewDbService.ifExistReviewThrowException(lessonId, memberId);
 
         Review review = Review.builder()
                 .comment(postReview.getComment())
