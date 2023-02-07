@@ -7,12 +7,9 @@ const useGetBookmarkModi = (lessonId: number) => {
   return useQuery(["get/BookmarkModi"], () => getBookmarkModi(lessonId), {
     enabled: false,
     onSuccess: res => {
-      console.log(res);
       setToggle(!toggle);
     },
-    onError: error => {
-      console.log(error);
-    },
+    onError: error => {},
     retry: 1,
   });
 };

@@ -54,7 +54,6 @@ const DetailButtons = (basicInfo: any) => {
 
   const { mutate } = useDeleteDetail();
   const deletePost = (lessonId: number) => {
-    console.log(lessonId);
     Swal.fire({
       title: "과외를 삭제하시겠습니까?",
       text: "다시 되돌릴 수 없습니다.",

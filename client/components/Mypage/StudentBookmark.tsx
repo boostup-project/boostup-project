@@ -26,7 +26,6 @@ const StudentBookmark = () => {
 
   useEffect(() => {
     setBookmarkData(studentBookmark?.data.data);
-    console.log(bookmarkData);
   }, [studentBookmark]);
 
   useEffect(() => {

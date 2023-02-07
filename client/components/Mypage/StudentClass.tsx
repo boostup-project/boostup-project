@@ -46,7 +46,6 @@ const StudentClass = () => {
       setSuggestId(suggestId);
       setLessonId(lessonId);
       setOpenReview(prev => !prev);
-      console.log(suggestId, lessonId);
     },
     [openAccept],
   );

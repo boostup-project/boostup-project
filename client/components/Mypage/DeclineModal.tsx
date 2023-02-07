@@ -35,27 +35,7 @@ const DeclineModal = ({
       decline: e.decline,
       suggestId: suggestId,
     };
-    console.log(acceptData);
   };
-
-  //   useEffect(() => {
-  //     if (isSuccess) {
-  //       Swal.fire({
-  //         text: "거절이 완료되었습니다",
-  //         icon: "success",
-  //         confirmButtonColor: "#3085d6",
-  //       });
-  //       onClickToggleModal(suggestId);
-  //     }
-
-  //     if (isError) {
-  //       Swal.fire({
-  //         text: "다시 수락해주세요",
-  //         icon: "warning",
-  //         confirmButtonColor: "#3085d6",
-  //       });
-  //     }
-  //   }, [isSuccess, isError]);
 
   return (
     <>

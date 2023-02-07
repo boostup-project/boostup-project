@@ -41,7 +41,6 @@ const ReviewModal = ({
       suggestId: suggestId,
       lessonId: lessonId,
     };
-    console.log(reviewData);
     mutate(reviewData);
   };
   useEffect(() => {

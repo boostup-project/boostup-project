@@ -9,7 +9,7 @@ import {
 import useGetMyReview from "hooks/mypage/useGetMyReview";
 const StudentReview = () => {
   const { data: MyReview } = useGetMyReview();
-  console.log(MyReview?.data.data);
+
   return (
     <>
       <div className="mt-6 flex flex-col w-full font-SCDream4">

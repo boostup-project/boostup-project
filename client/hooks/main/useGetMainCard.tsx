@@ -12,11 +12,8 @@ const useGetMainCard = (props: any) => {
     enabled: true,
     onSuccess: (data: any) => {
       // 성공시 호출
-      console.log("success");
     },
-    onError: error => {
-      console.log(error);
-    },
+    onError: error => {},
     retry: 1,
   });
 };

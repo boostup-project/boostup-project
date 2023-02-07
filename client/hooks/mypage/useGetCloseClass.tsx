@@ -5,10 +5,10 @@ const useGetCloseClass = (suggestId: number) => {
   return useQuery(["get/CloseClass"], () => getCloseClass(suggestId), {
     enabled: false,
     onSuccess: res => {
-      console.log(res);
+      console.log("success");
     },
     onError: error => {
-      console.log(error);
+      console.log("error");
     },
     retry: 1,
   });

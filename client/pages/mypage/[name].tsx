@@ -34,14 +34,11 @@ const Mypage = () => {
   const handleTabClick = (id: number) => {
     setTab(id);
     refetchTutorInfo;
-    console.log(tutorInfoData);
   };
   const widthSize = useWindowSize();
 
   useEffect(() => {
-    // refetch 실행위치
     // tab이 바뀔때마다 refetch 실행
-    console.log(lessonId, tab);
     if (lessonId) {
       // 요약정보 요청
     }

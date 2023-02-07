@@ -56,7 +56,6 @@ const Card = () => {
 
   useEffect(() => {
     setMainCardInfo(cardData?.data.data);
-    console.log(cardData?.data.data);
   }, [cardData]);
 
   useEffect(() => {
@@ -68,7 +67,6 @@ const Card = () => {
   const handleLike = (lessonId: any) => {
     if (localStorage.getItem("token")) {
       setLessonId(lessonId);
-      console.log(lessonId);
     } else {
       return Swal.fire({
         text: "로그인 후 원하는 선생님을 찜 해보세요",
