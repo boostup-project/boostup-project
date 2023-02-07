@@ -45,7 +45,7 @@ public class TossPaymentTest extends SuggestControllerTest{
                 .message(TOSS_PAY_URI_MSG)
                 .build();
 
-        given(suggestService.getTossPayUrl(Mockito.anyLong(), Mockito.anyString(), Mockito.anyInt()))
+        given(suggestService.getTossPayUrl(Mockito.anyLong(), Mockito.anyInt()))
                 .willReturn(message);
 
         ResultActions actions =
