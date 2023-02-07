@@ -64,7 +64,7 @@ const Navbar = () => {
   };
   const toProfile = () => {
     if (isLog) {
-      router.push(`mypage/${localStorage.name}`);
+      router.push(`/mypage/${localStorage.name}`);
     }
     if (!isLog) {
       toast.info("마이페이지는 로그인 후 이용해주세요", {

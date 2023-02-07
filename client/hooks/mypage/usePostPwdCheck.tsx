@@ -1,23 +1,24 @@
-import postCurModi from "apis/detail/postCurModi";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import postPwdCheck from "apis/mypage/postPwdCheck";
 import { toast } from "react-toastify";
 
-export const usePostCurModi = () => {
+const usePostPwdCheck = () => {
   const queryClient = useQueryClient();
 
-  return useMutation(postCurModi, {
+  return useMutation(postPwdCheck, {
     onSuccess: res => {
-      toast.success("진행상황이 수정되었습니다", {
+      toast.info("비밀변호가 확인되었습니다", {
         autoClose: 3000,
         position: toast.POSITION.TOP_RIGHT,
       });
-      // queryClient.invalidateQueries(["get/Curriculum"]);
     },
-    onError: res => {
-      toast.error("전송이 실패되었습니다. 다시 작성해주세요", {
+    onError: (res: any) => {
+      toast.error(res.response.data.message, {
         autoClose: 3000,
         position: toast.POSITION.TOP_RIGHT,
       });
     },
   });
 };
+
+export default usePostPwdCheck;
