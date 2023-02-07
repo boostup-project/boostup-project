@@ -7,7 +7,6 @@ import { IconImg } from "assets/icon";
 import { modalImgTxt } from "assets/color/color";
 import { SetterOrUpdater } from "recoil";
 import { Info } from "./WriteModal";
-import { useEffect } from "react";
 import { useRouter } from "next/router";
 import { useRecoilState } from "recoil";
 import { editMode } from "atoms/detail/detailAtom";
@@ -320,6 +319,7 @@ const BasicInfo = ({ basicInfo, setBasicInfo, toWrite, setStep }: Props) => {
           className="w-11/12 h-fit p-2 border border-borderColor outline-pointColor rounded-xl font-SCDream4 text-[11px] text-textColor tablet:text-sm desktop:w-4/6"
           {...register("career", {
             required: "필수 정보입니다.",
+            valueAsNumber: true,
           })}
           defaultValue={basicInfo.career as string}
         />
@@ -401,7 +401,10 @@ const BasicInfo = ({ basicInfo, setBasicInfo, toWrite, setStep }: Props) => {
           type="number"
           placeholder="회 당 수업료를 입력하세요"
           className="w-11/12 h-fit p-2 border border-borderColor outline-pointColor rounded-xl font-SCDream4 text-[11px] text-textColor tablet:text-sm desktop:w-4/6"
-          {...register("cost", { required: "필수 정보입니다." })}
+          {...register("cost", {
+            required: "필수 정보입니다.",
+            valueAsNumber: true,
+          })}
           defaultValue={basicInfo.cost as string}
         />
         <p className="w-11/12 text-xs text-negativeMessage mt-1 tablet:text-sm desktop:w-4/6">

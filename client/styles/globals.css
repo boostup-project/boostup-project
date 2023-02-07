@@ -83,7 +83,13 @@ button {
   font-size: 100%;
   vertical-align: baseline;
 } */
-
+@layer base {
+  input[type="number"]::-webkit-inner-spin-button,
+  input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+}
 @font-face {
   font-family: "SCDream1";
   src: url("../public/fonts/SCDream1.otf");

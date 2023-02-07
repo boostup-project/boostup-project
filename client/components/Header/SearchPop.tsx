@@ -39,7 +39,9 @@ export const SearchPop = ({ onSubmit }: Props) => {
             className="desktop:w-8/12 w-5/6 h-fit p-2 border  border-borderColor outline-pointColor rounded-xl font-SCDream2 text-sm text-textColor placeholder:text-center mt-5"
             type="number"
             placeholder="원하는 과외쌤의 경력을 숫자로 입력하세요"
-            {...register("carrer")}
+            {...register("carrer", {
+              valueAsNumber: true,
+            })}
           />
         </label>
         <label className="w-full flex flex-col items-center mt-5">
@@ -137,7 +139,10 @@ export const SearchPop = ({ onSubmit }: Props) => {
                 className="w-full h-fit p-2 border  border-borderColor outline-pointColor rounded-xl font-SCDream2 text-sm text-textColor placeholder:text-center mt-5"
                 type="number"
                 placeholder="최소금액"
-                {...register("startCost")}
+                {...(register("startCost"),
+                {
+                  valueAsNumber: true,
+                })}
               />
             </div>
             <div className="flex flex-col justify-end pb-1">
@@ -149,7 +154,9 @@ export const SearchPop = ({ onSubmit }: Props) => {
                 className="w-full h-fit p-2 border  border-borderColor outline-pointColor rounded-xl font-SCDream2 text-sm text-textColor placeholder:text-center mt-4"
                 type="number"
                 placeholder="최대금액"
-                {...register("endCost")}
+                {...register("endCost", {
+                  valueAsNumber: true,
+                })}
               />
             </div>
           </div>
