@@ -31,39 +31,44 @@ const Card = () => {
   const [cards, setMainCardInfo] = useRecoilState(mainCardInfo);
 
   const queryClient = useQueryClient();
-  const { isError, data, isFetching } = useQuery(["cards"], getMainCard, {
-    enabled: true,
-    onSuccess: data => {
-      // 성공시 호출
-      setMainCardInfo(data.data.data);
-      // setCards(data.data.data);
+  const { refetch: cardRefetch, data: cardData } = useQuery(
+    ["cards"],
+    getMainCard,
+    {
+      enabled: true,
+      onSuccess: data => {
+        setMainCardInfo(data.data.data);
+      },
+      retry: 2,
     },
-    onError: error => {},
-    retry: 2,
-  });
-  const [lessonId, setLessonId] = useState(0);
+  );
   const toggle = useRecoilValue(refetchBookmark);
+  const [lessonId, setLessonId] = useState(0);
+  const [mark, setMark] = useState<boolean>(false);
+
   const { refetch: bookmarkRefetch, data: bookmarkModiData } =
     useGetBookmarkModi(lessonId);
-  const {
-    data: bookmarkData,
-    isLoading,
-    refetch: getBookmark,
-  } = useGetBookmark(lessonId);
-  const [mark, setMark] = useState<boolean>(false);
+  const { data: bookmarkData, refetch: getBookmark } = useGetBookmark(lessonId);
+
+  useEffect(() => {
+    cardRefetch();
+  }, [toggle]);
+
+  useEffect(() => {
+    setMainCardInfo(cardData?.data.data);
+    console.log(cardData?.data.data);
+  }, [cardData]);
 
   useEffect(() => {
     if (lessonId !== 0) {
-      getBookmark();
-      setMark(bookmarkData?.data.bookmark);
+      bookmarkRefetch();
     }
-  }, [mark, bookmarkData, toggle]);
+  }, [lessonId]);
 
-  const handleLike = (lessonId: number) => {
+  const handleLike = (lessonId: any) => {
     if (localStorage.getItem("token")) {
       setLessonId(lessonId);
-      setMark(bookmarkModiData?.data.bookmark);
-      bookmarkRefetch();
+      console.log(lessonId);
     } else {
       return Swal.fire({
         text: "로그인 후 원하는 선생님을 찜 해보세요",
@@ -124,7 +129,6 @@ const Card = () => {
                       <IconRibbon />
                     </div>
                     {card.company}
-                    {isFetching && <span> (fetching...)</span>}
                   </div>
                   <div className="flex justify-start items-start w-full h-fit font-SCDream5 desktop:text-xs tablet:text-[11px] text-[8px] text-textColor ml-2  mb-2">
                     <div className="mr-1 desktop:w-4 tablet:w-3.5 w-3">

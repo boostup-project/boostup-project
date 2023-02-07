@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const getMyTutor = async () => {
+const getMyReview = async () => {
   const url = `/review`;
   return await axios.get(url, {
     baseURL: process.env.NEXT_PUBLIC_API_URL,
@@ -12,4 +12,4 @@ const getMyTutor = async () => {
   });
 };
 
-export default getMyTutor;
+export default getMyReview;

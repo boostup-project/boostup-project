@@ -174,8 +174,11 @@ const ApplyModal = ({
               type="text"
               placeholder="요청사항을 입력하세요"
               className="w-11/12 desktop:w-4/6 h-fit p-2 border border-borderColor outline-pointColor rounded-xl font-SCDream4 text-xs text-textColor tablet:text-sm "
-              {...register("requests")}
+              {...register("requests", { required: "true" })}
             />
+            <p className="w-11/12 text-xs text-negativeMessage mt-1 tablet:text-sm desktop:w-4/6">
+              {errors?.requests && <span>필수 정보입니다</span>}
+            </p>
             <div className="flex flex-row justify-center items-center w-full h-fit mt-10">
               <SmallBtn css="mr-4" onClick={onClickToggleModal}>
                 취 소

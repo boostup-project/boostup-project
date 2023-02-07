@@ -2,7 +2,6 @@ import DetailBtn from "../reuse/btn/DetailBtn";
 import { IconEmptyheart, IconFullheart } from "assets/icon";
 import ApplyModal from "./ApplyModal";
 import Swal from "sweetalert2";
-import { useQuery } from "@tanstack/react-query";
 import { useState, useCallback, useEffect } from "react";
 import useDeleteDetail from "hooks/detail/useDeleteDetail";
 import useGetBookmarkModi from "hooks/detail/useGetBookmarkModi";
@@ -12,7 +11,6 @@ import { useRecoilValue } from "recoil";
 import { refetchBookmark } from "atoms/detail/detailAtom";
 const DetailButtons = (basicInfo: any) => {
   const [isOpenModal, setOpenModal] = useState<boolean>(false);
-  const [islessonId, setIsLessonId] = useState(0);
 
   const toggle = useRecoilValue(refetchBookmark);
 
@@ -28,7 +26,6 @@ const DetailButtons = (basicInfo: any) => {
 
   useEffect(() => {
     getBookmark();
-    console.log(mark);
   }, [toggle]);
 
   useEffect(() => {

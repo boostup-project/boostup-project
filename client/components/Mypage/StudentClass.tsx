@@ -23,6 +23,7 @@ const StudentClass = () => {
     }).then(result => {
       if (result.isConfirmed) {
         mutate(suggestId);
+        refetchStudentInfo();
         return Swal.fire({
           text: "삭제가 완료되었습니다",
           icon: "success",

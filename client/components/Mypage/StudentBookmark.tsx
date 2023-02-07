@@ -17,21 +17,31 @@ const StudentBookmark = () => {
   const [lessonId, setLessonId] = useState(0);
   const { refetch: bookmarkRefetch } = useGetBookmarkModi(lessonId);
   const { data: studentBookmark, refetch: allBookmark } = useGetAllBookmark();
-
+  const [bookmarkData, setBookmarkData] = useState<any>();
   const toggle = useRecoilValue(refetchBookmark);
+
   useEffect(() => {
     allBookmark();
-    console.log(studentBookmark?.data.data);
   }, [toggle]);
 
+  useEffect(() => {
+    setBookmarkData(studentBookmark?.data.data);
+    console.log(bookmarkData);
+  }, [studentBookmark]);
+
+  useEffect(() => {
+    if (lessonId !== 0) {
+      bookmarkRefetch();
+    }
+  }, [lessonId]);
   const saveBookmark = (lessonId: any) => {
-    bookmarkRefetch(lessonId);
+    setLessonId(lessonId);
   };
   return (
     <>
-      <div className="mt-6 flex flex-col w-full">
+      <div className="mt-6 flex flex-col w-full font-SCDream4">
         <div className="w-full">
-          {studentBookmark?.data.data.map((bookmark: any) => (
+          {bookmarkData?.map((bookmark: any) => (
             <div className="flex flex-row h-fit w-full rounded-lg border border-borderColor mt-3">
               {/* {Left} */}
               <Link
@@ -39,7 +49,7 @@ const StudentBookmark = () => {
                 className="flex desktop:w-1/4 justify-center items-center "
               >
                 <img
-                  className="flex desktop:w-[200px] tablet:w-[150px] w-[100px] object-cover border border-borderColor rounded-xl m-3"
+                  className="flex desktop:w-[200px] tablet:w-[150px] w-[100px] desktop:h-[200px] tablet:h-[150px] h-[100px] object-cover border border-borderColor rounded-xl m-3"
                   src={bookmark.image}
                 ></img>
               </Link>

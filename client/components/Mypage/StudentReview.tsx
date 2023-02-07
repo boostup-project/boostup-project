@@ -12,7 +12,7 @@ const StudentReview = () => {
   console.log(MyReview?.data.data);
   return (
     <>
-      <div className="mt-6 flex flex-col w-full">
+      <div className="mt-6 flex flex-col w-full font-SCDream4">
         <div className="w-full">
           {MyReview?.data.data.map((review: any) => (
             <div className="flex flex-row h-fit w-full rounded-lg border border-borderColor mt-3">
@@ -37,7 +37,7 @@ const StudentReview = () => {
                   {review.title}
                 </div>
                 <div className="flex desktop:text-base tablet:text-sm text-[12px]">
-                  만족도 {"★ ".repeat(5)}
+                  만족도 {"★ ".repeat(review.score)}
                 </div>
                 <div className="flex desktop:text-base tablet:text-sm text-[12px] desktop:mt-3 tablet:mt-2">
                   {review.comment}
@@ -52,7 +52,7 @@ const StudentReview = () => {
                   ~{review.endTime?.slice(0, 10)}
                 </div>
                 <div className="flex text-borderColor desktop:text-lg tablet:text-base text-[14px]">
-                  {review.createdAt}
+                  {review.createdAt?.slice(0, 10)}
                 </div>
                 <div className="flex mt-5">
                   <button className="text text-pointColor m-2 desktop:text-base tablet:text-sm text-[10px]">

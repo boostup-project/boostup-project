@@ -35,13 +35,6 @@ const ReviewModal = ({
 
   const { mutate, isSuccess, isError } = usePostReview();
   const onSubmit = (e: Review) => {
-    if (e.score === null) {
-      Swal.fire({
-        title: "별점을 입력해 주세요.",
-        icon: "warning",
-        confirmButtonColor: "#3085d6",
-      });
-    }
     const reviewData = {
       score: e.score,
       comment: e.comment,
@@ -94,7 +87,7 @@ const ReviewModal = ({
                 className="peer hidden"
                 id="value5"
                 value="5"
-                {...register("score")}
+                {...register("score", { required: "true" })}
               />
               <label
                 htmlFor="value5"
@@ -107,7 +100,7 @@ const ReviewModal = ({
                 className="peer hidden"
                 id="value4"
                 value="4"
-                {...register("score")}
+                {...register("score", { required: "true" })}
               />
               <label
                 htmlFor="value4"
@@ -120,7 +113,7 @@ const ReviewModal = ({
                 className="peer hidden"
                 id="value3"
                 value="3"
-                {...register("score")}
+                {...register("score", { required: "true" })}
               />
               <label
                 htmlFor="value3"
@@ -133,7 +126,7 @@ const ReviewModal = ({
                 className="peer hidden"
                 id="value2"
                 value="2"
-                {...register("score")}
+                {...register("score", { required: "true" })}
               />
               <label
                 htmlFor="value2"
@@ -146,7 +139,7 @@ const ReviewModal = ({
                 className="peer hidden"
                 id="value1"
                 value="1"
-                {...register("score")}
+                {...register("score", { required: "true" })}
               />
               <label
                 htmlFor="value1"
