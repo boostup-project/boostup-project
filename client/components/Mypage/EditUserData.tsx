@@ -19,7 +19,7 @@ interface MemberEditData {
   profileImg: FileList;
 }
 
-const EditUserDataModal = ({ editProfile }: Props) => {
+const EditUserData = ({ editProfile }: Props) => {
   const [duplicationName, setDuplicationName] = useState("");
   const [previewImg, setPreviewImg] = useState<string>("");
   const { mutate, data, isSuccess } = usePostNameCheck();
@@ -171,4 +171,4 @@ const EditUserDataModal = ({ editProfile }: Props) => {
   );
 };
 
-export default EditUserDataModal;
+export default EditUserData;

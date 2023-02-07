@@ -1,6 +1,6 @@
 import { IconMail, IconProfile } from "assets/icon";
 import { useState, useEffect } from "react";
-import EditUserDataModal from "./EditUserData";
+import EditUserData from "./EditUserData";
 import EditUserPwd from "./EditUserPwd";
 
 const MypageInfo = () => {
@@ -61,7 +61,7 @@ const MypageInfo = () => {
             </button>
           </div>
         </div>
-        {isMemberEdit && <EditUserDataModal editProfile={editProfile} />}
+        {isMemberEdit && <EditUserData editProfile={editProfile} />}
         {isPwdEdit && <EditUserPwd editPWd={editPWd} />}
       </div>
     </>
