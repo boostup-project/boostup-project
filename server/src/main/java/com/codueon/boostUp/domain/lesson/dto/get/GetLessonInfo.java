@@ -1,6 +1,6 @@
-package com.codueon.boostUp.domain.lesson.dto.Get;
+package com.codueon.boostUp.domain.lesson.dto.get;
 
-import com.codueon.boostUp.domain.lesson.dto.etc.CareerImageVO;
+import com.codueon.boostUp.domain.lesson.dto.utils.CareerImageVO;
 import com.codueon.boostUp.domain.lesson.entity.LessonInfo;
 import lombok.Builder;
 import lombok.Getter;

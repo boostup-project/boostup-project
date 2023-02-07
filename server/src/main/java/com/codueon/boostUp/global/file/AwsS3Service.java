@@ -30,10 +30,9 @@ public class AwsS3Service {
 
     public List<UploadFile> uploadFileList(List<MultipartFile> multipartFiles, String dir) {
         List<UploadFile> fileList = new ArrayList<>();
-        if (multipartFiles.isEmpty()) {
+        if (multipartFiles == null) {
             return fileList;
         }
-
         multipartFiles.forEach(file -> {
             String fileName = createFileName(file.getOriginalFilename());
             ObjectMetadata objectMetadata = new ObjectMetadata();

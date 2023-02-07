@@ -1,7 +1,7 @@
 package com.codueon.boostUp.domain.lesson.controller;
 
 
-import com.codueon.boostUp.domain.lesson.dto.Patch.PatchLessonCurriculum;
+import com.codueon.boostUp.domain.lesson.dto.patch.PatchLessonCurriculum;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
