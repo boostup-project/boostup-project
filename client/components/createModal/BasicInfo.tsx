@@ -241,7 +241,9 @@ const BasicInfo = ({ basicInfo, setBasicInfo, toWrite, setStep }: Props) => {
                       <input
                         type="checkbox"
                         value={el}
-                        {...register("languages", { required: "true" })}
+                        {...register("languages", {
+                          required: "필수정보입니다",
+                        })}
                         defaultChecked={
                           [...(basicInfo.languages as any)].includes(el)
                             ? true
@@ -252,7 +254,9 @@ const BasicInfo = ({ basicInfo, setBasicInfo, toWrite, setStep }: Props) => {
                       <input
                         type="checkbox"
                         value={el}
-                        {...register("languages", { required: "true" })}
+                        {...register("languages", {
+                          required: "필수정보입니다",
+                        })}
                       />
                     )}
                     {el}
@@ -262,6 +266,9 @@ const BasicInfo = ({ basicInfo, setBasicInfo, toWrite, setStep }: Props) => {
             }
           })}
         </div>
+        <p className="w-11/12 text-xs text-negativeMessage mt-1 tablet:text-sm desktop:w-4/6">
+          {errors?.language && <span>필수 정보입니다</span>}
+        </p>
         <div className="w-11/12 list h-fit flex flex-row items-start mt-3 desktop:w-4/6">
           {langArr.map((el: string, idx: number) => {
             if (idx > 3) {
@@ -272,7 +279,9 @@ const BasicInfo = ({ basicInfo, setBasicInfo, toWrite, setStep }: Props) => {
                       <input
                         type="checkbox"
                         value={el}
-                        {...register("languages", { required: "true" })}
+                        {...register("languages", {
+                          required: "필수정보입니다",
+                        })}
                         defaultChecked={
                           [...(basicInfo.languages as any)].includes(el)
                             ? true
@@ -283,7 +292,9 @@ const BasicInfo = ({ basicInfo, setBasicInfo, toWrite, setStep }: Props) => {
                       <input
                         type="checkbox"
                         value={el}
-                        {...register("languages", { required: "true" })}
+                        {...register("languages", {
+                          required: "필수정보입니다",
+                        })}
                       />
                     )}
 
@@ -295,7 +306,7 @@ const BasicInfo = ({ basicInfo, setBasicInfo, toWrite, setStep }: Props) => {
           })}
         </div>
         <p className="w-11/12 text-xs text-negativeMessage mt-1 tablet:text-sm desktop:w-4/6">
-          {errors?.language && <span>필수 정보입니다</span>}
+          {errors?.languages && <span>필수 정보입니다</span>}
         </p>
         <div className="flex flex-row justify-start items-start w-11/12 h-fit font-SCDream5 text-sm text-textColor mt-4 mb-2 desktop:w-4/6">
           재직 회사/학교 <div className="text-pointColor">*</div>
