@@ -15,7 +15,7 @@ function setAuthorization() {
 }
 
 function clickButton() {
-    let socket = new SockJS('https://codueon.shop/ws/chat');
+    let socket = new SockJS("https://codueon.shop/ws/chat");
     stompClient = Stomp.over(socket);
     let headers = {Authorization : localStorage.getItem('access_token')};
     stompClient.connect(headers, (frame) => {});

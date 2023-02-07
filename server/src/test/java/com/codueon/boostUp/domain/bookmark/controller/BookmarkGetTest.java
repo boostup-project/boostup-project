@@ -101,6 +101,8 @@ public class BookmarkGetTest extends BookmarkControllerTest {
                 .andExpect(jsonPath("$.data[0].title").value(bookmarkInfo.getTitle()))
                 .andExpect(jsonPath("$.data[0].name").value(bookmarkInfo.getName()))
                 .andExpect(jsonPath("$.data[0].cost").value(bookmarkInfo.getCost()))
+                .andExpect(jsonPath("$.data[0].career").value(bookmarkInfo.getCareer()))
+                .andExpect(jsonPath("$.data[0].company").value(bookmarkInfo.getCompany()))
                 .andExpect(jsonPath("$.data[0].languages[0]").value("Javascript"))
                 .andExpect(jsonPath("$.data[0].address[0]").value("강남구"))
                 .andDo(document("북마크 마이페이지 조회",
@@ -118,7 +120,9 @@ public class BookmarkGetTest extends BookmarkControllerTest {
                                         fieldWithPath("data[].title").type(JsonFieldType.STRING).description("과외 타이틀"),
                                         fieldWithPath("data[].name").type(JsonFieldType.STRING).description("강사 이름"),
                                         fieldWithPath("data[].cost").type(JsonFieldType.NUMBER).description("과외 가격"),
-                                        fieldWithPath("data[].languages").type(JsonFieldType.ARRAY).description("과외 가능 언어"),
+                                        fieldWithPath("data[].career").type(JsonFieldType.NUMBER).description("과외 가능 주소"),
+                                        fieldWithPath("data[].company").type(JsonFieldType.STRING).description("경력"),
+                                        fieldWithPath("data[].languages").type(JsonFieldType.ARRAY).description("재직 회사"),
                                         fieldWithPath("data[].address").type(JsonFieldType.ARRAY).description("과외 가능 주소"),
 
                                         fieldWithPath("pageInfo").type(JsonFieldType.OBJECT).description("페이지 정보"),

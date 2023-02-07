@@ -58,7 +58,7 @@ public class DataForTest {
     public Member getMember1() {
         Member member = Member.builder()
                 .id(1L)
-                .name("김길동")
+                .name("김길동입니다")
                 .email("gddong@gmail.com")
                 .password("ghdrlfehd1!")
                 .roles(List.of("USER"))
@@ -70,7 +70,7 @@ public class DataForTest {
     public Member getMember2() {
         Member member = Member.builder()
                 .id(2L)
-                .name("조길동")
+                .name("조길동입니다")
                 .email("jddong@gmail.com")
                 .password("ghdrlfehd1!")
                 .roles(List.of("USER"))
