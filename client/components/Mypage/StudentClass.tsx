@@ -1,6 +1,7 @@
 import { IconRibbon, IconWon, IconPaper, IconPlace } from "assets/icon";
 import useGetStudentInfo from "hooks/mypage/useGetStudentInfo";
 import useDeleteApply from "hooks/mypage/useDeleteApply";
+import useDeleteFinishedClass from "hooks/mypage/useDeleteFinishedClass";
 import Swal from "sweetalert2";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -13,7 +14,8 @@ const StudentClass = () => {
     useGetStudentInfo();
   const [openReview, setOpenReview] = useState<boolean>(false);
   const [openAccept, setOpenAccept] = useState<boolean>(false);
-  const { mutate } = useDeleteApply();
+
+  const { mutate: deleteApplication } = useDeleteApply();
   const deleteApply = (suggestId: number) => {
     Swal.fire({
       title: "신청을 취소하시겠습니까?",
@@ -22,7 +24,7 @@ const StudentClass = () => {
       confirmButtonColor: "#3085d6",
     }).then(result => {
       if (result.isConfirmed) {
-        mutate(suggestId);
+        deleteApplication(suggestId);
         refetchStudentInfo();
         return Swal.fire({
           text: "삭제가 완료되었습니다",
@@ -32,6 +34,39 @@ const StudentClass = () => {
       }
     });
   };
+
+  const { mutate: deleteClass, isSuccess, isError } = useDeleteFinishedClass();
+  const deleteFinishedClass = (suggestId: number) => {
+    Swal.fire({
+      title: "신청을 취소하시겠습니까?",
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+    }).then(result => {
+      if (result.isConfirmed) {
+        deleteClass(suggestId);
+        refetchStudentInfo();
+      }
+    });
+  };
+
+  useEffect(() => {
+    if (isSuccess) {
+      Swal.fire({
+        text: "삭제가 완료되었습니다",
+        icon: "success",
+        confirmButtonColor: "#3085d6",
+      });
+    }
+    if (isError) {
+      Swal.fire({
+        text: "다시 삭제해주세요",
+        icon: "warning",
+        confirmButtonColor: "#3085d6",
+      });
+    }
+  }, [isSuccess, isError]);
+
   const toPayment = (suggestId: number) => {
     router.push(`/shop/${suggestId}`);
   };
@@ -192,13 +227,19 @@ const StudentClass = () => {
                       >
                         후기작성
                       </button>
-                      <button className="text text-negativeMessage m-2 font-SCDream3 desktop:text-base tablet:text-sm text-[10px]">
+                      <button
+                        className="text text-negativeMessage m-2 font-SCDream3 desktop:text-base tablet:text-sm text-[10px]"
+                        onClick={() => deleteFinishedClass(tutor.suggestId)}
+                      >
                         삭제하기
                       </button>
                     </>
                   ) : tutor.status === "과외 종료" &&
                     tutor.reviewCheck === true ? (
-                    <button className="text text-negativeMessage m-2 font-SCDream3 desktop:text-base tablet:text-sm text-[10px]">
+                    <button
+                      className="text text-negativeMessage m-2 font-SCDream3 desktop:text-base tablet:text-sm text-[10px]"
+                      onClick={() => deleteFinishedClass(tutor.suggestId)}
+                    >
                       삭제하기
                     </button>
                   ) : (
