@@ -9,67 +9,61 @@ import {
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-//import useGetMainCard from "./useGetMainCard";
+// import useGetMainCard from "./useGetMainCard";
 import getMainCard from "apis/card/getMainCard";
 import {
-  dehydrate,
   QueryClient,
   QueryClientProvider,
   useQuery,
   useQueryClient,
 } from "@tanstack/react-query";
 import useGetBookmarkModi from "hooks/detail/useGetBookmarkModi";
+import useGetBookmark from "hooks/detail/useGetBookmark";
 import Swal from "sweetalert2";
 import { mainCardInfo } from "atoms/main/mainAtom";
 import { useRouter } from "next/router";
-import { useSetRecoilState, useRecoilState } from "recoil";
+import { useSetRecoilState, useRecoilState, useRecoilValue } from "recoil";
+import { refetchBookmark } from "atoms/detail/detailAtom";
 const client = new QueryClient();
 
-// export async function getStaticProps() {
-//   const queryClient = new QueryClient();
-//   await queryClient.prefetchQuery("cards", () => getMainCard());
-
-//   return {
-//     props: {
-//       dehydratedState: dehydrate(queryClient),
-//     },
-//   };
-// }
-
 const Card = () => {
-  // const [cards, setCards] = useState<any>();
   const router = useRouter();
   const [cards, setMainCardInfo] = useRecoilState(mainCardInfo);
 
   const queryClient = useQueryClient();
-  const { isLoading, isError, data, isFetching } = useQuery(
-    ["cards"],
-    getMainCard,
-    {
-      enabled: true,
-      onSuccess: data => {
-        // 성공시 호출
-        setMainCardInfo(data.data.data);
-        // setCards(data.data.data);
-      },
-      onError: error => {},
-      retry: 2,
+  const { isError, data, isFetching } = useQuery(["cards"], getMainCard, {
+    enabled: true,
+    onSuccess: data => {
+      // 성공시 호출
+      setMainCardInfo(data.data.data);
+      // setCards(data.data.data);
     },
-  );
+    onError: error => {},
+    retry: 2,
+  });
   const [lessonId, setLessonId] = useState(0);
-  const { refetch: bookmarkRefetch, data: bookmarkData } =
+  const toggle = useRecoilValue(refetchBookmark);
+  const { refetch: bookmarkRefetch, data: bookmarkModiData } =
     useGetBookmarkModi(lessonId);
+  const {
+    data: bookmarkData,
+    isLoading,
+    refetch: getBookmark,
+  } = useGetBookmark(lessonId);
+  const [mark, setMark] = useState<boolean>(false);
 
   useEffect(() => {
     if (lessonId !== 0) {
+      getBookmark();
+      setMark(bookmarkData?.data.bookmark);
     }
-  }, [lessonId, bookmarkData]);
+  }, [mark, bookmarkData, toggle]);
 
   const handleLike = (lessonId: number) => {
     if (localStorage.getItem("token")) {
       setLessonId(lessonId);
+      setMark(bookmarkModiData?.data.bookmark);
       bookmarkRefetch();
-      queryClient.invalidateQueries(["get/Bookmark"]);
     } else {
       return Swal.fire({
         text: "로그인 후 원하는 선생님을 찜 해보세요",

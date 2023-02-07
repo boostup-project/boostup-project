@@ -18,8 +18,7 @@ const DetailButtons = (basicInfo: any) => {
 
   const router = useRouter();
   const lessonId = Number(router.query.id);
-  const { refetch: bookmarkRefetch, data: bookmarkModiData } =
-    useGetBookmarkModi(lessonId);
+  const { refetch: bookmarkRefetch } = useGetBookmarkModi(lessonId);
   const {
     data: bookmarkData,
     isLoading,
@@ -29,23 +28,31 @@ const DetailButtons = (basicInfo: any) => {
 
   useEffect(() => {
     getBookmark();
-    setMark(bookmarkData?.data.bookmark);
     console.log(mark);
-  }, [mark, bookmarkData, toggle]);
+  }, [toggle]);
+
+  useEffect(() => {
+    setMark(bookmarkData?.data.bookmark);
+  }, [bookmarkData]);
 
   const onClickToggleModal = useCallback(() => {
     setOpenModal(!isOpenModal);
-    console.log(bookmarkData?.data.bookmark);
   }, [isOpenModal]);
 
   const chatNow = () => {
     return;
   };
 
-  const saveBookmark = () => {
-    console.log(mark);
-    setMark(bookmarkModiData?.data.bookmark);
-    bookmarkRefetch();
+  const saveBookmark = (lessonId: any) => {
+    if (localStorage.getItem("token")) {
+      bookmarkRefetch(lessonId);
+    } else {
+      return Swal.fire({
+        text: "로그인 후 원하는 선생님을 찜 해보세요",
+        icon: "warning",
+        confirmButtonColor: "#3085d6",
+      });
+    }
   };
 
   const { mutate } = useDeleteDetail();
@@ -83,7 +90,11 @@ const DetailButtons = (basicInfo: any) => {
           실시간 채팅
         </DetailBtn>
         <div className="relative justify-center items-center w-full flex flex-col">
-          <DetailBtn bold={false} remove={false} onClick={saveBookmark}>
+          <DetailBtn
+            bold={false}
+            remove={false}
+            onClick={() => saveBookmark(lessonId)}
+          >
             <div className="flex w-full h-1/3 absolute justify-center items-center">
               {mark ? (
                 <IconFullheart width="25" heigth="25" />

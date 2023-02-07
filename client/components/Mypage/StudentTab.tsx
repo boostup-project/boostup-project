@@ -5,21 +5,22 @@ import MypageUnderContainer from "components/reuse/container/MypageUnderContaine
 import StudentClass from "./StudentClass";
 import StudentBookmark from "./StudentBookmark";
 import StudentReview from "./StudentReview";
+import useGetStudentInfo from "hooks/mypage/useGetStudentInfo";
+import useGetAllBookmark from "hooks/mypage/useGetAllBookmark";
 const StudentTab = () => {
   const [tab, setTab] = useState(1);
 
   const handleTabClick = (id: number) => {
     setTab(id);
   };
+  const { refetch: refetchStudentInfo } = useGetStudentInfo();
+  const { refetch: allBookmark } = useGetAllBookmark();
   useEffect(() => {
-    // refetch 실행위치
     // tab이 바뀔때마다 refetch 실행
-    // console.log(lessonId);
-
     if (tab === 1) {
-      // teacherTab refetch
+      refetchStudentInfo();
     } else if (tab === 2) {
-      // StudentTab refetch
+      allBookmark();
     } else if (tab === 3) {
       // ChatList refetch
     }

@@ -1,16 +1,18 @@
 import { IconRibbon, IconWon, IconPaper, IconPlace } from "assets/icon";
 import useGetStudentInfo from "hooks/mypage/useGetStudentInfo";
-import { useEffect } from "react";
 import useDeleteApply from "hooks/mypage/useDeleteApply";
 import Swal from "sweetalert2";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import { useState, useCallback, useEffect } from "react";
+import ReviewModal from "./ReviewModal";
 const StudentClass = () => {
   const router = useRouter();
 
   const { refetch: refetchStudentInfo, data: studentInfoData } =
     useGetStudentInfo();
-
+  const [openReview, setOpenReview] = useState<boolean>(false);
+  const [openAccept, setOpenAccept] = useState<boolean>(false);
   const { mutate } = useDeleteApply();
   const deleteApply = (suggestId: number) => {
     Swal.fire({
@@ -34,6 +36,22 @@ const StudentClass = () => {
   };
   const toReceipt = (suggestId: number) => {
     router.push(`/shop/${suggestId}/receipt`);
+  };
+  const [suggestId, setSuggestId] = useState(0);
+  const [lessonId, setLessonId] = useState(0);
+
+  const onClickAcceptModal = useCallback(
+    (suggestId: number, lessonId: number) => {
+      setSuggestId(suggestId);
+      setLessonId(lessonId);
+      setOpenReview(prev => !prev);
+      console.log(suggestId, lessonId);
+    },
+    [openAccept],
+  );
+
+  const openReviewModal = () => {
+    setOpenReview(prev => !prev);
   };
   return (
     <>
@@ -140,20 +158,39 @@ const StudentClass = () => {
                 </div>
 
                 <div className="flex">
-                  <button className="text text-pointColor font-SCDream3 m-2 desktop:text-base tablet:text-sm text-[10px]">
-                    채팅하기
-                  </button>
                   {tutor.status === "수락 대기 중" ||
                   tutor.status === "결제 대기 중" ? (
-                    <button
-                      className="text text-negativeMessage font-SCDream3 m-2 desktop:text-base tablet:text-sm text-[10px]"
-                      onClick={() => deleteApply(tutor.suggestId)}
-                    >
-                      신청취소
-                    </button>
+                    <>
+                      <button
+                        className="text text-pointColor font-SCDream3 m-2 desktop:text-base tablet:text-sm text-[10px]"
+                        onClick={openReviewModal}
+                      >
+                        채팅하기
+                      </button>
+                      <button
+                        className="text text-negativeMessage font-SCDream3 m-2 desktop:text-base tablet:text-sm text-[10px]"
+                        onClick={() => deleteApply(tutor.suggestId)}
+                      >
+                        신청취소
+                      </button>
+                    </>
                   ) : tutor.status === "과외 종료" ? (
-                    <button className="text text-pointColor m-2 desktop:text-base tablet:text-sm text-[10px]">
-                      후기 작성
+                    <>
+                      <button
+                        className="text text-pointColor font-SCDream3 m-2 desktop:text-base tablet:text-sm text-[10px]"
+                        onClick={e =>
+                          onClickAcceptModal(tutor.suggestId, tutor.lessonId)
+                        }
+                      >
+                        후기작성
+                      </button>
+                      <button className="text text-negativeMessage m-2 font-SCDream3 desktop:text-base tablet:text-sm text-[10px]">
+                        삭제하기
+                      </button>
+                    </>
+                  ) : tutor.status === "과외 중" ? (
+                    <button className="text text-pointColor font-SCDream3 m-2 desktop:text-base tablet:text-sm text-[10px]">
+                      채팅하기
                     </button>
                   ) : (
                     <></>
@@ -162,6 +199,14 @@ const StudentClass = () => {
               </div>
             </div>
           ))}
+          {openReview && (
+            <ReviewModal
+              onClickToggleModal={onClickAcceptModal}
+              suggestId={suggestId}
+              lessonId={lessonId}
+              openDeclineModal={openReviewModal}
+            ></ReviewModal>
+          )}
         </div>
       </div>
     </>

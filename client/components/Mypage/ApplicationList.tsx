@@ -81,12 +81,7 @@ const ApplicationList = () => {
                 <div> {apply.status}</div>
               </div>
             </div>
-            {openAccept && (
-              <AcceptModal
-                onClickToggleModal={onClickAcceptModal}
-                suggestId={suggestId}
-              />
-            )}
+
             <div className="flex flex-col w-[60%] justify-center items-end">
               <div className="text text-textColor font-SCDream6 mt-2">
                 {apply.status}
@@ -126,6 +121,12 @@ const ApplicationList = () => {
           </div>
         </div>
       ))}
+      {openAccept && (
+        <AcceptModal
+          onClickToggleModal={onClickAcceptModal}
+          suggestId={suggestId}
+        />
+      )}
 
       {openDecline && (
         <DeclineModal
