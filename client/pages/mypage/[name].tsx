@@ -34,14 +34,11 @@ const Mypage = () => {
   const handleTabClick = (id: number) => {
     setTab(id);
     refetchTutorInfo;
-    console.log(tutorInfoData);
   };
   const widthSize = useWindowSize();
 
   useEffect(() => {
-    // refetch 실행위치
     // tab이 바뀔때마다 refetch 실행
-    console.log(lessonId, tab);
     if (lessonId) {
       // 요약정보 요청
     }
@@ -57,7 +54,7 @@ const Mypage = () => {
 
   return (
     <>
-      <div className="flex flex-col bg-bgColor items-center justify-center w-full h-full pt-28">
+      <div className="flex flex-col bg-bgColor items-center justify-center w-full h-full pt-4">
         {/* 내요약정보 */}
         <DetailSummeryContainer>
           <MypageInfo></MypageInfo>
@@ -88,7 +85,7 @@ const Mypage = () => {
             채팅목록
           </MypageTabBtn>
         </div>
-        <div className="desktop:min-w-[1000px] min-w-[95%] w-full h-full flex desktop:flex-row flex-col justify-center desktop:items-start items-center">
+        <div className="desktop:min-w-[1000px] min-w-[95%] desktop:min-h-[300px] w-full h-full flex desktop:flex-row flex-col justify-center desktop:items-start items-center">
           <MypageContentContainer>
             {tab === 1 && <TeacherTab></TeacherTab>}
             {tab === 2 && <StudentTab></StudentTab>}

@@ -25,9 +25,7 @@ const MypageInfo = () => {
       <div className="w-full flex flex-row justify-start items-center">
         <div className="object-cover desktop:w-[260px] tablet:w-[250px] w-[200px] h-fit flex flex-col justify-start items-start p-5 ">
           <img
-            src={
-              "https://play-lh.googleusercontent.com/38AGKCqmbjZ9OuWx4YjssAz3Y0DTWbiM5HB0ove1pNBq_o9mtWfGszjZNxZdwt_vgHo=w240-h480-rw"
-            }
+            src={""}
             // src={data.profileImage}
             alt="profile Image"
             width={200}

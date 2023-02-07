@@ -50,9 +50,6 @@ const Signup = () => {
       name,
     });
   };
-  const failSubmit = (e: any) => {
-    console.log("fail");
-  };
 
   useEffect(() => {
     if (isSuccess) {
@@ -91,10 +88,7 @@ const Signup = () => {
           회원가입 후 원하는 선생님을 찜 해보세요!
         </div>
         <AuthContainer>
-          <form
-            onSubmit={handleSubmit(onSubmit, failSubmit)}
-            className="w-full h-fit"
-          >
+          <form onSubmit={handleSubmit(onSubmit)} className="w-full h-fit">
             <div className="flex flex-col justify-center items-start w-full h-fit font-SCDream5 text-sm text-textColor mb-1">
               닉네임
             </div>
