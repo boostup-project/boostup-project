@@ -7,11 +7,18 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 public class AuthDto {
+    private Long memberId;
+    private String memberImage;
     private String name;
     private String email;
 
     @Builder
-    public AuthDto(String name, String email) {
+    public AuthDto(Long memberId,
+                   String memberImage,
+                   String name,
+                   String email) {
+        this.memberId = memberId;
+        this.memberImage = memberImage;
         this.name = name;
         this.email = email;
     }
