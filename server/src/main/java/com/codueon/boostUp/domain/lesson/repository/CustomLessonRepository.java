@@ -1,8 +1,8 @@
 package com.codueon.boostUp.domain.lesson.repository;
 
-import com.codueon.boostUp.domain.lesson.dto.Get.GetLesson;
-import com.codueon.boostUp.domain.lesson.dto.Get.GetMainPageLesson;
-import com.codueon.boostUp.domain.lesson.dto.Post.PostSearchLesson;
+import com.codueon.boostUp.domain.lesson.dto.get.GetLesson;
+import com.codueon.boostUp.domain.lesson.dto.get.GetMainPageLesson;
+import com.codueon.boostUp.domain.lesson.dto.post.PostSearchLesson;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 

@@ -1,12 +1,12 @@
 package com.codueon.boostUp.domain.lesson.service;
 
 import com.codueon.boostUp.domain.bookmark.repository.BookmarkRepository;
-import com.codueon.boostUp.domain.lesson.dto.Get.*;
-import com.codueon.boostUp.domain.lesson.dto.Patch.PatchLessonCurriculum;
-import com.codueon.boostUp.domain.lesson.dto.Patch.PostLessonDetailEdit;
-import com.codueon.boostUp.domain.lesson.dto.Patch.PostLessonInfoEdit;
-import com.codueon.boostUp.domain.lesson.dto.Post.PostLesson;
-import com.codueon.boostUp.domain.lesson.dto.Post.PostSearchLesson;
+import com.codueon.boostUp.domain.lesson.dto.get.*;
+import com.codueon.boostUp.domain.lesson.dto.patch.PatchLessonCurriculum;
+import com.codueon.boostUp.domain.lesson.dto.patch.PostLessonDetailEdit;
+import com.codueon.boostUp.domain.lesson.dto.patch.PostLessonInfoEdit;
+import com.codueon.boostUp.domain.lesson.dto.post.PostLesson;
+import com.codueon.boostUp.domain.lesson.dto.post.PostSearchLesson;
 import com.codueon.boostUp.domain.lesson.entity.*;
 import com.codueon.boostUp.domain.lesson.repository.LessonRepository;
 import com.codueon.boostUp.domain.member.entity.Member;
@@ -299,12 +299,15 @@ public class LessonService {
 
         List<Long> careerImages = postLessonDetailEdit.getCareerImages();
         List<CareerImage> careerImageList =  new ArrayList<>(updateLessonDetail.getCareerImages());
-
-        for (int i = 0; i < careerImages.size(); i++) {
-            for (int j = 0; j < careerImageList.size(); j++) {
-                if (careerImageList.get(j).getId() == careerImages.get(i)) {
-                    careerImageList.remove(j);
-                    break;
+        if (careerImageList == null) {
+            lessonDbService.saveLessonInfo(updateLessonDetail);
+        } else {
+            for (int i = 0; i < careerImages.size(); i++) {
+                for (int j = 0; j < careerImageList.size(); j++) {
+                    if (careerImageList.get(j).getId() == careerImages.get(i)) {
+                        careerImageList.remove(j);
+                        break;
+                    }
                 }
             }
         }
@@ -335,13 +338,16 @@ public class LessonService {
         List<CareerImage> careerImageList = new ArrayList<>(updateLessonDetail.getCareerImages());
 
         String dir = "careerImage";
-
-        for (int i = 0; i < careerImages.size(); i++) {
-            for (int j = 0; j < careerImageList.size(); j++) {
-                if (careerImageList.get(j).getId() == careerImages.get(i)) {
-                    awsS3Service.delete(careerImageList.get(j).getFilePath(), dir);
-                    careerImageList.remove(j);
-                    break;
+        if (careerImageList == null) {
+            lessonDbService.saveLessonInfo(updateLessonDetail);
+        } else {
+            for (int i = 0; i < careerImages.size(); i++) {
+                for (int j = 0; j < careerImageList.size(); j++) {
+                    if (careerImageList.get(j).getId() == careerImages.get(i)) {
+                        awsS3Service.delete(careerImageList.get(j).getFilePath(), dir);
+                        careerImageList.remove(j);
+                        break;
+                    }
                 }
             }
         }

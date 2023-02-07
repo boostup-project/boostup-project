@@ -1,16 +1,16 @@
 package com.codueon.boostUp.domain.lesson.controller;
 
 import com.codueon.boostUp.domain.dto.MultiResponseDto;
-import com.codueon.boostUp.domain.lesson.dto.Get.GetLesson;
-import com.codueon.boostUp.domain.lesson.dto.Get.GetLessonCurriculum;
-import com.codueon.boostUp.domain.lesson.dto.Get.GetLessonInfo;
-import com.codueon.boostUp.domain.lesson.dto.Get.GetMainPageLesson;
-import com.codueon.boostUp.domain.lesson.dto.Patch.PatchLessonCurriculum;
-import com.codueon.boostUp.domain.lesson.dto.Patch.PostLessonDetailEdit;
-import com.codueon.boostUp.domain.lesson.dto.Patch.PostLessonInfoEdit;
-import com.codueon.boostUp.domain.lesson.dto.Post.PostLesson;
-import com.codueon.boostUp.domain.lesson.dto.Post.PostSearchLesson;
-import com.codueon.boostUp.domain.lesson.dto.etc.WrapUrl;
+import com.codueon.boostUp.domain.lesson.dto.get.GetLesson;
+import com.codueon.boostUp.domain.lesson.dto.get.GetLessonCurriculum;
+import com.codueon.boostUp.domain.lesson.dto.get.GetLessonInfo;
+import com.codueon.boostUp.domain.lesson.dto.get.GetMainPageLesson;
+import com.codueon.boostUp.domain.lesson.dto.patch.PatchLessonCurriculum;
+import com.codueon.boostUp.domain.lesson.dto.patch.PostLessonDetailEdit;
+import com.codueon.boostUp.domain.lesson.dto.patch.PostLessonInfoEdit;
+import com.codueon.boostUp.domain.lesson.dto.post.PostLesson;
+import com.codueon.boostUp.domain.lesson.dto.post.PostSearchLesson;
+import com.codueon.boostUp.domain.lesson.dto.utils.WrapUrl;
 import com.codueon.boostUp.domain.lesson.service.LessonService;
 import com.codueon.boostUp.global.security.token.JwtAuthenticationToken;
 import lombok.RequiredArgsConstructor;

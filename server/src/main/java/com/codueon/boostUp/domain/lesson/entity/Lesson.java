@@ -1,7 +1,7 @@
 package com.codueon.boostUp.domain.lesson.entity;
 
-import com.codueon.boostUp.domain.lesson.dto.Post.PostLesson;
-import com.codueon.boostUp.domain.lesson.dto.Patch.PostLessonInfoEdit;
+import com.codueon.boostUp.domain.lesson.dto.post.PostLesson;
+import com.codueon.boostUp.domain.lesson.dto.patch.PostLessonInfoEdit;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 

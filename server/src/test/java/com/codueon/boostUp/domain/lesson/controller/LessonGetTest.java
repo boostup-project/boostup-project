@@ -1,9 +1,9 @@
 package com.codueon.boostUp.domain.lesson.controller;
 
-import com.codueon.boostUp.domain.lesson.dto.Get.GetLesson;
-import com.codueon.boostUp.domain.lesson.dto.Get.GetLessonCurriculum;
-import com.codueon.boostUp.domain.lesson.dto.Get.GetLessonInfo;
-import com.codueon.boostUp.domain.lesson.dto.Post.PostSearchLesson;
+import com.codueon.boostUp.domain.lesson.dto.get.GetLesson;
+import com.codueon.boostUp.domain.lesson.dto.get.GetLessonCurriculum;
+import com.codueon.boostUp.domain.lesson.dto.get.GetLessonInfo;
+import com.codueon.boostUp.domain.lesson.dto.post.PostSearchLesson;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
