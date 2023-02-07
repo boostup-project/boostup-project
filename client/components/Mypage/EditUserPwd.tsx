@@ -1,7 +1,7 @@
 import AuthBtn from "components/reuse/btn/AuthBtn";
 import CreateModalContainer from "components/reuse/container/CreateModalContainer";
 import ModalBackDrop from "components/reuse/container/ModalBackDrop";
-import usePostPwdCheck from "hooks/detail/usePostPwdCheck";
+import usePostPwdCheck from "hooks/mypage/usePostPwdCheck";
 import { useEffect } from "react";
 import { ChangeEvent, useState } from "react";
 import { useForm } from "react-hook-form";
