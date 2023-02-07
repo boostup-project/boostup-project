@@ -421,6 +421,7 @@ public class SuggestGetTest extends SuggestControllerTest{
                 .andExpect(jsonPath("$.data[0].career").value(suggestList.get(0).getCareer()))
                 .andExpect(jsonPath("$.data[0].cost").value(suggestList.get(0).getCost()))
                 .andExpect(jsonPath("$.data[0].status").value(suggestList.get(0).getStatus()))
+                .andExpect(jsonPath("$.data[0].reviewCheck").value(false))
                 .andExpect(jsonPath("$.data[0].languages[0]").value("Javascript"))
                 .andExpect(jsonPath("$.data[0].languages[1]").value("Python"))
                 .andExpect(jsonPath("$.data[0].languages[2]").value("Go"))
