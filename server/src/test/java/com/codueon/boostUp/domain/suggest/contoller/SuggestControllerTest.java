@@ -190,6 +190,7 @@ class SuggestControllerTest {
                 fieldWithPath("data[].career").type(JsonFieldType.NUMBER).description("강사 경력"),
                 fieldWithPath("data[].cost").type(JsonFieldType.NUMBER).description("회당 가격"),
                 fieldWithPath("data[].status").type(JsonFieldType.STRING).description("신청 상태"),
+                fieldWithPath("data[].reviewCheck").type(JsonFieldType.BOOLEAN).description("리뷰 여부"),
                 fieldWithPath("data[].startTime").type(JsonFieldType.STRING).description("과외 시작 날짜").ignored(),
                 fieldWithPath("data[].endTime").type(JsonFieldType.STRING).description("과외 종료 날짜").ignored(),
 

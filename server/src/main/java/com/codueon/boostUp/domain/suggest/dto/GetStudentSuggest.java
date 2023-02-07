@@ -26,6 +26,7 @@ public class GetStudentSuggest {
     private String status;
     private LocalDateTime startTime;
     private LocalDateTime endTime;
+    private boolean reviewCheck;
 
     @Builder
     @QueryProjection
@@ -34,7 +35,8 @@ public class GetStudentSuggest {
                              SuggestStatus status,
                              LocalDateTime startTime,
                              LocalDateTime endTime,
-                             Lesson lesson) {
+                             Lesson lesson,
+                             boolean reviewCheck) {
         this.suggestId = suggestId;
         this.lessonId = lesson.getId();
         this.name = name;
@@ -48,5 +50,6 @@ public class GetStudentSuggest {
         this.status = status.getStatus();
         this.startTime = startTime;
         this.endTime = endTime;
+        this.reviewCheck = reviewCheck;
     }
 }
