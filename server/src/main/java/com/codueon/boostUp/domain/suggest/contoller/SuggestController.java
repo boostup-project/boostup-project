@@ -15,7 +15,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import static com.codueon.boostUp.domain.suggest.utils.SuggestConstants.CANCELED_PAY_MESSAGE;
@@ -103,11 +102,9 @@ public class SuggestController {
      * @author LeeGoh
      */
     @GetMapping("/suggest/{suggest-id}/kakao/payment")
-    public ResponseEntity<Message<?>> orderKakaoPayment(@PathVariable("suggest-id") Long suggestId,
-                                                        HttpServletRequest request) {
+    public ResponseEntity<Message<?>> orderKakaoPayment(@PathVariable("suggest-id") Long suggestId) {
 
-        String requestUrl = request.getRequestURL().toString().replace(request.getRequestURI(), "");
-        Message<?> message = suggestService.getKaKapPayUrl(suggestId, requestUrl);
+        Message<?> message = suggestService.getKaKapPayUrl(suggestId);
         if (message.getData() == null) suggestService.getFailedPayMessage();
         return ResponseEntity.ok().body(message);
     }
@@ -120,11 +117,9 @@ public class SuggestController {
      */
     @GetMapping("/suggest/{suggest-id}/toss/payment/{payment-id}")
     public ResponseEntity<Message<?>> orderTossPayment(@PathVariable("suggest-id") Long suggestId,
-                                                       @PathVariable("payment-id") int paymentId,
-                                                       HttpServletRequest request) {
+                                                       @PathVariable("payment-id") int paymentId) {
 
-        String requestUrl = request.getRequestURL().toString().replace(request.getRequestURI(), "");
-        Message<?> message = suggestService.getTossPayUrl(suggestId, requestUrl, paymentId);
+        Message<?> message = suggestService.getTossPayUrl(suggestId, paymentId);
         if (message.getData() == null) suggestService.getFailedPayMessage();
         return ResponseEntity.ok().body(message);
     }

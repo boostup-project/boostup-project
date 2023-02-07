@@ -18,6 +18,7 @@ import com.codueon.boostUp.domain.suggest.toss.*;
 import com.codueon.boostUp.global.exception.BusinessLogicException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -36,6 +37,9 @@ public class SuggestService {
     private final MemberDbService memberDbService;
     private final FeignService feignService;
     private final ReviewService reviewService;
+
+    @Value("${pay.request-url}")
+    private String requestUrl;
 
     /**
      * 신청 생성 메서드
@@ -143,12 +147,11 @@ public class SuggestService {
     /**
      * Kakao 결제 URL 요청 메서드
      * @param suggestId 신청 식별자
-     * @param requestUrl 요청 URL
      * @return Message
      * @author LeeGoh
      */
     @Transactional
-    public Message getKaKapPayUrl(Long suggestId, String requestUrl) {
+    public Message getKaKapPayUrl(Long suggestId) {
         Suggest findSuggest = suggestDbService.ifExistsReturnSuggest(suggestId);
 
         if (!findSuggest.getSuggestStatus().equals(PAY_IN_PROGRESS)) {
@@ -178,12 +181,11 @@ public class SuggestService {
      * Toss 결제 URL 요청 메서드
      * @param suggestId 신청 식별자
      * @param paymentId 결제 방법
-     * @param requestUrl 요청 URL
      * @return Message
      * @author LeeGoh
      */
     @Transactional
-    public Message getTossPayUrl(Long suggestId, String requestUrl, int paymentId) {
+    public Message getTossPayUrl(Long suggestId, int paymentId) {
         Suggest findSuggest = suggestDbService.ifExistsReturnSuggest(suggestId);
 
         if (!findSuggest.getSuggestStatus().equals(PAY_IN_PROGRESS)) {
