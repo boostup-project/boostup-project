@@ -5,6 +5,7 @@ import { ChangeEvent } from "react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
+import SmallBtn from "components/reuse/btn/SmallBtn";
 import AuthBtn from "components/reuse/btn/AuthBtn";
 import ModalBackDrop from "components/reuse/container/ModalBackDrop";
 import usePostMemberModi from "hooks/mypage/usePostMemberModi";
@@ -116,15 +117,15 @@ const EditUserData = ({ editProfile }: Props) => {
     <>
       <ModalBackDrop onClick={editProfile}>
         <CreateModalMypageContainer>
-          <div className="w-full font-SCDream7 text-borderColor desktop:w-full">
+          <div className="w-full font-SCDream7 text-lg text-textColor mt-4 desktop:w-full">
             개인정보 수정하기
           </div>
           <form
             className="w-full font-SCDream5 text-sm desktop:w-full"
             onSubmit={handleSubmit(editSubmit)}
           >
-            <div className="mt-4">
-              프로필 사진<span className="text-pointColor">*</span>
+            <div className="h-fit font-SCDream5 text-base text-textColor mt-2 mb-2">
+              프로필 사진<span className="text-pointColor ">*</span>
             </div>
             <div className="w-full flex items-center rounded-xl justify-center h-fit border tablet:w-full">
               <label className="flex flex-col w-full h-32 border-borderColor hover:bg-gray-100 hover:border-gray-300 tablet:w-full">
@@ -163,7 +164,9 @@ const EditUserData = ({ editProfile }: Props) => {
                 />
               </label>
             </div>
-            <div className="mt-6">닉네임</div>
+            <div className="h-fit font-SCDream5 text-base text-textColor mt-4 mb-2">
+              닉네임
+            </div>
             <div className="w-full flex tablet:w-full">
               <label className="w-9/12">
                 <input
@@ -191,14 +194,15 @@ const EditUserData = ({ editProfile }: Props) => {
             <p className="text-xs text-negativeMessage mt-1 tablet:text-sm">
               {errors?.name?.message}
             </p>
-            <div className="mt-12 flex justify-center w-full tablet:w-full">
-              <div
-                className="flex justify-center items-center w-1/4 py-2 bg-borderColor rounded-xl text-negativeMessage text-sm mr-5 cursor-pointer"
+            <div className="mt-10 flex flex-row justify-center w-full h-fit items-center tablet:w-full">
+              <SmallBtn
+                css="mr-4"
+                // className="flex justify-center items-center w-1/4 py-2 bg-borderColor rounded-xl text-negativeMessage text-sm mr-5 cursor-pointer"
                 onClick={editProfile}
               >
-                취소하기
-              </div>
-              <AuthBtn>변경하기</AuthBtn>
+                취 소
+              </SmallBtn>
+              <SmallBtn>변 경</SmallBtn>
             </div>
           </form>
         </CreateModalMypageContainer>
