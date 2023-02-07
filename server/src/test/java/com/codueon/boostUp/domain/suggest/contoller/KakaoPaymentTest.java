@@ -37,8 +37,7 @@ public class KakaoPaymentTest extends SuggestControllerTest{
                 .message(KAKAO_PAY_URI_MSG)
                 .build();
 
-        given(suggestService.getKaKapPayUrl(Mockito.anyLong(), Mockito.anyString()))
-                .willReturn(message);
+        given(suggestService.getKaKapPayUrl(Mockito.anyLong())).willReturn(message);
 
         ResultActions actions =
                 mockMvc.perform(
