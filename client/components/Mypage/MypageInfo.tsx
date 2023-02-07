@@ -1,13 +1,18 @@
 import { IconMail, IconProfile } from "assets/icon";
 import { useState, useEffect } from "react";
 import EditUserDataModal from "./EditUserData";
+import EditUserPwd from "./EditUserPwd";
 
 const MypageInfo = () => {
-  const [isEditOpen, setIsEditOpen] = useState(false);
+  const [isMemberEdit, setIsMemberEdit] = useState(false);
+  const [isPwdEdit, setIsPwdEdit] = useState(false);
   const [email, setEmail] = useState<string>("");
   const [name, setName] = useState<string>("");
   const editProfile = () => {
-    setIsEditOpen(prev => !prev);
+    setIsMemberEdit(prev => !prev);
+  };
+  const editPWd = () => {
+    setIsPwdEdit(prev => !prev);
   };
   useEffect(() => {
     if (localStorage) {
@@ -51,10 +56,13 @@ const MypageInfo = () => {
             <button className="mr-8 text text-pointColor" onClick={editProfile}>
               Edit
             </button>
-            <button className="mr-8 text text-pointColor">비밀번호수정</button>
+            <button className="mr-8 text text-pointColor" onClick={editPWd}>
+              비밀번호수정
+            </button>
           </div>
         </div>
-        {isEditOpen && <EditUserDataModal editProfile={editProfile} />}
+        {isMemberEdit && <EditUserDataModal editProfile={editProfile} />}
+        {isPwdEdit && <EditUserPwd editPWd={editPWd} />}
       </div>
     </>
   );
