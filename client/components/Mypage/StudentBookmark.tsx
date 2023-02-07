@@ -41,7 +41,10 @@ const StudentBookmark = () => {
       <div className="mt-6 flex flex-col w-full font-SCDream4">
         <div className="w-full">
           {bookmarkData?.map((bookmark: any) => (
-            <div className="flex flex-row h-fit w-full rounded-lg border border-borderColor mt-3">
+            <div
+              key={bookmark.lessonId}
+              className="flex flex-row h-fit w-full rounded-lg border border-borderColor mt-3"
+            >
               {/* {Left} */}
               <Link
                 href={`/lesson/${bookmark.lessonId}`}
