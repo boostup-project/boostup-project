@@ -70,8 +70,8 @@ public class MemberControllerTest {
         member = data.getMember1();
         postMember = PostMember.builder()
                 .email("hdg@gmail.com")
-                .password("ghdrlfehd")
-                .name("홍길동")
+                .password("ghdrlfehd1!")
+                .name("홍길동입니다")
                 .build();
 
         accessToken = jwtTokenUtils.generateAccessToken(member);

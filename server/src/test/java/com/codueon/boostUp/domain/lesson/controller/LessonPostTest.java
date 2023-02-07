@@ -37,7 +37,7 @@ public class LessonPostTest extends LessonControllerTest{
         addressList.add(1);
 
         PostLesson data = PostLesson.builder()
-                .title("자바가 제일 쉬울 수도 있고 어려울 수도 있습니다")
+                .title("자바가 제일 쉬울 수도")
                 .company("안우아한 형제들")
                 .career(5)
                 .cost(50000)
