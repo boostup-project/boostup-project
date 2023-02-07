@@ -325,8 +325,8 @@ public class SuggestService {
         if (!lessonDbService.getMemberIdByLessonId(findSuggest.getLessonId()).equals(memberId))
             throw new BusinessLogicException(INVALID_ACCESS);
 
-//        if (!findSuggest.getSuggestStatus().equals(DURING_LESSON))
-//            throw new BusinessLogicException(NOT_DURING_LESSON);
+        if (!findSuggest.getSuggestStatus().equals(DURING_LESSON))
+            throw new BusinessLogicException(NOT_DURING_LESSON);
 
         findSuggest.setStatus(END_OF_LESSON);
         findSuggest.setEndTime();
