@@ -3,12 +3,8 @@ import { useMutation } from "@tanstack/react-query";
 
 const useDeleteApply = () => {
   return useMutation(deleteApply, {
-    onSuccess: res => {
-      console.log(res);
-    },
-    onError: err => {
-      console.log(err);
-    },
+    onSuccess: res => {},
+    onError: err => {},
   });
 };
 export default useDeleteApply;

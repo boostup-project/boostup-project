@@ -2,47 +2,58 @@ import DetailBtn from "../reuse/btn/DetailBtn";
 import { IconEmptyheart, IconFullheart } from "assets/icon";
 import ApplyModal from "./ApplyModal";
 import Swal from "sweetalert2";
-import { useQuery } from "@tanstack/react-query";
 import { useState, useCallback, useEffect } from "react";
 import useDeleteDetail from "hooks/detail/useDeleteDetail";
 import useGetBookmarkModi from "hooks/detail/useGetBookmarkModi";
 import useGetBookmark from "hooks/detail/useGetBookmark";
 import { useRouter } from "next/router";
-
+import { useRecoilValue } from "recoil";
+import { refetchBookmark } from "atoms/detail/detailAtom";
 const DetailButtons = (basicInfo: any) => {
   const [isOpenModal, setOpenModal] = useState<boolean>(false);
-  const [islessonId, setIsLessonId] = useState(0);
+
+  const toggle = useRecoilValue(refetchBookmark);
 
   const router = useRouter();
   const lessonId = Number(router.query.id);
-  const { refetch: bookmarkRefetch, data: bookmarkModiData } =
-    useGetBookmarkModi(lessonId);
-  const { data: bookmarkData, isLoading } = useGetBookmark(lessonId);
+  const { refetch: bookmarkRefetch } = useGetBookmarkModi(lessonId);
+  const {
+    data: bookmarkData,
+    isLoading,
+    refetch: getBookmark,
+  } = useGetBookmark(lessonId);
   const [mark, setMark] = useState<boolean>(false);
 
   useEffect(() => {
+    getBookmark();
+  }, [toggle]);
+
+  useEffect(() => {
     setMark(bookmarkData?.data.bookmark);
-    console.log(mark);
-  }, [mark, bookmarkData]);
+  }, [bookmarkData]);
 
   const onClickToggleModal = useCallback(() => {
     setOpenModal(!isOpenModal);
-    console.log(bookmarkData?.data.bookmark);
   }, [isOpenModal]);
 
   const chatNow = () => {
     return;
   };
 
-  const saveBookmark = () => {
-    console.log(mark);
-    setMark(bookmarkModiData?.data.bookmark);
-    bookmarkRefetch();
+  const saveBookmark = (lessonId: any) => {
+    if (localStorage.getItem("token")) {
+      bookmarkRefetch(lessonId);
+    } else {
+      return Swal.fire({
+        text: "로그인 후 원하는 선생님을 찜 해보세요",
+        icon: "warning",
+        confirmButtonColor: "#3085d6",
+      });
+    }
   };
 
   const { mutate } = useDeleteDetail();
   const deletePost = (lessonId: number) => {
-    console.log(lessonId);
     Swal.fire({
       title: "과외를 삭제하시겠습니까?",
       text: "다시 되돌릴 수 없습니다.",
@@ -75,7 +86,11 @@ const DetailButtons = (basicInfo: any) => {
           실시간 채팅
         </DetailBtn>
         <div className="relative justify-center items-center w-full flex flex-col">
-          <DetailBtn bold={false} remove={false} onClick={saveBookmark}>
+          <DetailBtn
+            bold={false}
+            remove={false}
+            onClick={() => saveBookmark(lessonId)}
+          >
             <div className="flex w-full h-1/3 absolute justify-center items-center">
               {mark ? (
                 <IconFullheart width="25" heigth="25" />

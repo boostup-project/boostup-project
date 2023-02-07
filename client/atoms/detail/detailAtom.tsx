@@ -20,4 +20,15 @@ const refetchToggle = atom({
   default: false,
 });
 
-export { powerApplyModal, powerBasicEditModal, editMode, refetchToggle };
+const refetchBookmark = atom({
+  key: "refetchBookmark",
+  default: false,
+});
+
+export {
+  powerApplyModal,
+  powerBasicEditModal,
+  editMode,
+  refetchToggle,
+  refetchBookmark,
+};

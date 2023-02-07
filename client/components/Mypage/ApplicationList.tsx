@@ -2,17 +2,19 @@ import useGetMyTutor from "hooks/mypage/useGetMyTutor";
 import useGetTutorInfo from "hooks/mypage/useGetTutorInfo";
 import { useRouter } from "next/router";
 import AcceptModal from "./AcceptModal";
+import DeclineModal from "./DeclineModal";
 import Swal from "sweetalert2";
 
 import { useState, useCallback, useEffect } from "react";
 const ApplicationList = () => {
-  const [OpenModal, setOpenModal] = useState<boolean>(false);
+  const [openAccept, setOpenAccept] = useState<boolean>(false);
+  const [openDecline, setOpenDecline] = useState<boolean>(false);
 
   const [islessonId, setIsLessonId] = useState(0);
   const { data: myTutorUrl } = useGetMyTutor();
   const lessonId = Number(myTutorUrl?.data.lessonUrl.slice(29));
 
-  const { refetch: refetchTutorInfo, data: tutorInfoData } = useGetTutorInfo(
+  const { refetch: refetchApplyInfo, data: applyInfoData } = useGetTutorInfo(
     lessonId,
     1,
   );
@@ -22,7 +24,7 @@ const ApplicationList = () => {
   }, [myTutorUrl]);
   useEffect(() => {
     if (islessonId) {
-      refetchTutorInfo();
+      refetchApplyInfo();
     }
   }, [islessonId]);
 
@@ -44,10 +46,13 @@ const ApplicationList = () => {
   const onClickAcceptModal = useCallback(
     (suggestId: number) => {
       setSuggestId(suggestId);
-      setOpenModal(!OpenModal);
+      setOpenAccept(!openAccept);
     },
-    [OpenModal],
+    [openAccept],
   );
+  const openDeclineModal = () => {
+    setOpenDecline(prev => !prev);
+  };
 
   return (
     <div className="flex flex-col w-full">
@@ -58,7 +63,7 @@ const ApplicationList = () => {
         나의 과외로 이동하기
       </button>
       {/* {map} 수업신청정보 */}
-      {tutorInfoData?.data.data.map((apply: any) => (
+      {applyInfoData?.data.data.map((apply: any) => (
         <div className="flex flex-col">
           <div className="flex flex-row w-full h-fit border border-borderColor rounded-xl desktop:mt-5 tablet:mt-3 mt-2 p-3 pl-5">
             <div className="flex flex-col w-[43%]">
@@ -76,12 +81,7 @@ const ApplicationList = () => {
                 <div> {apply.status}</div>
               </div>
             </div>
-            {OpenModal && (
-              <AcceptModal
-                onClickToggleModal={onClickAcceptModal}
-                suggestId={suggestId}
-              />
-            )}
+
             <div className="flex flex-col w-[60%] justify-center items-end">
               <div className="text text-textColor font-SCDream6 mt-2">
                 {apply.status}
@@ -91,7 +91,10 @@ const ApplicationList = () => {
                   <button className="text text-pointColor mt-1">
                     채팅하기
                   </button>
-                  <button className="text text-negativeMessage mt-1">
+                  <button
+                    className="text text-negativeMessage mt-1"
+                    onClick={openDeclineModal}
+                  >
                     거절하기
                   </button>
                 </>
@@ -106,7 +109,10 @@ const ApplicationList = () => {
                   <button className="text text-pointColor mt-1">
                     채팅하기
                   </button>
-                  <button className="text text-negativeMessage mt-1">
+                  <button
+                    className="text text-negativeMessage mt-1"
+                    onClick={openDeclineModal}
+                  >
                     거절하기
                   </button>
                 </>
@@ -115,6 +121,20 @@ const ApplicationList = () => {
           </div>
         </div>
       ))}
+      {openAccept && (
+        <AcceptModal
+          onClickToggleModal={onClickAcceptModal}
+          suggestId={suggestId}
+        />
+      )}
+
+      {openDecline && (
+        <DeclineModal
+          onClickToggleModal={onClickAcceptModal}
+          suggestId={suggestId}
+          openDeclineModal={openDeclineModal}
+        ></DeclineModal>
+      )}
     </div>
   );
 };

@@ -18,11 +18,18 @@ const ClassList = () => {
     isSuccess,
     isError,
   } = useGetCloseClass(aSuggestId);
-  console.log(tutorInfoData);
 
   const closeClass = (suggestId: any) => {
-    setASuggestId(suggestId);
-    console.log(suggestId);
+    Swal.fire({
+      title: "과외를 종료하시겠습니까?",
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+    }).then(result => {
+      if (result.isConfirmed) {
+        setASuggestId(suggestId);
+      }
+    });
   };
   useEffect(() => {
     if (aSuggestId !== 0) {
@@ -38,7 +45,6 @@ const ClassList = () => {
         confirmButtonColor: "#3085d6",
       });
     }
-
     if (isError) {
       Swal.fire({
         text: "다시 시도해주세요",

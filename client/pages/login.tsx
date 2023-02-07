@@ -36,9 +36,7 @@ const Login = () => {
     mutate({ email, password });
   };
 
-  const failSubmit = (e: any) => {
-    console.log("Fail Submit");
-  };
+  const failSubmit = (e: any) => {};
 
   useEffect(() => {
     if (isSuccess) {
