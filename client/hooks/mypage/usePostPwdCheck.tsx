@@ -12,6 +12,12 @@ const usePostPwdCheck = () => {
         position: toast.POSITION.TOP_RIGHT,
       });
     },
+    onError: (res: any) => {
+      toast.error(res.response.data.message, {
+        autoClose: 3000,
+        position: toast.POSITION.TOP_RIGHT,
+      });
+    },
   });
 };
 
