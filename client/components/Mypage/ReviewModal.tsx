@@ -4,7 +4,8 @@ import SmallBtn from "../reuse/btn/SmallBtn";
 import { useState, useEffect } from "react";
 import { PropsWithChildren } from "react";
 import usePostReview from "hooks/mypage/usePostReview";
-import { ImStarFull } from "react-icons/im";
+import Swal from "sweetalert2";
+
 interface Review {
   comment: string;
   score: number;
@@ -32,8 +33,14 @@ const ReviewModal = ({
     formState: { errors },
   } = useForm<Review>({ mode: "onBlur" });
 
+  const { mutate, isSuccess, isError } = usePostReview();
   const onSubmit = (e: Review) => {
-    if (e.score === 0) {
+    if (e.score === null) {
+      Swal.fire({
+        title: "별점을 입력해 주세요.",
+        icon: "warning",
+        confirmButtonColor: "#3085d6",
+      });
     }
     const reviewData = {
       score: e.score,
@@ -42,7 +49,26 @@ const ReviewModal = ({
       lessonId: lessonId,
     };
     console.log(reviewData);
+    mutate(reviewData);
   };
+  useEffect(() => {
+    if (isSuccess) {
+      Swal.fire({
+        text: "리뷰작성이 완료되었습니다",
+        icon: "success",
+        confirmButtonColor: "#3085d6",
+      });
+      openDeclineModal();
+    }
+
+    if (isError) {
+      Swal.fire({
+        text: "다시 작성해주세요",
+        icon: "warning",
+        confirmButtonColor: "#3085d6",
+      });
+    }
+  }, [isSuccess, isError]);
 
   return (
     <>
