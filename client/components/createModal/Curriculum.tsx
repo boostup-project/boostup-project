@@ -3,17 +3,20 @@ import "@uiw/react-markdown-preview/markdown.css";
 import SmallBtn from "components/reuse/btn/SmallBtn";
 import dynamic from "next/dynamic";
 import useWindowSize from "hooks/useWindowSize";
+import usePostWrite from "hooks/main/usePostWrite";
+import imageCompression from "browser-image-compression";
 import { bold, italic } from "@uiw/react-md-editor/lib/commands/";
 import { Dispatch, SetStateAction } from "react";
 import { SetterOrUpdater, useSetRecoilState } from "recoil";
 import { Info } from "./WriteModal";
 import { langDict } from "components/reuse/dict";
-import usePostWrite from "hooks/main/usePostWrite";
 import { useEffect } from "react";
 import { isWrite } from "atoms/main/mainAtom";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import imageCompression from "browser-image-compression";
+const MDEditor = dynamic(() => import("@uiw/react-md-editor"), {
+  ssr: false,
+});
 
 interface Props {
   basicInfo: Info;
@@ -28,9 +31,17 @@ interface BasicSubmit {
   [index: string]: any;
 }
 
-const MDEditor = dynamic(() => import("@uiw/react-md-editor"), {
-  ssr: false,
-});
+const compressImage = async (image: any) => {
+  try {
+    const options = {
+      maxSizeMb: 2,
+      maxWidthOrHeight: 300,
+    };
+    return await imageCompression(image, options);
+  } catch (e) {
+    console.log(e);
+  }
+};
 
 const Curriculum = ({
   basicInfo,
@@ -59,20 +70,11 @@ const Curriculum = ({
   }),
     [isSuccess, isError];
 
-  // 이미지 압축 함수
-  const compressImage = async (image: any) => {
-    try {
-      const options = {
-        maxSizeMb: 2,
-        maxWidthOrHeight: 300,
-      };
-      return await imageCompression(image, options);
-    } catch (e) {
-      console.log(e);
-    }
-  };
-
   const onClick = async () => {
+    /** 1. FormData선언 및 할당 */
+    const formData = new FormData();
+
+    /** 2. 데이터 분해 */
     const {
       address,
       career,
@@ -89,25 +91,13 @@ const Curriculum = ({
       detailImage,
       introduction,
       personality,
-    } = extraInfo;
-    const proImage = profileImg[0];
+    }: BasicSubmit = extraInfo;
+
+    /** 3. 주소와 언어를 숫자로 변경 */
     const parseAddress = address.map((el: any) => el.value);
     const parseLang = languages.map((el: any) => langDict[el]);
-    const pre = {
-      title,
-      language: parseLang,
-      company,
-      career: parseInt(career),
-      address: parseAddress,
-      cost: parseInt(cost),
-      introduction,
-      detailCompany,
-      detailLocation,
-      personality,
-      detailCost,
-      curriculum: curInfo,
-    };
 
+    /** 4. 먼저 문자 데이터 추합 및 할당 */
     const json = JSON.stringify({
       title,
       languages: parseLang,
@@ -123,9 +113,10 @@ const Curriculum = ({
       curriculum: curInfo,
     });
     const blob = new Blob([json], { type: "application/json" });
-    const formData = new FormData();
     formData.append("data", blob);
 
+    /** 5. 프로필 이미지 압축 및 할당 */
+    const proImage = profileImg[0];
     const compressImg = await compressImage(proImage);
     let compressFile;
 
@@ -133,11 +124,29 @@ const Curriculum = ({
       compressFile = new File([compressImg], compressImg?.name);
       console.log(compressFile);
       formData.append("profileImage", compressFile);
-      // 확인필요
-      formData.append("careerImage", compressFile);
     }
 
-    mutate(formData);
+    /** 6. 참고 사진 압축 및 할당 */
+    console.log("detaiImg", detailImage);
+    if (detailImage.length > 0) {
+      const careerImgsBefore = detailImage.map((image: FileList) => image[0]);
+      console.log(careerImgsBefore);
+      careerImgsBefore.map(async (img: File, idx: number) => {
+        const compressImg = await compressImage(img);
+        // console.log(compressImg);
+        const compressImgFile = new File([compressImg!], compressImg?.name!);
+        console.log(compressImgFile);
+        formData.append("careerImage", compressImgFile);
+      });
+    }
+
+    toast.info("과외를 저장중입니다", {
+      autoClose: 4000,
+      position: toast.POSITION.TOP_RIGHT,
+    });
+    setTimeout(() => {
+      mutate(formData);
+    }, 4500);
   };
 
   return (
@@ -194,3 +203,18 @@ const Curriculum = ({
 };
 
 export default Curriculum;
+
+// const pre = {
+//   title,
+//   language: parseLang,
+//   company,
+//   career: parseInt(career),
+//   address: parseAddress,
+//   cost: parseInt(cost),
+//   introduction,
+//   detailCompany,
+//   detailLocation,
+//   personality,
+//   detailCost,
+//   curriculum: curInfo,
+// };
