@@ -46,6 +46,8 @@ public class AuthService {
         redisUtils.setData(findMember.getEmail(), findMember.getAccountStatus().getProvider(), generateRefreshToken, jwtTokenUtils.getRefreshTokenExpirationMinutes());
 
         AuthDto memberRes = AuthDto.builder()
+                .memberId(findMember.getId())
+                .memberImage(findMember.getMemberImage().getFilePath())
                 .email(findMember.getEmail())
                 .name(findMember.getName())
                 .build();
