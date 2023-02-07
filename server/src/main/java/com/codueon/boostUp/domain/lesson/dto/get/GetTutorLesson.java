@@ -1,4 +1,4 @@
-package com.codueon.boostUp.domain.lesson.dto.Get;
+package com.codueon.boostUp.domain.lesson.dto.get;
 
 import com.codueon.boostUp.domain.lesson.entity.Lesson;
 import com.codueon.boostUp.domain.member.entity.Member;
@@ -7,7 +7,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Getter
 @NoArgsConstructor

@@ -1,4 +1,4 @@
-package com.codueon.boostUp.domain.lesson.dto.Get;
+package com.codueon.boostUp.domain.lesson.dto.get;
 
 import com.codueon.boostUp.domain.lesson.entity.Lesson;
 import com.querydsl.core.annotations.QueryProjection;

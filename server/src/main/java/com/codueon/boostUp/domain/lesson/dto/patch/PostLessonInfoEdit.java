@@ -1,4 +1,4 @@
-package com.codueon.boostUp.domain.lesson.dto.Patch;
+package com.codueon.boostUp.domain.lesson.dto.patch;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -13,7 +13,6 @@ import java.util.List;
 @NoArgsConstructor
 public class PostLessonInfoEdit {
     private List<Integer> languages;
-    private String name;
 
     @Length(max = 12, message = "글자 수는 최대 12자 이하여야 합니다.")
     private String title;
@@ -29,7 +28,6 @@ public class PostLessonInfoEdit {
 
     @Builder
     public PostLessonInfoEdit(List<Integer> languages,
-                              String name,
                               String title,
                               String company,
                               Integer career,
@@ -37,7 +35,6 @@ public class PostLessonInfoEdit {
                               List<Integer> addresses,
                               String editState) {
         this.languages = languages;
-        this.name = name;
         this.title = title;
         this.company = company;
         this.career = career;

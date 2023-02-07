@@ -1,4 +1,4 @@
-package com.codueon.boostUp.domain.lesson.dto.Patch;
+package com.codueon.boostUp.domain.lesson.dto.patch;
 
 import lombok.Builder;
 import lombok.Getter;
