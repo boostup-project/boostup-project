@@ -9,7 +9,7 @@ import java.util.List;
 @Getter
 @NoArgsConstructor
 public class GetTutorMypageLesson {
-    private List<String> languges;
+    private List<String> languages;
     private String name;
     private String title;
     private String company;
@@ -18,14 +18,14 @@ public class GetTutorMypageLesson {
     private List<String> addresses;
 
     @Builder
-    public GetTutorMypageLesson(List<String> languges,
+    public GetTutorMypageLesson(List<String> languages,
                                 String name,
                                 String title,
                                 String company,
                                 Integer career,
                                 Integer cost,
                                 List<String> addresses) {
-        this.languges = languges;
+        this.languages = languages;
         this.name = name;
         this.title = title;
         this.company = company;
