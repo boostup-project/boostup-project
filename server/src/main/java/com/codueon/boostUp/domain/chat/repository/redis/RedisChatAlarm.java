@@ -29,7 +29,7 @@ public class RedisChatAlarm {
      * @param chatRoomId 채팅방 식별자
      * @author mozzi327
      */
-    public Integer makeChatRoomAndEnterAlarm(Long senderId, Long receiverId, Long chatRoomId) {
+    public Integer makeChatRoomAndEnterAlarm(Long receiverId, Long chatRoomId) {
         operations.set(getKey(receiverId, chatRoomId), 1);
         return operations.get(getKey(receiverId, chatRoomId));
     }
@@ -53,17 +53,6 @@ public class RedisChatAlarm {
      */
     public Integer getAlarmCount(Long memberId, Long chatRoomId) {
         return (operations.get(getKey(memberId, chatRoomId)) == null) ? 0 : 1;
-    }
-
-    /**
-     * Redis 채팅방 확인 시 알람 초기화 메서드
-     * @param memberId 사용자 식별자
-     * @param chatRoomId 채팅방 식별자
-     * @return
-     * @author mozzi327
-     */
-    public void getAndDelAlarmCount(Long memberId, Long chatRoomId) {
-        operations.set(getKey(memberId, chatRoomId), 0);
     }
 
     /**
