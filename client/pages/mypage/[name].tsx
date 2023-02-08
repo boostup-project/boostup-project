@@ -1,20 +1,11 @@
 import { useRouter } from "next/router";
 import DetailSummeryContainer from "components/reuse/container/DetailSummeryContainer";
-import DetailTabBtn from "components/reuse/btn/DetailTabBtn";
 import MypageContentContainer from "components/reuse/container/MypageContentContainer";
-import DetailBtn from "components/reuse/btn/DetailBtn";
 import { useEffect, useState } from "react";
-import useGetExtra from "hooks/detail/useGetExtra";
-import useGetCurriculum from "hooks/detail/useGetCurriculum";
-import useGetBasicInfo from "hooks/detail/useGetBasicInfo";
-import useWindowSize from "hooks/useWindowSize";
-import DetailCurriculum from "components/detailComp/DetailCurriculum";
-import DetailExtra from "components/detailComp/DetailExtra";
 import MypageTabBtn from "components/reuse/btn/MypageTabBtn";
 import MypageInfo from "components/Mypage/MypageInfo";
 import TeacherTab from "components/Mypage/TeacherTab";
 import StudentTab from "components/Mypage/StudentTab";
-import useGetStudentInfo from "hooks/mypage/useGetStudentInfo";
 import useGetTutorInfo from "hooks/mypage/useGetTutorInfo";
 import useGetMyTutor from "hooks/mypage/useGetMyTutor";
 import { useSetRecoilState } from "recoil";
@@ -28,35 +19,37 @@ const Mypage = () => {
     setActive(false);
   }, []);
 
-  const { data: myTutorUrl } = useGetMyTutor();
-  const lessonId = Number(myTutorUrl?.data.lessonUrl.slice(29));
+  const { data: myTutorUrl, isSuccess } = useGetMyTutor();
+  const [lessonId, setLessonId] = useState(0);
+  // const lessonId = myTutorUrl?.data.lessonUrl.split("/")[4];
 
   const [tab, setTab] = useState(1);
 
-  const { refetch: refetchStudentInfo, data: studentInfoData } =
-    useGetStudentInfo();
   const { refetch: refetchTutorInfo, data: tutorInfoData } = useGetTutorInfo(
     lessonId,
     tab,
   );
   const handleTabClick = (id: number) => {
     setTab(id);
-    refetchTutorInfo;
+    refetchTutorInfo();
   };
-  const widthSize = useWindowSize();
+
+  useEffect(() => {
+    setLessonId(myTutorUrl?.data.wrapLessonId);
+    console.log(myTutorUrl?.data.wrapLessonId);
+  }, [isSuccess]);
 
   useEffect(() => {
     // tab이 바뀔때마다 refetch 실행
     if (lessonId) {
       // 요약정보 요청
     }
-
     if (tab === 1 && lessonId) {
       // teacherTab refetch
     } else if (tab === 2 && lessonId) {
       // StudentTab refetch
     } else if (tab === 3) {
-      // ChatList refetch
+      router.push("/chat/0");
     }
   }, [tab, lessonId]);
 

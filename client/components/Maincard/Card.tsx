@@ -56,6 +56,7 @@ const Card = () => {
 
   useEffect(() => {
     setMainCardInfo(cardData?.data.data);
+    console.log(cardData);
   }, [cardData]);
 
   useEffect(() => {

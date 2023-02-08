@@ -11,8 +11,8 @@ const ApplicationList = () => {
   const [openDecline, setOpenDecline] = useState<boolean>(false);
 
   const [islessonId, setIsLessonId] = useState(0);
-  const { data: myTutorUrl } = useGetMyTutor();
-  const lessonId = Number(myTutorUrl?.data.lessonUrl.slice(29));
+  const { data: myTutorUrl, isSuccess } = useGetMyTutor();
+  const lessonId = myTutorUrl?.data.wrapLessonId;
 
   const { refetch: refetchApplyInfo, data: applyInfoData } = useGetTutorInfo(
     lessonId,
@@ -20,8 +20,10 @@ const ApplicationList = () => {
   );
 
   useEffect(() => {
-    setIsLessonId(Number(myTutorUrl?.data.lessonUrl.slice(29)));
+    setIsLessonId(lessonId);
+    //refetchApplyInfo();
   }, [myTutorUrl]);
+
   useEffect(() => {
     if (islessonId) {
       refetchApplyInfo();
@@ -31,7 +33,7 @@ const ApplicationList = () => {
   const router = useRouter();
   const toMyTutor = () => {
     if (myTutorUrl) {
-      router.push(myTutorUrl?.data.lessonUrl);
+      router.push(`/lesson/${islessonId}`);
     } else {
       Swal.fire({
         title: "등록하신 과외가 없습니다",

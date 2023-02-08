@@ -3,11 +3,13 @@ import getStudentInfo from "apis/mypage/getStudentInfo";
 
 const useGetStudentInfo = () => {
   return useQuery(["get/StudentInfo"], () => getStudentInfo(), {
-    // enabled: false,
+    enabled: true,
     onSuccess: res => {
       console.log(res);
     },
-
+    onError: error => {
+      console.log(error);
+    },
     retry: 1,
   });
 };

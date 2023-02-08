@@ -6,14 +6,14 @@ import DetailTabBtn from "components/reuse/btn/DetailTabBtn";
 import MypageContentContainer from "components/reuse/container/MypageContentContainer";
 import MypageUnderContainer from "components/reuse/container/MypageUnderContainer";
 import ClassList from "./ClassList";
-import FinishedClass from "./FinishedClass";
+import FinishedTutor from "./FinishedTutor";
 import useGetTutorInfo from "hooks/mypage/useGetTutorInfo";
 const TeacherTab = () => {
   const [tab, setTab] = useState(1);
 
   const [islessonId, setIsLessonId] = useState(0);
   const { data: myTutorUrl } = useGetMyTutor();
-  const lessonId = Number(myTutorUrl?.data.lessonUrl.slice(29));
+  const lessonId = myTutorUrl?.data.wrapLessonId;
 
   const { refetch: refetchApplyInfo } = useGetTutorInfo(lessonId, 1);
   const { refetch: refetchClassInfo } = useGetTutorInfo(lessonId, 2);
@@ -66,7 +66,7 @@ const TeacherTab = () => {
           <MypageUnderContainer>
             {tab === 1 && <ApplicationList></ApplicationList>}
             {tab === 2 && <ClassList></ClassList>}
-            {tab === 3 && <FinishedClass></FinishedClass>}
+            {tab === 3 && <FinishedTutor></FinishedTutor>}
           </MypageUnderContainer>
         </div>
       </div>

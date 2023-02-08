@@ -3,10 +3,10 @@ import useGetMyTutor from "hooks/mypage/useGetMyTutor";
 import useDeleteFinishedTutor from "hooks/mypage/useDeleteFinishedTutor";
 import { useState, useEffect } from "react";
 import Swal from "sweetalert2";
-const FinishedClass = () => {
+const FinishedTutor = () => {
   const [islessonId, setIsLessonId] = useState(0);
   const { data: myTutorUrl } = useGetMyTutor();
-  const lessonId = Number(myTutorUrl?.data.lessonUrl.slice(29));
+  const lessonId = myTutorUrl?.data.wrapLessonId;
 
   const { refetch: refetchFinishedClass, data: finishedClassData } =
     useGetTutorInfo(lessonId, 3);
@@ -72,4 +72,4 @@ const FinishedClass = () => {
     </>
   );
 };
-export default FinishedClass;
+export default FinishedTutor;
