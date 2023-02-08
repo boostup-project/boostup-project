@@ -19,20 +19,16 @@ public class PostMessage {
     @NotBlank
     private Long chatRoomId;
     @NotBlank
-    private String memberImage;
-    @NotBlank
     private String messageContent;
 
     @Builder
     public PostMessage(Long senderId,
                        Long receiverId,
                        Long chatRoomId,
-                       String memberImage,
                        String messageContent) {
         this.senderId = senderId;
         this.receiverId = receiverId;
         this.chatRoomId = chatRoomId;
-        this.memberImage = memberImage;
         this.messageContent = messageContent;
     }
 }

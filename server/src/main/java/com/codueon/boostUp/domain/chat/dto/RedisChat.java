@@ -23,7 +23,6 @@ public class RedisChat implements Serializable {
     private Long senderId;
     @NotNull
     private String message;
-    private String memberImage;
     private String displayName;
     private MessageType messageType;
 
@@ -35,13 +34,11 @@ public class RedisChat implements Serializable {
     public RedisChat(Long chatRoomId,
                      Long senderId,
                      String message,
-                     String memberImage,
                      MessageType messageType,
                      String displayName) {
         this.chatRoomId = chatRoomId;
         this.senderId = senderId;
         this.message = message;
-        this.memberImage = memberImage;
         this.messageType = messageType;
         this.displayName = displayName;
     }
