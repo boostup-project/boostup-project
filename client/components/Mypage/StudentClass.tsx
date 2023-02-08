@@ -164,7 +164,7 @@ const StudentClass = () => {
 
               {/* {Right} */}
               <div className="flex flex-col w-[40%] justify-center items-end desktop:mr-4 tablet:mr-2 mr-2">
-                <div className="flex  desktop:text-xl tablet:text-lg text-[14px]">
+                <div className="flex  desktop:text-xl tablet:text-lg text-[14px] text-moneyGrayColor font-SCDream5">
                   {/* <div className="mt-1 mr-1 desktop:w-5 tablet:w-4 w-3">
                     <IconWon />
                   </div> */}
