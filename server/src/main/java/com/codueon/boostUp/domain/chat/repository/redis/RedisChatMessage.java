@@ -1,6 +1,8 @@
 package com.codueon.boostUp.domain.chat.repository.redis;
 
+import com.codueon.boostUp.domain.chat.dto.GetChatRoom;
 import com.codueon.boostUp.domain.chat.dto.RedisChat;
+import com.codueon.boostUp.domain.chat.entity.ChatRoom;
 import com.codueon.boostUp.global.exception.BusinessLogicException;
 import com.codueon.boostUp.global.exception.ExceptionCode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -14,6 +16,7 @@ import org.springframework.stereotype.Repository;
 import javax.annotation.PostConstruct;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -28,6 +31,7 @@ public class RedisChatMessage {
 
     /**
      * Redis SortedSet 초기화 메서드(서버 실행 시)
+     *
      * @author mozzi327
      */
     @PostConstruct
@@ -37,8 +41,9 @@ public class RedisChatMessage {
 
     /**
      * Redis 최초 입장 시 메시지 생성 메서드
-     * @param chatRoomId 채팅방 식별자
-     * @param senderMessage 입장 문구(Sender)
+     *
+     * @param chatRoomId      채팅방 식별자
+     * @param senderMessage   입장 문구(Sender)
      * @param receiverMessage 입장 문구(Receiver)
      * @author mozzi327
      */
@@ -51,6 +56,7 @@ public class RedisChatMessage {
 
     /**
      * Redis 채팅 메시지 저장 메서드
+     *
      * @param redisChat 메시지 정보
      * @author mozzi327
      */
@@ -62,6 +68,7 @@ public class RedisChatMessage {
 
     /**
      * Redis 채팅방 메시지 전체 조회 메서드
+     *
      * @param chatRoomId 사용자 식별자
      * @return List(RedisChat)
      * @author mozzi327
@@ -73,6 +80,7 @@ public class RedisChatMessage {
 
     /**
      * Redis 채팅방 모든 메시지 삭제 메서드
+     *
      * @param chatRoomId 채팅방 식별자
      * @author mozzi327
      */
@@ -81,17 +89,8 @@ public class RedisChatMessage {
     }
 
     /**
-     * Redis 채팅방 식별 키를 통한 채팅 목록 조회 메서드
-     * @param chatRooms 채팅방 식별키(List)
-     * @return List(RedisChat)
-     * @author mozzi327
-     */
-    public List<RedisChat> findAllByRoomKey(List<String> chatRooms) {
-        return chatRooms.stream().map(this::getLatestMessage).collect(Collectors.toList());
-    }
-
-    /**
      * Redis 가장 최근 메시지 조회 메서드
+     *
      * @param key 식별 키
      * @return RedisChat
      * @author mozzi327
@@ -107,16 +106,18 @@ public class RedisChatMessage {
 
     /**
      * Redis 채팅메시지 식별 키 생성 메서드
+     *
      * @param chatRoomId 채팅방 식별자
      * @return String
      * @author mozzi327
      */
-    private String getKey(Long chatRoomId) {
+    public String getKey(Long chatRoomId) {
         return "ChatRoom" + chatRoomId + "Message";
     }
 
     /**
      * Redis 조회 채팅 메시지 RedisChat 변환 메서드
+     *
      * @param result 메시지(형변환 전)
      * @return List(RedisChat)
      * @author mozzi327
@@ -128,6 +129,7 @@ public class RedisChatMessage {
 
     /**
      * Redis 조회 채팅 메시지 List(RedisChat) 변환 메서드
+     *
      * @param results 메시지 리스트(형변환 전)
      * @return List(RedisChat)
      * @author mozzi327

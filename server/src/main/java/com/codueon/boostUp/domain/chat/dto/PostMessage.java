@@ -13,7 +13,9 @@ import javax.validation.constraints.NotNull;
 public class PostMessage {
 
     @NotNull
-    private Long memberId;
+    private Long senderId;
+    @NotNull
+    private Long receiverId;
     @NotBlank
     private Long chatRoomId;
     @NotBlank
@@ -22,11 +24,13 @@ public class PostMessage {
     private String messageContent;
 
     @Builder
-    public PostMessage(Long memberId,
+    public PostMessage(Long senderId,
+                       Long receiverId,
                        Long chatRoomId,
                        String memberImage,
                        String messageContent) {
-        this.memberId = memberId;
+        this.senderId = senderId;
+        this.receiverId = receiverId;
         this.chatRoomId = chatRoomId;
         this.memberImage = memberImage;
         this.messageContent = messageContent;
