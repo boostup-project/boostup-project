@@ -118,8 +118,12 @@ const Header = () => {
     }
   };
 
+  useEffect(() => {
+    if (seek) {
+      setSeek(prev => !prev);
+    }
+  }, [router.asPath]);
   return (
-    // sticky로 해야 따로 margin을 안잡아도 헤더공간이 유효해질 것 같습니다.
     <header className="bg-bgColor font-SCDream5 w-full sticky top-0 z-[1] h-fit flex flex-col justify-center items-center shadow">
       <div className="relative pt-2 max-w-[1000px] w-full pb-2 flex flex-col justify-center items-center desktop:w-3/4 desktop:min-w-[1000px] desktop:h-[87px] desktop:mt-0">
         <nav className="w-full h-full flex tablet:justify-center tablet:items-center desktop:justify-between">
@@ -183,7 +187,7 @@ const Header = () => {
       </div>
       {seek && (
         <div className="w-full flex justify-center items-center">
-          <div className="absolute top-36 tablet:w-[500px] desktop:w-[630px] desktop:top-[78px]">
+          <div className="absolute top-20 tablet:w-[500px] desktop:w-[630px] desktop:top-[78px]">
             <SearchPop onSubmit={onSubmit} />
           </div>
         </div>
