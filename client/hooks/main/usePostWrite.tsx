@@ -1,14 +1,13 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import postWrite from "apis/main/postWrite";
 import { toast } from "react-toastify";
-import { AxiosError, AxiosResponse } from "axios";
 
 const usePostWrite = () => {
   const queryClient = useQueryClient();
 
   return useMutation(postWrite, {
     onSuccess: res => {
-      // queryClient.invalidateQueries({ queryKey; ['Cards']})
+      queryClient.invalidateQueries(["cards"]);
       console.log("success");
     },
     onError: (err: any) => {

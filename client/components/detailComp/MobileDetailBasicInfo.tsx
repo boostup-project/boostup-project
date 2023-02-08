@@ -21,8 +21,7 @@ const MobileDetailBasicInfo = (basicInfo: any) => {
         {/* profile Image */}
         <div className="w-fit h-fit flex flex-col justify-center items-center p-3">
           <Image
-            src={"https://pbs.twimg.com/media/FgYA_RAWQAEWCw3.jpg"}
-            // src={basicInfo.profileImage}
+            src={basicInfo?.basicInfo?.profileImage}
             alt="profile Image"
             width={150}
             height={150}
