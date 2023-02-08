@@ -38,8 +38,7 @@ public class ChatService {
                 token.getName(),
                 token.getId(),
                 message.getChatRoomId(),
-                message.getMessageContent(),
-                message.getMemberImage());
+                message.getMessageContent());
         createChat.settingCurrentTime();
         redisChatMessage.saveChatMessage(createChat);
         eventPublisher.publishEvent(createChat);
@@ -71,12 +70,11 @@ public class ChatService {
      * @author mozzi327
      */
     private RedisChat makeRedisChat(String name, Long memberId, Long chatRoomId,
-                                    String content, String memberImage) {
+                                    String content) {
         return RedisChat.builder()
                 .messageType(MessageType.TALK)
                 .displayName(name)
                 .senderId(memberId)
-                .memberImage(memberImage)
                 .chatRoomId(chatRoomId)
                 .message(content)
                 .build();
