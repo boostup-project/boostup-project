@@ -1,4 +1,4 @@
-package com.codueon.boostUp.domain.chat.service;
+package com.codueon.boostUp.domain.chat.utils;
 
 import com.codueon.boostUp.domain.chat.dto.RedisChat;
 import com.codueon.boostUp.global.exception.BusinessLogicException;

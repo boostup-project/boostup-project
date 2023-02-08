@@ -18,8 +18,6 @@ import com.codueon.boostUp.global.security.token.JwtAuthenticationToken;
 @Component
 @RequiredArgsConstructor
 public class ChatRegisterController {
-    // **** StompHandler에서 사용할 인증 및 메시지 처리 컨트롤러 클래스 ****
-    private final ChatService chatService;
     private final RedisChatRoom redisChatRoom;
     private final WebSocketAuthService webSocketAuthService;
 
