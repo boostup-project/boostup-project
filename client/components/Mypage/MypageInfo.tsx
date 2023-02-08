@@ -23,7 +23,7 @@ const MypageInfo = () => {
   return (
     <>
       <div className="w-full flex flex-row justify-start items-center">
-        <div className="object-cover desktop:w-[260px] tablet:w-[250px] w-[200px] h-fit flex flex-col justify-start items-start p-5 ">
+        <div className="object-cover desktop:w-[260px] tablet:w-[250px] w-[150px] h-fit flex flex-col justify-start items-start p-5 ">
           <img
             src={""}
             // src={data.profileImage}
