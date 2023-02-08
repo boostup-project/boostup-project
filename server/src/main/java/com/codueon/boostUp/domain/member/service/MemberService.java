@@ -1,9 +1,6 @@
 package com.codueon.boostUp.domain.member.service;
 
-import com.codueon.boostUp.domain.member.dto.PostMember;
-import com.codueon.boostUp.domain.member.dto.PostName;
-import com.codueon.boostUp.domain.member.dto.PostPasswordInLoginPage;
-import com.codueon.boostUp.domain.member.dto.PostPasswordInMyPage;
+import com.codueon.boostUp.domain.member.dto.*;
 import com.codueon.boostUp.domain.member.entity.AccountStatus;
 import com.codueon.boostUp.domain.member.entity.Member;
 import com.codueon.boostUp.domain.member.entity.MemberImage;
@@ -123,21 +120,58 @@ public class MemberService {
         memberDbService.saveMember(findMember);
     }
 
+    /**
+     * 회원 정보 수정 메서드
+     * @param name 정보 수정 DTO
+     * @param file 사용자 프로필 이미지
+     * @param memberId 사용자 식별자
+     * @return GetMemberEditInfo
+     * @author LeeGoh
+     */
     @SneakyThrows
-    public String changeMemberInfo(PostName name, MultipartFile file, Long memberId) {
-
+    public GetMemberEditInfo editMemberInfo(PostName name, MultipartFile file, Long memberId) {
         if (file.isEmpty() && name.getName().isEmpty()) return null;
 
         Member findMember = memberDbService.ifExistsReturnMember(memberId);
         UploadFile uploadFile = fileHandler.uploadFile(file);
 
         if (!file.isEmpty()) {
-//            String dir = "memberImage";
-//            UploadFile uploadFile = awsS3Service.uploadfile(file, dir);
+            MemberImage memberImage = MemberImage.builder()
+                    .filePath(uploadFile.getFilePath())
+                    .fileName(uploadFile.getFileName())
+                    .fileSize(uploadFile.getFileSize())
+                    .originFileName(uploadFile.getOriginFileName())
+                    .build();
+            findMember.addMemberImage(memberImage);
+        }
 
-//            if (!findMember.getMemberImage().getFilePath().equals(defaultImageAddress)){
-//                awsS3Service.delete(findMember.getMemberImage().getFileName(), dir);
-//            }
+        if (!name.getName().isEmpty()) findMember.setName(name.getName());
+
+        memberDbService.saveMember(findMember);
+        return returnGetMemberEditInfo(findMember);
+    }
+
+    /**
+     * 회원 정보 수정 메서드 S3
+     * @param name 정보 수정 DTO
+     * @param file 사용자 프로필 이미지
+     * @param memberId 사용자 식별자
+     * @return GetMemberEditInfo
+     * @author LeeGoh
+     */
+    @SneakyThrows
+    public GetMemberEditInfo editMemberInfoS3(PostName name, MultipartFile file, Long memberId) {
+        if (file.isEmpty() && name.getName().isEmpty()) return null;
+
+        Member findMember = memberDbService.ifExistsReturnMember(memberId);
+
+        if (!file.isEmpty()) {
+            String dir = "memberImage";
+            UploadFile uploadFile = awsS3Service.uploadfile(file, dir);
+
+            if (!findMember.getMemberImage().getFilePath().equals(defaultImageAddress)){
+                awsS3Service.delete(findMember.getMemberImage().getFileName(), dir);
+            }
 
             MemberImage memberImage = MemberImage.builder()
                     .filePath(uploadFile.getFilePath())
@@ -151,7 +185,19 @@ public class MemberService {
         if (!name.getName().isEmpty()) findMember.setName(name.getName());
 
         memberDbService.saveMember(findMember);
+        return returnGetMemberEditInfo(findMember);
+    }
 
-        return findMember.getMemberImage().getFilePath();
+    /**
+     * 회원 정보 수정 시 반환 공통 메서드
+     * @param member 사용자 정보
+     * @return GetMemberEditInfo
+     * @author LeeGoh
+     */
+    private GetMemberEditInfo returnGetMemberEditInfo(Member member) {
+        return GetMemberEditInfo.builder()
+                .name(member.getName())
+                .memberImage(member.getMemberImage().getFilePath())
+                .build();
     }
 }

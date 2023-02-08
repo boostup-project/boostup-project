@@ -37,14 +37,30 @@ public class MemberController {
      * @param file 프로필 이미지 정보
      * @author LeeGoh
      */
+    @PostMapping("/test/modification")
+    public ResponseEntity postEditMemberInfoInMyPage(@RequestPart(value = "data") PostName name,
+                                                     @RequestPart(value = "profileImage") MultipartFile file,
+                                                     Authentication authentication) {
+
+        JwtAuthenticationToken token = (JwtAuthenticationToken) authentication;
+        Long memberId = getMemberIdIfExistToken(token);
+        return ResponseEntity.ok().body(memberService.editMemberInfo(name, file, memberId));
+    }
+
+    /**
+     * 회원 정보 수정 컨트롤러 메서드
+     * @param name 닉네임 정보
+     * @param file 프로필 이미지 정보
+     * @author LeeGoh
+     */
     @PostMapping("/modification")
-    public ResponseEntity postChangeMemberInfoInMyPage(@RequestPart(value = "data") PostName name,
+    public ResponseEntity postEditMemberInfoInMyPageS3(@RequestPart(value = "data") PostName name,
                                                        @RequestPart(value = "profileImage") MultipartFile file,
                                                        Authentication authentication) {
 
         JwtAuthenticationToken token = (JwtAuthenticationToken) authentication;
         Long memberId = getMemberIdIfExistToken(token);
-        return ResponseEntity.ok().body(memberService.changeMemberInfo(name, file, memberId));
+        return ResponseEntity.ok().body(memberService.editMemberInfoS3(name, file, memberId));
     }
 
     /**
