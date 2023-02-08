@@ -36,7 +36,7 @@ const FinishedClass = () => {
         <div className="flex flex-col">
           {finishedClassData?.data.data.map((finished: any) => (
             <div className="flex flex-row w-full h-fit border border-borderColor rounded-xl mt-3 p-3 pl-5">
-              <div className="flex flex-col w-[40%]">
+              <div className="flex flex-col w-[60%]">
                 <div className="mb-3 ">data.name</div>
                 <div className="flex">
                   <div className="mr-3">희망요일</div>
