@@ -10,7 +10,7 @@ import com.codueon.boostUp.domain.lesson.dto.patch.PostLessonDetailEdit;
 import com.codueon.boostUp.domain.lesson.dto.patch.PostLessonInfoEdit;
 import com.codueon.boostUp.domain.lesson.dto.post.PostLesson;
 import com.codueon.boostUp.domain.lesson.dto.post.PostSearchLesson;
-import com.codueon.boostUp.domain.lesson.dto.utils.WrapUrl;
+import com.codueon.boostUp.domain.lesson.dto.utils.WrapLessonId;
 import com.codueon.boostUp.domain.lesson.service.LessonService;
 import com.codueon.boostUp.global.security.token.JwtAuthenticationToken;
 import lombok.RequiredArgsConstructor;
@@ -124,11 +124,11 @@ public class LessonController {
      * @author Quartz614
      */
     @GetMapping(value = "/tutor")
-    public ResponseEntity<WrapUrl> getLessonMypage(Authentication authentication) {
+    public ResponseEntity<WrapLessonId> getLessonMypage(Authentication authentication) {
         JwtAuthenticationToken token = (JwtAuthenticationToken) authentication;
         Long memberId = getMemberIdIfExistToken(token);
 
-        return ResponseEntity.ok().body(new WrapUrl(lessonService.getLessonMypage(memberId)));
+        return ResponseEntity.ok().body(new WrapLessonId(lessonService.getLessonMypage(memberId)));
     }
 
     /**
