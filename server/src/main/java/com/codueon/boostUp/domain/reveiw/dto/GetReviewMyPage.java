@@ -38,8 +38,7 @@ public class GetReviewMyPage {
                            LocalDateTime createdAt,
                            Lesson lesson,
                            LocalDateTime startTime,
-                           LocalDateTime endTime
-    ) {
+                           LocalDateTime endTime) {
         this.lessonId = lessonId;
         this.languages = lesson.getLanguageListAsString();
         this.profileImage = lesson.getProfileImage().getFilePath();

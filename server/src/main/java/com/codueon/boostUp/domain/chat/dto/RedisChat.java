@@ -17,7 +17,6 @@ import java.time.LocalDateTime;
 @Getter
 @NoArgsConstructor
 public class RedisChat implements Serializable {
-
     @NotNull
     private Long chatRoomId;
     @NotNull

@@ -1,7 +1,4 @@
-
-
 let stompClient = null;
-let notificationCount = 0;
 
 $(document).ready(function() {
     console.log("Index page is ready");
@@ -15,7 +12,7 @@ function setAuthorization() {
 }
 
 function clickButton() {
-    let socket = new SockJS("https://codueon.shop/ws/chat");
+    let socket = new SockJS("http://localhost:8080/ws/chat");
     stompClient = Stomp.over(socket);
     let headers = {Authorization : localStorage.getItem('access_token')};
     stompClient.connect(headers, (frame) => {});
@@ -26,6 +23,12 @@ function clickGudokButton() {
     stompClient.subscribe('/topic/rooms/' + chatRoomId, (message) => {
         const data = JSON.parse(message.body);
         showMessage(data);
+        console.log(data);
+    });
+
+    let memberId = $("#senderId").val();
+    stompClient.subscribe('/topic/alarm/member/' + memberId, (message) => {
+        const data = JSON.parse(message.body);
         console.log(data);
     });
 }
@@ -42,15 +45,13 @@ function showMessage(message) {
 function sendMessage() {
     console.log("sending message");
     const newMsg = {
+        senderId: $("#senderId").val(),
+        receiverId: $("#receiverId").val(),
         chatRoomId: $("#chatRoomId").val(),
+        memberImage: "https://test.com/test.png",
         messageContent: $("#messageContent").val()
     }
     stompClient.send("/app/rooms", {}, JSON.stringify(newMsg));
-}
-
-function sendPrivateMessage() {
-    console.log("sending private message");
-    stompClient.send("/ws/private/message", {}, JSON.stringify({'messageContent': $("#private-message").val()}));
 }
 
 function updateNotificationDisplay() {
@@ -60,9 +61,4 @@ function updateNotificationDisplay() {
         $('#notifications').show();
         $('#notifications').text(notificationCount);
     }
-}
-
-function resetNotificationCount() {
-    notificationCount = 0;
-    updateNotificationDisplay();
 }
