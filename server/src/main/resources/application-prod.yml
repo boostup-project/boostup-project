@@ -71,6 +71,9 @@ kakao:
 
 toss:
   secret-key: ${TOSS_PAY_SECRET_KEY}
+  
+pay:
+  request-url: ${PAY_REQUEST_URL}
 
 jwt:
   secret-key: ${JWT_SECRET_KEY}
@@ -94,7 +97,3 @@ mail:
 default:
   image:
     address: ${DEFAULT_IMAGE_URL}
-
-pay:
-  request-url: ${PAY_REQUEST_URL}
-   ${PAY_REQUEST_URL} = "https://codueon.shop"
