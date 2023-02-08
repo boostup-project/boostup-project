@@ -63,8 +63,7 @@ public class SendAlarmService {
     public void sendEnterAlarm(ChatRoom chatRoom, RedisChat receiverChat) {
         String displayName = chatRoom.returnChatRoomName(receiverChat.getSenderId());
         Long receiverId = receiverChat.getSenderId();
-        Long senderId = chatRoom.returnReceiverId(receiverId);
-        int alarmCount = redisChatAlarm.makeChatRoomAndEnterAlarm(senderId, receiverId, chatRoom.getId());
+        int alarmCount = redisChatAlarm.makeChatRoomAndEnterAlarm(receiverId, chatRoom.getId());
         GetChatRoom makeEnterRoomAlarm = GetChatRoom.builder()
                 .chatRoomId(chatRoom.getId())
                 .alarmCount(alarmCount)
