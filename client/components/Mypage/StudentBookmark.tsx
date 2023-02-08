@@ -102,11 +102,8 @@ const StudentBookmark = () => {
                 </div>
               </div>
               <div className="flex flex-col w-[40%] justify-center items-end desktop:mr-4 tablet:mr-2 mr-2">
-                <div className="flex  desktop:text-xl tablet:text-lg text-[12px]">
-                  <div className="desktop:mt-1 tablet:mt-2 mt-1 mr-px desktop:w-5 tablet:w-3.5 w-2.5">
-                    <IconWon />
-                  </div>
-                  {bookmark.cost}원/회
+                <div className="flex desktop:text-xl tablet:text-lg text-[12px] text-moneyGrayColor">
+                  ₩ {bookmark.cost.toLocaleString("ko-KR")}원/회
                 </div>
                 <button
                   className="decktop:w-[30px] tablet:w-[28px] w-[25px] my-6"

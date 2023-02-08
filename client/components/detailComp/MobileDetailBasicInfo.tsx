@@ -62,7 +62,7 @@ const MobileDetailBasicInfo = (basicInfo: any) => {
           {basicInfo.basicInfo?.title}
         </div>
         <div className="w-full h-fit flex flex-row justify-center items-center font-SCDream4 text-sm text-textColor mt-2 mb-4">
-          {basicInfo.basicInfo?.cost}원 / 1회
+          {basicInfo.basicInfo?.cost.toLocleString("ko-KR")}원 / 1회
         </div>
         <div className="flex flex-col w-full h-fit justify-center items-center ml-7">
           {/* 닉네임 */}

@@ -165,10 +165,10 @@ const StudentClass = () => {
               {/* {Right} */}
               <div className="flex flex-col w-[40%] justify-center items-end desktop:mr-4 tablet:mr-2 mr-2">
                 <div className="flex  desktop:text-xl tablet:text-lg text-[14px]">
-                  <div className="mt-1 mr-1 desktop:w-5 tablet:w-4 w-3">
+                  {/* <div className="mt-1 mr-1 desktop:w-5 tablet:w-4 w-3">
                     <IconWon />
-                  </div>
-                  {tutor.cost}원
+                  </div> */}
+                  ₩ {tutor.cost.toLocaleString("ko-KR")}원/회
                 </div>
                 <div className="flex flex-col font-SCDream5 mt-5 tablet:mt-3 desktop:text-sm tablet:text-xs text-[8px] items-center">
                   {tutor.status}
