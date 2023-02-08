@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @Service
@@ -26,6 +27,7 @@ public class SendAlarmService {
      * @param chatRoomId 채팅방 식별자
      * @author mozzi327
      */
+    @Transactional
     public void setAlarmAndSendAlarm(Long senderId, Long receiverId, Long chatRoomId) {
         redisChatAlarm.increaseCharRoomAlarm(receiverId, chatRoomId);
 
@@ -49,8 +51,10 @@ public class SendAlarmService {
      */
     private void sendAlarm(GetAlarmMessage senderAlarm, GetAlarmMessage receiverAlarm,
                           Long senderId, Long receiverId) {
+        log.info("[SEND ALARM] START senderId : {}, receiverId : {}", senderId, receiverId);
         redisTemplate.convertAndSend("/topic/alarm/member/" + senderId, senderAlarm);
         redisTemplate.convertAndSend("/topic/alarm/member/" + receiverId, receiverAlarm);
+        log.info("[SEND ALARM] END");
     }
 
     /**
