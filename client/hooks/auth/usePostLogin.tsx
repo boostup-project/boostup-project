@@ -9,10 +9,12 @@ const usePostLogin = () => {
 
   return useMutation(postLogin, {
     onSuccess: (res: any) => {
+      console.log(res);
       localStorage.setItem("token", res.headers.authorization);
-      localStorage.setItem("refresh_token", res.headers.refreshtoken);
       localStorage.setItem("email", res.data.email);
       localStorage.setItem("name", res.data.name);
+      localStorage.setItem("memberId", res.data.memberId);
+      localStorage.setItem("memberImage", res.data.memberImage);
 
       setLog(prev => !prev);
     },

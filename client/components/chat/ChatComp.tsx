@@ -3,81 +3,37 @@ import { useRecoilState } from "recoil";
 import { useState, useEffect } from "react";
 import { chatActive } from "atoms/chat/chatAtom";
 import ChatContent from "./ChatContent";
-
-import { io } from "socket.io-client";
-import Stompjs from "stompjs";
-import SockJs from "sockjs-client";
-
-const socket = io(`http://localhost:8000/ws/chat`, {
-  transports: ["websocket"],
-});
-// const socket = io(`${process.env.NEXT_PUBLIC_API_URL}/ws/chat`, {
-//   transports: ["websocket"],
-// });
+import { chatListState, roomIdState, newDataState } from "atoms/chat/chatAtom";
+import { sendMsg, subscribeRoom, unSubscribeRoom } from "hooks/chat/socket";
 
 const ChatComp = () => {
   const [active, setActive] = useRecoilState(chatActive);
   const [inputValue, setInputValue] = useState<string>("");
-  const [chatList, setChatList] = useState<string[]>([]);
+  const [chatList, setChatList] = useRecoilState(chatListState);
+  const [roomId, setRoomId] = useRecoilState(roomIdState);
 
   const handleClickCancel = () => {
     setActive(false);
+    unSubscribeRoom();
   };
 
   const handleInputChange = (e: any) => {
     setInputValue(e.target.value);
   };
 
-  // !!socket test logic!!
-
-  const handleClickSubmit = () => {
-    if (inputValue) {
-      socket.emit("message", {
-        user: localStorage.getItem("token"),
-        comment: inputValue,
-      });
-
-      setInputValue("");
-    }
-  };
-
   const handlePressEnter = (e: any) => {
     if (e.key === "Enter" && inputValue) {
-      socket.emit("message", {
-        user: localStorage.getItem("name"),
-        comment: inputValue,
-      });
-
+      sendMsg(roomId, inputValue);
       setInputValue("");
     }
   };
 
-  socket.on("send", data => {
-    setChatList([...chatList, data]);
-  });
-
-  // useEffect(() => {
-  //   // connect to socket server
-
-  //   // if (socket) {
-  //   //   socket.disconnect();
-  //   // }
-  //   // // log socket connection
-  //   // socket.on("connect", () => {
-  //   //   console.log("SOCKET CONNECTED!");
-  //   //   setConnected(true);
-  //   // });
-
-  //   // socket.on("message", (message: IMessage) => {
-  //   //   console.log("change");
-  //   //   chat.push(message);
-  //   //   setChat([...chat]);
-  //   // });
-
-  //   // if (socket) {
-  //   //   socket.disconnect();
-  //   // }
-  // }, []);
+  const handleClickSubmit = (e: any) => {
+    if (inputValue) {
+      sendMsg(roomId, inputValue);
+      setInputValue("");
+    }
+  };
 
   return (
     <>

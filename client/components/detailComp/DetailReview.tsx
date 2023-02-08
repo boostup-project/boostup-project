@@ -1,6 +1,8 @@
 import Image from "next/image";
 
 const DetailReview = (reviewData: any) => {
+  console.log(reviewData);
+
   const changeToTime = (timeCode: string) => {
     let date = timeCode.slice(0, 10);
     let time = timeCode.slice(11, 16);
