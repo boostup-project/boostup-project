@@ -463,11 +463,11 @@ public class LessonService {
      * @return lessonUrl 과외 Url
      * @author Quartz614
      */
-    public String getLessonMypage(Long memberId) {
+    public Long getLessonMypage(Long memberId) {
 
         Lesson findLesson = lessonDbService.ifExistsReturnLessonByMemberId(memberId);
-        String lessonUrl = "http://localhost:3000/lesson/" + findLesson.getId();
-        return lessonUrl;
+        Long wrapLessonId = findLesson.getId();
+        return wrapLessonId;
     }
 
     /**
