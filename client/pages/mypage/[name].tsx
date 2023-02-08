@@ -17,8 +17,16 @@ import StudentTab from "components/Mypage/StudentTab";
 import useGetStudentInfo from "hooks/mypage/useGetStudentInfo";
 import useGetTutorInfo from "hooks/mypage/useGetTutorInfo";
 import useGetMyTutor from "hooks/mypage/useGetMyTutor";
+import { useSetRecoilState } from "recoil";
+import { chatActive } from "atoms/chat/chatAtom";
 const Mypage = () => {
   const router = useRouter();
+
+  const setActive = useSetRecoilState(chatActive);
+
+  useEffect(() => {
+    setActive(false);
+  }, []);
 
   const { data: myTutorUrl } = useGetMyTutor();
   const lessonId = Number(myTutorUrl?.data.lessonUrl.slice(29));

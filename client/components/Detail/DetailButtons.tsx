@@ -7,6 +7,7 @@ import useDeleteDetail from "hooks/detail/useDeleteDetail";
 import useGetBookmarkModi from "hooks/detail/useGetBookmarkModi";
 import useGetBookmark from "hooks/detail/useGetBookmark";
 import { useRouter } from "next/router";
+import useGetCreateRoom from "hooks/chat/useGetCreateRoom";
 import { useRecoilValue } from "recoil";
 import { refetchBookmark } from "atoms/detail/detailAtom";
 const DetailButtons = (basicInfo: any) => {
@@ -36,8 +37,10 @@ const DetailButtons = (basicInfo: any) => {
     setOpenModal(!isOpenModal);
   }, [isOpenModal]);
 
+  const { refetch: createChatRoomRefetch } = useGetCreateRoom(lessonId);
+
   const chatNow = () => {
-    return;
+    createChatRoomRefetch();
   };
 
   const saveBookmark = (lessonId: any) => {

@@ -103,8 +103,6 @@ const BasicInfo = ({ basicInfo, setBasicInfo, toWrite, setStep }: Props) => {
       if (proImage) {
         editState = "true";
 
-        console.log(proImage);
-
         const compressImg = await compressImage(proImage);
         let compressFile;
 

@@ -2,7 +2,7 @@
 const removeImports = require("next-remove-imports")();
 
 const nextConfig = {
-  reactStrictMode: true,
+  reactStrictMode: false,
   swcMinify: true,
   //   images:{
   //     loader: 'imgix',
