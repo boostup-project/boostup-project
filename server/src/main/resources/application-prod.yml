@@ -71,7 +71,7 @@ kakao:
 
 toss:
   secret-key: ${TOSS_PAY_SECRET_KEY}
-  
+
 pay:
   request-url: ${PAY_REQUEST_URL}
 
