@@ -9,6 +9,7 @@ import usePostExtraModi from "hooks/detail/usePostExtraModi";
 import { useEffect } from "react";
 import { toast } from "react-toastify";
 import ModalBackDrop from "components/reuse/container/ModalBackDrop";
+import imageCompression from "browser-image-compression";
 
 interface Props {
   modalOpen: () => void;
@@ -17,11 +18,22 @@ interface Props {
   lessonId: number;
 }
 
+const compressImage = async (image: any) => {
+  try {
+    const options = {
+      maxSizeMb: 2,
+      maxWidthOrHeight: 300,
+    };
+    return await imageCompression(image, options);
+  } catch (e) {
+    console.log(e);
+  }
+};
+
 const DetailExtraModi = ({ modalOpen, textData, images, lessonId }: Props) => {
-  const [previewImages, setPreviewImages] = useState<string[]>([]);
-  const [detailImages, setDetailImages] = useState<string[]>([]);
-  console.log("previewImages", previewImages);
-  console.log("detailImages", detailImages);
+  const [previewImages, setPreviewImages] = useState<any[]>([]);
+  const [detailImages, setDetailImages] = useState<any[]>([]);
+  const [deletedArr, setDeletedArr] = useState<number[]>([]);
 
   const imageInput: any = useRef();
   const { mutate, isError, isSuccess } = usePostExtraModi();
@@ -44,7 +56,9 @@ const DetailExtraModi = ({ modalOpen, textData, images, lessonId }: Props) => {
   /** 정보에 이미지 있을 시 집어넣기 **/
   useEffect(() => {
     if (images) {
-      setPreviewImages(images);
+      // 배열 안의 객체에서 filePath만 할당
+      setPreviewImages(images.map((image: any) => image.filePath));
+      // 배열모든 것을 Detail에 할당
       setDetailImages(images);
     }
   }, []);
@@ -62,6 +76,7 @@ const DetailExtraModi = ({ modalOpen, textData, images, lessonId }: Props) => {
     imageInput.current.click();
   };
 
+  /** previewImage만들어주는 url */
   const insertImg = (e: any) => {
     let reader = new FileReader();
     setDetailImages(prev => prev.concat(e.target.files));
@@ -77,36 +92,67 @@ const DetailExtraModi = ({ modalOpen, textData, images, lessonId }: Props) => {
       }
     };
   };
+  /** 이미지 삭제 기능
+   * how: 서버에서 { id, url }을 준다.
+   * 만약 바뀐 것이 없다면 careerImages[]에 넣어줌
+   * 만약 바뀐 것이 있다면 변경 된 것의 id를 기재하여 넘기기.
+   * 추가한 이미지는 careerImage로 넘기기
+   */
   const deleteImg = (e: any) => {
-    setPreviewImages(
-      previewImages.filter((image, idx) => e.target.id !== String(idx)),
+    const targetId = Number(e.target.id);
+
+    // /** 미리보기 삭제 */
+    const deletedPreview = previewImages.filter(
+      (image: any, idx) => idx !== targetId,
     );
-    setDetailImages(
-      detailImages.filter((image, idx) => e.target.id !== String(idx)),
-    );
+    setPreviewImages(deletedPreview);
+
+    /** 이미지 배열 삭제 */
+    const deletedDetail = detailImages.filter((image: any, idx) => {
+      return idx !== targetId;
+    });
+    setDetailImages(deletedDetail);
+
+    // 삭제된 이미지의 ID값 가져오기
+    const deletedId = detailImages
+      .filter((image, idx) => {
+        return idx === targetId;
+      })
+      .map(el => el.careerImageId)
+      .filter(image => image);
+    setDeletedArr(prev => prev.concat(deletedId));
   };
 
   const testSubmit = (e: any) => {
-    console.log(e);
-    const json = JSON.stringify({
+    const formData = new FormData();
+
+    const detailTxt = {
       introduction: e.introduction,
       detailCompany: e.detailCompany,
       detailCost: e.detailCost,
       personality: e.personality,
       detailLocation: e.detailLocation,
-    });
+      careerImages: deletedArr,
+    };
+    const json = JSON.stringify(detailTxt);
     const blob = new Blob([json], { type: "application/json" });
-    const formData = new FormData();
-
     formData.append("data", blob);
-    detailImages.map(image => {
-      formData.append("careerImage", image[0]);
-    });
+
+    const addImgs = detailImages
+      .filter(image => typeof image[0] === "object")
+      .map(image => image[0]);
+
+    if (addImgs.length > 0) {
+      addImgs.map(img => {
+        formData.append("careerImage", img);
+      });
+    }
     const assemble = {
       object: formData,
       id: lessonId,
     };
-    // mutate(assemble);
+    mutate(assemble);
+    modalOpen();
   };
 
   return (
@@ -204,40 +250,21 @@ const DetailExtraModi = ({ modalOpen, textData, images, lessonId }: Props) => {
             <div className="w-full py-3 border flex border-borderColor outline-pointColor rounded-xl font-SCDream4 text-xs text-textColor placeholder:text-center mt-2 tablet:text-smhover:bg-gray-100">
               <div className="w-full flex h-fit items-center justify-center">
                 {previewImages.length >= 1 ? (
-                  previewImages.map((el: any, idx) =>
-                    el.careerImageId ? (
-                      <div
-                        key={el.careerImageId}
-                        className="relative w-1/4 pr-1"
+                  previewImages.map((el: any, idx: any) => (
+                    <div key={idx} className="relative w-1/4 pr-1">
+                      <img
+                        className="aspect-square rounded-xl relative"
+                        src={el}
+                      />
+                      <span
+                        id={idx}
+                        className="absolute top-0 right-2 text-negativeMessage text-lg cursor-pointer"
+                        onClick={e => deleteImg(e)}
                       >
-                        <img
-                          className="aspect-square rounded-xl relative"
-                          src={el.filePath}
-                        />
-                        <span
-                          id={el.careerImageId}
-                          className="absolute top-0 right-2 text-negativeMessage text-lg cursor-pointer"
-                          onClick={e => deleteImg(e)}
-                        >
-                          X
-                        </span>
-                      </div>
-                    ) : (
-                      <div key={idx} className="relative w-1/4 pr-1">
-                        <img
-                          className="aspect-square rounded-xl relative"
-                          src={el}
-                        />
-                        <span
-                          id={`${idx}`}
-                          className="absolute top-0 right-2 text-negativeMessage text-lg cursor-pointer"
-                          onClick={e => deleteImg(e)}
-                        >
-                          X
-                        </span>
-                      </div>
-                    ),
-                  )
+                        X
+                      </span>
+                    </div>
+                  ))
                 ) : (
                   <div className="w-full flex flex-col justify-center items-center">
                     <IconImg width="69px" heigth="62px" fill={modalImgTxt} />

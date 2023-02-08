@@ -7,7 +7,6 @@ import { IconImg } from "assets/icon";
 import { modalImgTxt } from "assets/color/color";
 import { SetterOrUpdater } from "recoil";
 import { Info } from "./WriteModal";
-import { useEffect } from "react";
 import { useRouter } from "next/router";
 import { useRecoilState } from "recoil";
 import { editMode } from "atoms/detail/detailAtom";
@@ -240,7 +239,9 @@ const BasicInfo = ({ basicInfo, setBasicInfo, toWrite, setStep }: Props) => {
                       <input
                         type="checkbox"
                         value={el}
-                        {...register("languages", { required: "true" })}
+                        {...register("languages", {
+                          required: "필수정보입니다",
+                        })}
                         defaultChecked={
                           [...(basicInfo.languages as any)].includes(el)
                             ? true
@@ -251,7 +252,9 @@ const BasicInfo = ({ basicInfo, setBasicInfo, toWrite, setStep }: Props) => {
                       <input
                         type="checkbox"
                         value={el}
-                        {...register("languages", { required: "true" })}
+                        {...register("languages", {
+                          required: "필수정보입니다",
+                        })}
                       />
                     )}
                     {el}
@@ -261,6 +264,9 @@ const BasicInfo = ({ basicInfo, setBasicInfo, toWrite, setStep }: Props) => {
             }
           })}
         </div>
+        <p className="w-11/12 text-xs text-negativeMessage mt-1 tablet:text-sm desktop:w-4/6">
+          {errors?.language && <span>필수 정보입니다</span>}
+        </p>
         <div className="w-11/12 list h-fit flex flex-row items-start mt-3 desktop:w-4/6">
           {langArr.map((el: string, idx: number) => {
             if (idx > 3) {
@@ -271,7 +277,9 @@ const BasicInfo = ({ basicInfo, setBasicInfo, toWrite, setStep }: Props) => {
                       <input
                         type="checkbox"
                         value={el}
-                        {...register("languages", { required: "true" })}
+                        {...register("languages", {
+                          required: "필수정보입니다",
+                        })}
                         defaultChecked={
                           [...(basicInfo.languages as any)].includes(el)
                             ? true
@@ -282,7 +290,9 @@ const BasicInfo = ({ basicInfo, setBasicInfo, toWrite, setStep }: Props) => {
                       <input
                         type="checkbox"
                         value={el}
-                        {...register("languages", { required: "true" })}
+                        {...register("languages", {
+                          required: "필수정보입니다",
+                        })}
                       />
                     )}
 
@@ -294,7 +304,7 @@ const BasicInfo = ({ basicInfo, setBasicInfo, toWrite, setStep }: Props) => {
           })}
         </div>
         <p className="w-11/12 text-xs text-negativeMessage mt-1 tablet:text-sm desktop:w-4/6">
-          {errors?.language && <span>필수 정보입니다</span>}
+          {errors?.languages && <span>필수 정보입니다</span>}
         </p>
         <div className="flex flex-row justify-start items-start w-11/12 h-fit font-SCDream5 text-sm text-textColor mt-4 mb-2 desktop:w-4/6">
           재직 회사/학교 <div className="text-pointColor">*</div>
@@ -318,6 +328,7 @@ const BasicInfo = ({ basicInfo, setBasicInfo, toWrite, setStep }: Props) => {
           className="w-11/12 h-fit p-2 border border-borderColor outline-pointColor rounded-xl font-SCDream4 text-[11px] text-textColor tablet:text-sm desktop:w-4/6"
           {...register("career", {
             required: "필수 정보입니다.",
+            valueAsNumber: true,
           })}
           defaultValue={basicInfo.career as string}
         />
@@ -399,7 +410,10 @@ const BasicInfo = ({ basicInfo, setBasicInfo, toWrite, setStep }: Props) => {
           type="number"
           placeholder="회 당 수업료를 입력하세요"
           className="w-11/12 h-fit p-2 border border-borderColor outline-pointColor rounded-xl font-SCDream4 text-[11px] text-textColor tablet:text-sm desktop:w-4/6"
-          {...register("cost", { required: "필수 정보입니다." })}
+          {...register("cost", {
+            required: "필수 정보입니다.",
+            valueAsNumber: true,
+          })}
           defaultValue={basicInfo.cost as string}
         />
         <p className="w-11/12 text-xs text-negativeMessage mt-1 tablet:text-sm desktop:w-4/6">

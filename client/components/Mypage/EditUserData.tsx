@@ -1,15 +1,16 @@
 import { modalImgTxt } from "assets/color/color";
 import { IconImg } from "assets/icon";
-import AuthBtn from "components/reuse/btn/AuthBtn";
-import CreateModalContainer from "components/reuse/container/CreateModalContainer";
-import ModalBackDrop from "components/reuse/container/ModalBackDrop";
-import usePostMemberModi from "hooks/mypage/usePostMemberModi";
-import usePostNameCheck from "hooks/mypage/usePostNameCheck";
 import { useEffect } from "react";
 import { ChangeEvent } from "react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
+import AuthBtn from "components/reuse/btn/AuthBtn";
+import ModalBackDrop from "components/reuse/container/ModalBackDrop";
+import usePostMemberModi from "hooks/mypage/usePostMemberModi";
+import usePostNameCheck from "hooks/mypage/usePostNameCheck";
+import imageCompression from "browser-image-compression";
+import CreateModalMypageContainer from "components/reuse/container/CreateModalMypageContainer";
 
 interface Props {
   editProfile: () => void;
@@ -19,7 +20,7 @@ interface MemberEditData {
   profileImg: FileList;
 }
 
-const EditUserDataModal = ({ editProfile }: Props) => {
+const EditUserData = ({ editProfile }: Props) => {
   const [duplicationName, setDuplicationName] = useState("");
   const [previewImg, setPreviewImg] = useState<string>("");
   const { mutate, data, isSuccess } = usePostNameCheck();
@@ -28,7 +29,11 @@ const EditUserDataModal = ({ editProfile }: Props) => {
     isSuccess: isMemberSuccess,
     isError: isMemberError,
   } = usePostMemberModi();
-  const { register, handleSubmit } = useForm<MemberEditData>();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<MemberEditData>({ mode: "onBlur" });
 
   useEffect(() => {
     if (isSuccess && data) {
@@ -61,18 +66,40 @@ const EditUserDataModal = ({ editProfile }: Props) => {
     console.log(duplicationName);
     mutate(duplicationName);
   };
-  const editSubmit = (e: any) => {
-    console.log("submit");
+
+  /** 이미지 압축 함수 */
+  const compressImage = async (image: any) => {
+    try {
+      const options = {
+        maxSizeMb: 2,
+        maxWidthOrHeight: 300,
+      };
+      return await imageCompression(image, options);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  /** 변경정보 제출 */
+  const editSubmit = async (e: MemberEditData) => {
+    const { name, profileImg } = e;
     const json = JSON.stringify({
-      name: e.name,
+      name,
     });
-    const memberImage = e.profileImg[0];
     const blob = new Blob([json], { type: "application/json" });
     const formData = new FormData();
     formData.append("data", blob);
-    formData.append("profileImage", memberImage);
+    if (profileImg) {
+      const compressImg = await compressImage(profileImg[0]);
+      let compressFile;
+      if (compressImg) {
+        compressFile = new File([compressImg!], compressImg?.name);
+        formData.append("profileImage", compressFile);
+      }
+    }
     memberModi(formData);
   };
+
   useEffect(() => {
     if (isMemberError) {
       toast.error("정보 수정이 되지 않았습니다. 다시 작성부탁드립니다", {
@@ -88,12 +115,12 @@ const EditUserDataModal = ({ editProfile }: Props) => {
   return (
     <>
       <ModalBackDrop onClick={editProfile}>
-        <CreateModalContainer>
-          <div className="w-full font-SCDream7 text-borderColor desktop:w-4/5">
+        <CreateModalMypageContainer>
+          <div className="w-full font-SCDream7 text-borderColor desktop:w-full">
             개인정보 수정하기
           </div>
           <form
-            className="w-full font-SCDream5 text-sm desktop:w-4/5"
+            className="w-full font-SCDream5 text-sm desktop:w-full"
             onSubmit={handleSubmit(editSubmit)}
           >
             <div className="mt-4">
@@ -136,7 +163,7 @@ const EditUserDataModal = ({ editProfile }: Props) => {
                 />
               </label>
             </div>
-            <div className="mt-4">닉네임</div>
+            <div className="mt-6">닉네임</div>
             <div className="w-full flex tablet:w-full">
               <label className="w-9/12">
                 <input
@@ -144,7 +171,13 @@ const EditUserDataModal = ({ editProfile }: Props) => {
                   type="text"
                   placeholder="닉네임 중복검사를 해주세요"
                   className="w-full h-fit p-2 border border-borderColor outline-pointColor rounded-l-xl font-SCDream4 text-xs text-textColor tablet:text-sm"
-                  {...register("name")}
+                  {...register("name", {
+                    required: false,
+                    pattern: {
+                      value: /^[a-zA-Zㄱ-힣0-9|s]{5,12}$/gm,
+                      message: "5자이상 숫자,영문자로 작성해 주세요",
+                    },
+                  })}
                   onChange={e => nameReciever(e)}
                 />
               </label>
@@ -155,7 +188,10 @@ const EditUserDataModal = ({ editProfile }: Props) => {
                 중복검사
               </div>
             </div>
-            <div className="mt-7 flex justify-center w-full tablet:w-full">
+            <p className="text-xs text-negativeMessage mt-1 tablet:text-sm">
+              {errors?.name?.message}
+            </p>
+            <div className="mt-12 flex justify-center w-full tablet:w-full">
               <div
                 className="flex justify-center items-center w-1/4 py-2 bg-borderColor rounded-xl text-negativeMessage text-sm mr-5 cursor-pointer"
                 onClick={editProfile}
@@ -165,10 +201,10 @@ const EditUserDataModal = ({ editProfile }: Props) => {
               <AuthBtn>변경하기</AuthBtn>
             </div>
           </form>
-        </CreateModalContainer>
+        </CreateModalMypageContainer>
       </ModalBackDrop>
     </>
   );
 };
 
-export default EditUserDataModal;
+export default EditUserData;

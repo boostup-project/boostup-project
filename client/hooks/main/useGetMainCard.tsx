@@ -11,7 +11,7 @@ const useGetMainCard = (props: any) => {
     initialData: props.posts,
     enabled: true,
     onSuccess: (data: any) => {
-      // 성공시 호출
+      console.log(data);
     },
     onError: error => {},
     retry: 1,
