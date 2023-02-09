@@ -10,23 +10,26 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class GetAlarmMessage {
     private Long chatRoomId;
+    private Long receiverId;
     private Integer alarmCount;
     private String latestMessage;
     private LocalDateTime createdAt;
 
     @Builder
-    public GetAlarmMessage(Long chatRoomId, Integer alarmCount, String latestMessage,
-                           LocalDateTime createdAt) {
+    public GetAlarmMessage(Long chatRoomId, Long receiverId, Integer alarmCount,
+                           String latestMessage, LocalDateTime createdAt) {
         this.chatRoomId = chatRoomId;
+        this.receiverId = receiverId;
         this.alarmCount = alarmCount;
         this.latestMessage = latestMessage;
         this.createdAt = createdAt;
     }
 
-    public static GetAlarmMessage of(RedisChat latestChat, int alarmCount) {
+    public static GetAlarmMessage of(Long receiverId, RedisChat latestChat, int alarmCount) {
         return GetAlarmMessage.builder()
                 .chatRoomId(latestChat.getChatRoomId())
                 .alarmCount(alarmCount)
+                .receiverId(receiverId)
                 .latestMessage(latestChat.getMessage())
                 .createdAt(latestChat.getCreatedAt())
                 .build();

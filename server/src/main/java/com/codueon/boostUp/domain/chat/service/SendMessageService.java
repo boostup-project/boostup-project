@@ -5,14 +5,12 @@ import com.codueon.boostUp.domain.chat.repository.redis.RedisChatMessage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.listener.ChannelTopic;
 import org.springframework.stereotype.Service;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class SendMessageService {
-    private final ChannelTopic channelTopic;
     private final RedisChatMessage redisChatMessage;
     private final RedisTemplate<Object, Object> redisTemplate;
 
@@ -22,7 +20,7 @@ public class SendMessageService {
      * @author mozzi327
      */
     public void sendMessage(RedisChat redisChat) {
-        redisTemplate.convertAndSend(channelTopic.getTopic(), redisChat);
+        redisTemplate.convertAndSend("chat", redisChat);
     }
 
     /**
@@ -35,7 +33,7 @@ public class SendMessageService {
      */
     public void sendEnterMessage(Long chatRoomId, RedisChat senderChat, RedisChat receiverChat) {
         redisChatMessage.initialMessage(chatRoomId, senderChat, receiverChat);
-        redisTemplate.convertAndSend(channelTopic.getTopic(), senderChat);
-        redisTemplate.convertAndSend(channelTopic.getTopic(), receiverChat);
+        redisTemplate.convertAndSend("chat", senderChat);
+        redisTemplate.convertAndSend("chat", receiverChat);
     }
 }

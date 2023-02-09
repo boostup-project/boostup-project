@@ -30,13 +30,10 @@ public class SendAlarmService {
     @Transactional
     public void setAlarmAndSendAlarm(Long senderId, Long receiverId, Long chatRoomId) {
         redisChatAlarm.increaseCharRoomAlarm(receiverId, chatRoomId);
-
         RedisChat latestChat = redisChatMessage.getLatestMessage(getKey(chatRoomId));
-
-        int senderAlarmCount = redisChatAlarm.getAlarmCount(senderId, chatRoomId);
         int receiverAlarmCount = redisChatAlarm.getAlarmCount(receiverId, chatRoomId);
-        GetAlarmMessage senderAlarm = GetAlarmMessage.of(latestChat, senderAlarmCount);
-        GetAlarmMessage receiverAlarm = GetAlarmMessage.of(latestChat, receiverAlarmCount);
+        GetAlarmMessage senderAlarm = GetAlarmMessage.of(senderId, latestChat, 0);
+        GetAlarmMessage receiverAlarm = GetAlarmMessage.of(receiverId, latestChat, receiverAlarmCount);
 
         sendAlarm(senderAlarm, receiverAlarm, senderId, receiverId);
     }
@@ -52,8 +49,10 @@ public class SendAlarmService {
     private void sendAlarm(GetAlarmMessage senderAlarm, GetAlarmMessage receiverAlarm,
                           Long senderId, Long receiverId) {
         log.info("[SEND ALARM] START senderId : {}, receiverId : {}", senderId, receiverId);
-        redisTemplate.convertAndSend("/topic/alarm/member/" + senderId, senderAlarm);
-        redisTemplate.convertAndSend("/topic/alarm/member/" + receiverId, receiverAlarm);
+        log.info("senderAlarm : {}", senderAlarm.getReceiverId());
+        log.info("receiverAlarm : {}", receiverAlarm.getReceiverId());
+        redisTemplate.convertAndSend("alarm", senderAlarm);
+        redisTemplate.convertAndSend("alarm", receiverAlarm);
         log.info("[SEND ALARM] END");
     }
 
@@ -72,9 +71,10 @@ public class SendAlarmService {
                 .chatRoomId(chatRoom.getId())
                 .alarmCount(alarmCount)
                 .redisChat(receiverChat)
+                .receiverId(receiverChat.getSenderId())
                 .displayName(displayName)
                 .build();
-        redisTemplate.convertAndSend("/topic/alarm/member/" + receiverChat.getSenderId(), makeEnterRoomAlarm);
+        redisTemplate.convertAndSend("firstAlarm", makeEnterRoomAlarm);
     }
 
     /**

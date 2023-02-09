@@ -46,7 +46,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
         // destination header가 해당 포인트로 시작될 경우 발행 상태가 됨(StompHandler 참조)
         config.setApplicationDestinationPrefixes("/app");
         // destination header가 해당 포인트로 시작될 경우 구독 상태가 됨
-        config.enableSimpleBroker("/topic", "/info");
+        config.enableSimpleBroker("/topic", "/alarm");
     }
 
     /**
