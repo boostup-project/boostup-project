@@ -35,8 +35,8 @@ const Mypage = () => {
   };
 
   useEffect(() => {
-    setLessonId(myTutorUrl?.data.wrapLessonId);
-    console.log(myTutorUrl?.data.wrapLessonId);
+    setLessonId(myTutorUrl?.data.lessonId);
+    console.log(myTutorUrl?.data.lessonId);
   }, [isSuccess]);
 
   useEffect(() => {

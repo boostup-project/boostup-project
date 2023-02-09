@@ -6,7 +6,7 @@ import Swal from "sweetalert2";
 const FinishedTutor = () => {
   const [islessonId, setIsLessonId] = useState(0);
   const { data: myTutorUrl } = useGetMyTutor();
-  const lessonId = myTutorUrl?.data.wrapLessonId;
+  const lessonId = myTutorUrl?.data.lessonId;
 
   const { refetch: refetchFinishedClass, data: finishedClassData } =
     useGetTutorInfo(lessonId, 3);

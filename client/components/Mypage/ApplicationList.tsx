@@ -12,7 +12,7 @@ const ApplicationList = () => {
 
   const [islessonId, setIsLessonId] = useState(0);
   const { data: myTutorUrl, isSuccess } = useGetMyTutor();
-  const lessonId = myTutorUrl?.data.wrapLessonId;
+  const lessonId = myTutorUrl?.data.lessonId;
 
   const { refetch: refetchApplyInfo, data: applyInfoData } = useGetTutorInfo(
     lessonId,
@@ -66,7 +66,7 @@ const ApplicationList = () => {
       </button>
       {/* {map} 수업신청정보 */}
       {applyInfoData?.data.data.map((apply: any) => (
-        <div className="flex flex-col">
+        <div className="flex flex-col" key={apply.lessonId}>
           <div className="flex flex-row w-full h-fit border border-borderColor rounded-xl desktop:mt-5 tablet:mt-3 mt-2 p-3 pl-5">
             <div className="flex flex-col w-[60%]">
               <div className="mb-3 ">{apply.name}</div>

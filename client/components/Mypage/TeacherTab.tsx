@@ -13,7 +13,7 @@ const TeacherTab = () => {
 
   const [islessonId, setIsLessonId] = useState(0);
   const { data: myTutorUrl } = useGetMyTutor();
-  const lessonId = myTutorUrl?.data.wrapLessonId;
+  const lessonId = myTutorUrl?.data.lessonId;
 
   const { refetch: refetchApplyInfo } = useGetTutorInfo(lessonId, 1);
   const { refetch: refetchClassInfo } = useGetTutorInfo(lessonId, 2);

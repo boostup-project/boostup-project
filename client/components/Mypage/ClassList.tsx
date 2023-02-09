@@ -7,7 +7,7 @@ const ClassList = () => {
   const [aSuggestId, setASuggestId] = useState(0);
 
   const { data: myTutorUrl } = useGetMyTutor();
-  const lessonId = Number(myTutorUrl?.data.lessonUrl.slice(29));
+  const lessonId = Number(myTutorUrl?.data.lessonId);
 
   const { refetch: refetchTutorInfo, data: tutorInfoData } = useGetTutorInfo(
     lessonId,

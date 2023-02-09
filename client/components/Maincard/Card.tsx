@@ -6,7 +6,6 @@ import {
   IconFullheart,
   IconEmptyheart,
 } from "assets/icon/";
-
 import { useEffect, useState } from "react";
 import Link from "next/link";
 // import useGetMainCard from "./useGetMainCard";
@@ -21,27 +20,30 @@ import useGetBookmarkModi from "hooks/detail/useGetBookmarkModi";
 import useGetBookmark from "hooks/detail/useGetBookmark";
 import Swal from "sweetalert2";
 import { mainCardInfo } from "atoms/main/mainAtom";
-import { useRouter } from "next/router";
 import { useSetRecoilState, useRecoilState, useRecoilValue } from "recoil";
 import { refetchBookmark } from "atoms/detail/detailAtom";
+import Pagination from "./Pagination";
 const client = new QueryClient();
 
 const Card = () => {
-  const router = useRouter();
   const [cards, setMainCardInfo] = useRecoilState(mainCardInfo);
+  //pagination
+  const limit = 2;
+  const [page, setPage] = useState(1);
+  const offset = (page - 1) * limit;
 
   const queryClient = useQueryClient();
-  const { refetch: cardRefetch, data: cardData } = useQuery(
-    ["cards"],
-    getMainCard,
-    {
-      enabled: true,
-      onSuccess: data => {
-        setMainCardInfo(data.data.data);
-      },
-      retry: 2,
+  const {
+    refetch: cardRefetch,
+    data: cardData,
+    isSuccess,
+  } = useQuery(["cards"], getMainCard, {
+    enabled: true,
+    onSuccess: data => {
+      setMainCardInfo(data.data.data);
     },
-  );
+    retry: 2,
+  });
   const toggle = useRecoilValue(refetchBookmark);
   const [lessonId, setLessonId] = useState(0);
   const [mark, setMark] = useState<boolean>(false);
@@ -52,11 +54,12 @@ const Card = () => {
 
   useEffect(() => {
     cardRefetch();
+    console.log(cards);
   }, [toggle]);
 
   useEffect(() => {
     setMainCardInfo(cardData?.data.data);
-    console.log(cardData);
+    console.log(cardData?.data.data.length);
   }, [cardData]);
 
   useEffect(() => {
@@ -79,7 +82,7 @@ const Card = () => {
   return (
     <QueryClientProvider client={client}>
       <div className="flex flex-row flex-wrap w-full">
-        {cards?.map((card: any) => (
+        {cards?.slice(offset, offset + limit).map((card: any) => (
           <div
             key={card.lessonId}
             className="h-fit m-1 desktop:w-[24%] tablet:w-[32%] w-[47%] rounded-lg"
@@ -159,6 +162,16 @@ const Card = () => {
           </div>
         ))}
       </div>
+      <>
+        {isSuccess ? (
+          <Pagination
+            total={cardData?.data.data.length}
+            limit={limit}
+            page={page}
+            setPage={setPage}
+          />
+        ) : null}
+      </>
     </QueryClientProvider>
   );
 };
