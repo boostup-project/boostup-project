@@ -105,12 +105,12 @@ const StudentClass = () => {
               >
                 {tutor.profileImage ? (
                   <img
-                    className="flex desktop:w-[200px] tablet:w-[150px] w-[100px] object-cover border border-borderColor rounded-xl m-3"
+                    className="flex desktop:w-[200px] tablet:w-[150px] w-[100px] desktop:h-[200px] tablet:h-[150px] h-[100px] object-cover border border-borderColor rounded-xl m-3"
                     src={tutor.profileImage}
                   />
                 ) : (
                   <img
-                    className="flex desktop:w-[200px] tablet:w-[150px] w-[100px] object-cover border border-borderColor rounded-xl m-3"
+                    className="flex desktop:w-[200px] tablet:w-[150px] w-[100px] desktop:h-[200px] tablet:h-[150px] h-[100px] object-cover border border-borderColor rounded-xl m-3"
                     src={
                       "https://play-lh.googleusercontent.com/38AGKCqmbjZ9OuWx4YjssAz3Y0DTWbiM5HB0ove1pNBq_o9mtWfGszjZNxZdwt_vgHo=w240-h480-rw"
                     }

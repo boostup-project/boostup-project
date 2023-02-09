@@ -5,24 +5,25 @@ import AcceptModal from "./AcceptModal";
 import DeclineModal from "./DeclineModal";
 import Swal from "sweetalert2";
 
-import { useState, useCallback, useEffect } from "react";
+import { useState, useCallback, useEffect, useRef } from "react";
 const ApplicationList = () => {
   const [openAccept, setOpenAccept] = useState<boolean>(false);
   const [openDecline, setOpenDecline] = useState<boolean>(false);
 
   const [islessonId, setIsLessonId] = useState(0);
   const { data: myTutorUrl, isSuccess } = useGetMyTutor();
-  const lessonId = myTutorUrl?.data.lessonId;
+  // const lessonId = myTutorUrl?.data.lessonId;
 
   const { refetch: refetchApplyInfo, data: applyInfoData } = useGetTutorInfo(
-    lessonId,
+    islessonId,
     1,
   );
 
   useEffect(() => {
-    setIsLessonId(lessonId);
-    //refetchApplyInfo();
-  }, [myTutorUrl]);
+    if (isSuccess) {
+      setIsLessonId(myTutorUrl?.data.lessonId);
+    }
+  }, [isSuccess]);
 
   useEffect(() => {
     if (islessonId) {
@@ -64,6 +65,7 @@ const ApplicationList = () => {
       >
         나의 과외로 이동하기
       </button>
+
       {/* {map} 수업신청정보 */}
       {applyInfoData?.data.data.map((apply: any) => (
         <div className="flex flex-col" key={apply.lessonId}>
