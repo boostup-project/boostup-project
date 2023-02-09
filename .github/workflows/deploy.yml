@@ -35,8 +35,6 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ap-northeast-2
           mask-aws-account-id: true
-      - name: aws에 모든 파일삭제
-        run: aws s3 rm ${{ secrets.AWS_S3_BUCKET_NAME }}/ --recursive
       - name: S3 버켓에 빌드된 파일 업로드
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
@@ -44,12 +42,6 @@ jobs:
         run: |
           aws s3 sync ./out s3://codeuon
         working-directory: ./client
-      - name: remove .html files extension
-        run: for file in $(find ./out -name "*.html"); do mv "$file" "${file%%.html}"; done
-      - name: Set HTML Content-Type and Copy them
-        run: aws s3 sync ./out ${{ secrets.AWS_S3_BUCKET_NAME }} --exclude "*.*" --content-type "text/html" --acl public-read --delete 
-      - name: Copy Other Assets
-        run: aws s3 sync ./out/ ${{ secrets.AWS_S3_BUCKET_NAME }} --exclude "*" --include "*.jpg" --include "*.png" --include "*.svg" --include "*.ico" --include "*.mp4" --include "*.webp" --metadata-directive REPLACE --cache-control max-age=600
       - name: cloudfront 캐시 무효화
         uses: chetan/invalidate-cloudfront-action@master 
         env:
