@@ -1,8 +1,11 @@
 import { AxiosResponse } from "axios";
+import useGetExtra from "hooks/detail/useGetExtra";
 import Image from "next/image";
 import { useState } from "react";
 import { useEffect } from "react";
 import DetailExtraModi from "./DetailExtraModi";
+import FadeLoader from "react-spinners/FadeLoader";
+import { loaderBlue } from "assets/color/color";
 
 interface CareerImage {
   [index: string]: string;
@@ -45,6 +48,7 @@ const DetailExtra = ({ extraData, lessonId, editable }: Props) => {
   const [textData, setTextData] = useState<DetailTitles>();
   const [images, setImages] = useState<string[]>([]);
   const [isEdit, setIsEdit] = useState(false);
+
   useEffect(() => {
     if (extraData) {
       const prompt = {
@@ -87,7 +91,15 @@ const DetailExtra = ({ extraData, lessonId, editable }: Props) => {
       )}
       <div className="w-full h-full pb-6 pt-3 px-6 text-base">
         {!textData ? (
-          <div>Loading</div>
+          <div className="w-full h-full flex justify-center items-center">
+            <FadeLoader
+              color={loaderBlue}
+              height={15}
+              width={5}
+              radius={2}
+              margin={2}
+            />
+          </div>
         ) : (
           detailTitlesArray.map((title, i) => (
             <div key={i} className="mb-7">

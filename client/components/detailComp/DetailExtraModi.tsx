@@ -10,6 +10,8 @@ import { useEffect } from "react";
 import { toast } from "react-toastify";
 import ModalBackDrop from "components/reuse/container/ModalBackDrop";
 import imageCompression from "browser-image-compression";
+import { useSetRecoilState } from "recoil";
+import { refetchToggle } from "atoms/detail/detailAtom";
 
 interface Props {
   modalOpen: () => void;
@@ -34,6 +36,7 @@ const DetailExtraModi = ({ modalOpen, textData, images, lessonId }: Props) => {
   const [previewImages, setPreviewImages] = useState<any[]>([]);
   const [detailImages, setDetailImages] = useState<any[]>([]);
   const [deletedArr, setDeletedArr] = useState<number[]>([]);
+  const setToggle = useSetRecoilState(refetchToggle);
 
   const imageInput: any = useRef();
   const { mutate, isError, isSuccess } = usePostExtraModi();
@@ -70,7 +73,10 @@ const DetailExtraModi = ({ modalOpen, textData, images, lessonId }: Props) => {
         position: toast.POSITION.TOP_RIGHT,
       });
     }
-  }, [isError]);
+    if (isSuccess) {
+      setToggle(prev => !prev);
+    }
+  }, [isError, isSuccess]);
 
   const onCickImageUpload = () => {
     imageInput.current.click();
@@ -141,18 +147,25 @@ const DetailExtraModi = ({ modalOpen, textData, images, lessonId }: Props) => {
     const addImgs = detailImages
       .filter(image => typeof image[0] === "object")
       .map(image => image[0]);
-
     if (addImgs.length > 0) {
-      addImgs.map(img => {
-        formData.append("careerImage", img);
+      addImgs.map(async img => {
+        const compressImg = await compressImage(img);
+        const compressImgFile = new File([compressImg!], compressImg?.name!);
+        formData.append("careerImage", compressImgFile);
       });
     }
     const assemble = {
       object: formData,
       id: lessonId,
     };
-    mutate(assemble);
-    modalOpen();
+    toast.info("이미지 최적화 중입니다...", {
+      autoClose: 4000,
+      position: toast.POSITION.TOP_RIGHT,
+    });
+    setTimeout(() => {
+      mutate(assemble);
+      modalOpen();
+    }, 4500);
   };
 
   return (

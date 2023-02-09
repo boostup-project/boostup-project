@@ -7,7 +7,6 @@ import { useRecoilState } from "recoil";
 import { powerBasicEditModal, editMode } from "atoms/detail/detailAtom";
 
 const DetailBasicInfo = (basicInfo: any) => {
-  console.log(basicInfo);
   const [power, setPower] = useRecoilState(powerBasicEditModal);
   const [mode, setMode] = useRecoilState(editMode);
   const handleClickEdit = () => {

@@ -12,6 +12,7 @@ import { useRecoilState } from "recoil";
 import { editMode } from "atoms/detail/detailAtom";
 import usePostBasicModi from "hooks/detail/usePostBasicModi";
 import imageCompression from "browser-image-compression";
+import { useEffect } from "react";
 
 interface BasicInfo {
   [index: string]: string | string[];
@@ -30,6 +31,7 @@ const BasicInfo = ({ basicInfo, setBasicInfo, toWrite, setStep }: Props) => {
   );
 
   const [mode, setMode] = useRecoilState(editMode);
+  const [btnWord, setBtnWord] = useState<string>();
 
   const {
     control,
@@ -50,6 +52,14 @@ const BasicInfo = ({ basicInfo, setBasicInfo, toWrite, setStep }: Props) => {
   ];
 
   const router = useRouter();
+  useEffect(() => {
+    if (mode) {
+      setBtnWord("수정");
+    } else {
+      setBtnWord("다음");
+    }
+  }, []);
+
   /** 미리보기 이미지 생성**/
   const insertImg = async (e: any) => {
     let reader = new FileReader();
@@ -421,7 +431,7 @@ const BasicInfo = ({ basicInfo, setBasicInfo, toWrite, setStep }: Props) => {
         </p>
         <div className="flex flex-row justify-center items-center w-full h-fit mt-10">
           <SmallBtn onClick={handleClickCancel}>취 소</SmallBtn>
-          <SmallBtn css="ml-5">다 음</SmallBtn>
+          <SmallBtn css="ml-5">{btnWord}</SmallBtn>
         </div>
       </form>
     </>
