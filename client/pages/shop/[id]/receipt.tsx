@@ -114,7 +114,7 @@ const receipt = () => {
         company,
       });
       setCostInfoData({
-        cost: cost.toLocaleString("ko-KR") + " 원",
+        cost: cost.toLocaleString("ko-KR") + " 원/회",
         quantity: String(quantity),
         totalCost: totalCost.toLocaleString("ko-KR") + " 원",
       });

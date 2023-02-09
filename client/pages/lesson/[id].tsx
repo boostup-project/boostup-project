@@ -2,7 +2,6 @@ import { useRouter } from "next/router";
 import DetailSummeryContainer from "components/reuse/container/DetailSummeryContainer";
 import DetailTabBtn from "components/reuse/btn/DetailTabBtn";
 import DetailContentContainer from "components/reuse/container/DetailContentContainer";
-import DetailBtn from "components/reuse/btn/DetailBtn";
 import DetailBasicInfo from "components/detailComp/DetailBasicInfo";
 import MobileDetailBasicInfo from "components/detailComp/MobileDetailBasicInfo";
 import DetailBasicInfoEditModal from "components/detailComp/DetailBasicInfoEditModal";
@@ -31,35 +30,24 @@ const Detail = () => {
   const [editable, setEditable] = useState<boolean>();
 
   const {
-    refetch: refetchGetExtra,
-    isSuccess: extraSuccess,
-    isError: extraError,
-    data: extraData,
-  } = useGetExtra(lessonId);
-
-  const {
-    refetch: refetchGetCur,
-    isSuccess: curSuccess,
-    isError: curError,
-    data: curData,
-  } = useGetCurriculum(lessonId);
-
-  const handleTabClick = (id: number) => {
-    setTab(id);
-    console.log(basicInfo);
-  };
-
-  const {
     refetch: basicInfoRefetch,
     data: basicInfo,
     isSuccess: basicInfoSuccess,
-  } = useGetBasicInfo(lessonId);
+  } = useGetBasicInfo(lessonId!);
+
+  const { refetch: refetchGetExtra, data: extraData } = useGetExtra(lessonId!);
+
+  const { refetch: refetchGetCur, data: curData } = useGetCurriculum(lessonId!);
+
+  const handleTabClick = (id: number) => {
+    setTab(id);
+  };
 
   const {
     refetch: reviewRefetch,
     data: reviewData,
     isSuccess: reviewSuccess,
-  } = useGetDetailReview(lessonId);
+  } = useGetDetailReview(lessonId!);
 
   const widthSize = useWindowSize();
 
@@ -87,7 +75,7 @@ const Detail = () => {
       // 과외후기 refetch
       reviewRefetch();
     }
-  }, [tab, lessonId, toggle]);
+  }, [tab, lessonId, toggle]); //tab,
 
   return (
     <>
@@ -135,7 +123,7 @@ const Detail = () => {
             {tab === 1 && (
               <DetailExtra
                 extraData={extraData}
-                lessonId={lessonId}
+                lessonId={lessonId!}
                 editable={editable}
               />
             )}
@@ -158,3 +146,11 @@ const Detail = () => {
 };
 
 export default Detail;
+
+// export async function getServerSideProps({ query: { id } }) {
+//   return {
+//     props: {
+//       id,
+//     },
+//   };
+// }

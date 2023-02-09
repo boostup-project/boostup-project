@@ -150,11 +150,10 @@ const Card = () => {
                       );
                     })}
                   </div>
-                  <div className="flex justify-center items-start w-full h-fit font-SCDream7 desktop:text-base tablet:text-sm text-[12px] text-textColor ml-1 mb-2">
-                    <div className="desktop:mt-0.5 tablet:mt-0.5 desktop:w-4 tablet:w-3.5 w-3">
-                      <IconWon />
+                  <div className="flex justify-center items-start w-full h-fit font-SCDream7 desktop:text-base tablet:text-sm text-[12px] text-moneyGrayColor ml-1 mb-2 font-bold">
+                    <div className="ml-1">
+                      ₩ {card.cost.toLocaleString("ko-KR")}원/회
                     </div>
-                    <div className="ml-1">{card.cost}/회</div>
                   </div>
                 </div>
               </Link>

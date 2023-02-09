@@ -36,6 +36,7 @@ module.exports = {
         PHP: "#527ACC",
         negativeMessage: "#FF000F",
         disabledBtnColor: "#5090F2",
+        moneyGrayColor: "#6B6B6B",
       },
     },
     screens: {

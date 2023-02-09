@@ -7,7 +7,6 @@ import { useRecoilState } from "recoil";
 import { powerBasicEditModal, editMode } from "atoms/detail/detailAtom";
 
 const DetailBasicInfo = (basicInfo: any) => {
-  console.log(basicInfo);
   const [power, setPower] = useRecoilState(powerBasicEditModal);
   const [mode, setMode] = useRecoilState(editMode);
   const handleClickEdit = () => {
@@ -111,10 +110,10 @@ const DetailBasicInfo = (basicInfo: any) => {
             </div>
           </div>
         </div>
-        <div className="w-1/5 h-full flex flex-col justify-center items-end pr-10 pt-16">
+        <div className="w-[22%] h-full flex flex-col justify-center items-end pr-10 pt-16">
           {/* 가격 */}
-          <div className="w-full h-fit flex flex-row justify-end items-center font-SCDream5 desktop:text-xl text-sm text-textColor mt-2 mb-14">
-            {basicInfo.basicInfo?.cost}원 / 1회
+          <div className="w-full h-fit flex flex-row justify-end items-center font-SCDream5 desktop:text-xl text-sm text-moneyGrayColor mt-2 mb-14 font-bold">
+            ₩ {basicInfo.basicInfo?.cost.toLocaleString("ko-KR")}원/회
           </div>
           {basicInfo.basicInfo?.editable ? (
             <div
