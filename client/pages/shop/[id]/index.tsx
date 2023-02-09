@@ -99,7 +99,6 @@ const shop = () => {
     const left = window.screenX + (window.outerWidth - width) / 2;
     const top = window.screenY + (window.outerHeight - height) / 2;
     if (isSuccess) {
-      console.log(dataPayURL.data.data);
       window.open(
         dataPayURL.data.data,
         "payPop",
@@ -217,7 +216,7 @@ const shop = () => {
                   <div className="flex h-full my-4 tablet:justify-start desktop:h-fit">
                     <div className="w-fit">
                       <img
-                        className="rounded-xl w-[140px]"
+                        className="object-cover rounded-xl w-[140px] h-[140px]"
                         src={teacherImg as string}
                       />
                     </div>
@@ -293,7 +292,7 @@ const shop = () => {
                     {payMethod.map((el, i) => (
                       <label
                         key={i}
-                        className="w-1/4 text-center flex justify-center text-xs items-center desktop:justify-start desktop:w-32"
+                        className="w-1/4 flex justify-center text-xs items-center desktop:justify-start desktop:w-32"
                       >
                         <input
                           type="radio"
@@ -304,7 +303,9 @@ const shop = () => {
                           })}
                         />
                         <span>&nbsp;</span>
-                        {screenWidth <= 412 ? el.mobile : el.name}
+                        <div className="desktop:w-16">
+                          {screenWidth <= 412 ? el.mobile : el.name}
+                        </div>
                         <span>&nbsp;</span>
                         <Image
                           src={el.icon}

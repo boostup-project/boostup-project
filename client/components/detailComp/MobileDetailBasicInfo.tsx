@@ -25,7 +25,7 @@ const MobileDetailBasicInfo = (basicInfo: any) => {
             alt="profile Image"
             width={150}
             height={150}
-            className="rounded-xl border border-borderColor"
+            className="rounded-xl border aspect-square border-borderColor"
           />
         </div>
         {/* Language Tags */}
