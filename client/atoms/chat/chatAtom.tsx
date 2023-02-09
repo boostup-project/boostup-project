@@ -25,10 +25,34 @@ const roomIdState = atom({
   default: 0,
 });
 
+const receiverIdState = atom({
+  key: "receiverIdState",
+  default: 0,
+});
+
+const chatDisplayName = atom({
+  key: "chatDisplayName",
+  default: "",
+});
+
+const chatRoomListState = atom<any>({
+  key: "chatRoomListState",
+  default: [],
+});
+
+const newChatRoomState = atom<any>({
+  key: "newChatRoomState",
+  default: [],
+});
+
 export {
   chatActive,
   chatListState,
   connectionState,
   roomIdState,
   newDataState,
+  chatDisplayName,
+  receiverIdState,
+  chatRoomListState,
+  newChatRoomState,
 };

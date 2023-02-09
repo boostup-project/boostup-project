@@ -11,8 +11,8 @@ const ApplicationList = () => {
   const [openDecline, setOpenDecline] = useState<boolean>(false);
 
   const [islessonId, setIsLessonId] = useState(0);
-  const { data: myTutorUrl } = useGetMyTutor();
-  const lessonId = Number(myTutorUrl?.data.lessonUrl.slice(29));
+  const { data: myTutorUrl, isSuccess } = useGetMyTutor();
+  const lessonId = myTutorUrl?.data.lessonId;
 
   const { refetch: refetchApplyInfo, data: applyInfoData } = useGetTutorInfo(
     lessonId,
@@ -20,8 +20,10 @@ const ApplicationList = () => {
   );
 
   useEffect(() => {
-    setIsLessonId(Number(myTutorUrl?.data.lessonUrl.slice(29)));
+    setIsLessonId(lessonId);
+    //refetchApplyInfo();
   }, [myTutorUrl]);
+
   useEffect(() => {
     if (islessonId) {
       refetchApplyInfo();
@@ -31,7 +33,7 @@ const ApplicationList = () => {
   const router = useRouter();
   const toMyTutor = () => {
     if (myTutorUrl) {
-      router.push(myTutorUrl?.data.lessonUrl);
+      router.push(`/lesson/${islessonId}`);
     } else {
       Swal.fire({
         title: "등록하신 과외가 없습니다",
@@ -64,7 +66,7 @@ const ApplicationList = () => {
       </button>
       {/* {map} 수업신청정보 */}
       {applyInfoData?.data.data.map((apply: any) => (
-        <div className="flex flex-col">
+        <div className="flex flex-col" key={apply.lessonId}>
           <div className="flex flex-row w-full h-fit border border-borderColor rounded-xl desktop:mt-5 tablet:mt-3 mt-2 p-3 pl-5">
             <div className="flex flex-col w-[60%]">
               <div className="mb-3 ">{apply.name}</div>

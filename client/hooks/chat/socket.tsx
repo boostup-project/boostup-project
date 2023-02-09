@@ -5,6 +5,7 @@ import { chatListState } from "atoms/chat/chatAtom";
 
 let stomp_client: StompJs.Client;
 let chatSub: StompJs.Subscription;
+let chatRoomSub: StompJs.Subscription;
 
 interface Props {
   handleConnectSocket: (state: boolean) => void;
@@ -29,8 +30,6 @@ export const connectSocket = async ({ handleConnectSocket }: Props) => {
         } else {
           handleConnectSocket(false);
         }
-        stomp_client.heartbeat.outgoing = 0;
-        stomp_client.heartbeat.incoming = 0;
       },
       err => console.log(err),
     );
@@ -38,35 +37,44 @@ export const connectSocket = async ({ handleConnectSocket }: Props) => {
 };
 
 // 채팅방 목록 구독
-export const subscribeRoomList = (memberId: number | null) => {
+interface ChatRoomListProps {
+  memberId: number;
+  handleSubChatRoom: (date: any) => void;
+}
+export const subscribeRoomList = ({
+  memberId,
+  handleSubChatRoom,
+}: ChatRoomListProps) => {
   const Authorization = `Bearer ${localStorage.getItem("token")}`;
   const headers = {
     Authorization,
   };
 
-  stomp_client.subscribe(
-    `/topic/alarm/member/${memberId}`,
+  chatRoomSub = stomp_client.subscribe(
+    // `/topic/alarm/member/${memberId}`,
+    `/topic/member/${memberId}`,
     msg => {
-      console.log("this: ", msg);
+      console.log("flag");
+      handleSubChatRoom(JSON.parse(msg.body));
     },
     headers,
   );
 };
 
 interface Props2 {
-  roomId: number;
+  roomIdNum: number;
   handleSocketData: (data: any) => void;
 }
 
 // 채팅방 구독
-export const subscribeRoom = ({ roomId, handleSocketData }: Props2) => {
+export const subscribeRoom = ({ roomIdNum, handleSocketData }: Props2) => {
   const Authorization = `Bearer ${localStorage.getItem("token")}`;
   const headers = {
     Authorization,
   };
 
   chatSub = stomp_client.subscribe(
-    `/topic/rooms/${roomId}`,
+    `/topic/rooms/${roomIdNum}`,
     msg => {
       handleSocketData(JSON.parse(msg.body));
     },
@@ -75,7 +83,11 @@ export const subscribeRoom = ({ roomId, handleSocketData }: Props2) => {
 };
 
 // 메세지전송
-export const sendMsg = (roomId: number, content: string) => {
+export const sendMsg = (
+  roomId: number,
+  content: string,
+  receiverId: number,
+) => {
   const Authorization = `Bearer ${localStorage.getItem("token")}`;
   const headers = {
     Authorization,
@@ -83,19 +95,15 @@ export const sendMsg = (roomId: number, content: string) => {
 
   const body = {
     chatRoomId: roomId,
+    senderId: Number(localStorage.getItem("memberId")),
+    receiverId: receiverId,
     messageContent: content,
   };
 
-  const memberId = localStorage.getItem("memberId");
+  console.log(body);
 
   // 채팅방에 메시지 전송
   stomp_client.send(`/app/rooms`, headers, JSON.stringify(body));
-  // memberId로 구독한 채팅목록에 메시지 전송
-  stomp_client.send(
-    `/topic/alarm/member/${memberId}}`,
-    headers,
-    JSON.stringify(body),
-  );
 };
 
 export const unSubscribeRoom = () => {

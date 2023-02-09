@@ -1,35 +1,56 @@
 import ChatListContent from "./ChatListContent";
 import { useState, useEffect } from "react";
 import { useRecoilState } from "recoil";
-import { chatActive, chatListState, newDataState } from "atoms/chat/chatAtom";
+import {
+  chatActive,
+  chatListState,
+  newDataState,
+  roomIdState,
+  chatDisplayName,
+  receiverIdState,
+  chatRoomListState,
+} from "atoms/chat/chatAtom";
 import useGetChatRoomList from "hooks/chat/useGetChatRoomList";
+import useGetResetChatAlarm from "hooks/chat/useGetResetChatAlarm";
 import { subscribeRoom, unSubscribeRoom } from "hooks/chat/socket";
 import useGetChatList from "hooks/chat/useGetChatList";
 
 const ChatListComp = () => {
   const [active, setActive] = useRecoilState(chatActive);
-  const [roomId, setRoomId] = useState<number>(0);
+  const [roomId, setRoomId] = useRecoilState(roomIdState);
   const [newData, setNewData] = useRecoilState(newDataState);
   const [chatList, setChatList] = useRecoilState(chatListState);
+  const [chatRoomName, setChatRoomName] = useRecoilState(chatDisplayName);
+  const [receiverId, setReceiverId] = useRecoilState(receiverIdState);
+  const [chatRoomList, setChatRoomList] = useRecoilState(chatRoomListState);
 
-  const { refetch: chatRoomFetch, data } = useGetChatRoomList();
+  useGetChatRoomList();
   const { refetch: chatListFetch } = useGetChatList(roomId);
+  const { refetch: chatRoomAlarmResetFetch } = useGetResetChatAlarm(roomId);
 
   const handleSocketData = (data: any) => {
     setNewData(data);
   };
 
-  const handleClickChat = (roomId: number) => {
+  const handleClickChat = (
+    roomIdNum: number,
+    displayName: string,
+    receiverIdNum: number,
+  ) => {
     if (active) {
       unSubscribeRoom();
     }
-    setActive(true);
-    subscribeRoom({ roomId, handleSocketData });
-    setRoomId(roomId);
+    subscribeRoom({ roomIdNum, handleSocketData });
+    setRoomId(roomIdNum);
+    setReceiverId(receiverIdNum);
+    setChatRoomName(displayName);
   };
 
   useEffect(() => {
-    chatListFetch();
+    if (roomId !== 0) {
+      chatRoomAlarmResetFetch();
+      chatListFetch();
+    }
   }, [roomId]);
 
   useEffect(() => {
@@ -37,12 +58,6 @@ const ChatListComp = () => {
       setChatList([newData, ...chatList]);
     }
   }, [newData]);
-
-  let chatRoomList: any = [];
-
-  if (data) {
-    chatRoomList = [...data?.data];
-  }
 
   return (
     <>
@@ -55,18 +70,23 @@ const ChatListComp = () => {
         {/* map */}
         {chatRoomList.map(
           (el: {
+            receiverId: number;
             chatRoomId: number;
             displayName: string;
-            message: string;
+            latestMessage: string;
             createdAt: string;
+            alarmCount: number;
           }) => {
             return (
               <ChatListContent
                 key={el.chatRoomId}
-                onClick={() => handleClickChat(el.chatRoomId)}
+                onClick={() =>
+                  handleClickChat(el.chatRoomId, el.displayName, el.receiverId)
+                }
                 displayName={el.displayName}
-                message={el.message}
+                message={el.latestMessage}
                 createAt={el.createdAt}
+                alarmCount={el.alarmCount}
               />
             );
           },

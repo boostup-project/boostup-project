@@ -1,8 +1,7 @@
-//과외 종료 삭제(강사용)
 import axios from "axios";
 
-const deleteFinishedTutor = async (suggestId: number) => {
-  return await axios.delete(`/suggest/${suggestId}/tutor`, {
+const deleteAccount = async () => {
+  return await axios.delete(`/member`, {
     baseURL: process.env.NEXT_PUBLIC_API_URL,
     headers: {
       "content-Type": `application/json`,
@@ -11,4 +10,4 @@ const deleteFinishedTutor = async (suggestId: number) => {
     },
   });
 };
-export default deleteFinishedTutor;
+export default deleteAccount;
