@@ -6,6 +6,11 @@ import useGetKakaoNTossPay from "hooks/shop/useGetKakaoNTossPay";
 import useGetPaymentCheck from "hooks/shop/useGetPaymentCheck";
 import useGetPaymentInfo from "hooks/shop/useGetPaymentInfo";
 import { toast } from "react-toastify";
+import Kakao from "../../../public/images/Kakao.png";
+import Toss from "../../../public/images/Toss.png";
+import useWindowSize from "hooks/useWindowSize";
+
+import Image from "next/image";
 
 interface FetchedData {
   address: string[];
@@ -42,11 +47,17 @@ export const costInfo: StringToString = {
 export const teacherInfoKeys = Object.keys(teacherInfo);
 export const costInfoKeys = Object.keys(costInfo);
 
-const payMethod = ["카카오페이", "토스 - 카드", "토스 - 휴대폰", "토스 - 계좌"];
+const payMethod = [
+  { name: "카카오페이", icon: Kakao, mobile: "카카오" },
+  { name: "토스-카드", icon: Toss, mobile: "카드" },
+  { name: "토스-휴대폰", icon: Toss, mobile: "휴대폰" },
+  { name: "토스-계좌", icon: Toss, mobile: "계좌" },
+];
 
 const shop = () => {
   const router = useRouter();
   const suggestId = Number(router.query.id);
+  const screenWidth = useWindowSize();
 
   /** 유저 정보 hydration error 방지를 위하여 state로 처리 **/
   const [userName, setUserName] = useState<string | null>("");
@@ -189,7 +200,7 @@ const shop = () => {
     <div className="mt-28 desktop:mt-12">Loading</div>;
   } else {
     return (
-      <div className="flex flex-col bg-bgColor items-center w-full h-screen text-base tablet:text-2xl desktop:w-3/4 desktop:min-w-[1000px]">
+      <div className="flex flex-col bg-bgColor items-center w-full h-full mt-10 text-base tablet:text-2xl desktop:w-3/4 desktop:min-w-[1000px]">
         <form
           className="w-full h-full flex flex-col justify-center items-center"
           onSubmit={handleSubmit(onSubmit)}
@@ -278,11 +289,11 @@ const shop = () => {
               <div className="desktop:h-1/2">
                 <div className="mb-1">결제 수단</div>
                 <div className="desktop:h-[87%]">
-                  <div className="flex text-xs mb-6 p-5 border rounded-xl border-borderColor bg-white tablet:text-sm desktop:h-full desktop:flex-col desktop:justify-evenly desktop:items-center">
+                  <div className="flex justify-center text-xs mb-6 px-3 py-5 border rounded-xl border-borderColor bg-white tablet:text-sm desktop:h-full desktop:flex-col desktop:justify-evenly desktop:items-center">
                     {payMethod.map((el, i) => (
                       <label
                         key={i}
-                        className="w-1/4 text-center desktop:text-start desktop:w-32 desktop:"
+                        className="w-1/4 text-center flex justify-center text-xs items-center desktop:justify-start desktop:w-32"
                       >
                         <input
                           type="radio"
@@ -292,7 +303,15 @@ const shop = () => {
                             required: true,
                           })}
                         />
-                        {el}
+                        <span>&nbsp;</span>
+                        {screenWidth <= 412 ? el.mobile : el.name}
+                        <span>&nbsp;</span>
+                        <Image
+                          src={el.icon}
+                          alt="kakao"
+                          width={screenWidth < 412 ? 15 : 30}
+                          height={screenWidth < 412 ? 15 : 30}
+                        />
                       </label>
                     ))}
                   </div>
