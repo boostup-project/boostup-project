@@ -3,18 +3,43 @@ import { useRecoilState } from "recoil";
 import { useState, useEffect } from "react";
 import { chatActive } from "atoms/chat/chatAtom";
 import ChatContent from "./ChatContent";
-import { chatListState, roomIdState, newDataState } from "atoms/chat/chatAtom";
+import {
+  chatListState,
+  roomIdState,
+  newDataState,
+  chatDisplayName,
+  receiverIdState,
+} from "atoms/chat/chatAtom";
 import { sendMsg, subscribeRoom, unSubscribeRoom } from "hooks/chat/socket";
+import useWindowSize from "hooks/useWindowSize";
+import useGetChatList from "hooks/chat/useGetChatList";
+import { useQueryClient } from "@tanstack/react-query";
+import useGetResetChatAlarm from "hooks/chat/useGetResetChatAlarm";
 
 const ChatComp = () => {
   const [active, setActive] = useRecoilState(chatActive);
   const [inputValue, setInputValue] = useState<string>("");
   const [chatList, setChatList] = useRecoilState(chatListState);
-  const [roomId, setRoomId] = useRecoilState(roomIdState);
+  const [roomIdNum, setRoomId] = useRecoilState(roomIdState);
+  const [chatRoomName, setChatRoomName] = useRecoilState(chatDisplayName);
+  const [receiverId, setReceiverId] = useRecoilState(receiverIdState);
+
+  const [newData, setNewData] = useRecoilState(newDataState);
+
+  const { refetch: chatListFetch } = useGetChatList(roomIdNum);
+  // const { refetch: chatRoomAlarmResetFetch } = useGetResetChatAlarm(roomIdNum);
+
+  let windowSize = useWindowSize();
+
+  const handleSocketData = (data: any) => {
+    setNewData(data);
+  };
 
   const handleClickCancel = () => {
     setActive(false);
     unSubscribeRoom();
+    setRoomId(0);
+    setReceiverId(0);
   };
 
   const handleInputChange = (e: any) => {
@@ -23,17 +48,34 @@ const ChatComp = () => {
 
   const handlePressEnter = (e: any) => {
     if (e.key === "Enter" && inputValue) {
-      sendMsg(roomId, inputValue);
+      sendMsg(roomIdNum, inputValue, receiverId);
       setInputValue("");
     }
   };
 
   const handleClickSubmit = (e: any) => {
     if (inputValue) {
-      sendMsg(roomId, inputValue);
+      sendMsg(roomIdNum, inputValue, receiverId);
       setInputValue("");
     }
   };
+
+  useEffect(() => {
+    if (windowSize < 764) {
+      if (active) {
+        unSubscribeRoom();
+        chatListFetch();
+      }
+
+      subscribeRoom({ roomIdNum, handleSocketData });
+    }
+  }, []);
+
+  useEffect(() => {
+    if (newData) {
+      setChatList([newData, ...chatList]);
+    }
+  }, [newData]);
 
   return (
     <>
@@ -41,7 +83,7 @@ const ChatComp = () => {
         {/* header */}
         <div className="w-[95%] h-[50px] flex flex-row justify-center items-center border-b border-borderColor/30">
           <div className="w-fit h-fit font-SCDream4 text-textColor tablet:text-md text-sm">
-            과외쌤이름
+            {chatRoomName}
           </div>
           <div
             className="absolute right-6 w-fit h-fit cursor-pointer"
