@@ -3,6 +3,8 @@ import DesktopChatComp from "components/chat/DesktopChatComp";
 import MobileChatComp from "components/chat/MobileChatComp";
 import useWindowSize from "hooks/useWindowSize";
 import { connectSocket, subscribeRoomList } from "hooks/chat/socket";
+import { chatRoomListState, newChatRoomState } from "atoms/chat/chatAtom";
+import { useRecoilState } from "recoil";
 import { useState } from "react";
 import { SyncLoader } from "react-spinners";
 import { useEffect } from "react";
@@ -11,21 +13,60 @@ const Chat = () => {
   const widthSize = useWindowSize();
   const [connectState, setConnectState] = useState<boolean>(false);
   const [subscribeState, setSubscribeState] = useState<boolean>(false);
+  const [newChatRoom, setnewChatRoom] = useRecoilState(newChatRoomState);
+  const [chatRoomList, setchatRoomList] = useRecoilState(chatRoomListState);
 
   const handleConnectSocket = (state: boolean) => {
     setConnectState(state);
   };
 
+  const handleSubChatRoom = (data: any) => {
+    setnewChatRoom(data);
+  };
+
   useEffect(() => {
     connectSocket({ handleConnectSocket });
+    let memberId = Number(localStorage.getItem("memberId"));
 
     if (connectState) {
       setTimeout(() => {
-        subscribeRoomList(Number(localStorage.getItem("memberId")));
+        subscribeRoomList({ memberId, handleSubChatRoom });
         setSubscribeState(true);
       }, 5000);
     }
   }, [connectState]);
+
+  useEffect(() => {
+    if (newChatRoom) {
+      // chatRoomList 깊은복사
+      let currData = chatRoomList.slice();
+      let elIdx = 0;
+
+      currData.forEach((el: any, idx: number) => {
+        if (el.chatRoomId === newChatRoom.chatRoomId) {
+          elIdx = idx;
+        }
+      });
+
+      let name = currData[elIdx]?.displayName;
+      let { alarmCount, chatRoomId, createdAt, latestMessage, receiverId } =
+        newChatRoom;
+
+      const newData = {
+        alarmCount,
+        chatRoomId,
+        createdAt,
+        latestMessage,
+        receiverId,
+        displayName: name,
+      };
+
+      currData.splice(elIdx, 1);
+      currData.unshift(newData);
+
+      setchatRoomList(currData);
+    }
+  }, [newChatRoom]);
 
   return (
     <>
