@@ -28,7 +28,7 @@ const client = new QueryClient();
 const Card = () => {
   const [cards, setMainCardInfo] = useRecoilState(mainCardInfo);
   //pagination
-  const limit = 2;
+  const limit = 12;
   const [page, setPage] = useState(1);
   const offset = (page - 1) * limit;
 
