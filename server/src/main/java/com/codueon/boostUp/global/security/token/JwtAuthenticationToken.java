@@ -1,5 +1,7 @@
 package com.codueon.boostUp.global.security.token;
 
+import com.codueon.boostUp.domain.member.exception.AuthException;
+import com.codueon.boostUp.global.exception.ExceptionCode;
 import lombok.Builder;
 import lombok.Getter;
 import org.springframework.security.authentication.AbstractAuthenticationToken;

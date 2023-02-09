@@ -45,9 +45,9 @@ public class ChatRoomService {
         Member receiver = memberDbService.ifExistsReturnMemberByLessonId(lessonId);
         Long senderId = token.getId();
         Long receiverId = receiver.getId();
+        if (isExistRoom(senderId, receiverId)) return;
         String senderName = token.getName();
         String receiverName = receiver.getName();
-        if (isExistRoom(senderId, receiverId)) return;
         saveChatRoomAndSendEnterMessage(senderId, receiverId, senderName, receiverName);
     }
 

@@ -3,6 +3,7 @@ package com.codueon.boostUp.global.config;
 import com.codueon.boostUp.domain.chat.utils.RedisSubscriber;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -10,6 +11,7 @@ import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.listener.ChannelTopic;
+import org.springframework.data.redis.listener.PatternTopic;
 import org.springframework.data.redis.listener.RedisMessageListenerContainer;
 import org.springframework.data.redis.listener.adapter.MessageListenerAdapter;
 import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
@@ -27,14 +29,19 @@ public class RedisConfig {
 
     private final ObjectMapper objectMapper;
 
-    @Bean
-    public ChannelTopic channelTopic() {
-        return new ChannelTopic("chat");
+    @Bean("messageListenerAdapter")
+    public MessageListenerAdapter messageListenerAdapter(RedisSubscriber redisSubscriber) {
+        return new MessageListenerAdapter(redisSubscriber, "sendMessage");
     }
 
-    @Bean
-    public MessageListenerAdapter listenerAdapter(RedisSubscriber redisSubscriber) {
-        return new MessageListenerAdapter(redisSubscriber, "onMessage");
+    @Bean("alarmListenerAdapter")
+    public MessageListenerAdapter alarmListenerAdapter(RedisSubscriber redisSubscriber) {
+        return new MessageListenerAdapter(redisSubscriber, "sendAlarm");
+    }
+
+    @Bean("firstAlarmListenerAdapter")
+    public MessageListenerAdapter firstAlarmListenerAdapter(RedisSubscriber redisSubscriber) {
+        return new MessageListenerAdapter(redisSubscriber, "sendEnterAlarm");
     }
 
     /**
@@ -61,11 +68,14 @@ public class RedisConfig {
      */
     @Bean
     public RedisMessageListenerContainer redisMessageListenerContainer(RedisConnectionFactory factory,
-                                                                       MessageListenerAdapter listenerAdapter,
-                                                                       ChannelTopic channelTopic) {
+                                                                       @Qualifier("messageListenerAdapter") MessageListenerAdapter sendMessageAdapter,
+                                                                       @Qualifier("firstAlarmListenerAdapter") MessageListenerAdapter enterAlarmMessageAdapter,
+                                                                       @Qualifier("alarmListenerAdapter") MessageListenerAdapter alarmMessageAdapter) {
         RedisMessageListenerContainer container = new RedisMessageListenerContainer();
         container.setConnectionFactory(factory);
-        container.addMessageListener(listenerAdapter, channelTopic);
+        container.addMessageListener(sendMessageAdapter, new PatternTopic("chat"));
+        container.addMessageListener(alarmMessageAdapter, new PatternTopic("alarm"));
+        container.addMessageListener(enterAlarmMessageAdapter, new PatternTopic("firstAlarm"));
         return container;
     }
 
