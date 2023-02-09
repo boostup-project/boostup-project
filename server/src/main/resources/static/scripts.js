@@ -27,7 +27,7 @@ function clickGudokButton() {
     });
 
     let memberId = $("#senderId").val();
-    stompClient.subscribe('/topic/alarm/member/' + memberId, (message) => {
+    stompClient.subscribe('/topic/member/' + memberId, (message) => {
         const data = JSON.parse(message.body);
         console.log(data);
     });
