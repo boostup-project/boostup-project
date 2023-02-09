@@ -7,9 +7,29 @@ import {
   IconFullheart,
 } from "assets/icon";
 import useGetMyReview from "hooks/mypage/useGetMyReview";
+import useDeleteReview from "hooks/mypage/useDeleteReview";
+import Swal from "sweetalert2";
 const StudentReview = () => {
   const { data: MyReview } = useGetMyReview();
-
+  const { mutate: deleteMyReview } = useDeleteReview();
+  const deleteReview = () => {
+    console.log(MyReview);
+    Swal.fire({
+      title: "과외 후기를 삭제하시겠습니까?",
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+    }).then(result => {
+      if (result.isConfirmed) {
+        // deleteMyReview(suggestId);
+        return Swal.fire({
+          text: "삭제가 완료되었습니다",
+          icon: "success",
+          confirmButtonColor: "#3085d6",
+        });
+      }
+    });
+  };
   return (
     <>
       <div className="mt-6 flex flex-col w-full font-SCDream4">
@@ -40,7 +60,7 @@ const StudentReview = () => {
                   {review.title}
                 </div>
                 <div className="flex desktop:text-base tablet:text-sm text-[12px]">
-                  만족도 {"★ ".repeat(review.score)}
+                  만족도 {"★ ".repeat(review.score)} {review.reviewId}
                 </div>
                 <div className="flex desktop:text-base tablet:text-sm text-[12px] desktop:mt-3 tablet:mt-2">
                   {review.comment}
@@ -61,7 +81,10 @@ const StudentReview = () => {
                   <button className="text text-pointColor m-2 desktop:text-base tablet:text-sm text-[10px]">
                     수정하기
                   </button>
-                  <button className="text text-negativeMessage m-2 desktop:text-base tablet:text-sm text-[10px]">
+                  <button
+                    className="text text-negativeMessage m-2 desktop:text-base tablet:text-sm text-[10px]"
+                    onClick={deleteReview}
+                  >
                     삭제하기
                   </button>
                 </div>

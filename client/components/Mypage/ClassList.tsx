@@ -7,7 +7,7 @@ const ClassList = () => {
   const [aSuggestId, setASuggestId] = useState(0);
 
   const { data: myTutorUrl } = useGetMyTutor();
-  const lessonId = Number(myTutorUrl?.data.lessonUrl.slice(29));
+  const lessonId = Number(myTutorUrl?.data.lessonId);
 
   const { refetch: refetchTutorInfo, data: tutorInfoData } = useGetTutorInfo(
     lessonId,
@@ -28,23 +28,22 @@ const ClassList = () => {
     }).then(result => {
       if (result.isConfirmed) {
         setASuggestId(suggestId);
+        Swal.fire({
+          text: "과외종료가 완료되었습니다",
+          icon: "success",
+          confirmButtonColor: "#3085d6",
+        });
       }
     });
   };
   useEffect(() => {
     if (aSuggestId !== 0) {
       classRefetch();
+      refetchTutorInfo();
     }
   }, [aSuggestId]);
 
   useEffect(() => {
-    if (isSuccess) {
-      Swal.fire({
-        text: "과외종료가 완료되었습니다",
-        icon: "success",
-        confirmButtonColor: "#3085d6",
-      });
-    }
     if (isError) {
       Swal.fire({
         text: "다시 시도해주세요",

@@ -146,3 +146,9 @@ button {
 .slick-dots li button:before {
   color: orange;
 }
+
+@layer base {
+  button[aria-current="page"] {
+    @apply bg-pointColor/40;
+  }
+}

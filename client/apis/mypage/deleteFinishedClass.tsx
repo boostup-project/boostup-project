@@ -1,3 +1,4 @@
+//과외 종료 삭제(학생용)
 import axios from "axios";
 
 const deleteFinishedClass = async (suggestId: number) => {

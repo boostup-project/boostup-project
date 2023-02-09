@@ -1,4 +1,5 @@
 import CreateModalContainer from "../reuse/container/CreateModalContainer";
+import CreateModalMypageContainer from "components/reuse/container/CreateModalMypageContainer";
 import { useForm } from "react-hook-form";
 import SmallBtn from "../reuse/btn/SmallBtn";
 import usePostAccept from "hooks/mypage/usePostAccept";
@@ -62,7 +63,7 @@ const AcceptModal = ({
   return (
     <>
       <div className="fixed z-10 top-0 left-0 bottom-0 right-0 bg-modalBgColor grid place-items-center">
-        <CreateModalContainer>
+        <CreateModalMypageContainer>
           <form
             className="flex flex-col items-center w-full text-sm z-20"
             onSubmit={handleSubmit(onSubmit)}
@@ -90,7 +91,7 @@ const AcceptModal = ({
               <SmallBtn>수 락</SmallBtn>
             </div>
           </form>
-        </CreateModalContainer>
+        </CreateModalMypageContainer>
       </div>
     </>
   );
