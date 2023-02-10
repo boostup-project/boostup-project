@@ -40,7 +40,21 @@ const DetailButtons = (basicInfo: any) => {
   const { refetch: createChatRoomRefetch } = useGetCreateRoom(lessonId);
 
   const chatNow = () => {
-    createChatRoomRefetch();
+    if (!localStorage.getItem("token")) {
+      Swal.fire({
+        title: "로그인 하시겠습니까?",
+        text: "로그인이 필요한 서비스입니다.",
+        icon: "question",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+      }).then(result => {
+        if (result.isConfirmed) {
+          router.push("/login");
+        }
+      });
+    } else {
+      createChatRoomRefetch();
+    }
   };
 
   const saveBookmark = (lessonId: any) => {

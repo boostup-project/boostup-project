@@ -20,6 +20,7 @@ const ApplicationList = () => {
     isSuccess: tutorInfoSuccess,
   } = useGetTutorInfo(islessonId, 1);
 
+  console.log(applyInfoData);
   useEffect(() => {
     if (isSuccess) {
       setIsLessonId(myTutorUrl?.data.lessonId);
@@ -59,15 +60,20 @@ const ApplicationList = () => {
   };
 
   return (
-    <div className="flex flex-col w-full">
+    <div className="flex flex-col w-full min-h-[300px] bg-bgColor">
       <button
         className="flex flex-col bg-pointColor text-white font-SCDream7 desktop:text-lg tablet:text-base text-sm rounded-xl items-start justify-center border border-borderColor w-full desktop:h-[50px] tablet:h-[43px] h-[38px] py-3 desktop:mt-5 tablet:mt-3 mt-2 pl-5"
         onClick={toMyTutor}
       >
         나의 과외로 이동하기
       </button>
-
+      {applyInfoData === undefined || applyInfoData?.data.data.length === 0 ? (
+        <div className="flex flex-col justify-center items-center w-full h-36 font-SCDream3 text-lg text-textColor mt-10">
+          아직 신청내역이 없어요🙂
+        </div>
+      ) : null}
       {/* {map} 수업신청정보 */}
+   
       {tutorInfoSuccess
         ? applyInfoData?.data.data.map((apply: any) => (
             <div className="flex flex-col" key={apply.lessonId}>

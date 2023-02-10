@@ -55,8 +55,14 @@ const ClassList = () => {
 
   return (
     <>
-      <div className="flex flex-col w-full">
+      <div className="flex flex-col w-full min-h-[300px] bg-bgColor">
         <div className="flex flex-col">
+          {tutorInfoData === undefined ||
+          tutorInfoData?.data.data.length === 0 ? (
+            <div className="flex flex-col justify-center items-center w-full h-36 font-SCDream3 text-lg text-textColor mt-20">
+              아직 진행중인 과외가 없어요🙂
+            </div>
+          ) : null}
           {tutorInfoData?.data.data.map((curStu: any) => (
             <div className="flex flex-row w-full h-fit border border-borderColor rounded-xl mt-3 p-3 pl-5">
               <div className="flex flex-col w-[60%]">
