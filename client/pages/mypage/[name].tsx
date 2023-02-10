@@ -89,12 +89,10 @@ const Mypage = () => {
           </MypageTabBtn>
         </div>
         <div className="desktop:min-w-[1000px] min-w-[95%] desktop:min-h-[300px] w-full h-full flex desktop:flex-row flex-col justify-center desktop:items-start items-center">
-          {tutorInfoSuccess ? (
-            <MypageContentContainer>
-              {tab === 1 && <TeacherTab></TeacherTab>}
-              {tab === 2 && <StudentTab></StudentTab>}
-            </MypageContentContainer>
-          ) : null}
+          <MypageContentContainer>
+            {tab === 1 && tutorInfoSuccess && <TeacherTab></TeacherTab>}
+            {tab === 2 && <StudentTab></StudentTab>}
+          </MypageContentContainer>
         </div>
       </div>
     </>

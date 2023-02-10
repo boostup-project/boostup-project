@@ -12,6 +12,7 @@ import Link from "next/link";
 import useGetBookmarkModi from "hooks/detail/useGetBookmarkModi";
 import { useRecoilValue } from "recoil";
 import { refetchBookmark } from "atoms/detail/detailAtom";
+import useGetCreateRoom from "hooks/chat/useGetCreateRoom";
 
 const StudentBookmark = () => {
   const [lessonId, setLessonId] = useState(0);
@@ -19,7 +20,8 @@ const StudentBookmark = () => {
   const { data: studentBookmark, refetch: allBookmark } = useGetAllBookmark();
   const [bookmarkData, setBookmarkData] = useState<any>();
   const toggle = useRecoilValue(refetchBookmark);
-
+  const [chat, setChat] = useState(false);
+  const [bookmark, setBookmark] = useState(false);
   useEffect(() => {
     allBookmark();
   }, [toggle]);
@@ -29,12 +31,25 @@ const StudentBookmark = () => {
   }, [studentBookmark]);
 
   useEffect(() => {
-    if (lessonId !== 0) {
+    if (lessonId !== 0 && bookmark) {
       bookmarkRefetch();
+      setBookmark(false);
     }
   }, [lessonId]);
+
   const saveBookmark = (lessonId: any) => {
     setLessonId(lessonId);
+    setBookmark(true);
+  };
+
+  const { refetch: createChatRoomRefetch } = useGetCreateRoom(lessonId);
+  const chatNow = (lessonId: number) => {
+    setChat(true);
+    setLessonId(lessonId);
+    if (chat && lessonId !== 0) {
+      setChat(false);
+      createChatRoomRefetch();
+    }
   };
   return (
     <>
@@ -112,7 +127,10 @@ const StudentBookmark = () => {
                   {true ? <IconFullheart /> : <IconEmptyheart />}
                 </button>
                 <div className="flex">
-                  <button className="text text-pointColor font-SCDream3 m-2 desktop:text-base tablet:text-sm text-[10px]">
+                  <button
+                    className="text text-pointColor font-SCDream3 m-2 desktop:text-base tablet:text-sm text-[10px]"
+                    onClick={() => chatNow(bookmark.lessonId)}
+                  >
                     채팅하기
                   </button>
                 </div>
