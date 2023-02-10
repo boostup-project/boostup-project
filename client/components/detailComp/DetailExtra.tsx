@@ -57,10 +57,7 @@ const DetailExtra = ({ extraData, lessonId, editable }: Props) => {
         introduction: extraData.data.introduction,
         detailCompany: extraData.data.detailCompany,
         personality: extraData.data.personality,
-        detailCost:
-          parseInt(extraData.data.detailCost.split("원")).toLocaleString(
-            "ko-KR",
-          ) + "원/회",
+        detailCost: extraData.data.detailCost,
         detailLocation: extraData.data.detailLocation,
       };
       setTextData(prompt);
