@@ -15,6 +15,7 @@ const FinishedTutor = () => {
   const deleteFinishedList = (suggestId: number) => {
     Swal.fire({
       title: "과외 내역을 삭제하시겠습니까?",
+      text: "학생의 수업내역에서도 해당 수업이 사라집니다.",
       icon: "question",
       showCancelButton: true,
       confirmButtonColor: "#3085d6",
@@ -43,7 +44,7 @@ const FinishedTutor = () => {
           {finishedClassData?.data.data.map((finished: any) => (
             <div className="flex flex-row w-full h-fit border border-borderColor rounded-xl mt-3 p-3 pl-5">
               <div className="flex flex-col w-[60%]">
-                <div className="mb-3 ">data.name</div>
+                <div className="mb-3 ">{finished.name}</div>
                 <div className="flex">
                   <div className="mr-3">희망요일</div>
                   <div> {finished.days}</div>

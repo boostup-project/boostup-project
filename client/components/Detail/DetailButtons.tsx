@@ -91,7 +91,29 @@ const DetailButtons = (basicInfo: any) => {
   };
 
   return isLoading ? (
-    <></>
+    <div className="flex w-full h-full flex-col desktop:mt-0 mt-3">
+      {isOpenModal && <ApplyModal onClickToggleModal={onClickToggleModal} />}
+      <div className="flex flex-col desktop:w-full desktop:h-fit tablet:w-[97%] w-[97%] justify-center items-center">
+        <DetailBtn bold={true} remove={false} onClick={onClickToggleModal}>
+          신청하기
+        </DetailBtn>
+        <DetailBtn bold={false} remove={false} onClick={chatNow}>
+          실시간 채팅
+        </DetailBtn>
+
+        {basicInfo.basicInfo?.editable ? (
+          <div className="mt-10 w-full flex flex-col justify-center items-center">
+            <DetailBtn
+              bold={false}
+              remove={true}
+              onClick={() => deletePost(lessonId)}
+            >
+              삭제하기
+            </DetailBtn>
+          </div>
+        ) : null}
+      </div>
+    </div>
   ) : (
     <div className="flex w-full h-full flex-col desktop:mt-0 mt-3">
       {isOpenModal && <ApplyModal onClickToggleModal={onClickToggleModal} />}

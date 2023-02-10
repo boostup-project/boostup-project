@@ -25,10 +25,11 @@ const Mypage = () => {
 
   const [tab, setTab] = useState(1);
 
-  const { refetch: refetchTutorInfo, data: tutorInfoData } = useGetTutorInfo(
-    lessonId,
-    tab,
-  );
+  const {
+    refetch: refetchTutorInfo,
+    data: tutorInfoData,
+    isSuccess: tutorInfoSuccess,
+  } = useGetTutorInfo(lessonId, tab);
   const handleTabClick = (id: number) => {
     setTab(id);
     refetchTutorInfo();
@@ -41,11 +42,12 @@ const Mypage = () => {
 
   useEffect(() => {
     // tab이 바뀔때마다 refetch 실행
-    if (lessonId) {
-      // 요약정보 요청
+    if (lessonId && tutorInfoSuccess) {
+      refetchTutorInfo();
     }
     if (tab === 1 && lessonId) {
       // teacherTab refetch
+      refetchTutorInfo();
     } else if (tab === 2 && lessonId) {
       // StudentTab refetch
     } else if (tab === 3) {
@@ -88,7 +90,7 @@ const Mypage = () => {
         </div>
         <div className="desktop:min-w-[1000px] min-w-[95%] desktop:min-h-[300px] w-full h-full flex desktop:flex-row flex-col justify-center desktop:items-start items-center">
           <MypageContentContainer>
-            {tab === 1 && <TeacherTab></TeacherTab>}
+            {tab === 1 && tutorInfoSuccess && <TeacherTab></TeacherTab>}
             {tab === 2 && <StudentTab></StudentTab>}
           </MypageContentContainer>
         </div>

@@ -7,6 +7,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { useState, useCallback, useEffect } from "react";
 import ReviewModal from "./ReviewModal";
+import useGetCreateRoom from "hooks/chat/useGetCreateRoom";
 const StudentClass = () => {
   const router = useRouter();
 
@@ -14,6 +15,7 @@ const StudentClass = () => {
     useGetStudentInfo();
   const [openReview, setOpenReview] = useState<boolean>(false);
   const [openAccept, setOpenAccept] = useState<boolean>(false);
+  const [chat, setChat] = useState(false);
 
   const { mutate: deleteApplication, isSuccess: deleteThisApply } =
     useDeleteApply();
@@ -40,6 +42,7 @@ const StudentClass = () => {
   const deleteFinishedClass = (suggestId: number) => {
     Swal.fire({
       title: "과외 내역을 삭제하시겠습니까?",
+      text: "선생님의 수업내역에서도 해당 수업이 사라집니다.",
       icon: "question",
       showCancelButton: true,
       confirmButtonColor: "#3085d6",
@@ -89,6 +92,15 @@ const StudentClass = () => {
   const openReviewModal = () => {
     setOpenReview(prev => !prev);
   };
+  const { refetch: createChatRoomRefetch } = useGetCreateRoom(lessonId);
+  const chatNow = (lessonId: number) => {
+    setChat(true);
+    setLessonId(lessonId);
+    if (chat && lessonId !== 0) {
+      setChat(false);
+      createChatRoomRefetch();
+    }
+  };
   return (
     <>
       <div className="flex flex-col w-full min-h-[300px] bg-bgColor">
@@ -111,12 +123,12 @@ const StudentClass = () => {
               >
                 {tutor.profileImage ? (
                   <img
-                    className="flex desktop:w-[200px] tablet:w-[150px] w-[100px] object-cover border border-borderColor rounded-xl m-3"
+                    className="flex desktop:w-[200px] tablet:w-[150px] w-[100px] desktop:h-[200px] tablet:h-[150px] h-[100px] object-cover border border-borderColor rounded-xl m-3"
                     src={tutor.profileImage}
                   />
                 ) : (
                   <img
-                    className="flex desktop:w-[200px] tablet:w-[150px] w-[100px] object-cover border border-borderColor rounded-xl m-3"
+                    className="flex desktop:w-[200px] tablet:w-[150px] w-[100px] desktop:h-[200px] tablet:h-[150px] h-[100px] object-cover border border-borderColor rounded-xl m-3"
                     src={
                       "https://play-lh.googleusercontent.com/38AGKCqmbjZ9OuWx4YjssAz3Y0DTWbiM5HB0ove1pNBq_o9mtWfGszjZNxZdwt_vgHo=w240-h480-rw"
                     }
@@ -205,7 +217,7 @@ const StudentClass = () => {
                     <>
                       <button
                         className="text text-pointColor font-SCDream3 m-2 desktop:text-base tablet:text-sm text-[10px]"
-                        onClick={openReviewModal}
+                        onClick={() => chatNow(tutor.lessonId)}
                       >
                         채팅하기
                       </button>
@@ -217,7 +229,10 @@ const StudentClass = () => {
                       </button>
                     </>
                   ) : tutor.status === "과외 중" ? (
-                    <button className="text text-pointColor font-SCDream3 m-2 desktop:text-base tablet:text-sm text-[10px]">
+                    <button
+                      className="text text-pointColor font-SCDream3 m-2 desktop:text-base tablet:text-sm text-[10px]"
+                      onClick={() => chatNow(tutor.lessonId)}
+                    >
                       채팅하기
                     </button>
                   ) : tutor.status === "과외 종료" &&
