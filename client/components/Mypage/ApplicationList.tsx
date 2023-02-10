@@ -5,24 +5,26 @@ import AcceptModal from "./AcceptModal";
 import DeclineModal from "./DeclineModal";
 import Swal from "sweetalert2";
 
-import { useState, useCallback, useEffect } from "react";
+import { useState, useCallback, useEffect, useRef } from "react";
 const ApplicationList = () => {
   const [openAccept, setOpenAccept] = useState<boolean>(false);
   const [openDecline, setOpenDecline] = useState<boolean>(false);
 
   const [islessonId, setIsLessonId] = useState(0);
   const { data: myTutorUrl, isSuccess } = useGetMyTutor();
-  const lessonId = myTutorUrl?.data.lessonId;
+  // const lessonId = myTutorUrl?.data.lessonId;
 
-  const { refetch: refetchApplyInfo, data: applyInfoData } = useGetTutorInfo(
-    lessonId,
-    1,
-  );
+  const {
+    refetch: refetchApplyInfo,
+    data: applyInfoData,
+    isSuccess: tutorInfoSuccess,
+  } = useGetTutorInfo(islessonId, 1);
 
   useEffect(() => {
-    setIsLessonId(lessonId);
-    //refetchApplyInfo();
-  }, [myTutorUrl]);
+    if (isSuccess) {
+      setIsLessonId(myTutorUrl?.data.lessonId);
+    }
+  }, [isSuccess]);
 
   useEffect(() => {
     if (islessonId) {
@@ -64,65 +66,68 @@ const ApplicationList = () => {
       >
         나의 과외로 이동하기
       </button>
-      {/* {map} 수업신청정보 */}
-      {applyInfoData?.data.data.map((apply: any) => (
-        <div className="flex flex-col" key={apply.lessonId}>
-          <div className="flex flex-row w-full h-fit border border-borderColor rounded-xl desktop:mt-5 tablet:mt-3 mt-2 p-3 pl-5">
-            <div className="flex flex-col w-[60%]">
-              <div className="mb-3 ">{apply.name}</div>
-              <div className="flex">
-                <div className="mr-3">희망요일</div>
-                <div> {apply.days}</div>
-              </div>
-              <div className="flex">
-                <div className="mr-3">희망언어</div>
-                <div> {apply.languages}</div>
-              </div>
-              <div className="flex">
-                <div className="mr-3">요청사항</div>
-                <div> {apply.status}</div>
-              </div>
-            </div>
 
-            <div className="flex flex-col w-[60%] justify-center items-end">
-              <div className="text text-textColor font-SCDream6 mt-2">
-                {apply.status}
+      {/* {map} 수업신청정보 */}
+      {tutorInfoSuccess
+        ? applyInfoData?.data.data.map((apply: any) => (
+            <div className="flex flex-col" key={apply.lessonId}>
+              <div className="flex flex-row w-full h-fit border border-borderColor rounded-xl desktop:mt-5 tablet:mt-3 mt-2 p-3 pl-5">
+                <div className="flex flex-col w-[60%]">
+                  <div className="mb-3 ">{apply.name}</div>
+                  <div className="flex">
+                    <div className="mr-3">희망요일</div>
+                    <div> {apply.days}</div>
+                  </div>
+                  <div className="flex">
+                    <div className="mr-3">희망언어</div>
+                    <div> {apply.languages}</div>
+                  </div>
+                  <div className="flex">
+                    <div className="mr-3">요청사항</div>
+                    <div> {apply.status}</div>
+                  </div>
+                </div>
+
+                <div className="flex flex-col w-[60%] justify-center items-end">
+                  <div className="text text-textColor font-SCDream6 mt-2">
+                    {apply.status}
+                  </div>
+                  {apply.status === "결제 대기 중" ? (
+                    <>
+                      <button className="text text-pointColor mt-1">
+                        채팅하기
+                      </button>
+                      <button
+                        className="text text-negativeMessage mt-1"
+                        onClick={openDeclineModal}
+                      >
+                        거절하기
+                      </button>
+                    </>
+                  ) : (
+                    <>
+                      <button
+                        className="text text-pointColor mt-1"
+                        onClick={e => onClickAcceptModal(apply.suggestId)}
+                      >
+                        수락하기
+                      </button>
+                      <button className="text text-pointColor mt-1">
+                        채팅하기
+                      </button>
+                      <button
+                        className="text text-negativeMessage mt-1"
+                        onClick={openDeclineModal}
+                      >
+                        거절하기
+                      </button>
+                    </>
+                  )}
+                </div>
               </div>
-              {apply.status === "결제 대기 중" ? (
-                <>
-                  <button className="text text-pointColor mt-1">
-                    채팅하기
-                  </button>
-                  <button
-                    className="text text-negativeMessage mt-1"
-                    onClick={openDeclineModal}
-                  >
-                    거절하기
-                  </button>
-                </>
-              ) : (
-                <>
-                  <button
-                    className="text text-pointColor mt-1"
-                    onClick={e => onClickAcceptModal(apply.suggestId)}
-                  >
-                    수락하기
-                  </button>
-                  <button className="text text-pointColor mt-1">
-                    채팅하기
-                  </button>
-                  <button
-                    className="text text-negativeMessage mt-1"
-                    onClick={openDeclineModal}
-                  >
-                    거절하기
-                  </button>
-                </>
-              )}
             </div>
-          </div>
-        </div>
-      ))}
+          ))
+        : null}
       {openAccept && (
         <AcceptModal
           onClickToggleModal={onClickAcceptModal}
