@@ -68,11 +68,11 @@ const ClassList = () => {
               <div className="flex flex-col w-[60%]">
                 <div className="mb-3 ">{curStu.name}</div>
                 <div className="flex">
-                  <div className="mr-3">희망요일</div>
+                  <div className="mr-3 mb-2">희망요일</div>
                   <div>{curStu.days}</div>
                 </div>
                 <div className="flex">
-                  <div className="mr-3">희망언어</div>
+                  <div className="mr-3 mb-2">희망언어</div>
                   <div> {curStu.languages}</div>
                 </div>
                 <div className="flex">
@@ -86,7 +86,6 @@ const ClassList = () => {
                 </div>
                 <div className="text text-textColor">
                   {curStu.startTime?.slice(0, 10)}
-                  {curStu.startTime?.slice(11, 19)}
                 </div>
                 <button className="text text-pointColor m-2">채팅하기</button>
                 <button

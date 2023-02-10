@@ -46,11 +46,11 @@ const FinishedTutor = () => {
               <div className="flex flex-col w-[60%]">
                 <div className="mb-3 ">{finished.name}</div>
                 <div className="flex">
-                  <div className="mr-3">희망요일</div>
+                  <div className="mr-3 mb-2">희망요일</div>
                   <div> {finished.days}</div>
                 </div>
                 <div className="flex">
-                  <div className="mr-3">희망언어</div>
+                  <div className="mr-3 mb-2">희망언어</div>
                   <div> {finished.languages}</div>
                 </div>
                 <div className="flex">
@@ -62,7 +62,7 @@ const FinishedTutor = () => {
                 <div className="text text-textColor font-SCDream6 m-2">
                   {finished.status}
                 </div>
-                <div className="text text-textColor">
+                <div className="text text-textColor my-2">
                   {finished.endTime?.slice(0, 10)}
                 </div>
                 <button

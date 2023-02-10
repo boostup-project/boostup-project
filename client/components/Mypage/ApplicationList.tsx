@@ -73,18 +73,18 @@ const ApplicationList = () => {
         </div>
       ) : null}
       {/* {map} 수업신청정보 */}
-   
+
       {tutorInfoSuccess
         ? applyInfoData?.data.data.map((apply: any) => (
             <div className="flex flex-col" key={apply.lessonId}>
               <div className="flex flex-row w-full h-fit border border-borderColor rounded-xl desktop:mt-5 tablet:mt-3 mt-2 p-3 pl-5">
                 <div className="flex flex-col w-[60%]">
-                  <div className="mb-3 ">{apply.name}</div>
-                  <div className="flex">
+                  <div className="mb-3">{apply.name}</div>
+                  <div className="flex mb-2">
                     <div className="mr-3">희망요일</div>
                     <div> {apply.days}</div>
                   </div>
-                  <div className="flex">
+                  <div className="flex mb-2">
                     <div className="mr-3">희망언어</div>
                     <div> {apply.languages}</div>
                   </div>
@@ -100,11 +100,11 @@ const ApplicationList = () => {
                   </div>
                   {apply.status === "결제 대기 중" ? (
                     <>
-                      <button className="text text-pointColor mt-1">
+                      <button className="text text-pointColor mt-4">
                         채팅하기
                       </button>
                       <button
-                        className="text text-negativeMessage mt-1"
+                        className="text text-negativeMessage mt-4"
                         onClick={openDeclineModal}
                       >
                         거절하기
@@ -113,16 +113,16 @@ const ApplicationList = () => {
                   ) : (
                     <>
                       <button
-                        className="text text-pointColor mt-1"
+                        className="text text-pointColor mt-2"
                         onClick={e => onClickAcceptModal(apply.suggestId)}
                       >
                         수락하기
                       </button>
-                      <button className="text text-pointColor mt-1">
+                      <button className="text text-pointColor mt-2">
                         채팅하기
                       </button>
                       <button
-                        className="text text-negativeMessage mt-1"
+                        className="text text-negativeMessage mt-2"
                         onClick={openDeclineModal}
                       >
                         거절하기
