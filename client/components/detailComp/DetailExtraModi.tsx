@@ -4,7 +4,7 @@ import { IconImg } from "assets/icon";
 import { useState, useRef } from "react";
 import ExtraInfo from "../createModal/ExtraInfo";
 import CreateModalContainer from "../reuse/container/CreateModalContainer";
-import { DetailTitles } from "./DetailExtra";
+import { CareerImage, DetailTitles } from "./DetailExtra";
 import usePostExtraModi from "hooks/detail/usePostExtraModi";
 import { useEffect } from "react";
 import { toast } from "react-toastify";
@@ -16,7 +16,7 @@ import { refetchToggle } from "atoms/detail/detailAtom";
 interface Props {
   modalOpen: () => void;
   textData: DetailTitles;
-  images: string[];
+  images: CareerImage[];
   lessonId: number;
 }
 
