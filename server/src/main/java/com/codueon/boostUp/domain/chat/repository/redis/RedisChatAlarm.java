@@ -52,7 +52,8 @@ public class RedisChatAlarm {
      * @author mozzi327
      */
     public Integer getAlarmCount(Long memberId, Long chatRoomId) {
-        return (operations.get(getKey(memberId, chatRoomId)) == null) ? 0 : 1;
+        Integer count = operations.get(getKey(memberId, chatRoomId));
+        return (count == null) ? 0 : count;
     }
 
     /**

@@ -13,6 +13,7 @@ import com.codueon.boostUp.domain.chat.utils.MessageType;
 import com.codueon.boostUp.domain.member.entity.Member;
 import com.codueon.boostUp.domain.member.exception.AuthException;
 import com.codueon.boostUp.domain.member.service.MemberDbService;
+import com.codueon.boostUp.domain.vo.AuthVO;
 import com.codueon.boostUp.global.exception.ExceptionCode;
 import com.codueon.boostUp.global.security.token.JwtAuthenticationToken;
 import lombok.RequiredArgsConstructor;
@@ -37,16 +38,16 @@ public class ChatRoomService {
     /**
      * 채팅방 생성 메서드
      *
-     * @param token    사용자 인증 정보
+     * @param authInfo 사용자 인증 정보
      * @param lessonId 과외 식별자
      * @author mozzi327
      */
-    public void createChatRoom(JwtAuthenticationToken token, Long lessonId) {
+    public void createChatRoom(AuthVO authInfo, Long lessonId) {
         Member receiver = memberDbService.ifExistsReturnMemberByLessonId(lessonId);
-        Long senderId = token.getId();
+        Long senderId = authInfo.getMemberId();
         Long receiverId = receiver.getId();
         if (isExistRoom(senderId, receiverId)) return;
-        String senderName = token.getName();
+        String senderName = authInfo.getName();
         String receiverName = receiver.getName();
         saveChatRoomAndSendEnterMessage(senderId, receiverId, senderName, receiverName);
     }
@@ -80,8 +81,8 @@ public class ChatRoomService {
         ChatRoom savedChatRoom = makeChatRoomThenReturn(senderId, receiverId, senderName, receiverName);
         Long chatRoomId = savedChatRoom.getId();
 
-        RedisChat senderChat = makeChat(savedChatRoom.getId(), senderId, senderName, MessageType.ENTER);
-        RedisChat receiverChat = makeChat(savedChatRoom.getId(), receiverId, receiverName, MessageType.ENTER);
+        RedisChat senderChat = makeChat(savedChatRoom.getId(), senderId, senderName, MessageType.ALARM);
+        RedisChat receiverChat = makeChat(savedChatRoom.getId(), receiverId, receiverName, MessageType.ALARM);
 
         checkExistRoomKeyInfo(chatRoomId, senderId, receiverId);
 
@@ -132,13 +133,12 @@ public class ChatRoomService {
     /**
      * 채팅방 목록 조회 메서드
      *
-     * @param token 인증 정보
+     * @param authInfo 인증 정보
      * @return List(GetChatRoom)
      * @author mozzi327
      */
-    public List<GetChatRoom> findAllChatRoom(JwtAuthenticationToken token) {
-        if (token == null) throw new AuthException(ExceptionCode.INVALID_AUTH_TOKEN);
-        Long memberId = token.getId();
+    public List<GetChatRoom> findAllChatRoom(AuthVO authInfo) {
+        Long memberId = authInfo.getMemberId();
         List<ChatRoom> chatRooms = chatRoomRepository.findChatRoomsBySenderIdOrReceiverId(memberId, memberId);
         return chatRooms.stream()
                 .map(chatRoom -> GetChatRoom.builder()

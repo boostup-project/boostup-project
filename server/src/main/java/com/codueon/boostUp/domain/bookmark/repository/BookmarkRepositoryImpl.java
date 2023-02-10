@@ -2,14 +2,11 @@ package com.codueon.boostUp.domain.bookmark.repository;
 
 import com.codueon.boostUp.domain.bookmark.dto.GetBookmark;
 import com.codueon.boostUp.domain.bookmark.dto.QGetBookmark;
-import com.codueon.boostUp.domain.lesson.entity.Lesson;
-import com.querydsl.core.types.dsl.CaseBuilder;
-import com.querydsl.jpa.JPAExpressions;
-import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import java.util.List;
@@ -18,6 +15,7 @@ import static com.codueon.boostUp.domain.bookmark.entity.QBookmark.bookmark;
 import static com.codueon.boostUp.domain.lesson.entity.QLesson.lesson;
 import static com.codueon.boostUp.domain.member.entity.QMember.member;
 
+@Repository
 public class BookmarkRepositoryImpl implements CustomBookmarkRepository {
 
     private final JPAQueryFactory queryFactory;

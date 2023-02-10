@@ -32,6 +32,9 @@ public enum ExceptionCode {
     MISMATCH_ACCESS_TOKEN(403, "엑세스 토큰의 유저 정보가 일치하지 않습니다."),
     BLACK_LIST(403, "로그아웃 처리된 토큰입니다."),
     MISSING_HEADER_ACCESS_TOKEN(403,"토큰이 존재하지 않습니다."),
+    NO_AUTHORIZATION_EDIT_LESSON(403, "요약 정보를 수정할 권한이 없습니다."),
+    NO_AUTHORIZATION_EDIT_LESSON_INFO(403, "상세 정보를 수정할 권한이 없습니다."),
+    NO_AUTHORIZATION_EDIT_CURRICULUM(403, "커리큘럼을 수정할 권한이 없습니다."),
 
     // 중복여부
     EMAIL_ALREADY_EXIST(504, "이미 존재하는 이메일입니다."),

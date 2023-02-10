@@ -7,4 +7,6 @@ import java.util.Optional;
 
 public interface CurriculumRepository extends JpaRepository <Curriculum, Long> {
     Optional<Curriculum> findByLessonId(Long lessonId);
+    Optional<Curriculum> findByLessonIdAndMemberId(Long lessonId, Long memberId);
+    void deleteByLessonId(Long lessonId);
 }

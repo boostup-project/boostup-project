@@ -1,18 +1,14 @@
 package com.codueon.boostUp.domain.chat.controller;
 
-import java.security.Principal;
-
-import com.codueon.boostUp.domain.chat.service.ChatService;
-import lombok.extern.slf4j.Slf4j;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
-import com.codueon.boostUp.global.exception.ExceptionCode;
-import com.codueon.boostUp.domain.member.exception.AuthException;
-import com.codueon.boostUp.global.exception.BusinessLogicException;
-import com.codueon.boostUp.domain.chat.service.WebSocketAuthService;
-import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import com.codueon.boostUp.domain.chat.repository.redis.RedisChatRoom;
-import com.codueon.boostUp.global.security.token.JwtAuthenticationToken;
+import com.codueon.boostUp.domain.chat.service.WebSocketAuthService;
+import com.codueon.boostUp.domain.vo.AuthVO;
+import com.codueon.boostUp.global.exception.BusinessLogicException;
+import com.codueon.boostUp.global.exception.ExceptionCode;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
+import org.springframework.stereotype.Component;
 
 @Slf4j
 @Component
@@ -28,10 +24,8 @@ public class ChatRegisterController {
      * @param principal Principal
      * @author mozzi327
      */
-    public void registerUserAndSendEnterMessage(Long chatRoomId, Principal principal) {
-        if (principal == null) throw new AuthException(ExceptionCode.INVALID_ACCESS);
-        JwtAuthenticationToken token = (JwtAuthenticationToken) principal;
-        boolean isExistMember = redisChatRoom.isExistMemberInChatRoom(chatRoomId, token.getId());
+    public void registerUserAndSendEnterMessage(Long chatRoomId, AuthVO authInfo) {
+        boolean isExistMember = redisChatRoom.isExistMemberInChatRoom(chatRoomId, authInfo.getMemberId());
         if (!isExistMember) throw new BusinessLogicException(ExceptionCode.CHATROOM_NOT_FOUND);
     }
 

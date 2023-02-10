@@ -67,6 +67,22 @@ public class RedisChatMessage {
     }
 
     /**
+     * Redis 가장 최근 메시지 조회 메서드
+     *
+     * @param key 식별 키
+     * @return RedisChat
+     * @author mozzi327
+     */
+    public RedisChat getLatestMessage(String key) {
+        RedisChat redisChat = objectToEntity(operations.popMax(key).getValue());
+        Long size = operations.zCard(key);
+        if (redisChat.getChatRoomId() == null && size == 0)
+            throw new BusinessLogicException(ExceptionCode.CHAT_NOT_FOUND);
+        operations.add(key, redisChat, size);
+        return redisChat;
+    }
+
+    /**
      * Redis 채팅방 메시지 전체 조회 메서드
      *
      * @param chatRoomId 사용자 식별자
@@ -86,22 +102,6 @@ public class RedisChatMessage {
      */
     public void removeAllMessageInChatRoom(Long chatRoomId) {
         redisTemplate.delete(getKey(chatRoomId));
-    }
-
-    /**
-     * Redis 가장 최근 메시지 조회 메서드
-     *
-     * @param key 식별 키
-     * @return RedisChat
-     * @author mozzi327
-     */
-    public RedisChat getLatestMessage(String key) {
-        RedisChat redisChat = objectToEntity(operations.popMax(key).getValue());
-        Long size = operations.zCard(key);
-        if (redisChat.getChatRoomId() == null && size == 0)
-            throw new BusinessLogicException(ExceptionCode.CHAT_NOT_FOUND);
-        operations.add(key, redisChat, size);
-        return redisChat;
     }
 
     /**

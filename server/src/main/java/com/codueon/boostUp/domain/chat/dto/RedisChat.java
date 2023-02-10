@@ -51,6 +51,20 @@ public class RedisChat implements Serializable {
         this.message = "[알림] " + displayName + "님이 나가셨습니다.";
     }
 
+    public void addRegisterSuggestMessage() {
+        this.message = "[알림] " + displayName + "님께서 과외를 신청했습니다.";
+    }
+
+    public void addRejectSuggestMessage(String rejectComment) {
+        this.message = "[알림] " + displayName + "님께서 과외 신청을 거절하셨어요! \n"
+                + "거절 사유 : \n"
+                + rejectComment;
+    }
+
+    public void addAcceptSuggestMessage() {
+        this.message = "[알림] " + displayName + "님 과외가 수락되었습니다.";
+    }
+
     public void settingCurrentTime() {
         this.createdAt = LocalDateTime.now();
     }
