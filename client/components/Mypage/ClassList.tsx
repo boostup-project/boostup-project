@@ -66,7 +66,10 @@ const ClassList = () => {
           {tutorInfoData?.data.data.map((curStu: any) => (
             <div className="flex flex-row w-full h-fit border border-borderColor rounded-xl mt-3 p-3 pl-5">
               <div className="flex flex-col w-[60%]">
-                <div className="mb-3 ">{curStu.name}</div>
+                <div className="flex mb-2">
+                  <div className="mr-3">신청학생</div>
+                  <div> {curStu.name}</div>
+                </div>
                 <div className="flex">
                   <div className="mr-3 mb-2">희망요일</div>
                   <div>{curStu.days}</div>
@@ -81,15 +84,15 @@ const ClassList = () => {
                 </div>
               </div>
               <div className="flex flex-col w-[60%] justify-end items-end">
-                <div className="text text-textColor font-SCDream6 mt-2">
+                <div className="text text-textColor font-SCDream6 mb-1 mr-2">
                   {curStu.status}
                 </div>
-                <div className="text text-textColor">
+                <div className="text text-textColor mb-1 mr-2">
                   {curStu.startTime?.slice(0, 10)}
                 </div>
-                <button className="text text-pointColor m-2">채팅하기</button>
+                <button className="text text-pointColor mr-2">채팅하기</button>
                 <button
-                  className="text text-negativeMessage m-2"
+                  className="text text-negativeMessage mt-2 mr-2"
                   onClick={() => {
                     closeClass(curStu.suggestId);
                   }}

@@ -44,7 +44,10 @@ const FinishedTutor = () => {
           {finishedClassData?.data.data.map((finished: any) => (
             <div className="flex flex-row w-full h-fit border border-borderColor rounded-xl mt-3 p-3 pl-5">
               <div className="flex flex-col w-[60%]">
-                <div className="mb-3 ">{finished.name}</div>
+                <div className="flex">
+                  <div className="mr-3 mb-2">신청학생</div>
+                  <div> {finished.name}</div>
+                </div>
                 <div className="flex">
                   <div className="mr-3 mb-2">희망요일</div>
                   <div> {finished.days}</div>
@@ -62,7 +65,7 @@ const FinishedTutor = () => {
                 <div className="text text-textColor font-SCDream6 m-2">
                   {finished.status}
                 </div>
-                <div className="text text-textColor my-2">
+                <div className="text text-textColor my-2 mr-2">
                   {finished.endTime?.slice(0, 10)}
                 </div>
                 <button
