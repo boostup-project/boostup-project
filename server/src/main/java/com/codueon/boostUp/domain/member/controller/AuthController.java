@@ -2,6 +2,7 @@ package com.codueon.boostUp.domain.member.controller;
 
 import com.codueon.boostUp.domain.member.dto.TokenDto;
 import com.codueon.boostUp.domain.member.service.AuthService;
+import com.codueon.boostUp.domain.vo.AuthVO;
 import com.codueon.boostUp.global.security.token.JwtAuthenticationToken;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -43,8 +44,7 @@ public class AuthController {
     public ResponseEntity deleteLoginMember(@RequestHeader("authorization") String accessToken,
                                             @RequestHeader("refreshToken") String refreshToken,
                                             Authentication authentication) {
-        JwtAuthenticationToken token = (JwtAuthenticationToken) authentication;
-        authService.logoutMember(accessToken, refreshToken, token.getId());
+        authService.logoutMember(accessToken, refreshToken, AuthVO.ofMemberId(authentication));
         return ResponseEntity.ok().build();
     }
 
@@ -60,9 +60,7 @@ public class AuthController {
     public ResponseEntity getReIssueToken(@RequestHeader("authorization") String accessToken,
                                           @RequestHeader("refreshToken") String refreshToken,
                                           Authentication authentication) {
-        JwtAuthenticationToken token = (JwtAuthenticationToken) authentication;
-
-        TokenDto.Response response = authService.reIssueToken(accessToken, refreshToken, token.getId());
+        TokenDto.Response response = authService.reIssueToken(accessToken, refreshToken, AuthVO.ofMemberId(authentication));
         return ResponseEntity.ok()
                 .headers(response.getHeaders())
                 .body(response.getResponse());

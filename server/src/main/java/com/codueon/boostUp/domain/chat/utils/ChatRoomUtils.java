@@ -5,7 +5,6 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class ChatRoomUtils {
-    public final String  KEY_FOR_CHAT_ROOMS = "ChatRooms";
     private final String PREFIX_OF_KEY = "ChatRoom";
     private final String SUFFIX_OF_KEY = "Message";
     private final String PREFIX_OF_MEMBER = "Member";
@@ -33,6 +32,12 @@ public class ChatRoomUtils {
         return PREFIX_OF_KEY + chatRoomId + SUFFIX_OF_KEY;
     }
 
+    /**
+     * member key 형변환 메서드(저장용)
+     * @param memberId 사용자 식별자
+     * @return String
+     * @author mozzi327
+     */
     public String makeMemberKey(Long memberId) {
         return PREFIX_OF_MEMBER + memberId + SUFFIX_OF_KEY;
     }

@@ -17,6 +17,7 @@ import java.util.stream.Collectors;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class GetReviewMyPage {
+    private Long reviewId;
     private Long lessonId;
     private String profileImage;
     private List<String> languages;
@@ -31,7 +32,8 @@ public class GetReviewMyPage {
 
     @Builder
     @QueryProjection
-    public GetReviewMyPage(Long lessonId,
+    public GetReviewMyPage(Long reviewId,
+                           Long lessonId,
                            String name,
                            Integer score,
                            String comment,
@@ -39,6 +41,7 @@ public class GetReviewMyPage {
                            Lesson lesson,
                            LocalDateTime startTime,
                            LocalDateTime endTime) {
+        this.reviewId = reviewId;
         this.lessonId = lessonId;
         this.languages = lesson.getLanguageListAsString();
         this.profileImage = lesson.getProfileImage().getFilePath();

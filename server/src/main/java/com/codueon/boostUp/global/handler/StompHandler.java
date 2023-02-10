@@ -3,6 +3,7 @@ package com.codueon.boostUp.global.handler;
 import com.codueon.boostUp.domain.chat.controller.ChatRegisterController;
 import com.codueon.boostUp.domain.chat.vo.ChatRoomIdVO;
 import com.codueon.boostUp.domain.member.entity.Member;
+import com.codueon.boostUp.domain.vo.AuthVO;
 import com.codueon.boostUp.global.exception.BusinessLogicException;
 import com.codueon.boostUp.global.exception.ExceptionCode;
 import com.codueon.boostUp.global.security.utils.JwtTokenUtils;
@@ -44,7 +45,7 @@ public class StompHandler implements ChannelInterceptor {
         } else if (StompCommand.SUBSCRIBE.equals(command)) {
             log.info("[SUBSCRIBE] start {}", sessionId);
             Long chatRoomId = parseRoomIdFromHeader(accessor);
-            if (chatRoomId != null) chatRegisterController.registerUserAndSendEnterMessage(chatRoomId, accessor.getUser());
+            if (chatRoomId != null) chatRegisterController.registerUserAndSendEnterMessage(chatRoomId, AuthVO.of(accessor.getUser()));
             log.info("[SUBSCRIBE] end {}", sessionId);
         } else if (StompCommand.UNSUBSCRIBE.equals(command)) {
             log.info("[UNSUBSCRIBE] start {}", sessionId);

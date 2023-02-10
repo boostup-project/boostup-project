@@ -4,6 +4,7 @@ import com.codueon.boostUp.domain.chat.dto.GetChatRoom;
 import com.codueon.boostUp.domain.chat.dto.RedisChat;
 import com.codueon.boostUp.domain.chat.service.ChatRoomService;
 import com.codueon.boostUp.domain.chat.service.ChatService;
+import com.codueon.boostUp.domain.vo.AuthVO;
 import com.codueon.boostUp.global.security.token.JwtAuthenticationToken;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -33,8 +34,7 @@ public class ChatRoomController {
     @GetMapping("/{room-id}/messages")
     public ResponseEntity getMessageInChatRoom(@PathVariable("room-id") Long chatRoomId,
                                                Authentication authentication) {
-        JwtAuthenticationToken token = (JwtAuthenticationToken) authentication;
-        List<RedisChat> response = chatService.getChatMessages(token, chatRoomId);
+        List<RedisChat> response = chatService.getChatMessages(AuthVO.of(authentication), chatRoomId);
         return ResponseEntity.ok().body(response);
     }
 
@@ -47,8 +47,7 @@ public class ChatRoomController {
     @GetMapping("/create/lesson/{lesson-id}")
     public ResponseEntity createChatRoom(@PathVariable("lesson-id") Long lessonId,
                                          Authentication authentication) {
-        JwtAuthenticationToken token = (JwtAuthenticationToken) authentication;
-        chatRoomService.createChatRoom(token, lessonId);
+        chatRoomService.createChatRoom(AuthVO.of(authentication), lessonId);
         return ResponseEntity.ok().build();
     }
 
@@ -60,8 +59,7 @@ public class ChatRoomController {
      */
     @GetMapping
     public ResponseEntity getAllChatRoom(Authentication authentication) {
-        JwtAuthenticationToken token = (JwtAuthenticationToken) authentication;
-        List<GetChatRoom> response = chatRoomService.findAllChatRoom(token);
+        List<GetChatRoom> response = chatRoomService.findAllChatRoom(AuthVO.of(authentication));
         Collections.sort(response);
         return ResponseEntity.ok().body(response);
     }

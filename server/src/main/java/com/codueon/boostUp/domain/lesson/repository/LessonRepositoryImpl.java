@@ -17,6 +17,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import java.util.List;
@@ -27,7 +28,7 @@ import static com.codueon.boostUp.domain.lesson.entity.QLessonAddress.lessonAddr
 import static com.codueon.boostUp.domain.lesson.entity.QLessonLanguage.lessonLanguage;
 import static com.codueon.boostUp.domain.member.entity.QMember.member;
 
-
+@Repository
 public class LessonRepositoryImpl implements CustomLessonRepository {
     private final JPAQueryFactory queryFactory;
 
@@ -224,16 +225,15 @@ public class LessonRepositoryImpl implements CustomLessonRepository {
      * @return result
      * @author Qruatz614
      */
-    public GetLesson getDetailLesson(Long lessonId) {
-        GetLesson result = queryFactory
+    public GetLesson getDetailLesson(Long lessonId, Long memberId) {
+        return queryFactory
                 .select(new QGetLesson(
                         lesson,
                         member.name
                 )).from(lesson)
-                .leftJoin(member).on(lesson.memberId.eq(member.id))
+                .leftJoin(member).on(lesson.memberId.eq(memberId))
                 .where(lesson.id.eq(lessonId))
                 .fetchOne();
-        return result;
     }
 
     /**
@@ -296,12 +296,11 @@ public class LessonRepositoryImpl implements CustomLessonRepository {
      * @author LeeGoh
      */
     public Long getMemberIdByLessonId(Long lessonId) {
-        Long memberId = queryFactory
+        return queryFactory
                 .select(member.id)
                 .from(member)
                 .leftJoin(lesson).on(member.id.eq(lesson.memberId))
                 .where(lesson.id.eq(lessonId))
                 .fetchOne();
-        return memberId;
     }
 }

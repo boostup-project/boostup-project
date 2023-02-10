@@ -8,6 +8,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import java.util.List;
@@ -17,6 +18,7 @@ import static com.codueon.boostUp.domain.member.entity.QMember.member;
 import static com.codueon.boostUp.domain.reveiw.entity.QReview.review;
 import static com.codueon.boostUp.domain.suggest.entity.QSuggest.suggest;
 
+@Repository
 public class ReviewRepositoryImpl implements CustomReviewRepository {
 
     private final JPAQueryFactory queryFactory;
@@ -50,7 +52,8 @@ public class ReviewRepositoryImpl implements CustomReviewRepository {
     public Page<GetReviewMyPage> getMyPageReviewList(Long memberId, Pageable pageable) {
         List<GetReviewMyPage> result = queryFactory
                 .select(new QGetReviewMyPage(
-                        review.lessonId,
+                        review.id,
+                        lesson.id,
                         member.name,
                         review.score,
                         review.comment,
