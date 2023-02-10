@@ -18,14 +18,13 @@ const DetailBasicInfo = (basicInfo: any) => {
     <>
       <div className="w-full h-full flex flex-row justify-center items-center">
         {/* profile Image */}
-        <div className="w-1/5 h-full flex flex-col justify-center items-center p-5">
+        <div className="w-1/5 min-w-[200px] h-full flex flex-col justify-center items-center p-5">
           <Image
-            // src={"https://pbs.twimg.com/media/FgYA_RAWQAEWCw3.jpg"}
             src={basicInfo.basicInfo?.profileImage}
             alt="profile Image"
             width={200}
             height={200}
-            className="rounded-xl border border-borderColor"
+            className="rounded-xl border w-[150px] h-[150px] object-cover border-borderColor"
           />
         </div>
         {/* lesson Info */}

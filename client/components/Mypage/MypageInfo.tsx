@@ -5,9 +5,13 @@ import EditUserData from "./EditUserData";
 import EditUserPwd from "./EditUserPwd";
 import { useRouter } from "next/router";
 import Swal from "sweetalert2";
+import { useRecoilValue } from "recoil";
+import { isMemberEdited } from "atoms/mypage/myPageAtom";
 const MypageInfo = () => {
+  const isMemEdited = useRecoilValue(isMemberEdited);
   const [isMemberEdit, setIsMemberEdit] = useState(false);
   const [isPwdEdit, setIsPwdEdit] = useState(false);
+  const [memberImg, setMemberImg] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [name, setName] = useState<string>("");
   const router = useRouter();
@@ -21,8 +25,9 @@ const MypageInfo = () => {
     if (localStorage) {
       setEmail(localStorage.email);
       setName(localStorage.name);
+      setMemberImg(localStorage.memberImage);
     }
-  }, [email, name]);
+  }, [isMemEdited]);
   const { mutate, isSuccess, isError } = useDeleteAccount();
   const deleteMyAccount = () => {
     Swal.fire({
@@ -58,14 +63,13 @@ const MypageInfo = () => {
   return (
     <>
       <div className="w-full flex flex-row justify-start items-center">
-        <div className="object-cover desktop:w-[260px] tablet:w-[250px] w-[150px] h-fit flex flex-col justify-start items-start p-5 ">
+        <div className="object-cover tablet:w-[250px] tablet:h-[250px] w-[150px] h-[150px] flex flex-col justify-start items-start p-5 ">
           <img
-            // src={localStorage.memberImage}
-            // src={data.profileImage}
+            src={memberImg}
             alt="profile Image"
             width={200}
             height={200}
-            className="object-cover rounded-xl border border-borderColor"
+            className="w-full h-full object-cover rounded-xl border border-borderColor"
           />
         </div>
         <div className="w-4/5 h-full flex flex-col justify-start items-start py-5">

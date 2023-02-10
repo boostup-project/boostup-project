@@ -6,7 +6,6 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import SmallBtn from "components/reuse/btn/SmallBtn";
-import AuthBtn from "components/reuse/btn/AuthBtn";
 import ModalBackDrop from "components/reuse/container/ModalBackDrop";
 import usePostMemberModi from "hooks/mypage/usePostMemberModi";
 import usePostNameCheck from "hooks/mypage/usePostNameCheck";
@@ -36,11 +35,11 @@ const EditUserData = ({ editProfile }: Props) => {
     formState: { errors },
   } = useForm<MemberEditData>({ mode: "onBlur" });
 
-  useEffect(() => {
-    if (isSuccess && data) {
-      console.log(data.data);
-    }
-  }, [isSuccess]);
+  // useEffect(() => {
+  //   if (isSuccess && data) {
+  //     console.log(data.data);
+  //   }
+  // }, [isSuccess]);
 
   const insertImg = (e: any) => {
     let reader = new FileReader();
@@ -64,7 +63,6 @@ const EditUserData = ({ editProfile }: Props) => {
     setDuplicationName(e.target.value);
   };
   const duplicationCheck = () => {
-    console.log(duplicationName);
     mutate(duplicationName);
   };
 

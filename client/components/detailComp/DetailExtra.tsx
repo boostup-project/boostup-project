@@ -1,16 +1,15 @@
 import { AxiosResponse } from "axios";
-import useGetExtra from "hooks/detail/useGetExtra";
-import Image from "next/image";
 import { useState } from "react";
 import { useEffect } from "react";
 import DetailExtraModi from "./DetailExtraModi";
 import FadeLoader from "react-spinners/FadeLoader";
 import { loaderBlue } from "assets/color/color";
+import DetailImageModal from "./DetailImageModal";
 
-interface CareerImage {
+export interface CareerImage {
   [index: string]: string;
   careerImageId: string;
-  careerImageUrl: string;
+  filePath: string;
 }
 
 export interface DetailExtraInfo {
@@ -46,8 +45,11 @@ const detailTitlesArray = Object.keys(detailTitles);
 
 const DetailExtra = ({ extraData, lessonId, editable }: Props) => {
   const [textData, setTextData] = useState<DetailTitles>();
-  const [images, setImages] = useState<string[]>([]);
+  const [images, setImages] = useState<CareerImage[]>([]);
+  const [imagesToShow, setImagesToShow] = useState<string>("");
+  const [isImageModal, setIsImageModal] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
+  console.log(imagesToShow);
 
   useEffect(() => {
     if (extraData) {
@@ -67,6 +69,14 @@ const DetailExtra = ({ extraData, lessonId, editable }: Props) => {
   }, [extraData]);
   const modalOpen = () => {
     setIsEdit(prev => !prev);
+  };
+  const modalImageOpen = (e: any) => {
+    setImagesToShow(images[e.target.id].filePath);
+    setIsImageModal(prev => !prev);
+  };
+
+  const modalImageClose = () => {
+    setIsImageModal(prev => !prev);
   };
 
   return (
@@ -106,13 +116,15 @@ const DetailExtra = ({ extraData, lessonId, editable }: Props) => {
               <div className="font-SCDream5">{detailTitles[title]}</div>
               <div className="font-SCDream3">
                 {title === "careerImage" ? (
-                  <div className="border border-borderColor w-72 h-fit flex">
-                    {images?.map((image: any) => (
+                  <div className="border border-borderColor w-72 h-[100px] flex">
+                    {images?.map((image: any, idx: number) => (
                       <img
-                        className="w-1/3 p-1 rounded-xl"
+                        className="w-1/3 p-1 rounded-xl aspect-square cursor-pointer"
                         key={image.careerImageId}
+                        id={String(idx)}
                         src={image.filePath}
                         alt="detailImage"
+                        onClick={e => modalImageOpen(e)}
                       />
                     ))}
                   </div>
@@ -124,6 +136,12 @@ const DetailExtra = ({ extraData, lessonId, editable }: Props) => {
           ))
         )}
       </div>
+      {isImageModal && (
+        <DetailImageModal
+          modalImageClose={modalImageClose}
+          imagesToShow={imagesToShow}
+        />
+      )}
     </div>
   );
 };
