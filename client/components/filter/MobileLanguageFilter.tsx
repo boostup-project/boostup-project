@@ -50,7 +50,7 @@ const MoblieLanguageFilter = () => {
                 height={100}
                 src={el.img}
                 alt={el.name}
-                className="border border-borderColor rounded-full w-full h-full cursor-pointer bg-white"
+                className="border border-borderColor/40 rounded-full w-full h-full cursor-pointer bg-white"
               />
             </div>
           );

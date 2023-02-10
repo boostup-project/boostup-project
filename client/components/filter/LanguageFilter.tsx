@@ -32,7 +32,7 @@ const LanguageFilter = () => {
                 height={100}
                 src={lang.img}
                 alt={lang.name}
-                className="border border-borderColor rounded-full w-full h-full cursor-pointer bg-white"
+                className="border border-borderColor/40 rounded-full w-full h-full cursor-pointer bg-white"
               />
             </div>
           );
