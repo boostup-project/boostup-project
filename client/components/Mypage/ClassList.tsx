@@ -3,6 +3,7 @@ import useGetMyTutor from "hooks/mypage/useGetMyTutor";
 import useGetCloseClass from "hooks/mypage/useGetCloseClass";
 import { useState, useEffect } from "react";
 import Swal from "sweetalert2";
+import { useRouter } from "next/router";
 const ClassList = () => {
   const [aSuggestId, setASuggestId] = useState(0);
 
@@ -53,6 +54,10 @@ const ClassList = () => {
     }
   }, [isSuccess, isError]);
 
+  const router = useRouter();
+  const toChat = () => {
+    router.push("/chat/0");
+  };
   return (
     <>
       <div className="flex flex-col w-full min-h-[300px] bg-bgColor">
@@ -90,7 +95,9 @@ const ClassList = () => {
                 <div className="text text-textColor mb-1 mr-2">
                   {curStu.startTime?.slice(0, 10)}
                 </div>
-                <button className="text text-pointColor mr-2">채팅하기</button>
+                <button className="text text-pointColor mr-2" onClick={toChat}>
+                  채팅하기
+                </button>
                 <button
                   className="text text-negativeMessage mt-2 mr-2"
                   onClick={() => {

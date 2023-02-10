@@ -37,7 +37,6 @@ const AcceptModal = ({
       quantity: e.quantity,
       suggestId: suggestId,
     };
-    console.log(acceptData);
     mutate(acceptData);
   };
 
