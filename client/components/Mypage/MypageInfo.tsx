@@ -69,7 +69,7 @@ const MypageInfo = () => {
             alt="profile Image"
             width={200}
             height={200}
-            className="w-full h-full object-cover rounded-xl border border-borderColor"
+            className="w-full h-full object-cover rounded-xl"
           />
         </div>
         <div className="w-4/5 h-full flex flex-col justify-start items-start py-5">
