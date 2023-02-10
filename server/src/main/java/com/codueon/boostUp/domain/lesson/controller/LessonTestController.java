@@ -1,10 +1,10 @@
 package com.codueon.boostUp.domain.lesson.controller;
 
-import com.codueon.boostUp.domain.lesson.dto.post.PostLesson;
 import com.codueon.boostUp.domain.lesson.dto.patch.PostLessonDetailEdit;
 import com.codueon.boostUp.domain.lesson.dto.patch.PostLessonInfoEdit;
+import com.codueon.boostUp.domain.lesson.dto.post.PostLesson;
 import com.codueon.boostUp.domain.lesson.service.LessonService;
-import com.codueon.boostUp.global.security.token.JwtAuthenticationToken;
+import com.codueon.boostUp.domain.vo.AuthVO;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.http.HttpStatus;
@@ -24,83 +24,70 @@ public class LessonTestController {
 
     /**
      * 과외 등록 테스트 컨트롤러 메서드
-     * @param postLesson 과외 등록
+     *
+     * @param postLesson   과외 등록
      * @param profileImage 프로필 이미지
-     * @param careerImage 경력 이미지
-     * @return ResponseEntity
-     * @throws Exception
+     * @param careerImage  경력 이미지
      * @author Quartz614
      */
     @PostMapping(value = "/registration")
     public ResponseEntity<?> testPostLesson(@RequestPart(value = "data") @Valid PostLesson postLesson,
-                                        Authentication authentication,
-                                        @RequestPart(required = false, value = "profileImage") MultipartFile profileImage,
-                                        @RequestPart(required = false, value = "careerImage") List<MultipartFile> careerImage) {
-        JwtAuthenticationToken token = (JwtAuthenticationToken) authentication;
-        Long memberId = getMemberIdIfExistToken(token);
-        lessonService.createLesson(postLesson, memberId, profileImage, careerImage);
+                                            Authentication authentication,
+                                            @RequestPart(required = false, value = "profileImage") MultipartFile profileImage,
+                                            @RequestPart(required = false, value = "careerImage") List<MultipartFile> careerImage) {
+        lessonService.createLesson(postLesson, AuthVO.ofMemberId(authentication), profileImage, careerImage);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     /**
      * 과외 요약 정보 수정 테스트 컨트롤러 메서드
-     * @param lessonId 과외 식별자
+     *
+     * @param lessonId           과외 식별자
      * @param postLessonInfoEdit 수정 과외 요약 정보
-     * @param profileImage 프로필 이미지
-     * @return ResponseEntity
+     * @param profileImage       프로필 이미지
+     * @param authentication     인증 정보
      * @author Quatz614
      */
     @SneakyThrows
     @PostMapping("/{lesson-id}/modification")
-    public ResponseEntity testUpdateLesson(@PathVariable("lesson-id") Long lessonId,
-                                       @RequestPart(value = "data") @Valid PostLessonInfoEdit postLessonInfoEdit,
-                                       Authentication authentication,
-                                       @RequestPart(required = false, value = "profileImage") MultipartFile profileImage) {
-        JwtAuthenticationToken token = (JwtAuthenticationToken) authentication;
-        lessonService.updateLessonInfo(lessonId, postLessonInfoEdit, profileImage);
+    public ResponseEntity<?> testUpdateLesson(@PathVariable("lesson-id") Long lessonId,
+                                           @RequestPart(value = "data") @Valid PostLessonInfoEdit postLessonInfoEdit,
+                                           @RequestPart(required = false, value = "profileImage") MultipartFile profileImage,
+                                           Authentication authentication) {
+        lessonService.updateLessonInfo(lessonId, AuthVO.ofMemberId(authentication), postLessonInfoEdit, profileImage);
         return ResponseEntity.ok().build();
     }
 
     /**
      * 과외 상세 정보 수정 테스트 컨트롤러 메서드
-     * @param lessonId 과외 식별자
+     *
+     * @param lessonId             과외 식별자
      * @param postLessonDetailEdit 수정 과외 상세 정보
-     * @param careerImage 경력 이미지
-     * @return ResponseEntity
+     * @param careerImage          경력 이미지
+     * @param authentication       인증 정보
      * @author Quartz614
      */
     @SneakyThrows
     @PostMapping("/{lesson-id}/detailInfo/modification")
-    public ResponseEntity testUpdateLessonDetail(@PathVariable("lesson-id") Long lessonId,
-                                             @RequestPart(value = "data") @Valid PostLessonDetailEdit postLessonDetailEdit,
-                                             @RequestPart(required = false, value = "careerImage") List<MultipartFile> careerImage) {
-        lessonService.updateLessonDetail(lessonId, postLessonDetailEdit, careerImage);
+    public ResponseEntity<?> testUpdateLessonDetail(@PathVariable("lesson-id") Long lessonId,
+                                                 @RequestPart(value = "data") @Valid PostLessonDetailEdit postLessonDetailEdit,
+                                                 @RequestPart(required = false, value = "careerImage") List<MultipartFile> careerImage,
+                                                 Authentication authentication) {
+        lessonService.updateLessonDetail(lessonId, AuthVO.ofMemberId(authentication), postLessonDetailEdit, careerImage);
         return ResponseEntity.ok().build();
     }
 
     /**
      * 과외 삭제 테스트 컨트롤러 메서드
-     * @param lessonId 과외 식별자
-     * @return ResponseEntity
+     *
+     * @param lessonId       과외 식별자
+     * @param authentication 인증 정보
      * @author Quartz614
      */
     @DeleteMapping(value = "/{lesson-id}")
-    public ResponseEntity testDeleteLesson(@PathVariable("lesson-id") Long lessonId,
-                                       Authentication authentication) {
-        JwtAuthenticationToken token = (JwtAuthenticationToken) authentication;
-        Long memberId = getMemberIdIfExistToken(token);
-        lessonService.deleteLesson(memberId, lessonId);
+    public ResponseEntity<?> testDeleteLesson(@PathVariable("lesson-id") Long lessonId,
+                                           Authentication authentication) {
+        lessonService.deleteLesson(AuthVO.ofMemberId(authentication), lessonId);
         return ResponseEntity.noContent().build();
-    }
-
-    /**
-     * 로그인 확인 메서드
-     * @param token 토큰 정보
-     * @return Long
-     * @author mozzi327
-     */
-    private Long getMemberIdIfExistToken(JwtAuthenticationToken token) {
-        if (token == null) return null;
-        else return token.getId();
     }
 }

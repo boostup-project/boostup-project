@@ -5,6 +5,7 @@ import com.codueon.boostUp.domain.dto.MultiResponseDto;
 import com.codueon.boostUp.domain.reveiw.dto.*;
 import com.codueon.boostUp.domain.reveiw.service.ReviewDbService;
 import com.codueon.boostUp.domain.reveiw.service.ReviewService;
+import com.codueon.boostUp.domain.vo.AuthVO;
 import com.codueon.boostUp.global.security.token.JwtAuthenticationToken;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -35,9 +36,7 @@ public class ReviewController {
                                         @PathVariable("suggest-id") Long suggestId,
                                         @RequestBody @Valid PostReview postReview,
                                         Authentication authentication) {
-        JwtAuthenticationToken token = (JwtAuthenticationToken) authentication;
-        Long memberId = getMemberIdIfExistToken(token);
-        reviewService.createStudentReview(memberId, lessonId, suggestId, postReview);
+        reviewService.createStudentReview(AuthVO.ofMemberId(authentication), lessonId, suggestId, postReview);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
@@ -64,10 +63,7 @@ public class ReviewController {
     @GetMapping
     public ResponseEntity<MultiResponseDto> getMyPageReview(Pageable pageable,
                                                             Authentication authentication) {
-        JwtAuthenticationToken token = (JwtAuthenticationToken) authentication;
-        Long memberId = getMemberIdIfExistToken(token);
-
-        Page<GetReviewMyPage> getReviews = reviewDbService.findAllMyPageReviews(memberId, pageable);
+        Page<GetReviewMyPage> getReviews = reviewDbService.findAllMyPageReviews(AuthVO.ofMemberId(authentication), pageable);
         return ResponseEntity.ok().body(new MultiResponseDto<>(getReviews));
     }
 
@@ -81,10 +77,7 @@ public class ReviewController {
     public ResponseEntity<?> updateReview(@PathVariable("review-id") Long reviewId,
                                           @RequestBody @Valid PatchReview patchReview,
                                           Authentication authentication) {
-        JwtAuthenticationToken token = (JwtAuthenticationToken) authentication;
-        Long memberId = getMemberIdIfExistToken(token);
-
-        reviewService.editReview(memberId, reviewId, patchReview);
+        reviewService.editReview(AuthVO.ofMemberId(authentication), reviewId, patchReview);
         return ResponseEntity.ok().build();
     }
 
@@ -96,20 +89,7 @@ public class ReviewController {
     @DeleteMapping("/{review-id}")
     public ResponseEntity<?> deleteReview(@PathVariable("review-id") Long reviewId,
                                           Authentication authentication) {
-        JwtAuthenticationToken token = (JwtAuthenticationToken) authentication;
-        Long memberId = getMemberIdIfExistToken(token);
-        reviewService.removeReview(memberId, reviewId);
+        reviewService.removeReview(AuthVO.ofMemberId(authentication), reviewId);
         return ResponseEntity.noContent().build();
-    }
-
-    /**
-     * 로그인 확인 메서드
-     * @param token 토큰 정보
-     * @return Long
-     * @author mozzi327
-     */
-    private Long getMemberIdIfExistToken(JwtAuthenticationToken token) {
-        if (token == null) return null;
-        else return token.getId();
     }
 }

@@ -27,6 +27,7 @@ public class LessonInfo {
     private String favoriteLocation;
     private String personality;
     private String costs;
+    private Long memberId;
 
     @JsonManagedReference
     @OneToMany(mappedBy = "lessonInfo", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -39,7 +40,8 @@ public class LessonInfo {
                       String companies,
                       String favoriteLocation,
                       String personality,
-                      String costs) {
+                      String costs,
+                      Long memberId) {
         this.id = id;
         this.lessonId = lessonId;
         this.introduction = introduction;
@@ -47,6 +49,7 @@ public class LessonInfo {
         this.favoriteLocation = favoriteLocation;
         this.personality = personality;
         this.costs = costs;
+        this.memberId = memberId;
     }
 
     public void addCareerImage(CareerImage careerImage) {
@@ -54,7 +57,7 @@ public class LessonInfo {
         careerImages.add(careerImage);
     }
 
-    public static LessonInfo toEntity(Long lessonId, PostLesson postLesson) {
+    public static LessonInfo toEntity(Long lessonId, PostLesson postLesson, Long memberId) {
         return LessonInfo.builder()
                 .lessonId(lessonId)
                 .introduction(postLesson.getIntroduction())
@@ -62,6 +65,7 @@ public class LessonInfo {
                 .favoriteLocation(postLesson.getDetailLocation())
                 .personality(postLesson.getPersonality())
                 .costs(postLesson.getDetailCost())
+                .id(memberId)
                 .build();
     }
 

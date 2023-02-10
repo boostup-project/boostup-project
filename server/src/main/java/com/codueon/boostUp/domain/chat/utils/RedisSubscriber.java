@@ -19,6 +19,11 @@ public class RedisSubscriber {
     private final ObjectMapper objectMapper;
     private final SimpMessagingTemplate operations;
 
+    /**
+     * 채팅방 메시지 전송용 Listener 메서드
+     * @param publishedMessage 전송할 메시지(JSON) - RedisChat
+     * @author mozzi327
+     */
     public void sendMessage(String publishedMessage) {
         try {
             RedisChat redisChat = objectMapper.readValue(publishedMessage, RedisChat.class);
@@ -30,6 +35,11 @@ public class RedisSubscriber {
         }
     }
 
+    /**
+     * 채팅방 목록 알람 전송용 Listener 메서드
+     * @param publishedMessage 전송할 알람(JSON) - GetAlarmMessage
+     * @author mozzi327
+     */
     public void sendAlarm(String publishedMessage) {
         try {
             GetAlarmMessage alarmMessage = objectMapper.readValue(publishedMessage, GetAlarmMessage.class);
@@ -39,6 +49,11 @@ public class RedisSubscriber {
         }
     }
 
+    /**
+     * 채팅방 목록에 입장 시 알람을 전송하기 위한 메서드
+     * @param publishedMessage 전송할 알람(JSON) - GetChatRoom
+     * @author mozzi327
+     */
     public void sendEnterAlarm(String publishedMessage) {
         try {
             GetChatRoom firstAlarm = objectMapper.readValue(publishedMessage, GetChatRoom.class);

@@ -50,7 +50,7 @@ public class Lesson {
         this.memberId = memberId;
     }
 
-    public static Lesson toEntity(PostLesson postLesson, String name, Long memberId) {
+    public static Lesson toEntity(PostLesson postLesson, Long memberId) {
         return Lesson.builder()
                 .title(postLesson.getTitle())
                 .company(postLesson.getCompany())

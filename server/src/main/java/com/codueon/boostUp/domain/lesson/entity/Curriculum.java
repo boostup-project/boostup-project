@@ -21,14 +21,17 @@ public class Curriculum {
     @Length(max = 5000)
     private String curriculum;
     private Long lessonId;
+    private Long memberId;
 
     @Builder
     public Curriculum(Long id,
                       String curriculum,
-                      Long lessonId) {
+                      Long lessonId,
+                      Long memberId) {
         this.id = id;
         this.curriculum = curriculum;
         this.lessonId = lessonId;
+        this.memberId = memberId;
     }
 
     public void editCurriculum(PatchLessonCurriculum patchLessonCurriculum) {

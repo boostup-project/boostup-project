@@ -106,7 +106,8 @@ public class ReviewGetTest extends ReviewControllerTest {
         String name = "김선생";
 
         GetReviewMyPage reviewMyPage = GetReviewMyPage.builder()
-                .lessonId(review.getLessonId())
+                .reviewId(review.getId())
+                .lessonId(lesson.getId())
                 .lesson(lesson)
                 .name(name)
                 .score(review.getScore())
@@ -135,6 +136,8 @@ public class ReviewGetTest extends ReviewControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data[0].languages[0]").value(lesson.getLessonLanguages().get(0).getLanguageInfo().getLanguages()))
                 .andExpect(jsonPath("$.data[0].profileImage").value(lesson.getProfileImage().getFilePath()))
+                .andExpect(jsonPath("$.data[0].reviewId").value(review.getId()))
+                .andExpect(jsonPath("$.data[0].lessonId").value(lesson.getId()))
                 .andExpect(jsonPath("$.data[0].name").value(name))
                 .andExpect(jsonPath("$.data[0].title").value(lesson.getTitle()))
                 .andExpect(jsonPath("$.data[0].cost").value(lesson.getCost()))
@@ -153,6 +156,7 @@ public class ReviewGetTest extends ReviewControllerTest {
                         responseFields(
                                 List.of(
                                         fieldWithPath("data").type(JsonFieldType.ARRAY).description("리뷰 데이터"),
+                                        fieldWithPath("data[].reviewId").type(JsonFieldType.NUMBER).description("과외 식별자"),
                                         fieldWithPath("data[].lessonId").type(JsonFieldType.NUMBER).description("과외 식별자"),
                                         fieldWithPath("data[].name").type(JsonFieldType.STRING).description("강사 이름"),
                                         fieldWithPath("data[].title").type(JsonFieldType.STRING).description("과외 타이틀"),

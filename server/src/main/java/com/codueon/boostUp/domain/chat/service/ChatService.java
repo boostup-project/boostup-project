@@ -6,6 +6,7 @@ import com.codueon.boostUp.domain.chat.event.vo.SendAlarmMessageEvent;
 import com.codueon.boostUp.domain.chat.repository.redis.RedisChatMessage;
 import com.codueon.boostUp.domain.chat.utils.MessageType;
 import com.codueon.boostUp.domain.member.exception.AuthException;
+import com.codueon.boostUp.domain.vo.AuthVO;
 import com.codueon.boostUp.global.exception.ExceptionCode;
 import com.codueon.boostUp.global.security.token.JwtAuthenticationToken;
 import lombok.RequiredArgsConstructor;
@@ -32,11 +33,10 @@ public class ChatService {
      * @author mozzi327
      */
     @Transactional
-    public void setRedisChatInfo(PostMessage message, JwtAuthenticationToken token) {
-        if (token == null) throw new AuthException(ExceptionCode.INVALID_AUTH_TOKEN);
+    public void setRedisChatInfo(PostMessage message, AuthVO authInfo) {
         RedisChat createChat = makeRedisChat(
-                token.getName(),
-                token.getId(),
+                authInfo.getName(),
+                authInfo.getMemberId(),
                 message.getChatRoomId(),
                 message.getMessageContent());
         createChat.settingCurrentTime();
@@ -86,8 +86,7 @@ public class ChatService {
      * @return List(RedisChat)
      * @author mozzi327
      */
-    public List<RedisChat> getChatMessages(JwtAuthenticationToken token, Long chatRoomId) {
-        if (token == null) throw new AuthException(ExceptionCode.INVALID_AUTH_TOKEN);
+    public List<RedisChat> getChatMessages(AuthVO authInfo, Long chatRoomId) {
         return redisChatMessage.findAll(chatRoomId);
     }
 }

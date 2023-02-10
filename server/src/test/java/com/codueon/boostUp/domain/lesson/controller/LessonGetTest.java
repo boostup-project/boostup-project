@@ -579,8 +579,8 @@ public class LessonGetTest extends LessonControllerTest {
 
     @Test
     @DisplayName("마이페이지 선생님 자기 과외 URL 조회")
-    void getLessonMypage() throws Exception {
-        given(lessonService.getLessonMypage(Mockito.anyLong()))
+    void getLessonMyPage() throws Exception {
+        given(lessonService.getLessonMyPage(Mockito.anyLong()))
                 .willReturn(lesson.getId());
 
         ResultActions actions =

@@ -10,6 +10,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import java.util.List;
@@ -21,6 +22,7 @@ import static com.codueon.boostUp.domain.suggest.entity.QPaymentInfo.paymentInfo
 import static com.codueon.boostUp.domain.suggest.entity.QSuggest.suggest;
 import static com.codueon.boostUp.domain.suggest.entity.SuggestStatus.*;
 
+@Repository
 public class SuggestRepositoryImpl implements CustomSuggestRepository {
     private final JPAQueryFactory queryFactory;
 
@@ -136,7 +138,7 @@ public class SuggestRepositoryImpl implements CustomSuggestRepository {
      * @author LeeGoh
      */
     public GetPaymentInfo getPaymentInfoOnMyPage(Long suggestId, Long memberId) {
-        GetPaymentInfo result = queryFactory
+        return queryFactory
                 .select(new QGetPaymentInfo(
                         lesson,
                         member.name,
@@ -148,7 +150,6 @@ public class SuggestRepositoryImpl implements CustomSuggestRepository {
                 .leftJoin(paymentInfo).on(suggest.id.eq(paymentInfo.suggest.id))
                 .where(suggest.memberId.eq(memberId).and(suggest.id.eq(suggestId)))
                 .fetchOne();
-        return result;
     }
 
     /**
@@ -159,7 +160,7 @@ public class SuggestRepositoryImpl implements CustomSuggestRepository {
      * @author LeeGoh
      */
     public GetPaymentReceipt getPaymentReceiptOnMyPage(Long suggestId, Long memberId) {
-        GetPaymentReceipt result = queryFactory
+        return queryFactory
                 .select(new QGetPaymentReceipt(
                         lesson,
                         member.name,
@@ -172,6 +173,5 @@ public class SuggestRepositoryImpl implements CustomSuggestRepository {
                 .leftJoin(paymentInfo).on(suggest.id.eq(paymentInfo.suggest.id))
                 .where(suggest.memberId.eq(memberId).and(suggest.id.eq(suggestId)))
                 .fetchOne();
-        return result;
     }
 }

@@ -15,6 +15,7 @@ import com.codueon.boostUp.domain.suggest.entity.Suggest;
 import com.codueon.boostUp.domain.suggest.kakao.*;
 import com.codueon.boostUp.domain.suggest.response.Message;
 import com.codueon.boostUp.domain.suggest.toss.*;
+import com.codueon.boostUp.domain.vo.AuthVO;
 import com.codueon.boostUp.global.exception.BusinessLogicException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -49,19 +50,20 @@ public class SuggestService {
      * @author LeeGoh
      */
     @Transactional
-    public void createSuggest(PostSuggest post, Long lessonId, Long memberId) {
+    public void createSuggest(PostSuggest post, Long lessonId, AuthVO authInfo) {
 //        if(memberId.equals(lessonDbService.getMemberIdByLessonId(lessonId)) {
 //            throw new BusinessLogicException(ExceptionCode.TUTOR_CANNOT_RESERVATION);
 //        }
+        Lesson findLesson = lessonDbService.ifExistsReturnLesson(lessonId);
 
-        suggestDbService.ifUnfinishedSuggestExistsReturnException(lessonId, memberId);
+        suggestDbService.ifUnfinishedSuggestExistsReturnException(lessonId, authInfo.getMemberId());
 
         Suggest suggest = Suggest.builder()
                 .days(post.getDays())
                 .languages(post.getLanguages())
                 .requests(post.getRequests())
                 .lessonId(lessonId)
-                .memberId(memberId)
+                .memberId(authInfo.getMemberId())
                 .build();
 
         suggest.setStatus(ACCEPT_IN_PROGRESS);
@@ -76,11 +78,11 @@ public class SuggestService {
      * @author LeeGoh
      */
     @Transactional
-    public void acceptSuggest(Long suggestId, Long memberId, Integer quantity) {
+    public void acceptSuggest(Long suggestId, AuthVO authInfo, Integer quantity) {
         Suggest findSuggest = suggestDbService.ifExistsReturnSuggest(suggestId);
         Lesson findLesson = lessonDbService.ifExistsReturnLesson(findSuggest.getLessonId());
 
-        if (!memberId.equals(findLesson.getMemberId()))
+        if (!authInfo.getMemberId().equals(findLesson.getMemberId()))
             throw new BusinessLogicException(INVALID_ACCESS);
 
         if (!findSuggest.getSuggestStatus().equals(ACCEPT_IN_PROGRESS))
@@ -127,10 +129,10 @@ public class SuggestService {
      * @param postReason 거절 사유
      * @author LeeGoh
      */
-    public void declineSuggest(Long suggestId, Long memberId, PostReason postReason) {
+    public void declineSuggest(Long suggestId, AuthVO authInfo, PostReason postReason) {
         Suggest findSuggest = suggestDbService.ifExistsReturnSuggest(suggestId);
 
-        if (!memberId.equals(lessonDbService.getMemberIdByLessonId(findSuggest.getLessonId())))
+        if (!authInfo.equals(lessonDbService.getMemberIdByLessonId(findSuggest.getLessonId())))
             throw new BusinessLogicException(INVALID_ACCESS);
 
         if (!findSuggest.getSuggestStatus().equals(ACCEPT_IN_PROGRESS))
