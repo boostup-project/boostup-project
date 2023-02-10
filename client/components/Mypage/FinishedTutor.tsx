@@ -32,8 +32,14 @@ const FinishedTutor = () => {
 
   return (
     <>
-      <div className="flex flex-col w-full">
+      <div className="flex flex-col w-full min-h-[300px] bg-bgColor">
         <div className="flex flex-col">
+          {finishedClassData === undefined ||
+          finishedClassData?.data.data.length === 0 ? (
+            <div className="flex flex-col justify-center items-center w-full h-36 font-SCDream3 text-lg text-textColor mt-20">
+              아직 신청내역이 없어요🙂
+            </div>
+          ) : null}
           {finishedClassData?.data.data.map((finished: any) => (
             <div className="flex flex-row w-full h-fit border border-borderColor rounded-xl mt-3 p-3 pl-5">
               <div className="flex flex-col w-[60%]">

@@ -76,7 +76,7 @@ const Navbar = () => {
   };
   const toChat = () => {
     if (isLog) {
-      console.log("toChat");
+      router.push("/chat/0");
     }
     if (!isLog) {
       toast.info("채팅은 로그인 후 이용해주세요", {

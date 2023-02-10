@@ -26,4 +26,22 @@ const filterModal = atom({
   default: 48,
 });
 
-export { inputStep, powerWriteModal, filterModal, isWrite, mainCardInfo };
+const powerEditReviewModal = atom({
+  key: "powerEditReviewModal",
+  default: false,
+});
+
+const reviewCommentState = atom({
+  key: "reviewCommentState",
+  default: "",
+});
+
+export {
+  inputStep,
+  powerWriteModal,
+  filterModal,
+  isWrite,
+  mainCardInfo,
+  powerEditReviewModal,
+  reviewCommentState,
+};
