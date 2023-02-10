@@ -23,7 +23,7 @@ const resetPwStep = atom<Number>({
   default: 1,
 });
 
-const logUser = atom({
+const logUser = atom<boolean>({
   key: "logUser",
   default: false,
   effects_UNSTABLE: [persistAtom],

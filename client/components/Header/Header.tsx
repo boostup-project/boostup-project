@@ -15,6 +15,9 @@ import { useEffect } from "react";
 import { useRouter } from "next/router";
 import usePostSearch from "hooks/main/usePostSearch";
 
+import { useQueryClient } from "@tanstack/react-query";
+import useDeleteLogout from "hooks/auth/useDeleteLogout";
+
 interface SelectData {
   key: number;
   label: string;
@@ -31,6 +34,7 @@ interface SearchData {
 }
 
 const Header = () => {
+  const queryClient = useQueryClient();
   const router = useRouter();
   const [log, setLog] = useRecoilState<boolean>(logUser);
   const [wordOne, setWordOne] = useState<string>("");
@@ -42,6 +46,7 @@ const Header = () => {
   const setMainCardInfo = useSetRecoilState(mainCardInfo);
 
   const { mutate, isSuccess, data } = usePostSearch();
+  const { mutate: mutateLogout } = useDeleteLogout();
 
   useEffect(() => {
     if (log) {
@@ -105,13 +110,7 @@ const Header = () => {
 
   const logInNOutEvent = () => {
     if (log) {
-      localStorage.clear();
-      setLog(prev => !prev);
-      toast.success("로그아웃이 되었습니다", {
-        autoClose: 1500,
-        position: toast.POSITION.TOP_RIGHT,
-      });
-      router.push("/");
+      mutateLogout();
     }
     if (!log) {
       router.push("/login");
