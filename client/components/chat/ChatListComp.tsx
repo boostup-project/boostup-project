@@ -1,5 +1,5 @@
 import ChatListContent from "./ChatListContent";
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { useRecoilState } from "recoil";
 import {
   chatActive,

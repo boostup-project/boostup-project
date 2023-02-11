@@ -13,8 +13,6 @@ import {
 import { sendMsg, subscribeRoom, unSubscribeRoom } from "hooks/chat/socket";
 import useWindowSize from "hooks/useWindowSize";
 import useGetChatList from "hooks/chat/useGetChatList";
-import { useQueryClient } from "@tanstack/react-query";
-import useGetResetChatAlarm from "hooks/chat/useGetResetChatAlarm";
 
 const ChatComp = () => {
   const [active, setActive] = useRecoilState(chatActive);
@@ -27,7 +25,6 @@ const ChatComp = () => {
   const [newData, setNewData] = useRecoilState(newDataState);
 
   const { refetch: chatListFetch } = useGetChatList(roomIdNum);
-  // const { refetch: chatRoomAlarmResetFetch } = useGetResetChatAlarm(roomIdNum);
 
   let windowSize = useWindowSize();
 

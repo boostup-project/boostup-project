@@ -1,5 +1,6 @@
 import ChatSendMessage from "./ChatSendMessage";
 import ChatReceiveMessage from "./ChatReceiveMessage";
+import ChatNoticeMessage from "./ChatNoticeMessage";
 import { useEffect, useRef } from "react";
 
 interface Props {
@@ -16,6 +17,8 @@ const ChatContent = ({ chatList }: Props) => {
     }
   };
 
+  console.log(chatList);
+
   useEffect(() => {
     scrollToBottom();
   }, [list]);
@@ -29,7 +32,10 @@ const ChatContent = ({ chatList }: Props) => {
         {list.map((el: any) => {
           return (
             <>
-              {el.displayName === localStorage.getItem("name")?.toString() ? (
+              {el.messageType === "ALARM" ? (
+                <ChatNoticeMessage content={el.message} time={el.createdAt} />
+              ) : el.displayName ===
+                localStorage.getItem("name")?.toString() ? (
                 <ChatSendMessage content={el.message} time={el.createdAt} />
               ) : (
                 <ChatReceiveMessage

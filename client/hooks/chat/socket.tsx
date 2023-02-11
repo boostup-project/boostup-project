@@ -1,7 +1,5 @@
 import StompJs from "stompjs";
 import SockJS from "sockjs-client";
-import { useRecoilState } from "recoil";
-import { chatListState } from "atoms/chat/chatAtom";
 
 let stomp_client: StompJs.Client;
 let chatSub: StompJs.Subscription;
@@ -24,7 +22,6 @@ export const connectSocket = async ({ handleConnectSocket }: Props) => {
     stomp_client.connect(
       headers,
       frame => {
-        console.log(frame?.command);
         if (frame?.command === "CONNECTED") {
           handleConnectSocket(true);
         } else {
@@ -41,6 +38,7 @@ interface ChatRoomListProps {
   memberId: number;
   handleSubChatRoom: (date: any) => void;
 }
+
 export const subscribeRoomList = ({
   memberId,
   handleSubChatRoom,
@@ -51,10 +49,8 @@ export const subscribeRoomList = ({
   };
 
   chatRoomSub = stomp_client.subscribe(
-    // `/topic/alarm/member/${memberId}`,
     `/topic/member/${memberId}`,
     msg => {
-      console.log("flag");
       handleSubChatRoom(JSON.parse(msg.body));
     },
     headers,
@@ -99,8 +95,6 @@ export const sendMsg = (
     receiverId: receiverId,
     messageContent: content,
   };
-
-  console.log(body);
 
   // 채팅방에 메시지 전송
   stomp_client.send(`/app/rooms`, headers, JSON.stringify(body));

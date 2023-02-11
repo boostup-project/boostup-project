@@ -32,7 +32,7 @@ const Chat = () => {
       setTimeout(() => {
         subscribeRoomList({ memberId, handleSubChatRoom });
         setSubscribeState(true);
-      }, 5000);
+      }, 2000);
     }
   }, [connectState]);
 
@@ -41,23 +41,24 @@ const Chat = () => {
       // chatRoomList 깊은복사
       let currData = chatRoomList.slice();
       let elIdx = 0;
+      let currReceiverId = 0;
 
       currData.forEach((el: any, idx: number) => {
         if (el.chatRoomId === newChatRoom.chatRoomId) {
           elIdx = idx;
+          currReceiverId = el.receiverId;
         }
       });
 
       let name = currData[elIdx]?.displayName;
-      let { alarmCount, chatRoomId, createdAt, latestMessage, receiverId } =
-        newChatRoom;
+      let { alarmCount, chatRoomId, createdAt, latestMessage } = newChatRoom;
 
       const newData = {
         alarmCount,
         chatRoomId,
         createdAt,
         latestMessage,
-        receiverId,
+        receiverId: currReceiverId,
         displayName: name,
       };
 
