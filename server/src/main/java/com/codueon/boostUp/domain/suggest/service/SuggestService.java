@@ -51,7 +51,6 @@ public class SuggestService {
      */
     @Transactional
     public void createSuggest(PostSuggest post, Long lessonId, AuthVO authInfo) {
-
 //        if(memberId.equals(lessonDbService.getMemberIdByLessonId(lessonId)) {
 //            throw new BusinessLogicException(ExceptionCode.TUTOR_CANNOT_RESERVATION);
 //        }
