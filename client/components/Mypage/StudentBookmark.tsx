@@ -83,7 +83,7 @@ const StudentBookmark = () => {
                     return (
                       <div
                         key={idx}
-                        className={`flex justify-center bg-${el} items-center px-1 py-0.5 ml-1 mt-1 border rounded-xl desktop:text-xs tablet:text-[10px] text-[6px]`}
+                        className={`flex justify-center bg-${el} text-white items-center px-1 py-0.5 ml-1 mt-1 border rounded-xl desktop:text-xs tablet:text-[10px] text-[6px]`}
                       >
                         {el}
                       </div>

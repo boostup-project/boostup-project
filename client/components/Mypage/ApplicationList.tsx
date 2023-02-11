@@ -48,6 +48,7 @@ const ApplicationList = () => {
   };
 
   const [suggestId, setSuggestId] = useState(0);
+
   const onClickAcceptModal = useCallback(
     (suggestId: number) => {
       setSuggestId(suggestId);
@@ -55,10 +56,18 @@ const ApplicationList = () => {
     },
     [openAccept],
   );
-  const openDeclineModal = () => {
-    setOpenDecline(prev => !prev);
-  };
 
+  const openDeclineModal = useCallback(
+    (suggestId: number) => {
+      setSuggestId(suggestId);
+      setOpenDecline(!openDecline);
+    },
+    [openDecline],
+  );
+
+  const toChat = () => {
+    router.push("/chat/0");
+  };
   return (
     <div className="flex flex-col w-full min-h-[300px] bg-bgColor">
       <button
@@ -73,18 +82,21 @@ const ApplicationList = () => {
         </div>
       ) : null}
       {/* {map} 수업신청정보 */}
-   
+
       {tutorInfoSuccess
         ? applyInfoData?.data.data.map((apply: any) => (
-            <div className="flex flex-col" key={apply.lessonId}>
+            <div className="flex flex-col" key={apply.name}>
               <div className="flex flex-row w-full h-fit border border-borderColor rounded-xl desktop:mt-5 tablet:mt-3 mt-2 p-3 pl-5">
                 <div className="flex flex-col w-[60%]">
-                  <div className="mb-3 ">{apply.name}</div>
-                  <div className="flex">
+                  <div className="flex mb-2">
+                    <div className="mr-3">신청학생</div>
+                    <div> {apply.name}</div>
+                  </div>
+                  <div className="flex mb-2">
                     <div className="mr-3">희망요일</div>
                     <div> {apply.days}</div>
                   </div>
-                  <div className="flex">
+                  <div className="flex mb-2">
                     <div className="mr-3">희망언어</div>
                     <div> {apply.languages}</div>
                   </div>
@@ -95,17 +107,20 @@ const ApplicationList = () => {
                 </div>
 
                 <div className="flex flex-col w-[60%] justify-center items-end">
-                  <div className="text text-textColor font-SCDream6 mt-2">
+                  <div className="text text-textColor font-SCDream6 mb-2">
                     {apply.status}
                   </div>
                   {apply.status === "결제 대기 중" ? (
                     <>
-                      <button className="text text-pointColor mt-1">
+                      <button
+                        className="text text-pointColor mt-4"
+                        onClick={toChat}
+                      >
                         채팅하기
                       </button>
                       <button
-                        className="text text-negativeMessage mt-1"
-                        onClick={openDeclineModal}
+                        className="text text-negativeMessage mt-4"
+                        onClick={e => openDeclineModal(apply.suggestId)}
                       >
                         거절하기
                       </button>
@@ -113,17 +128,20 @@ const ApplicationList = () => {
                   ) : (
                     <>
                       <button
-                        className="text text-pointColor mt-1"
+                        className="text text-pointColor mb-2"
                         onClick={e => onClickAcceptModal(apply.suggestId)}
                       >
                         수락하기
                       </button>
-                      <button className="text text-pointColor mt-1">
+                      <button
+                        className="text text-pointColor mb-2"
+                        onClick={toChat}
+                      >
                         채팅하기
                       </button>
                       <button
-                        className="text text-negativeMessage mt-1"
-                        onClick={openDeclineModal}
+                        className="text text-negativeMessage mb-1"
+                        onClick={e => openDeclineModal(apply.suggestId)}
                       >
                         거절하기
                       </button>
@@ -143,9 +161,9 @@ const ApplicationList = () => {
 
       {openDecline && (
         <DeclineModal
-          onClickToggleModal={onClickAcceptModal}
+          onClickToggleModal={openDeclineModal}
           suggestId={suggestId}
-          openDeclineModal={openDeclineModal}
+          // openDeclineModal={openDeclineModal}
         ></DeclineModal>
       )}
     </div>

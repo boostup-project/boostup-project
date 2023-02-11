@@ -12,6 +12,7 @@ import Swal from "sweetalert2";
 import ReviewEditModal from "./ReviewEditModal";
 import { useRecoilState } from "recoil";
 import { powerEditReviewModal, reviewCommentState } from "atoms/main/mainAtom";
+import { useRouter } from "next/router";
 
 const StudentReview = () => {
   const { data: MyReview } = useGetMyReview();
@@ -43,6 +44,10 @@ const StudentReview = () => {
   const handleClickEdit = (comment: string) => {
     setPowerModal(true);
     setCommentState(comment);
+  };
+  const router = useRouter();
+  const toClass = (lessonId: number) => {
+    router.push(`/lesson/${lessonId}`);
   };
 
   return (
@@ -77,7 +82,10 @@ const StudentReview = () => {
                 <div className="flex justify-start items-start w-full h-fit font-SCDream5 desktop:text-xs tablet:text-[12px] text-[8px] text-textColor px-1 py-0.5 ml-1 mt-1">
                   {review.name}
                 </div>
-                <div className="flex justify-start items-start w-full h-fit font-SCDream6 desktop:text-lg tablet:text-base text-xs text-textColor px-1 py-0.5 ml-1 mt-1 flex-wrap">
+                <div
+                  className="flex justify-start items-start w-full h-fit font-SCDream6 desktop:text-lg tablet:text-base text-xs text-textColor px-1 py-0.5 ml-1 mt-1 flex-wrap cursor-pointer"
+                  onClick={() => toClass(review.lessonId)}
+                >
                   {review.title}
                 </div>
                 <div className="flex desktop:text-base tablet:text-sm text-[12px] font-SCDream3 px-1 py-0.5 ml-1 mt-1">
