@@ -54,8 +54,8 @@ public class SuggestService {
 //        if(memberId.equals(lessonDbService.getMemberIdByLessonId(lessonId)) {
 //            throw new BusinessLogicException(ExceptionCode.TUTOR_CANNOT_RESERVATION);
 //        }
-        Lesson findLesson = lessonDbService.ifExistsReturnLesson(lessonId);
 
+        Lesson findLesson = lessonDbService.ifExistsReturnLesson(lessonId);
         suggestDbService.ifUnfinishedSuggestExistsReturnException(lessonId, authInfo.getMemberId());
 
         Suggest suggest = Suggest.builder()
@@ -135,8 +135,9 @@ public class SuggestService {
         if (!authInfo.equals(lessonDbService.getMemberIdByLessonId(findSuggest.getLessonId())))
             throw new BusinessLogicException(INVALID_ACCESS);
 
-        if (!findSuggest.getSuggestStatus().equals(ACCEPT_IN_PROGRESS))
-            throw new BusinessLogicException(NOT_ACCEPT_IN_PROGRESS);
+        if (!findSuggest.getSuggestStatus().equals(ACCEPT_IN_PROGRESS) &&
+            !findSuggest.getSuggestStatus().equals(PAY_IN_PROGRESS))
+            throw new BusinessLogicException(NOT_SUGGEST_OR_NOT_ACCEPT);
 
         Reason reason = Reason.builder().reason(postReason.getReason()).build();
         suggestDbService.saveReason(reason);
