@@ -82,7 +82,8 @@ const Card = () => {
     <QueryClientProvider client={client}>
       <div className="flex flex-row flex-wrap w-full">
         {cards?.slice(offset, offset + limit).map((card: any) => (
-          <div
+          <Link
+            href={`/lesson/${card.lessonId}`}
             key={card.lessonId}
             className="h-fit m-1 desktop:w-[24%] tablet:w-[32%] w-[47%] rounded-lg"
           >
@@ -103,15 +104,15 @@ const Card = () => {
                   </button>
                 </div>
               </div>
-              <Link href={`/lesson/${card.lessonId}`}>
-                <div className="flex flex-col w-full h-2/3">
+              <div>
+                <div className="flex flex-col w-full h-2/3 bg-white rounded-xl">
                   <div className="flex flex-row whitespace-wrap">
                     <div className="flex">
                       {card.languages?.map((el: any, idx: any) => {
                         return (
                           <div
                             key={idx}
-                            className={`flex justify-center bg-${el} items-center px-1 py-0.5 ml-1 mt-1 border font-SCDream5 text-white rounded-xl desktop:text-xs tablet:text-[10px] text-[6px]`}
+                            className={`flex justify-center bg-${el} items-center px-1 py-0.5 ml-1 mt-1 font-SCDream5 text-white rounded-xl desktop:text-xs tablet:text-[10px] text-[6px]`}
                           >
                             {el}
                           </div>
@@ -155,9 +156,9 @@ const Card = () => {
                     </div>
                   </div>
                 </div>
-              </Link>
+              </div>
             </div>
-          </div>
+          </Link>
         ))}
       </div>
       <>

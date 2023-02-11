@@ -57,10 +57,7 @@ const DetailExtra = ({ extraData, lessonId, editable }: Props) => {
         introduction: extraData.data.introduction,
         detailCompany: extraData.data.detailCompany,
         personality: extraData.data.personality,
-        detailCost:
-          parseInt(extraData.data.detailCost.split("원")).toLocaleString(
-            "ko-KR",
-          ) + "원/회",
+        detailCost: extraData.data.detailCost,
         detailLocation: extraData.data.detailLocation,
       };
       setTextData(prompt);
@@ -116,10 +113,10 @@ const DetailExtra = ({ extraData, lessonId, editable }: Props) => {
               <div className="font-SCDream5">{detailTitles[title]}</div>
               <div className="font-SCDream3">
                 {title === "careerImage" ? (
-                  <div className="border border-borderColor w-72 h-[100px] flex">
+                  <div className="w-80 h-28 tablet:w-[450px] tablet:h-36 desktop:w-[500px] desktop:h-40 flex">
                     {images?.map((image: any, idx: number) => (
                       <img
-                        className="w-1/3 p-1 rounded-xl aspect-square cursor-pointer"
+                        className="w-1/3 mr-5 rounded-xl aspect-square cursor-pointer"
                         key={image.careerImageId}
                         id={String(idx)}
                         src={image.filePath}
