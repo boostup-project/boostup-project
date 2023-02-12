@@ -47,11 +47,10 @@ public class RedisChatMessage {
      * @param receiverMessage 입장 문구(Receiver)
      * @author mozzi327
      */
-    public void initialMessage(Long chatRoomId, RedisChat senderMessage, RedisChat receiverMessage) {
+    public void initialMessage(Long chatRoomId, RedisChat enterMessage, int count) {
         String key = getKey(chatRoomId);
         if (operations.zCard(key) != 0) return;
-        operations.add(key, senderMessage, 0);
-        operations.add(key, receiverMessage, 1);
+        operations.add(key, enterMessage, count);
     }
 
     /**

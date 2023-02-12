@@ -8,12 +8,13 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class SendEnterRoomMessageEvent {
+public class InitialChatRoomListEvent {
+    /* 채팅방 최초 생성 시 Receiver의 채팅방 리스트를 최신화하기 위한 Event */
     private ChatRoom chatRoom;
     private RedisChat receiverChat;
 
     @Builder
-    public SendEnterRoomMessageEvent(ChatRoom chatRoom, RedisChat receiverChat) {
+    public InitialChatRoomListEvent(ChatRoom chatRoom, RedisChat receiverChat) {
         this.chatRoom = chatRoom;
         this.receiverChat = receiverChat;
     }

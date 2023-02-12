@@ -1,5 +1,7 @@
 package com.codueon.boostUp.domain.suggest.service;
 
+import com.codueon.boostUp.domain.chat.utils.AlarmType;
+import com.codueon.boostUp.domain.lesson.dto.get.GetLessonInfoForAlarm;
 import com.codueon.boostUp.domain.lesson.entity.Lesson;
 import com.codueon.boostUp.domain.lesson.service.LessonDbService;
 import com.codueon.boostUp.domain.member.entity.Member;
@@ -17,6 +19,7 @@ import com.codueon.boostUp.domain.suggest.response.Message;
 import com.codueon.boostUp.domain.suggest.toss.*;
 import com.codueon.boostUp.domain.vo.AuthVO;
 import com.codueon.boostUp.global.exception.BusinessLogicException;
+import com.codueon.boostUp.global.exception.ExceptionCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -33,29 +36,29 @@ import static com.codueon.boostUp.global.exception.ExceptionCode.*;
 @Service
 @RequiredArgsConstructor
 public class SuggestService {
-    private final SuggestDbService suggestDbService;
-    private final LessonDbService lessonDbService;
-    private final MemberDbService memberDbService;
     private final FeignService feignService;
     private final ReviewService reviewService;
+    private final LessonDbService lessonDbService;
+    private final MemberDbService memberDbService;
+    private final SuggestDbService suggestDbService;
+    private final SuggestEventService suggestEventService;
 
     @Value("${pay.request-url}")
     private String requestUrl;
 
     /**
      * 신청 생성 메서드
-     * @param post 신청 생성 DTO
+     *
+     * @param post     신청 생성 DTO
      * @param lessonId 과외 식별자
-     * @param memberId 사용자 식별자
+     * @param authInfo 사용자 인증 정보
      * @author LeeGoh
      */
     @Transactional
     public void createSuggest(PostSuggest post, Long lessonId, AuthVO authInfo) {
-//        if(memberId.equals(lessonDbService.getMemberIdByLessonId(lessonId)) {
-//            throw new BusinessLogicException(ExceptionCode.TUTOR_CANNOT_RESERVATION);
-//        }
-        Lesson findLesson = lessonDbService.ifExistsReturnLesson(lessonId);
-
+        if(authInfo.getMemberId().equals(lessonDbService.getMemberIdByLessonId(lessonId))) {
+            throw new BusinessLogicException(ExceptionCode.TUTOR_CANNOT_RESERVATION);
+        }
         suggestDbService.ifUnfinishedSuggestExistsReturnException(lessonId, authInfo.getMemberId());
 
         Suggest suggest = Suggest.builder()
@@ -68,13 +71,20 @@ public class SuggestService {
 
         suggest.setStatus(ACCEPT_IN_PROGRESS);
         suggestDbService.saveSuggest(suggest);
+
+        // 최초 채팅방 생성 이벤트
+        suggestEventService.sendMakeChatRoom(authInfo, lessonId);
+        // 채팅방 목록, 메시지 알람 최신화 이벤트
+        GetLessonInfoForAlarm tutorInfo = lessonDbService.getLessonInfoForAlarm(lessonId);
+        suggestEventService.sendAlarmMessage(tutorInfo.getTutorId(), tutorInfo.getTitle(), authInfo.getName(), null, null, AlarmType.REGISTER);
     }
 
     /**
      * 신청 수락 메서드
+     *
      * @param suggestId 신청 식별자
-     * @param memberId 사용자 식별자
-     * @param quantity 과외 횟수
+     * @param authInfo  사용자 인증 정보
+     * @param quantity  과외 횟수
      * @author LeeGoh
      */
     @Transactional
@@ -99,40 +109,47 @@ public class SuggestService {
         findSuggest.setTotalCost(findLesson.getCost() * paymentInfo.getQuantity());
         findSuggest.setStatus(PAY_IN_PROGRESS);
         suggestDbService.saveSuggest(findSuggest);
+
+        GetLessonInfoForAlarm tutorInfo = lessonDbService.getLessonInfoForAlarm(findSuggest.getLessonId());
+        suggestEventService.sendAlarmMessage(findSuggest.getMemberId(), tutorInfo.getTitle(), tutorInfo.getTutorName(), null, null, AlarmType.ACCEPT);
     }
 
     /**
      * 신청 취소 메서드
+     *
      * @param suggestId 신청 식별자
-     * @param memberId 사용자 식별자
+     * @param authInfo  사용자 인증 정보
      * @author LeeGoh
      */
-    public void cancelSuggest(Long suggestId, Long memberId) {
+    public void cancelSuggest(Long suggestId, AuthVO authInfo) {
         Suggest findSuggest = suggestDbService.ifExistsReturnSuggest(suggestId);
 
-        if (!memberId.equals(findSuggest.getMemberId())) {
+        if (!authInfo.getMemberId().equals(findSuggest.getMemberId())) {
             throw new BusinessLogicException(UNAUTHORIZED_FOR_DELETE);
         }
 
         if (!findSuggest.getSuggestStatus().equals(ACCEPT_IN_PROGRESS) &&
-            !findSuggest.getSuggestStatus().equals(PAY_IN_PROGRESS)) {
+                !findSuggest.getSuggestStatus().equals(PAY_IN_PROGRESS)) {
             throw new BusinessLogicException(NOT_SUGGEST_OR_NOT_ACCEPT);
         }
 
         suggestDbService.deleteSuggest(findSuggest);
+        GetLessonInfoForAlarm tutorInfo = lessonDbService.getLessonInfoForAlarm(findSuggest.getLessonId());
+        suggestEventService.sendAlarmMessage(tutorInfo.getTutorId(), tutorInfo.getTitle(), authInfo.getName(), null, null, AlarmType.CANCEL);
     }
 
     /**
      * 신청 거절 메서드
-     * @param suggestId 신청 식별자
-     * @param memberId 사용자 식별자
+     *
+     * @param suggestId  신청 식별자
+     * @param authInfo   사용자 인증 정보
      * @param postReason 거절 사유
      * @author LeeGoh
      */
     public void declineSuggest(Long suggestId, AuthVO authInfo, PostReason postReason) {
         Suggest findSuggest = suggestDbService.ifExistsReturnSuggest(suggestId);
 
-        if (!authInfo.equals(lessonDbService.getMemberIdByLessonId(findSuggest.getLessonId())))
+        if (!authInfo.getMemberId().equals(lessonDbService.getMemberIdByLessonId(findSuggest.getLessonId())))
             throw new BusinessLogicException(INVALID_ACCESS);
 
         if (!findSuggest.getSuggestStatus().equals(ACCEPT_IN_PROGRESS))
@@ -142,18 +159,22 @@ public class SuggestService {
         suggestDbService.saveReason(reason);
 
         suggestDbService.deleteSuggest(findSuggest);
+
+        GetLessonInfoForAlarm tutorInfo = lessonDbService.getLessonInfoForAlarm(findSuggest.getLessonId());
+        suggestEventService.sendAlarmMessage(findSuggest.getMemberId(), tutorInfo.getTitle(), tutorInfo.getTutorName(), null, reason.getReason(), AlarmType.REJECT);
     }
 
     /*---------- 결제 로직 ----------*/
 
     /**
      * Kakao 결제 URL 요청 메서드
+     *
      * @param suggestId 신청 식별자
      * @return Message
      * @author LeeGoh
      */
     @Transactional
-    public Message getKaKapPayUrl(Long suggestId) {
+    public Message getKaKaoPayUrl(Long suggestId) {
         Suggest findSuggest = suggestDbService.ifExistsReturnSuggest(suggestId);
 
         if (!findSuggest.getSuggestStatus().equals(PAY_IN_PROGRESS)) {
@@ -181,6 +202,7 @@ public class SuggestService {
 
     /**
      * Toss 결제 URL 요청 메서드
+     *
      * @param suggestId 신청 식별자
      * @param paymentId 결제 방법
      * @return Message
@@ -199,11 +221,14 @@ public class SuggestService {
 
         String method = "";
         switch (paymentId) {
-            case 2: method = "휴대폰";
-                    break;
-            case 3: method = "계좌이체";
-                    break;
-            default: method = "카드";
+            case 2:
+                method = "휴대폰";
+                break;
+            case 3:
+                method = "계좌이체";
+                break;
+            default:
+                method = "카드";
         }
 
         TossPayHeader headers = feignService.setTossHeaders();
@@ -225,6 +250,7 @@ public class SuggestService {
 
     /**
      * URL 요청 시 리턴되는 URL이 없을 때 발생하는 이벤트 메서드
+     *
      * @return Message
      * @author LeeGoh
      */
@@ -236,8 +262,9 @@ public class SuggestService {
 
     /**
      * Kakao 결제 성공 시 예약 정보 반환 메서드
+     *
      * @param suggestId 신청 식별자
-     * @param pgToken Payment Gateway Token
+     * @param pgToken   Payment Gateway Token
      * @return Message
      * @author LeeGoh
      */
@@ -256,6 +283,9 @@ public class SuggestService {
         findSuggest.setStatus(DURING_LESSON);
         suggestDbService.saveSuggest(findSuggest);
 
+        Member student = memberDbService.ifExistsReturnMember(findSuggest.getMemberId());
+        GetLessonInfoForAlarm tutorInfo = lessonDbService.getLessonInfoForAlarm(findSuggest.getLessonId());
+        suggestEventService.sendAlarmMessage(tutorInfo.getTutorId(), tutorInfo.getTitle(), student.getName(), null, null, AlarmType.PAYMENT_SUCCESS);
         return Message.builder()
                 .data(kakaoPaySuccessInfo)
                 .message(INFO_URI_MSG)
@@ -264,6 +294,7 @@ public class SuggestService {
 
     /**
      * Toss 결제 성공 시 예약 정보 반환 메서드
+     *
      * @param suggestId 신청 식별자
      * @return Message
      * @author LeeGoh
@@ -279,17 +310,23 @@ public class SuggestService {
         TossPaySuccessInfo tossPaySuccessInfo = feignService.getSuccessTossResponse(headers, body);
 
         switch (tossPaySuccessInfo.getMethod()) {
-            case "휴대폰": findSuggest.setPaymentMethod("토스페이 휴대폰");
+            case "휴대폰":
+                findSuggest.setPaymentMethod("토스페이 휴대폰");
                 break;
-            case "계좌이체": findSuggest.setPaymentMethod("토스페이 계좌이체");
+            case "계좌이체":
+                findSuggest.setPaymentMethod("토스페이 계좌이체");
                 break;
-            default: findSuggest.setPaymentMethod("토스페이 카드");
+            default:
+                findSuggest.setPaymentMethod("토스페이 카드");
         }
 
         tossPaySuccessInfo.setOrderStatus(ORDER_APPROVED);
         findSuggest.setStatus(DURING_LESSON);
         suggestDbService.saveSuggest(findSuggest);
 
+        Member student = memberDbService.ifExistsReturnMember(findSuggest.getMemberId());
+        GetLessonInfoForAlarm tutorInfo = lessonDbService.getLessonInfoForAlarm(findSuggest.getLessonId());
+        suggestEventService.sendAlarmMessage(tutorInfo.getTutorId(), tutorInfo.getTitle(), student.getName(), null, null, AlarmType.PAYMENT_SUCCESS);
         return Message.builder()
                 .data(tossPaySuccessInfo)
                 .message(INFO_URI_MSG)
@@ -298,26 +335,26 @@ public class SuggestService {
 
     /**
      * 결제 여부 확인 메서드
+     *
      * @param suggestId 신청 식별자
-     * @param memberId 사용자 식별자
+     * @param memberId  사용자 식별자
      * @return Boolean
      * @author LeeGoh
      */
     public Boolean getPaymentStatusCheck(Long suggestId, Long memberId) {
         Suggest findSuggest = suggestDbService.ifExistsReturnSuggest(suggestId);
 
-        if (!findSuggest.getMemberId().equals(memberId)) {
+        if (!findSuggest.getMemberId().equals(memberId))
             throw new BusinessLogicException(INVALID_ACCESS);
-        }
 
-        if (findSuggest.getSuggestStatus().equals(DURING_LESSON)) return true;
-        else return false;
+        return findSuggest.getSuggestStatus().equals(DURING_LESSON);
     }
 
     /*---------- 결제 로직 끝 ----------*/
 
     /**
      * 과외 종료 시 신청 상태 및 종료 시간 저장 메서드
+     *
      * @param suggestId 신청 식별자
      * @author LeeGoh
      */
@@ -333,12 +370,16 @@ public class SuggestService {
         findSuggest.setStatus(END_OF_LESSON);
         findSuggest.setEndTime();
         suggestDbService.saveSuggest(findSuggest);
+
+        GetLessonInfoForAlarm tutorInfo = lessonDbService.getLessonInfoForAlarm(findSuggest.getLessonId());
+        suggestEventService.sendAlarmMessage(findSuggest.getMemberId(), tutorInfo.getTitle(), tutorInfo.getTutorName(), null, null, AlarmType.END);
     }
 
     /**
      * 강사 종료 과외 삭제 메서드
+     *
      * @param suggestId 신청 식별자
-     * @param memberId 사용된 식별자
+     * @param memberId  사용된 식별자
      * @author LeeGoh
      */
     public void deleteTutorEndOfSuggest(Long suggestId, Long memberId) {
@@ -352,8 +393,9 @@ public class SuggestService {
 
     /**
      * 학생 종료 과외 삭제 메서드
+     *
      * @param suggestId 신청 식별자
-     * @param memberId 사용된 식별자
+     * @param memberId  사용된 식별자
      * @author LeeGoh
      */
     public void deleteStudentEndOfSuggest(Long suggestId, Long memberId) {
@@ -367,6 +409,7 @@ public class SuggestService {
 
     /**
      * 종료 과외 삭제 공통 메서드
+     *
      * @param suggest 신청 정보
      * @author LeeGoh
      */
@@ -380,8 +423,9 @@ public class SuggestService {
 
     /**
      * 환불 메서드 Kakao/Toss
+     *
      * @param suggestId 신청 식별자
-     * @param memberId 회원 식별자
+     * @param memberId  회원 식별자
      * @return Message
      * @author LeeGoh
      */
@@ -390,19 +434,18 @@ public class SuggestService {
         suggestDbService.suggestGetMemberIdAndStatusIsDuringLesson(findSuggest, memberId);
         PaymentInfo findPaymentInfo = suggestDbService.ifExistsReturnPaymentInfo(suggestId);
 
-        if (findPaymentInfo.getQuantity() == findPaymentInfo.getQuantityCount()) {
+        if (findPaymentInfo.getQuantity() == findPaymentInfo.getQuantityCount())
             throw new BusinessLogicException(INVALID_ACCESS);
-        }
 
-        switch (findSuggest.getPaymentMethod()) {
-            case "카카오페이": return refundKakaoPayment(findSuggest, findPaymentInfo);
-            default: return refundTossPayment(findSuggest, findPaymentInfo);
-        }
+        if (findSuggest.getPaymentMethod().equals("카카오페이"))
+            return refundKakaoPayment(findSuggest, findPaymentInfo);
+        return refundTossPayment(findSuggest, findPaymentInfo);
     }
 
     /**
      * Kakao 환불 메서드
-     * @param suggest 신청 정보
+     *
+     * @param suggest     신청 정보
      * @param paymentInfo 결제 정보
      * @author LeeGoh
      */
@@ -418,6 +461,8 @@ public class SuggestService {
         suggest.setEndTime();
         suggestDbService.saveSuggest(suggest);
 
+        GetLessonInfoForAlarm tutorInfo = lessonDbService.getLessonInfoForAlarm(suggest.getLessonId());
+        suggestEventService.sendAlarmMessage(suggest.getMemberId(), tutorInfo.getTitle(), null, null, null, AlarmType.ACCEPT_REFUND);
         return Message.builder()
                 .data(cancelInfo)
                 .message(CANCELED_PAY_MESSAGE)
@@ -426,7 +471,8 @@ public class SuggestService {
 
     /**
      * Toss 환불 메서드
-     * @param suggest 신청 정보
+     *
+     * @param suggest     신청 정보
      * @param paymentInfo 결제 정보
      * @author LeeGoh
      */
@@ -442,6 +488,8 @@ public class SuggestService {
         suggest.setEndTime();
         suggestDbService.saveSuggest(suggest);
 
+        GetLessonInfoForAlarm tutorInfo = lessonDbService.getLessonInfoForAlarm(suggest.getLessonId());
+        suggestEventService.sendAlarmMessage(suggest.getMemberId(), tutorInfo.getTitle(), null, null, null, AlarmType.ACCEPT_REFUND);
         return Message.builder()
                 .data(cancelInfo)
                 .message(CANCELED_PAY_MESSAGE)
@@ -450,8 +498,9 @@ public class SuggestService {
 
     /**
      * 환불 단건 조회 메서드
+     *
      * @param suggestId 신청 식별자
-     * @param memberId 회원 식별자
+     * @param memberId  회원 식별자
      * @return GetRefundPayment
      * @author LeeGoh
      */
@@ -480,8 +529,9 @@ public class SuggestService {
 
     /**
      * 출석 인정 메서드
+     *
      * @param suggestId 신청 식별자
-     * @param memberId 회원 식별자
+     * @param memberId  회원 식별자
      * @return Integer
      * @author LeeGoh
      */
@@ -492,16 +542,21 @@ public class SuggestService {
 
         PaymentInfo findPaymentInfo = suggestDbService.ifExistsReturnPaymentInfo(suggestId);
         suggestDbService.checkQuantityCount(findPaymentInfo);
+        Integer attendanceCount = findPaymentInfo.getQuantityCount();
 
-        return findPaymentInfo.getQuantityCount();
+        Member student = memberDbService.ifExistsReturnMember(findSuggest.getMemberId());
+        GetLessonInfoForAlarm tutorInfo = lessonDbService.getLessonInfoForAlarm(findSuggest.getLessonId());
+        suggestEventService.sendAlarmMessage(student.getId(), tutorInfo.getTitle(), student.getName(), attendanceCount, null, AlarmType.CHECK_ATTENDANCE);
+        return attendanceCount;
     }
 
     /**
      * 출석 인정 취소 메서드
+     *
      * @param suggestId 신청 식별자
-     * @param memberId 회원 식별자
+     * @param memberId  회원 식별자
      * @return Integer
-      @author LeeGoh
+     * @author LeeGoh
      */
     public Integer teacherCancelAttendance(Long suggestId, Long memberId) {
         Suggest findSuggest = suggestDbService.ifExistsReturnSuggest(suggestId);
@@ -511,15 +566,22 @@ public class SuggestService {
         PaymentInfo findPaymentInfo = suggestDbService.ifExistsReturnPaymentInfo(suggestId);
         suggestDbService.cancelQuantityCount(findSuggest.getPaymentInfo());
 
-        return findPaymentInfo.getQuantityCount();
+        Integer attendanceCount = findPaymentInfo.getQuantityCount();
+
+        Member student = memberDbService.ifExistsReturnMember(findSuggest.getMemberId());
+        GetLessonInfoForAlarm tutorInfo = lessonDbService.getLessonInfoForAlarm(findSuggest.getLessonId());
+        suggestEventService.sendAlarmMessage(student.getId(), tutorInfo.getTitle(), student.getName(), attendanceCount, null, AlarmType.CANCEL_ATTENDANCE);
+
+        return attendanceCount;
     }
 
     /**
      * 출석부 조회 메서드
+     *
      * @param suggestId 신청 식별자
-     * @param memberId 회원 식별자
+     * @param memberId  회원 식별자
      * @return Integer
-      @author LeeGoh
+     * @author LeeGoh
      */
     public GetLessonAttendance getLessonAttendance(Long suggestId, Long memberId) {
         Suggest findSuggest = suggestDbService.ifExistsReturnSuggest(suggestId);
@@ -532,7 +594,7 @@ public class SuggestService {
         return GetLessonAttendance.builder()
                 .quantity(quantity)
                 .quantityCount(quantityCount)
-                .progress((int)((double)quantityCount/(double)quantity * 100))
+                .progress((int) ((double) quantityCount / (double) quantity * 100))
                 .build();
     }
 }

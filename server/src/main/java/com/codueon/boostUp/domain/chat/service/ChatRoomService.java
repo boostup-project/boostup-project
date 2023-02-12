@@ -3,19 +3,20 @@ package com.codueon.boostUp.domain.chat.service;
 import com.codueon.boostUp.domain.chat.dto.GetChatRoom;
 import com.codueon.boostUp.domain.chat.dto.RedisChat;
 import com.codueon.boostUp.domain.chat.entity.ChatRoom;
-import com.codueon.boostUp.domain.chat.event.vo.SendEnterMessageEvent;
-import com.codueon.boostUp.domain.chat.event.vo.SendEnterRoomMessageEvent;
+import com.codueon.boostUp.domain.chat.event.vo.AlarmChatListEvent;
+import com.codueon.boostUp.domain.chat.event.vo.InitialChatRoomListEvent;
+import com.codueon.boostUp.domain.chat.event.vo.InitialChatRoomMessageEvent;
 import com.codueon.boostUp.domain.chat.repository.querydsl.ChatRoomRepository;
 import com.codueon.boostUp.domain.chat.repository.redis.RedisChatAlarm;
 import com.codueon.boostUp.domain.chat.repository.redis.RedisChatMessage;
 import com.codueon.boostUp.domain.chat.repository.redis.RedisChatRoom;
-import com.codueon.boostUp.domain.chat.utils.MessageType;
+import com.codueon.boostUp.domain.chat.utils.AlarmMessageUtils;
+import com.codueon.boostUp.domain.chat.utils.AlarmType;
 import com.codueon.boostUp.domain.member.entity.Member;
-import com.codueon.boostUp.domain.member.exception.AuthException;
 import com.codueon.boostUp.domain.member.service.MemberDbService;
 import com.codueon.boostUp.domain.vo.AuthVO;
+import com.codueon.boostUp.global.exception.BusinessLogicException;
 import com.codueon.boostUp.global.exception.ExceptionCode;
-import com.codueon.boostUp.global.security.token.JwtAuthenticationToken;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
@@ -34,6 +35,48 @@ public class ChatRoomService {
     private final RedisChatMessage redisChatMessage;
     private final ChatRoomRepository chatRoomRepository;
     private final ApplicationEventPublisher eventPublisher;
+    private final String CODUEON_MANAGER = "코듀온 알리미";
+
+    /**
+     * 회원가입 시 발생되는 MemberAlarm 생성 및 전송 이벤트 처리 메서드
+     *
+     * @param memberId       사용자 식별자
+     * @param memberNickname 사용자 닉네임
+     * @author mozzi327
+     */
+    @Transactional
+    public void createAlarmChatRoom(Long memberId, String memberNickname) {
+        if (isExistRoom(memberId, memberId)) return;
+        ChatRoom savedChatRoom = makeChatRoomThenReturn(memberId, memberId, CODUEON_MANAGER, memberNickname);
+        Long chatRoomId = savedChatRoom.getId();
+        redisChatRoom.createChatRoom(chatRoomId, memberId);
+        RedisChat alarmChat = AlarmMessageUtils
+                .makeMemberAlarmMessage(chatRoomId, memberId, null, memberNickname, null, null, AlarmType.JOIN);
+        sendMakeRoomMessage(chatRoomId, alarmChat, 0);
+    }
+
+    /**
+     * MemberAlarm 메시지 채팅방 식별자 조회 메서드
+     *
+     * @param memberId        사용자 식별자
+     * @param displayName     사용자 닉네임
+     * @param attendanceCount 출석일수
+     * @param lessonTitle     과외 타이틀
+     * @param rejectMessage   거절 사유
+     * @param alarmType       알람 타입
+     * @author mozzi327
+     */
+    @Transactional
+    public void sendAlarmChannelMessage(Long memberId, String lessonTitle, String displayName, Integer attendanceCount, String message, AlarmType alarmType) {
+        Long chatRoomId = ifExistsAlarmChatRoomThenReturn(memberId).getId();
+        RedisChat alarmChat = AlarmMessageUtils.makeMemberAlarmMessage(chatRoomId, memberId, lessonTitle, displayName, attendanceCount, message, alarmType);
+        eventPublisher.publishEvent(alarmChat);
+        eventPublisher.publishEvent(AlarmChatListEvent.builder()
+                .chatRoomId(chatRoomId)
+                .memberId(memberId)
+                .isReceiver(true)
+                .build());
+    }
 
     /**
      * 채팅방 생성 메서드
@@ -42,6 +85,7 @@ public class ChatRoomService {
      * @param lessonId 과외 식별자
      * @author mozzi327
      */
+    @Transactional
     public void createChatRoom(AuthVO authInfo, Long lessonId) {
         Member receiver = memberDbService.ifExistsReturnMemberByLessonId(lessonId);
         Long senderId = authInfo.getMemberId();
@@ -75,59 +119,52 @@ public class ChatRoomService {
      * @param receiverName 닉네임(receiver)
      * @author mozzi327
      */
-    @Transactional
     public void saveChatRoomAndSendEnterMessage(Long senderId, Long receiverId, String senderName,
                                                 String receiverName) {
         ChatRoom savedChatRoom = makeChatRoomThenReturn(senderId, receiverId, senderName, receiverName);
         Long chatRoomId = savedChatRoom.getId();
 
-        RedisChat senderChat = makeChat(savedChatRoom.getId(), senderId, senderName, MessageType.ALARM);
-        RedisChat receiverChat = makeChat(savedChatRoom.getId(), receiverId, receiverName, MessageType.ALARM);
+        RedisChat senderChat = AlarmMessageUtils.makeMemberAlarmMessage(chatRoomId, senderId, null, senderName, null, null, AlarmType.ENTER);
+        RedisChat receiverChat = AlarmMessageUtils.makeMemberAlarmMessage(chatRoomId, receiverId, null, receiverName, null, null, AlarmType.ENTER);
 
         checkExistRoomKeyInfo(chatRoomId, senderId, receiverId);
 
-        eventPublisher.publishEvent(SendEnterMessageEvent.builder()
-                .chatRoomId(savedChatRoom.getId())
-                .senderChat(senderChat)
-                .receiverChat(receiverChat)
-                .build());
+        sendMakeRoomMessage(chatRoomId, senderChat, 0);
+        sendMakeRoomMessage(chatRoomId, receiverChat, 1);
 
-        eventPublisher.publishEvent(SendEnterRoomMessageEvent.builder()
+        eventPublisher.publishEvent(InitialChatRoomListEvent.builder()
                 .chatRoom(savedChatRoom)
                 .receiverChat(receiverChat)
                 .build());
     }
 
+    private void sendMakeRoomMessage(Long chatRoomId, RedisChat enterChat, int count) {
+        eventPublisher.publishEvent(InitialChatRoomMessageEvent.builder()
+                .chatRoomId(chatRoomId)
+                .enterChat(enterChat)
+                .count(count)
+                .build());
+    }
+
     /**
      * 채팅방 저장 후 리턴 메서드
-     * @param senderId 사용자 식별자(Sender)
-     * @param receiverId 사용자 식별자(Receiver)
-     * @param senderName 닉네임(Sender)
+     *
+     * @param senderId     사용자 식별자(Sender)
+     * @param receiverId   사용자 식별자(Receiver)
+     * @param senderName   닉네임(Sender)
      * @param receiverName 닉네임(Receiver)
      * @return ChatRoom
      * @author mozzi327
      */
     public ChatRoom makeChatRoomThenReturn(Long senderId, Long receiverId, String senderName,
-                                 String receiverName) {
+                                           String receiverName) {
         ChatRoom chatRoom = ChatRoom.builder()
                 .senderId(senderId)
-                .senderName(senderName)
                 .receiverId(receiverId)
+                .senderName(senderName)
                 .receiverName(receiverName)
                 .build();
         return chatRoomRepository.save(chatRoom);
-    }
-
-    /**
-     * Redis 채팅방 키 존재 유무 확인 메서드
-     * @param chatRoomId 채팅방 식별자
-     * @param senderId 사용자 식별자(Sender)
-     * @param receiverId 사용자 식별자(Receiver)
-     * @author mozzi327
-     */
-    public void checkExistRoomKeyInfo(Long chatRoomId, Long senderId, Long receiverId) {
-        redisChatRoom.isNotExistMemberInChatRoomMakeRoomInfo(chatRoomId, senderId);
-        redisChatRoom.isNotExistMemberInChatRoomMakeRoomInfo(chatRoomId, receiverId);
     }
 
     /**
@@ -152,25 +189,28 @@ public class ChatRoomService {
     }
 
     /**
-     * RedisChat 생성 메서드
+     * Redis 채팅방 키 존재 유무 확인 메서드
      *
-     * @param chatRoomId  채팅방 식별자
-     * @param memberId    사용자 식별자
-     * @param displayName 닉네임
-     * @param messageType 메시지 타입
-     * @return RedisChat
+     * @param chatRoomId 채팅방 식별자
+     * @param senderId   사용자 식별자(Sender)
+     * @param receiverId 사용자 식별자(Receiver)
      * @author mozzi327
      */
-    public RedisChat makeChat(Long chatRoomId, Long memberId, String displayName,
-                              MessageType messageType) {
-        RedisChat makeChat = RedisChat.builder()
-                .chatRoomId(chatRoomId)
-                .messageType(messageType)
-                .senderId(memberId)
-                .displayName(displayName)
-                .build();
-        makeChat.settingCurrentTime();
-        makeChat.addEnterMessage();
-        return makeChat;
+    public void checkExistRoomKeyInfo(Long chatRoomId, Long senderId, Long receiverId) {
+        redisChatRoom.isNotExistMemberInChatRoomMakeRoomInfo(chatRoomId, senderId);
+        redisChatRoom.isNotExistMemberInChatRoomMakeRoomInfo(chatRoomId, receiverId);
+    }
+
+
+    /**
+     * 알람 채팅방 조회 메서드
+     *
+     * @param memberId 사용자 식별자
+     * @return ChatRoom
+     * @author mozzi327
+     */
+    public ChatRoom ifExistsAlarmChatRoomThenReturn(Long memberId) {
+        return chatRoomRepository.findBySenderIdAndReceiverId(memberId, memberId)
+                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.CHATROOM_NOT_FOUND));
     }
 }

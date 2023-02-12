@@ -98,7 +98,7 @@ public class SuggestController {
     @GetMapping("/suggest/{suggest-id}/kakao/payment")
     public ResponseEntity<Message<?>> orderKakaoPayment(@PathVariable("suggest-id") Long suggestId) {
 
-        Message<?> message = suggestService.getKaKapPayUrl(suggestId);
+        Message<?> message = suggestService.getKaKaoPayUrl(suggestId);
         if (message.getData() == null) suggestService.getFailedPayMessage();
         return ResponseEntity.ok().body(message);
     }
@@ -345,7 +345,7 @@ public class SuggestController {
     @DeleteMapping("/suggest/{suggest-id}")
     public ResponseEntity<?> cancelSuggest(@PathVariable("suggest-id") Long suggestId,
                                         Authentication authentication) {
-        suggestService.cancelSuggest(suggestId, AuthVO.ofMemberId(authentication));
+        suggestService.cancelSuggest(suggestId, AuthVO.of(authentication));
         return ResponseEntity.noContent().build();
     }
 
