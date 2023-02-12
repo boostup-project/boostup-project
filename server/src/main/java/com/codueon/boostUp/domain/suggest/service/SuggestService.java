@@ -152,8 +152,9 @@ public class SuggestService {
         if (!authInfo.getMemberId().equals(lessonDbService.getMemberIdByLessonId(findSuggest.getLessonId())))
             throw new BusinessLogicException(INVALID_ACCESS);
 
-        if (!findSuggest.getSuggestStatus().equals(ACCEPT_IN_PROGRESS))
-            throw new BusinessLogicException(NOT_ACCEPT_IN_PROGRESS);
+        if (!findSuggest.getSuggestStatus().equals(ACCEPT_IN_PROGRESS) &&
+            !findSuggest.getSuggestStatus().equals(PAY_IN_PROGRESS))
+            throw new BusinessLogicException(NOT_SUGGEST_OR_NOT_ACCEPT);
 
         Reason reason = Reason.builder().reason(postReason.getReason()).build();
         suggestDbService.saveReason(reason);
