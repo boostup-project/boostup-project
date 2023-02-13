@@ -32,7 +32,7 @@ const Chat = () => {
       setTimeout(() => {
         subscribeRoomList({ memberId, handleSubChatRoom });
         setSubscribeState(true);
-      }, 2000);
+      }, 5000);
     }
   }, [connectState]);
 

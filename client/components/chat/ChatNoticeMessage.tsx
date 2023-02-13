@@ -19,9 +19,9 @@ const ChatNoticeMessage = ({ content, time }: Props) => {
         <div className="w-2/3 h-fit font-SCDream3 text-[10px] text-textColor/80 flex flex-col justify-center items-center rounded-xl p-1">
           {useTranslateTIme({ currTime, kr_curr })}
         </div>
-        <div className="w-2/3 h-fit font-SCDream3 text-xs text-white bg-textColor/30 flex flex-col justify-center items-center rounded-xl p-1">
+        <p className="w-2/3 h-fit font-SCDream3 text-xs text-white bg-textColor/30 flex flex-col justify-center items-center rounded-xl p-1">
           {content}
-        </div>
+        </p>
       </div>
     </>
   );
