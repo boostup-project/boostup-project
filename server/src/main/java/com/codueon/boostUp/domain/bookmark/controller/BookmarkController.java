@@ -4,6 +4,7 @@ import com.codueon.boostUp.domain.bookmark.dto.GetBookmark;
 import com.codueon.boostUp.domain.bookmark.dto.WrapBookmark;
 import com.codueon.boostUp.domain.bookmark.service.BookmarkService;
 import com.codueon.boostUp.domain.dto.MultiResponseDto;
+import com.codueon.boostUp.domain.vo.AuthVO;
 import com.codueon.boostUp.global.security.token.JwtAuthenticationToken;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -30,10 +31,7 @@ public class BookmarkController {
     @GetMapping("/lesson/{lesson-id}")
     public ResponseEntity getBookmark(@PathVariable("lesson-id") Long lessonId,
                                       Authentication authentication) {
-        JwtAuthenticationToken token = (JwtAuthenticationToken) authentication;
-        Long memberId = getMemberIdIfExistToken(token);
-
-        boolean isBookmarked = bookmarkService.isMemberBookmarked(memberId, lessonId);
+        boolean isBookmarked = bookmarkService.isMemberBookmarked(AuthVO.ofMemberIdNotRequired(authentication), lessonId);
         return ResponseEntity.ok().body(new WrapBookmark(isBookmarked));
     }
 
@@ -46,10 +44,7 @@ public class BookmarkController {
     @GetMapping("/lesson/{lesson-id}/modification")
     public ResponseEntity changeBookmark(@PathVariable("lesson-id") Long lessonId,
                                          Authentication authentication) {
-        JwtAuthenticationToken token = (JwtAuthenticationToken) authentication;
-        Long memberId = getMemberIdIfExistToken(token);
-
-        boolean isBookmarked = bookmarkService.changeBookmarkStatus(memberId, lessonId);
+        boolean isBookmarked = bookmarkService.changeBookmarkStatus(AuthVO.ofMemberId(authentication), lessonId);
         return ResponseEntity.ok().body(new WrapBookmark(isBookmarked));
     }
 
@@ -61,21 +56,7 @@ public class BookmarkController {
     @GetMapping
     public ResponseEntity getBookmarks(Pageable pageable,
                                        Authentication authentication) {
-        JwtAuthenticationToken token = (JwtAuthenticationToken) authentication;
-        Long memberId = getMemberIdIfExistToken(token);
-
-        Page<GetBookmark> bookmarkList = bookmarkService.findBookmarkList(memberId, pageable);
+        Page<GetBookmark> bookmarkList = bookmarkService.findBookmarkList(AuthVO.ofMemberId(authentication), pageable);
         return ResponseEntity.ok().body(new MultiResponseDto<>(bookmarkList));
-    }
-
-    /**
-     * 로그인 확인 메서드
-     * @param token 토큰 정보
-     * @return Long
-     * @author mozzi327
-     */
-    private Long getMemberIdIfExistToken(JwtAuthenticationToken token) {
-        if (token == null) return null;
-        else return token.getId();
     }
 }
