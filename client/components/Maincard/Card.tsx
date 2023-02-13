@@ -50,7 +50,6 @@ const Card = () => {
 
   const { refetch: bookmarkRefetch, data: bookmarkModiData } =
     useGetBookmarkModi(lessonId);
-  const { data: bookmarkData, refetch: getBookmark } = useGetBookmark(lessonId);
 
   useEffect(() => {
     cardRefetch();
