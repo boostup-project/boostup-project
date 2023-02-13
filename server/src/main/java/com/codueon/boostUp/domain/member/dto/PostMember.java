@@ -23,7 +23,7 @@ public class PostMember {
 
     @NotBlank(message = "이름은 공백이 아니어야 합니다.")
     @Pattern(regexp = "^[ㄱ-ㅎ|가-힣|a-z|A-Z|0-9|]+$" , message = "특수문자는 사용할 수 없습니다.")
-    @Length(min = 5, max = 12, message = "이름은 5자 이상 12자 이하여햐 합니다.")
+    @Length(min = 3, max = 12, message = "이름은 3자 이상 12자 이하여햐 합니다.")
     private String name;
 
     @Builder
