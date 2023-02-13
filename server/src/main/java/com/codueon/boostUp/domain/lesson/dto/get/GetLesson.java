@@ -19,16 +19,13 @@ public class GetLesson {
     private Integer career;
     private Integer cost;
     private List<String> address;
-    private Boolean editable;
-
-    public void setEditable(Boolean editable) {
-        this.editable = editable;
-    }
+    private boolean editable;
 
     @Builder
     @QueryProjection
     public GetLesson(Lesson lesson,
-                     String name) {
+                     String name,
+                     boolean editable) {
         this.profileImage = lesson.getProfileImage().getFilePath();
         this.languages = lesson.getLanguageListAsString();
         this.name = name;
@@ -37,5 +34,6 @@ public class GetLesson {
         this.career = lesson.getCareer();
         this.cost = lesson.getCost();
         this.address = lesson.getAddressListAsString();
+        this.editable = editable;
     }
 }

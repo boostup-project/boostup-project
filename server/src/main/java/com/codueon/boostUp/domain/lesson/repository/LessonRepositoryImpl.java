@@ -5,6 +5,7 @@ import com.codueon.boostUp.domain.lesson.dto.post.PostSearchLesson;
 import com.codueon.boostUp.domain.lesson.entity.AddressInfo;
 import com.codueon.boostUp.domain.lesson.entity.LanguageInfo;
 import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.types.Expression;
 import com.querydsl.core.types.dsl.CaseBuilder;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.core.types.dsl.NumberPath;
@@ -217,18 +218,43 @@ public class LessonRepositoryImpl implements CustomLessonRepository {
     }
 
     /**
-     * 과외 요약 정보 조회 (상세페이지)
+     * 과외 요약 정보 조회 (상세페이지) - 로그인 x
+     *
      * @param lessonId 과외 식별자
-     * @return result
+     * @return GetLesson
      * @author Qruatz614
      */
-    public GetLesson getDetailLesson(Long lessonId, Long memberId) {
+    public GetLesson getDetailLesson(Long lessonId) {
         return queryFactory
                 .select(new QGetLesson(
                         lesson,
-                        member.name
+                        member.name,
+                        Expressions.constant(false)
                 )).from(lesson)
-                .leftJoin(member).on(lesson.memberId.eq(memberId))
+                .leftJoin(member).on(lesson.memberId.eq(member.id))
+                .where(lesson.id.eq(lessonId))
+                .fetchOne();
+    }
+
+    /**
+     * 과외 요약 정보 조회 (상세페이지) - 로그인 o
+     *
+     * @param lessonId 과외 식별자
+     * @param memberId 사용자 식별자
+     * @return GetLesson
+     * @author mozzi327
+     */
+    @Override
+    public GetLesson getDetailLessonForEditable(Long lessonId, Long memberId) {
+        return queryFactory
+                .select(new QGetLesson(
+                        lesson,
+                        member.name,
+                        new CaseBuilder()
+                                .when(lesson.memberId.eq(memberId)).then(true)
+                                .otherwise(false)
+                )).from(lesson)
+                .leftJoin(member).on(lesson.memberId.eq(member.id))
                 .where(lesson.id.eq(lessonId))
                 .fetchOne();
     }
@@ -240,7 +266,7 @@ public class LessonRepositoryImpl implements CustomLessonRepository {
                         member.id,
                         member.name,
                         lesson.title
-                        )).from(lesson)
+                )).from(lesson)
                 .leftJoin(member).on(lesson.memberId.eq(member.id))
                 .where(lesson.id.eq(lessonId))
                 .fetchOne();
@@ -293,7 +319,7 @@ public class LessonRepositoryImpl implements CustomLessonRepository {
                                             Long memberId) {
         return JPAExpressions.select(
                         new CaseBuilder()
-                                .when(bookmark.isNotNull()).then(true)
+                                .when(lesson.memberId.eq(memberId)).then(true)
                                 .otherwise(false)
                 ).from(bookmark)
                 .where(bookmark.lessonId.eq(lessonId).and(bookmark.memberId.eq(memberId)));
@@ -301,6 +327,7 @@ public class LessonRepositoryImpl implements CustomLessonRepository {
 
     /**
      * 과외 등록한 사용자 식별자 조회 쿼라
+     *
      * @param lessonId 과외 식별자
      * @return Long
      * @author LeeGoh
