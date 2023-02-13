@@ -50,8 +50,8 @@ public class ReviewDbService {
      * @param memberId 페이지 정보
      * @author mozzi327
      */
-    public void ifExistReviewThrowException(Long lessonId, Long memberId) {
-        if(reviewRepository.findByLessonIdAndMemberId(lessonId, memberId).isPresent())
+    public void ifExistReviewThrowException(Long lessonId, Long memberId, Long suggestId) {
+        if(reviewRepository.existsByLessonIdAndMemberIdAndSuggestId(lessonId, memberId, suggestId))
             throw new BusinessLogicException(ExceptionCode.REVIEW_ONLY_ONE);
     }
 

@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 public class SendMessageEvent {
+    /* 채팅방 메시지 전송 Event */
     private Long receiverId;
     private RedisChat receiverChat;
 

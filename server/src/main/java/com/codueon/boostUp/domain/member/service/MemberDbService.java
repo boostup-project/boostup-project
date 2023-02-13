@@ -72,8 +72,8 @@ public class MemberDbService {
      * @param member 사용자 정보
      * @author LimJaeminZ
      */
-    public void saveMember(Member member) {
-        memberRepository.save(member);
+    public Member saveMember(Member member) {
+        return memberRepository.save(member);
     }
 
     /**
@@ -139,7 +139,7 @@ public class MemberDbService {
      * @author mozzi327
      */
     public Member ifExistsReturnMemberByLessonId(Long lessonId) {
-        return memberRepository.getNicknameByLessonId(lessonId)
+        return memberRepository.getMemberByLessonId(lessonId)
                 .orElseThrow(() -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
     }
 }

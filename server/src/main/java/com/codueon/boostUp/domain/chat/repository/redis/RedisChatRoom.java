@@ -42,8 +42,6 @@ public class RedisChatRoom {
     }
 
     public boolean isExistMemberInChatRoom(Long chatRoomId, Long memberId) {
-        log.info("key : {}", chatRoomUtils.makeMemberKey(memberId));
-        log.info("value : {}", chatRoomUtils.makeKey(chatRoomId));
         return setOperations.isMember(chatRoomUtils.makeMemberKey(memberId), chatRoomUtils.makeKey(chatRoomId));
     }
 

@@ -1,9 +1,6 @@
 package com.codueon.boostUp.domain.lesson.repository;
 
-import com.codueon.boostUp.domain.lesson.dto.get.GetLesson;
-import com.codueon.boostUp.domain.lesson.dto.get.GetMainPageLesson;
-import com.codueon.boostUp.domain.lesson.dto.get.QGetLesson;
-import com.codueon.boostUp.domain.lesson.dto.get.QGetMainPageLesson;
+import com.codueon.boostUp.domain.lesson.dto.get.*;
 import com.codueon.boostUp.domain.lesson.dto.post.PostSearchLesson;
 import com.codueon.boostUp.domain.lesson.entity.AddressInfo;
 import com.codueon.boostUp.domain.lesson.entity.LanguageInfo;
@@ -232,6 +229,19 @@ public class LessonRepositoryImpl implements CustomLessonRepository {
                         member.name
                 )).from(lesson)
                 .leftJoin(member).on(lesson.memberId.eq(memberId))
+                .where(lesson.id.eq(lessonId))
+                .fetchOne();
+    }
+
+    @Override
+    public GetLessonInfoForAlarm getLessonInfoForAlarm(Long lessonId) {
+        return queryFactory
+                .select(new QGetLessonInfoForAlarm(
+                        member.id,
+                        member.name,
+                        lesson.title
+                        )).from(lesson)
+                .leftJoin(member).on(lesson.memberId.eq(member.id))
                 .where(lesson.id.eq(lessonId))
                 .fetchOne();
     }
