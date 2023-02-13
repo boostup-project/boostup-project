@@ -54,7 +54,6 @@ const Card = () => {
 
   useEffect(() => {
     cardRefetch();
-    console.log(cards);
   }, [toggle]);
 
   useEffect(() => {
