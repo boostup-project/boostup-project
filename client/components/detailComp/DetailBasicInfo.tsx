@@ -14,8 +14,6 @@ const DetailBasicInfo = (basicInfo: any) => {
     setMode(true);
   };
 
-  console.log(basicInfo);
-
   return (
     <>
       <div className="w-full h-full flex flex-row justify-center items-center">
