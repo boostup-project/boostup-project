@@ -536,7 +536,7 @@ public class LessonService {
      * @author mozzi327
      */
     public GetLesson getDetailLesson(Long lessonId, Long memberId) {
-        if (memberId == null) lessonRepository.getDetailLesson(lessonId);
+        if (memberId == null) return lessonRepository.getDetailLesson(lessonId);
         return lessonRepository.getDetailLessonForEditable(lessonId, memberId);
     }
 

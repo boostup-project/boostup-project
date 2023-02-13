@@ -4,6 +4,7 @@ import com.codueon.boostUp.domain.lesson.dto.get.*;
 import com.codueon.boostUp.domain.lesson.dto.post.PostSearchLesson;
 import com.codueon.boostUp.domain.lesson.entity.AddressInfo;
 import com.codueon.boostUp.domain.lesson.entity.LanguageInfo;
+import com.codueon.boostUp.domain.lesson.entity.QLesson;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Expression;
 import com.querydsl.core.types.dsl.CaseBuilder;
@@ -259,6 +260,13 @@ public class LessonRepositoryImpl implements CustomLessonRepository {
                 .fetchOne();
     }
 
+    /**
+     * 알람 전송을 위한 선생님 정보 조회 QueryDSL
+     *
+     * @param lessonId 과외 식별자
+     * @return GetLessonInfoForAlarm
+     * @author mozzi327
+     */
     @Override
     public GetLessonInfoForAlarm getLessonInfoForAlarm(Long lessonId) {
         return queryFactory
