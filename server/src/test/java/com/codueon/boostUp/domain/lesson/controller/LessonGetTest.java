@@ -429,8 +429,8 @@ public class LessonGetTest extends LessonControllerTest {
         GetLesson getLesson = GetLesson.builder()
                 .name(member.getName())
                 .lesson(lesson)
+                .editable(true)
                 .build();
-        getLesson.setEditable(true);
 
         given(lessonService.getDetailLesson(Mockito.anyLong(), Mockito.anyLong())).willReturn(getLesson);
 
@@ -454,7 +454,7 @@ public class LessonGetTest extends LessonControllerTest {
                 .andExpect(jsonPath("$.company").value(lesson.getCompany()))
                 .andExpect(jsonPath("$.career").value(lesson.getCareer()))
                 .andExpect(jsonPath("$.cost").value(lesson.getCost()))
-                .andExpect(jsonPath("$.editable").value(getLesson.getEditable()))
+                .andExpect(jsonPath("$.editable").value(getLesson.isEditable()))
                 .andExpect(jsonPath("$.address[0]").value("강남구"))
                 .andExpect(jsonPath("$.address[1]").value("강동구"))
                 .andExpect(jsonPath("$.address[2]").value("강북구"))

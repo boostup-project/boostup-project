@@ -178,7 +178,6 @@ public class LessonController {
      * 과외 상세 페이지 요약 정보 조회 컨트롤러 메서드
      *
      * @param lessonId       과외 식별자
-     * @param authentication 인증 정보
      * @return GetLesson
      * @author mozzi327
      */
