@@ -14,8 +14,9 @@ public interface CustomLessonRepository {
     Page<GetMainPageLesson> getMainPageLessonByLanguageAndBookmarkInfo(Long memberId, Integer languageId, Pageable pageable);
     Page<GetMainPageLesson> getDetailSearchMainPageLesson(PostSearchLesson postSearchLesson, Pageable pageable);
     Page<GetMainPageLesson> getDetailSearchMainPageLessonAndGetBookmarkInfo(Long memberId, PostSearchLesson postSearchLesson, Pageable pageable);
-    GetLesson getDetailLesson(Long lessonId, Long memberId);
+    GetLesson getDetailLesson(Long lessonId);
 
+    GetLesson getDetailLessonForEditable(Long lessonId, Long memberId);
     GetLessonInfoForAlarm getLessonInfoForAlarm(Long lessonId);
     Long getMemberIdByLessonId(Long lessonId);
 }
