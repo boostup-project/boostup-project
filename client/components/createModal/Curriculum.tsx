@@ -198,18 +198,3 @@ const Curriculum = ({
 };
 
 export default Curriculum;
-
-// const pre = {
-//   title,
-//   language: parseLang,
-//   company,
-//   career: parseInt(career),
-//   address: parseAddress,
-//   cost: parseInt(cost),
-//   introduction,
-//   detailCompany,
-//   detailLocation,
-//   personality,
-//   detailCost,
-//   curriculum: curInfo,
-// };

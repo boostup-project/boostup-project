@@ -8,11 +8,8 @@ const usePostWrite = () => {
   return useMutation(postWrite, {
     onSuccess: res => {
       queryClient.invalidateQueries(["cards"]);
-      console.log("success");
     },
     onError: (err: any) => {
-      console.log("에러 ", err.response.data.message);
-      console.log("에러2", err.response.status);
       if (err.response.status === 504) {
         toast.error(err.response.data.message, {
           autoClose: 1500,
