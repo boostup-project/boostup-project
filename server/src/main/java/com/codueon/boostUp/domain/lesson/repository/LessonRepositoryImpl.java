@@ -327,7 +327,7 @@ public class LessonRepositoryImpl implements CustomLessonRepository {
                                             Long memberId) {
         return JPAExpressions.select(
                         new CaseBuilder()
-                                .when(lesson.memberId.eq(memberId)).then(true)
+                                .when(bookmark.isNotNull()).then(true)
                                 .otherwise(false)
                 ).from(bookmark)
                 .where(bookmark.lessonId.eq(lessonId).and(bookmark.memberId.eq(memberId)));
