@@ -1,0 +1,11 @@
+package com.codueon.boostUp.domain.chat.utils;
+
+public enum AlarmType {
+    JOIN,
+    ENTER,
+    REGISTER, REJECT, CANCEL, ACCEPT, PAYMENT_SUCCESS,
+    CHECK_ATTENDANCE, CANCEL_ATTENDANCE,
+    REFUND_REQUEST, ACCEPT_REFUND, REJECT_REFUND,
+    END, COMPLETED_REVIEW,
+    LEAVE
+}

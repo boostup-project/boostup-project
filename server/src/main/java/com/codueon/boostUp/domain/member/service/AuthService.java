@@ -65,7 +65,7 @@ public class AuthService {
      * @param memberId
      * @author LimJaeminZ
      */
-    public void logoutMember(String accessToken, String refreshToken, Long memberId) {
+    public void logoutMember(String accessToken, Long memberId) {
         Member findMember = memberDbService.ifExistsReturnMember(memberId);
 
         accessToken = jwtTokenUtils.parseAccessToken(accessToken);

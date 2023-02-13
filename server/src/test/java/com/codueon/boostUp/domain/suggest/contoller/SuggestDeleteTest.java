@@ -1,5 +1,6 @@
 package com.codueon.boostUp.domain.suggest.contoller;
 
+import com.codueon.boostUp.domain.vo.AuthVO;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -23,7 +24,7 @@ public class SuggestDeleteTest extends SuggestControllerTest{
     @Test
     @DisplayName("DELETE 과외 신청 취소")
     void cancelSuggest() throws Exception{
-        doNothing().when(suggestService).cancelSuggest(Mockito.anyLong(), Mockito.anyLong());
+        doNothing().when(suggestService).cancelSuggest(Mockito.anyLong(), Mockito.any(AuthVO.class));
 
         ResultActions actions =
                 mockMvc.perform(

@@ -42,9 +42,8 @@ public class AuthController {
      */
     @DeleteMapping("/logout")
     public ResponseEntity deleteLoginMember(@RequestHeader("authorization") String accessToken,
-                                            @RequestHeader("refreshToken") String refreshToken,
                                             Authentication authentication) {
-        authService.logoutMember(accessToken, refreshToken, AuthVO.ofMemberId(authentication));
+        authService.logoutMember(accessToken, AuthVO.ofMemberId(authentication));
         return ResponseEntity.ok().build();
     }
 

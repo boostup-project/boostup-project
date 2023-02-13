@@ -10,8 +10,8 @@ import com.codueon.boostUp.global.utils.Auditable;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Entity
 @Getter
+@Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ChatRoom extends Auditable implements Serializable {
 
@@ -25,12 +25,10 @@ public class ChatRoom extends Auditable implements Serializable {
     private String receiverName;
 
     @Builder
-    public ChatRoom(Long id,
-                    Long senderId,
+    public ChatRoom(Long senderId,
                     String senderName,
                     Long receiverId,
                     String receiverName) {
-        this.id = id;
         this.senderId = senderId;
         this.senderName = senderName;
         this.receiverId = receiverId;

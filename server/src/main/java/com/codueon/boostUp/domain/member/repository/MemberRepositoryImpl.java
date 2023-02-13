@@ -18,8 +18,14 @@ public class MemberRepositoryImpl implements CustomMemberRepository {
         this.queryFactory = new JPAQueryFactory(em);
     }
 
+    /**
+     * 과외 선생님 정보 조회 메서드
+     * @param lessonId 과외 식별자
+     * @return Optional(Member)
+     * @author mozzi327
+     */
     @Override
-    public Optional<Member> getNicknameByLessonId(Long lessonId) {
+    public Optional<Member> getMemberByLessonId(Long lessonId) {
         return Optional.ofNullable(queryFactory
                 .selectFrom(member)
                 .leftJoin(lesson).on(lesson.memberId.eq(member.id))

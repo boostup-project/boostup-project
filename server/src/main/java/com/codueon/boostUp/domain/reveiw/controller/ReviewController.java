@@ -36,7 +36,7 @@ public class ReviewController {
                                         @PathVariable("suggest-id") Long suggestId,
                                         @RequestBody @Valid PostReview postReview,
                                         Authentication authentication) {
-        reviewService.createStudentReview(AuthVO.ofMemberId(authentication), lessonId, suggestId, postReview);
+        reviewService.createStudentReview(AuthVO.of(authentication), lessonId, suggestId, postReview);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 

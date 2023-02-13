@@ -4,7 +4,6 @@ import com.codueon.boostUp.domain.member.dto.*;
 import com.codueon.boostUp.domain.member.entity.AccountStatus;
 import com.codueon.boostUp.domain.member.entity.Member;
 import com.codueon.boostUp.domain.member.entity.MemberImage;
-import com.codueon.boostUp.domain.member.repository.MemberRepository;
 import com.codueon.boostUp.global.exception.BusinessLogicException;
 import com.codueon.boostUp.global.exception.ExceptionCode;
 import com.codueon.boostUp.global.file.AwsS3Service;
@@ -15,6 +14,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
@@ -22,11 +23,11 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class MemberService {
-    private final MemberDbService memberDbService;
-    private final CustomAuthorityUtils authorityUtils;
-    private final MemberRepository memberRepository;
     private final FileHandler fileHandler;
     private final AwsS3Service awsS3Service;
+    private final MemberDbService memberDbService;
+    private final CustomAuthorityUtils authorityUtils;
+    private final MemberEventService memberEventService;
 
     @Value("${default.image.address}")
     private String defaultImageAddress;
@@ -37,6 +38,7 @@ public class MemberService {
      * @param postMember 회원가입 정보
      * @author LimJaeminZ
      */
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void createMember(PostMember postMember) {
         memberDbService.verifyName(postMember.getName());
         memberDbService.verifyEmail(postMember.getEmail());
@@ -56,11 +58,13 @@ public class MemberService {
                 .build();
         member.addMemberImage(memberImageS3);
 
-        memberDbService.saveMember(member);
+        Member savedMember = memberDbService.saveMember(member);
+        memberEventService.createAlarmChatRoom(savedMember.getId(), savedMember.getName());
     }
 
     /**
      * password 변경 메서드(로그인페이지)
+     *
      * @param changePassword 비밀번호 변경 정보
      * @author mozzi327
      */
@@ -70,16 +74,18 @@ public class MemberService {
 
     /**
      * 이메일 중복 확인 메서드
+     *
      * @param email 이메일 정보
      * @author mozzi327
      */
     public void checkIsOverLappedEmail(String email) {
-        if(memberDbService.checkExistEmail(email))
+        if (memberDbService.checkExistEmail(email))
             throw new BusinessLogicException(ExceptionCode.EMAIL_ALREADY_EXIST);
     }
 
     /**
      * 이메일 존재 여부 확인 메서드
+     *
      * @param email 이메일 정보
      * @author mozzi327
      */
@@ -90,6 +96,7 @@ public class MemberService {
 
     /**
      * 닉네임 중복 확인 메서드
+     *
      * @param name 닉네임 정보
      * @author mozzi327
      */
@@ -99,6 +106,7 @@ public class MemberService {
 
     /**
      * 비밀번호 일치 확인 메서드
+     *
      * @param password 검증 비밀번호 정보
      * @param memberId 사용자 식별자
      * @author mozzi327
@@ -110,7 +118,8 @@ public class MemberService {
 
     /**
      * 비밀번호 변경 메서드(마이페이지)
-     * @param memberId 사용자 식별자
+     *
+     * @param memberId       사용자 식별자
      * @param changePassword 비밀번호 변경 정보
      * @author mozzi327
      */
@@ -122,8 +131,9 @@ public class MemberService {
 
     /**
      * 회원 정보 수정 메서드
-     * @param name 정보 수정 DTO
-     * @param file 사용자 프로필 이미지
+     *
+     * @param name     정보 수정 DTO
+     * @param file     사용자 프로필 이미지
      * @param memberId 사용자 식별자
      * @return GetMemberEditInfo
      * @author LeeGoh
@@ -153,8 +163,9 @@ public class MemberService {
 
     /**
      * 회원 정보 수정 메서드 S3
-     * @param name 정보 수정 DTO
-     * @param file 사용자 프로필 이미지
+     *
+     * @param name     정보 수정 DTO
+     * @param file     사용자 프로필 이미지
      * @param memberId 사용자 식별자
      * @return GetMemberEditInfo
      * @author LeeGoh
@@ -169,7 +180,7 @@ public class MemberService {
             String dir = "memberImage";
             UploadFile uploadFile = awsS3Service.uploadfile(file, dir);
 
-            if (!findMember.getMemberImage().getFilePath().equals(defaultImageAddress)){
+            if (!findMember.getMemberImage().getFilePath().equals(defaultImageAddress)) {
                 awsS3Service.delete(findMember.getMemberImage().getFileName(), dir);
             }
 
@@ -190,6 +201,7 @@ public class MemberService {
 
     /**
      * 회원 정보 수정 시 반환 공통 메서드
+     *
      * @param member 사용자 정보
      * @return GetMemberEditInfo
      * @author LeeGoh

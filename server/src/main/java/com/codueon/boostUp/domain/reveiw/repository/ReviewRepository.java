@@ -11,4 +11,5 @@ public interface ReviewRepository extends JpaRepository<Review, Long>, CustomRev
     Optional<Review> findByMemberIdAndId(Long memberId, Long reviewId);
     Optional<Review> findBySuggestId(Long suggestId);
     List<Review> removeAllByLessonId(Long lessonId);
+    boolean existsByLessonIdAndMemberIdAndSuggestId(Long lessonId, Long memberId, Long suggestId);
 }

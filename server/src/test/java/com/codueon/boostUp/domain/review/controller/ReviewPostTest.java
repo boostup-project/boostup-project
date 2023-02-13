@@ -1,6 +1,7 @@
 package com.codueon.boostUp.domain.review.controller;
 
 import com.codueon.boostUp.domain.reveiw.dto.PostReview;
+import com.codueon.boostUp.domain.vo.AuthVO;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -37,7 +38,7 @@ public class ReviewPostTest extends ReviewControllerTest {
         Long lessonId = 1L;
         Long suggestId = 1L;
 
-        doNothing().when(reviewService).createStudentReview(Mockito.anyLong(), Mockito.anyLong(), Mockito.anyLong(), Mockito.any(PostReview.class));
+        doNothing().when(reviewService).createStudentReview(Mockito.any(AuthVO.class), Mockito.anyLong(), Mockito.anyLong(), Mockito.any(PostReview.class));
 
         ResultActions actions =
                 mockMvc.perform(post("/review/lesson/{lesson-id}/suggest/{suggest-id}", lessonId, suggestId)
