@@ -70,17 +70,12 @@ public class AuthService {
 
         accessToken = jwtTokenUtils.parseAccessToken(accessToken);
 
-        // accessToken 검증
-        if (!jwtTokenUtils.validateToken(accessToken)) {
-           throw new AuthException(ExceptionCode.INVALID_AUTH_TOKEN);
-        }
-
         // refreshToken 존재 시 삭제
         redisUtils.deleteData(findMember.getEmail(), findMember.getAccountStatus().getProvider());
 
         // accessToken 만료 전까지 블랙리스트 처리
         Long expiration = jwtTokenUtils.getExpiration(accessToken);
-        redisUtils.setBlackList(accessToken, "Logout", expiration);
+        if (expiration > 0) redisUtils.setBlackList(accessToken, "Logout", expiration);
     }
 
     /**

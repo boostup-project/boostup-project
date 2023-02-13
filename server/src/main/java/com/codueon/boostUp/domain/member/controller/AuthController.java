@@ -41,7 +41,7 @@ public class AuthController {
      * @author LimJaeminZ
      */
     @DeleteMapping("/logout")
-    public ResponseEntity deleteLoginMember(@RequestHeader("authorization") String accessToken,
+    public ResponseEntity deleteLoginMember(@RequestHeader("Authorization") String accessToken,
                                             Authentication authentication) {
         authService.logoutMember(accessToken, AuthVO.ofMemberId(authentication));
         return ResponseEntity.ok().build();
@@ -56,8 +56,8 @@ public class AuthController {
      * @author LimJaeminZ
      */
     @GetMapping("/re-issue")
-    public ResponseEntity getReIssueToken(@RequestHeader("authorization") String accessToken,
-                                          @RequestHeader("refreshToken") String refreshToken,
+    public ResponseEntity getReIssueToken(@RequestHeader("Authorization") String accessToken,
+                                          @RequestHeader("RefreshToken") String refreshToken,
                                           Authentication authentication) {
         TokenDto.Response response = authService.reIssueToken(accessToken, refreshToken, AuthVO.ofMemberId(authentication));
         return ResponseEntity.ok()
