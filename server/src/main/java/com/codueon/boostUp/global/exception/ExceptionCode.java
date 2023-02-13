@@ -35,6 +35,7 @@ public enum ExceptionCode {
     NO_AUTHORIZATION_EDIT_LESSON(403, "요약 정보를 수정할 권한이 없습니다."),
     NO_AUTHORIZATION_EDIT_LESSON_INFO(403, "상세 정보를 수정할 권한이 없습니다."),
     NO_AUTHORIZATION_EDIT_CURRICULUM(403, "커리큘럼을 수정할 권한이 없습니다."),
+    BOOKMARK_REQUIRED_LOGIN(403, "로그인이 필요한 서비스입니다."),
 
     // 중복여부
     EMAIL_ALREADY_EXIST(504, "이미 존재하는 이메일입니다."),
