@@ -65,7 +65,7 @@ public class LessonInfo {
                 .favoriteLocation(postLesson.getDetailLocation())
                 .personality(postLesson.getPersonality())
                 .costs(postLesson.getDetailCost())
-                .id(memberId)
+                .memberId(memberId)
                 .build();
     }
 
