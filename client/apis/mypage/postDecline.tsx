@@ -19,7 +19,6 @@ const postDecline = async ({ reason, suggestId }: Decline) => {
         "content-Type": `application/json`,
 
         Authorization: `Bearer ${localStorage.getItem("token")}`,
-        // RefreshToken: localStorage.getItem("refresh_token"),
       },
     },
   );

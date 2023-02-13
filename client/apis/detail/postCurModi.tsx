@@ -15,9 +15,7 @@ const postCurModi = async (assemble: Assemble) => {
     baseURL: process.env.NEXT_PUBLIC_API_URL,
     headers: {
       "Content-Type": "application/json",
-      "ngrok-skip-browser-warning": "63490",
       Authorization: `Bearer ${localStorage.getItem("token")}`,
-      RefreshToken: localStorage.getItem("refresh_token"),
     },
   });
 };
