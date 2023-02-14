@@ -1,8 +1,7 @@
-import axios from "axios";
+import instance from "apis/module";
 
 const deleteApply = async (suggestId: number) => {
-  return await axios.delete(`/suggest/${suggestId}`, {
-    baseURL: process.env.NEXT_PUBLIC_API_URL,
+  return await instance.delete(`/suggest/${suggestId}`, {
     headers: {
       "content-Type": `application/json`,
       Authorization: `Bearer ${localStorage.getItem("token")}`,

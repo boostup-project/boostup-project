@@ -1,10 +1,9 @@
-import axios from "axios";
+import instance from "apis/module";
 
 export const deleteLogout = async () => {
   const url = "/member/logout";
 
-  return await axios.delete(url, {
-    baseURL: process.env.NEXT_PUBLIC_API_URL,
+  return await instance.delete(url, {
     headers: {
       "content-Type": `application/json`,
       Authorization: `Bearer ${localStorage.getItem("token")}`,

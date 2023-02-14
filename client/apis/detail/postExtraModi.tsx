@@ -1,4 +1,4 @@
-import axios from "axios";
+import instance from "apis/module";
 
 interface Assemble {
   object: FormData;
@@ -8,11 +8,9 @@ interface Assemble {
 const postExtraModi = async (assemble: Assemble) => {
   const { object, id } = assemble;
   const url = `/lesson/${id}/detailInfo/modification`;
-  return await axios.post(url, object, {
-    baseURL: process.env.NEXT_PUBLIC_API_URL,
+  return await instance.post(url, object, {
     headers: {
       "Content-Type": "multipart/form-data",
-      "ngrok-skip-browser-warning": "63490",
       Authorization: `Bearer ${localStorage.getItem("token")}`,
     },
   });

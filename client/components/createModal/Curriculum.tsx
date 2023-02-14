@@ -188,8 +188,10 @@ const Curriculum = ({
         </div>
       )}
       <div className="flex flex-row justify-center items-center w-full h-fit mt-10">
-        <SmallBtn onClick={toBack}>이전</SmallBtn>
-        <SmallBtn onClick={onClick} css="ml-5">
+        <SmallBtn type="button" onClick={toBack}>
+          이전
+        </SmallBtn>
+        <SmallBtn type="submit" onClick={onClick} css="ml-5">
           등 록
         </SmallBtn>
       </div>

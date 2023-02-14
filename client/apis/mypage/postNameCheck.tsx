@@ -1,12 +1,10 @@
-import axios from "axios";
+import instance from "apis/module";
 
 const postNameCheck = async (name: string) => {
   const url = "/member/name/overlap/check";
-  return await axios.post(url, name, {
-    baseURL: process.env.NEXT_PUBLIC_API_URL,
+  return await instance.post(url, name, {
     headers: {
       "content-Type": `application/json`,
-      "ngrok-skip-browser-warning": "69420",
       Authorization: `Bearer ${localStorage.getItem("token")}`,
     },
   });

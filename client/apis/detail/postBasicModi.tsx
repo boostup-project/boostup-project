@@ -1,4 +1,4 @@
-import axios from "axios";
+import instance from "apis/module";
 
 interface Props {
   formData: FormData;
@@ -7,11 +7,9 @@ interface Props {
 
 const postBasicModi = ({ formData, lessonId }: Props) => {
   console.log(formData);
-  return axios.post(`lesson/${lessonId}/modification`, formData, {
-    baseURL: process.env.NEXT_PUBLIC_API_URL,
+  return instance.post(`lesson/${lessonId}/modification`, formData, {
     headers: {
       "Content-Type": "multipart/form-data",
-      "ngrok-skip-browser-warning": "63490",
       Authorization: `Bearer ${localStorage.getItem("token")}`,
     },
   });

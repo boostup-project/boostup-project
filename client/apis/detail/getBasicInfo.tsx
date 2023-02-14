@@ -1,8 +1,7 @@
-import axios from "axios";
+import instance from "apis/module";
 
 const getBasicInfo = async (lessonId: number) => {
-  return await axios.get(`/lesson/${lessonId}`, {
-    baseURL: process.env.NEXT_PUBLIC_API_URL,
+  return await instance.get(`/lesson/${lessonId}`, {
     headers: {
       "content-Type": `application/json`,
       "ngrok-skip-browser-warning": "69420",

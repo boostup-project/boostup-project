@@ -180,10 +180,10 @@ const ApplyModal = ({
               {errors?.requests && <span>필수 정보입니다</span>}
             </p>
             <div className="flex flex-row justify-center items-center w-full h-fit mt-10">
-              <SmallBtn css="mr-4" onClick={onClickToggleModal}>
+              <SmallBtn type="button" css="mr-4" onClick={onClickToggleModal}>
                 취 소
               </SmallBtn>
-              <SmallBtn>신 청</SmallBtn>
+              <SmallBtn type="submit">신 청</SmallBtn>
             </div>
           </form>
         </CreateModalContainer>

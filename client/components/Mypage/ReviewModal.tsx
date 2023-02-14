@@ -164,10 +164,10 @@ const ReviewModal = ({
               {errors?.comment && <span>필수 정보입니다</span>}
             </p>
             <div className="flex flex-row justify-center items-center w-full h-fit mt-10">
-              <SmallBtn css="mr-4" onClick={openDeclineModal}>
+              <SmallBtn type="button" css="mr-4" onClick={openDeclineModal}>
                 취 소
               </SmallBtn>
-              <SmallBtn>확 인</SmallBtn>
+              <SmallBtn type="submit">확 인</SmallBtn>
             </div>
           </form>
         </CreateModalContainer>

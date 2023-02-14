@@ -211,8 +211,12 @@ const ExtraInfo = ({ setExtraInfo, setStep }: Props) => {
           )}
         </div>
         <div className="flex flex-row justify-center items-center w-full h-fit mt-10">
-          <SmallBtn onClick={toBack}>이 전</SmallBtn>
-          <SmallBtn css="ml-5">다 음</SmallBtn>
+          <SmallBtn type="button" onClick={toBack}>
+            이 전
+          </SmallBtn>
+          <SmallBtn type="submit" css="ml-5">
+            다 음
+          </SmallBtn>
         </div>
       </form>
     </>

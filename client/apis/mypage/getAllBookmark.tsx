@@ -1,8 +1,7 @@
-import axios from "axios";
+import instance from "apis/module";
 
 const getAllBookmark = async () => {
-  return await axios.get(`/bookmark`, {
-    baseURL: process.env.NEXT_PUBLIC_API_URL,
+  return await instance.get(`/bookmark`, {
     headers: {
       "content-Type": `application/json`,
       Authorization: `Bearer ${localStorage.getItem("token")}`,
