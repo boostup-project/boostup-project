@@ -22,7 +22,7 @@ const StudentReview = () => {
   const [commentState, setCommentState] = useRecoilState(reviewCommentState);
 
   console.log(MyReview);
-  const deleteReview = () => {
+  const deleteReview = (reviewId: number) => {
     console.log(MyReview);
     Swal.fire({
       title: "과외 후기를 삭제하시겠습니까?",
@@ -31,7 +31,7 @@ const StudentReview = () => {
       confirmButtonColor: "#3085d6",
     }).then(result => {
       if (result.isConfirmed) {
-        // deleteMyReview(suggestId);
+        deleteMyReview(reviewId);
         return Swal.fire({
           text: "삭제가 완료되었습니다",
           icon: "success",
@@ -89,7 +89,7 @@ const StudentReview = () => {
                   {review.title}
                 </div>
                 <div className="flex desktop:text-base tablet:text-sm text-[12px] font-SCDream3 px-1 py-0.5 ml-1 mt-1">
-                  만족도 {"★ ".repeat(review.score)} {review.reviewId}
+                  만족도 {"★ ".repeat(review.score)}
                 </div>
                 <div className="flex desktop:text-base tablet:text-sm text-[12px] desktop:mt-3 tablet:mt-2 font-SCDream3 px-1 py-0.5 ml-1 mt-1">
                   {review.comment}
@@ -117,7 +117,7 @@ const StudentReview = () => {
                     </button>
                     <button
                       className="text text-negativeMessage m-1 desktop:text-md tablet:text-sm text-[10px] font-SCDream3"
-                      onClick={deleteReview}
+                      onClick={() => deleteReview(review.reviewId)}
                     >
                       삭제하기
                     </button>

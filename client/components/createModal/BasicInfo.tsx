@@ -325,7 +325,13 @@ const BasicInfo = ({ basicInfo, setBasicInfo, toWrite, setStep }: Props) => {
           type="text"
           placeholder="현재 회사 또는 학교를 입력하세요"
           className="w-11/12 h-fit p-2 border border-borderColor outline-pointColor rounded-xl font-SCDream4 text-[11px] text-textColor tablet:text-sm desktop:w-4/6"
-          {...register("company", { required: "필수 정보입니다." })}
+          {...register("company", {
+            required: "필수 정보입니다.",
+            maxLength: {
+              value: 18,
+              message: "재직 회사/학교를 18자 이하로 입력하여 주시길 바랍니다.",
+            },
+          })}
           defaultValue={basicInfo.company as string}
         />
         <p className="w-11/12 text-xs text-negativeMessage mt-1 tablet:text-sm desktop:w-4/6">

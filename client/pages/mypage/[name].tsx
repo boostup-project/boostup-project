@@ -37,7 +37,6 @@ const Mypage = () => {
 
   useEffect(() => {
     setLessonId(myTutorUrl?.data.lessonId);
-    console.log(myTutorUrl?.data.lessonId);
   }, [isSuccess]);
 
   useEffect(() => {

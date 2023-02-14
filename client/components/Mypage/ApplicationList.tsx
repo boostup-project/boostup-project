@@ -20,7 +20,6 @@ const ApplicationList = () => {
     isSuccess: tutorInfoSuccess,
   } = useGetTutorInfo(islessonId, 1);
 
-  console.log(applyInfoData);
   useEffect(() => {
     if (isSuccess) {
       setIsLessonId(myTutorUrl?.data.lessonId);

@@ -52,18 +52,18 @@ const Card = () => {
     useGetBookmarkModi(lessonId);
 
   useEffect(() => {
+    if (lessonId !== 0) {
+      bookmarkRefetch();
+    }
+  }, [lessonId]);
+
+  useEffect(() => {
     cardRefetch();
   }, [toggle]);
 
   useEffect(() => {
     setMainCardInfo(cardData?.data.data);
   }, [cardData]);
-
-  useEffect(() => {
-    if (lessonId !== 0) {
-      bookmarkRefetch();
-    }
-  }, [lessonId]);
 
   const handleLike = (lessonId: any) => {
     if (localStorage.getItem("token")) {
@@ -80,8 +80,7 @@ const Card = () => {
     <QueryClientProvider client={client}>
       <div className="flex flex-row flex-wrap w-full">
         {cards?.slice(offset, offset + limit).map((card: any) => (
-          <Link
-            href={`/lesson/${card.lessonId}`}
+          <div
             key={card.lessonId}
             className="h-fit m-1 desktop:w-[24%] tablet:w-[32%] w-[47%] rounded-lg"
           >
@@ -103,60 +102,62 @@ const Card = () => {
                 </div>
               </div>
               <div>
-                <div className="flex flex-col w-full h-2/3 bg-white rounded-xl">
-                  <div className="flex flex-row whitespace-wrap">
-                    <div className="flex">
-                      {card.languages?.map((el: any, idx: any) => {
+                <Link href={`/lesson/${card.lessonId}`}>
+                  <div className="flex flex-col w-full h-2/3 bg-white rounded-xl">
+                    <div className="flex flex-row whitespace-wrap">
+                      <div className="flex">
+                        {card.languages?.map((el: any, idx: any) => {
+                          return (
+                            <div
+                              key={idx}
+                              className={`flex justify-center bg-${el} items-center px-1 py-0.5 ml-1 mt-1 font-SCDream5 text-white rounded-xl desktop:text-xs tablet:text-[10px] text-[6px]`}
+                            >
+                              {el}
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </div>
+                    <div className="flex justify-start items-start w-full h-fit font-SCDream5 desktop:text-xs tablet:text-[10px] text-[8px] text-textColor ml-2  my-1">
+                      {card.name}
+                    </div>
+                    <div className="flex justify-start items-start w-full h-fit font-SCDream6 desktop:text-base tablet:text-sm text-xs text-textColor ml-1 mb-2 flex-wrap">
+                      {card.title}
+                    </div>
+                    <div className="flex justify-start items-start w-full h-fit font-SCDream5 text-textColor ml-2 mb-2 desktop:text-xs tablet:text-[10px] text-[8px]">
+                      <div className="mr-1 desktop:w-4 tablet:w-3.5 w-3">
+                        <IconRibbon />
+                      </div>
+                      {card.company}
+                    </div>
+                    <div className="flex justify-start items-start w-full h-fit font-SCDream5 desktop:text-xs tablet:text-[11px] text-[8px] text-textColor ml-2  mb-2">
+                      <div className="mr-1 desktop:w-4 tablet:w-3.5 w-3">
+                        <IconPaper />
+                      </div>
+                      {card.career}년
+                    </div>
+                    <div className="flex justify-start items-start w-full h-fit font-SCDream5 desktop:text-xs tablet:text-[10px] text-[8px] text-textColor ml-2 desktop:my-1 mb-1">
+                      <div className="mr-1 desktop:w-3.5 tablet:w-2.5 w-2 ">
+                        <IconPlace />
+                      </div>
+                      {card.address?.map((el: any, idx: any) => {
                         return (
-                          <div
-                            key={idx}
-                            className={`flex justify-center bg-${el} items-center px-1 py-0.5 ml-1 mt-1 font-SCDream5 text-white rounded-xl desktop:text-xs tablet:text-[10px] text-[6px]`}
-                          >
+                          <div className="ml-1" key={idx}>
                             {el}
                           </div>
                         );
                       })}
                     </div>
-                  </div>
-                  <div className="flex justify-start items-start w-full h-fit font-SCDream5 desktop:text-xs tablet:text-[10px] text-[8px] text-textColor ml-2  my-1">
-                    {card.name}
-                  </div>
-                  <div className="flex justify-start items-start w-full h-fit font-SCDream6 desktop:text-base tablet:text-sm text-xs text-textColor ml-1 mb-2 flex-wrap">
-                    {card.title}
-                  </div>
-                  <div className="flex justify-start items-start w-full h-fit font-SCDream5 text-textColor ml-2 mb-2 desktop:text-xs tablet:text-[10px] text-[8px]">
-                    <div className="mr-1 desktop:w-4 tablet:w-3.5 w-3">
-                      <IconRibbon />
-                    </div>
-                    {card.company}
-                  </div>
-                  <div className="flex justify-start items-start w-full h-fit font-SCDream5 desktop:text-xs tablet:text-[11px] text-[8px] text-textColor ml-2  mb-2">
-                    <div className="mr-1 desktop:w-4 tablet:w-3.5 w-3">
-                      <IconPaper />
-                    </div>
-                    {card.career}년
-                  </div>
-                  <div className="flex justify-start items-start w-full h-fit font-SCDream5 desktop:text-xs tablet:text-[10px] text-[8px] text-textColor ml-2 desktop:my-1 mb-1">
-                    <div className="mr-1 desktop:w-3.5 tablet:w-2.5 w-2 ">
-                      <IconPlace />
-                    </div>
-                    {card.address?.map((el: any, idx: any) => {
-                      return (
-                        <div className="ml-1" key={idx}>
-                          {el}
-                        </div>
-                      );
-                    })}
-                  </div>
-                  <div className="flex justify-center items-start w-full h-fit font-SCDream7 desktop:text-base tablet:text-sm text-[12px] text-moneyGrayColor ml-1 mb-2 font-bold">
-                    <div className="ml-1">
-                      ₩ {card.cost.toLocaleString("ko-KR")}원/회
+                    <div className="flex justify-center items-start w-full h-fit font-SCDream7 desktop:text-base tablet:text-sm text-[12px] text-moneyGrayColor ml-1 mb-2 font-bold">
+                      <div className="ml-1">
+                        ₩ {card.cost.toLocaleString("ko-KR")}원/회
+                      </div>
                     </div>
                   </div>
-                </div>
+                </Link>
               </div>
             </div>
-          </Link>
+          </div>
         ))}
       </div>
       <>
