@@ -3,19 +3,25 @@ package com.codueon.boostUp.domain.chat.service;
 import com.codueon.boostUp.domain.chat.dto.PostMessage;
 import com.codueon.boostUp.domain.chat.dto.RedisChat;
 import com.codueon.boostUp.domain.chat.event.vo.AlarmChatListEvent;
+import com.codueon.boostUp.domain.chat.repository.querydsl.ChatRepository;
 import com.codueon.boostUp.domain.chat.repository.redis.RedisChatMessage;
+import com.codueon.boostUp.domain.chat.repository.redis.RedisChatRoom;
 import com.codueon.boostUp.domain.chat.utils.MessageType;
 import com.codueon.boostUp.domain.vo.AuthVO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.data.jpa.repository.Lock;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.LockModeType;
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 public class ChatService {
+    private final RedisChatRoom redisChatRoom;
+    private final ChatRepository chatRepository;
     private final RedisChatMessage redisChatMessage;
     private final ApplicationEventPublisher eventPublisher;
 
@@ -86,11 +92,40 @@ public class ChatService {
     /**
      * 채팅방 메시지 전체 조회 메서드
      *
+     * @param memberId   사용자 식별자
      * @param chatRoomId 채팅방 식별자
      * @return List(RedisChat)
      * @author mozzi327
      */
-    public List<RedisChat> getChatMessages(AuthVO authInfo, Long chatRoomId) {
+    public List<RedisChat> getChatMessages(Long memberId, Long chatRoomId) {
+        isExistsChatRoomKey(chatRoomId, memberId);
+        List<RedisChat> getChat = redisChatMessage.findAll(chatRoomId);
+        if (getChat.size() == 0) return ifNotExistsMessageLookingForRdb(chatRoomId);
+        return getChat;
+    }
+
+    /**
+     * 채팅방 식별 키 존재유무 확인 및 생성 메서드
+     * @param chatRoomId 채팅방 식별자
+     * @param memberId 사용자 식별자
+     * @author mozzi327
+     */
+    private void isExistsChatRoomKey(Long chatRoomId, Long memberId) {
+        if (!redisChatRoom.isExistMemberInChatRoom(chatRoomId, memberId))
+            redisChatRoom.createChatRoom(chatRoomId, memberId);
+    }
+
+    /**
+     * 채팅방 내용이 존재하지 않을 시 RDB에서 메시지를 Redis에 저장하는 메서드 (30개)
+     *
+     * @param chatRoomId 채팅방 식별자
+     * @author mozzi327
+     */
+    @Transactional
+    @Lock(value = LockModeType.PESSIMISTIC_WRITE)
+    private List<RedisChat> ifNotExistsMessageLookingForRdb(Long chatRoomId) {
+        List<RedisChat> redisChats = chatRepository.findTop30ChatByChatRoomId(chatRoomId);
+        redisChats.forEach(redisChat -> redisChatMessage.saveChatMessageFromRdb(redisChat));
         return redisChatMessage.findAll(chatRoomId);
     }
 }
