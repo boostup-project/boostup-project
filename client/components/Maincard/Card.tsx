@@ -31,6 +31,7 @@ const Card = () => {
   const limit = 12;
   const [page, setPage] = useState(1);
   const offset = (page - 1) * limit;
+  const [doLike, setDoLike] = useState(false);
 
   const queryClient = useQueryClient();
   const {
@@ -55,7 +56,7 @@ const Card = () => {
     if (lessonId !== 0) {
       bookmarkRefetch();
     }
-  }, [lessonId]);
+  }, [lessonId, doLike]);
 
   useEffect(() => {
     cardRefetch();
@@ -68,6 +69,7 @@ const Card = () => {
   const handleLike = (lessonId: any) => {
     if (localStorage.getItem("token")) {
       setLessonId(lessonId);
+      setDoLike(prev => !prev);
     } else {
       return Swal.fire({
         text: "로그인 후 원하는 선생님을 찜 해보세요",
