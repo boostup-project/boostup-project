@@ -37,6 +37,8 @@ module.exports = {
         negativeMessage: "#FF000F",
         disabledBtnColor: "#5090F2",
         moneyGrayColor: "#6B6B6B",
+        kakao: "#F9E000",
+        kakaoBorder: "#D2BD01",
       },
     },
     screens: {
