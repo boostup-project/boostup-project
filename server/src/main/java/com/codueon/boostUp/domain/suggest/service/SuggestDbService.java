@@ -7,7 +7,6 @@ import com.codueon.boostUp.domain.suggest.dto.GetTutorSuggest;
 import com.codueon.boostUp.domain.suggest.entity.PaymentInfo;
 import com.codueon.boostUp.domain.suggest.entity.Reason;
 import com.codueon.boostUp.domain.suggest.entity.Suggest;
-import com.codueon.boostUp.domain.suggest.entity.SuggestStatus;
 import com.codueon.boostUp.domain.suggest.repository.PaymentInfoRepository;
 import com.codueon.boostUp.domain.suggest.repository.ReasonRepository;
 import com.codueon.boostUp.domain.suggest.repository.SuggestRepository;
@@ -20,8 +19,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-import static com.codueon.boostUp.domain.suggest.entity.SuggestStatus.*;
-import static com.codueon.boostUp.global.exception.ExceptionCode.*;
+import static com.codueon.boostUp.domain.suggest.entity.SuggestStatus.END_OF_LESSON;
+import static com.codueon.boostUp.domain.suggest.entity.SuggestStatus.REFUND_PAYMENT;
+import static com.codueon.boostUp.global.exception.ExceptionCode.INVALID_ACCESS;
 
 @Service
 @RequiredArgsConstructor
@@ -29,6 +29,8 @@ public class SuggestDbService {
     private final SuggestRepository suggestRepository;
     private final ReasonRepository reasonRepository;
     private final PaymentInfoRepository paymentInfoRepository;
+
+    /*--------------------------------------- DB Create 메서드 --------------------------------------*/
 
     /**
      * 신청 조회 메서드
@@ -39,31 +41,6 @@ public class SuggestDbService {
     public Suggest ifExistsReturnSuggest(Long suggestId) {
         return suggestRepository.findById(suggestId)
                 .orElseThrow(() -> new BusinessLogicException(ExceptionCode.SUGGEST_NOT_FOUND));
-    }
-
-    /**
-     * 중복 신청 방지 메서드     * @param lessonId 과외 식별자
-     * @param memberId 사용자 식별자
-     */
-    public void ifSuggestExistsReturnException(Long lessonId, Long memberId) {
-        if (suggestRepository.findByLessonIdAndMemberId(lessonId, memberId).isPresent())
-            throw new BusinessLogicException(ExceptionCode.SUGGEST_ALREADY_EXIST);
-    }
-
-    /**
-     * 중복 신청 방지 메서드(Status 확인)
-     * @param lessonId 과외 식별자
-     * @param memberId 사용자 식별자
-     */
-    public void ifUnfinishedSuggestExistsReturnException(Long lessonId, Long memberId) {
-        List<Suggest> findSuggest = suggestRepository.findAllByLessonIdAndMemberId(lessonId, memberId);
-        if (!findSuggest.isEmpty()) {
-            for (Suggest suggest : findSuggest) {
-                if (!(suggest.getSuggestStatus().equals(END_OF_LESSON) ||
-                        suggest.getSuggestStatus().equals(REFUND_PAYMENT)))
-                    throw new BusinessLogicException(ExceptionCode.SUGGEST_ALREADY_EXIST);
-            }
-        }
     }
 
     /**
@@ -87,6 +64,22 @@ public class SuggestDbService {
     public Suggest ifNotExistSuggestThrowException(Long lessonId, Long suggestId, Long memberId) {
         return suggestRepository.findByIdAndLessonIdAndMemberId(suggestId, lessonId, memberId)
                 .orElseThrow(() -> new BusinessLogicException(ExceptionCode.SUGGEST_NOT_FOUND));
+    }
+
+    /**
+     * 중복 신청 방지 메서드(Status 확인)
+     * @param lessonId 과외 식별자
+     * @param memberId 사용자 식별자
+     */
+    public void ifUnfinishedSuggestExistsReturnException(Long lessonId, Long memberId) {
+        List<Suggest> findSuggest = suggestRepository.findAllByLessonIdAndMemberId(lessonId, memberId);
+        if (!findSuggest.isEmpty()) {
+            for (Suggest suggest : findSuggest) {
+                if (!(suggest.getSuggestStatus().equals(END_OF_LESSON) ||
+                        suggest.getSuggestStatus().equals(REFUND_PAYMENT)))
+                    throw new BusinessLogicException(ExceptionCode.SUGGEST_ALREADY_EXIST);
+            }
+        }
     }
 
     /**
@@ -116,14 +109,7 @@ public class SuggestDbService {
         paymentInfoRepository.save(paymentInfo);
     }
 
-    /**
-     * 신청 삭제 메서드
-     * @param suggest 신청 정보
-     * @author LeeGoh
-     */
-    public void deleteSuggest(Suggest suggest) {
-        suggestRepository.delete(suggest);
-    }
+    /*--------------------------------------- DB Read 메서드 --------------------------------------*/
 
     /**
      * 결제 페이지 요청 메서드
@@ -181,6 +167,19 @@ public class SuggestDbService {
         return suggestRepository.findAllById(lessonId);
     }
 
+    /*--------------------------------------- DB Delete 메서드 --------------------------------------*/
+
+    /**
+     * 신청 삭제 메서드
+     * @param suggest 신청 정보
+     * @author LeeGoh
+     */
+    public void deleteSuggest(Suggest suggest) {
+        suggestRepository.delete(suggest);
+    }
+
+    /*--------------------------------------- 출석부 메서드 --------------------------------------*/
+
     /**
      * 출석 인정(출석 횟수 증가) 메서드
      * @param paymentInfo 결제 정보
@@ -207,50 +206,5 @@ public class SuggestDbService {
             throw new BusinessLogicException(INVALID_ACCESS);
         }
         return paymentInfoRepository.save(paymentInfo);
-    }
-
-    /**
-     * 예외처리 - Suggest memberId, status 비교
-     * @param suggest 신청 정보
-     * @param memberId 회원 식별자
-     * @author LeeGoh
-     */
-    public void suggestGetMemberIdAndStatusIsDuringLesson(Suggest suggest, Long memberId) {
-        if (!suggest.getMemberId().equals(memberId))
-            throw new BusinessLogicException(INVALID_ACCESS);
-
-        if (!suggest.getSuggestStatus().equals(DURING_LESSON))
-            throw new BusinessLogicException(NOT_DURING_LESSON);
-    }
-
-    /**
-     * 예외처리 - Lesson memberId, Suggest status 비교
-     * @param status 신청 상태
-     * @param tutorMemberId 과외 등록한 사용자 식별자
-     * @param memberId 회원 식별자
-     * @author LeeGoh
-     */
-    public void lessonGetMemberIdAndStatusIsDuringLesson(SuggestStatus status, Long tutorMemberId, Long memberId) {
-        if (!tutorMemberId.equals(memberId))
-            throw new BusinessLogicException(INVALID_ACCESS);
-
-        if (!status.equals(DURING_LESSON)) {
-            throw new BusinessLogicException(NOT_DURING_LESSON);
-        }
-    }
-
-    /**
-     * 예외처리 - Suggest memberId, Suggest status 두 가지 비교
-     * @param suggest 신청 정보
-     * @param memberId 회원 식별자
-     * @author LeeGoh
-     */
-    public void suggestGetMemberIdAndStatusIsNotInProgress(Suggest suggest, Long memberId) {
-        if (!suggest.getMemberId().equals(memberId))
-            throw new BusinessLogicException(INVALID_ACCESS);
-
-        if (suggest.getSuggestStatus().equals(ACCEPT_IN_PROGRESS) ||
-                suggest.getSuggestStatus().equals(PAY_IN_PROGRESS))
-            throw new BusinessLogicException(NOT_SUGGEST_OR_NOT_ACCEPT);
     }
 }

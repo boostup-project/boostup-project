@@ -3,7 +3,6 @@ package com.codueon.boostUp.domain.suggest.contoller;
 import com.codueon.boostUp.domain.lesson.entity.Lesson;
 import com.codueon.boostUp.domain.lesson.entity.ProfileImage;
 import com.codueon.boostUp.domain.member.entity.Member;
-import com.codueon.boostUp.domain.suggest.entity.PaymentInfo;
 import com.codueon.boostUp.domain.suggest.entity.Suggest;
 import com.codueon.boostUp.domain.suggest.service.SuggestDbService;
 import com.codueon.boostUp.domain.suggest.service.SuggestService;
@@ -42,7 +41,6 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWit
 @MockBean(JpaMetamodelMappingContext.class)
 @WebMvcTest(controllers = {SuggestController.class})
 class SuggestControllerTest {
-
     @Autowired
     protected Gson gson;
 
@@ -64,7 +62,6 @@ class SuggestControllerTest {
     protected Suggest suggest;
     protected Lesson lesson;
     protected ProfileImage profileImage;
-    protected PaymentInfo paymentInfo;
 
     @MockBean
     protected RedisUtils redisUtils;
@@ -85,10 +82,6 @@ class SuggestControllerTest {
         suggest.setStatus(DURING_LESSON);
         lesson = data.getLesson1();
         profileImage = data.getProfileImage();
-        paymentInfo = PaymentInfo.builder()
-                .quantity(5)
-                .build();
-        paymentInfo.setQuantityCount(3);
 
         accessToken = jwtTokenUtils.generateAccessToken(member);
         refreshToken = jwtTokenUtils.generateRefreshToken(member);
@@ -96,6 +89,7 @@ class SuggestControllerTest {
         List<GrantedAuthority> authorities = member.getRoles().stream()
                 .map(role -> (GrantedAuthority) () -> "ROLE_" + role)
                 .collect(Collectors.toList());
+
         authentication = JwtAuthenticationToken.builder()
                 .credential(null)
                 .id(member.getId())
@@ -106,55 +100,6 @@ class SuggestControllerTest {
                 .isExpired(false)
                 .build();
         SecurityContextHolder.getContext().setAuthentication(authentication);
-    }
-
-    protected List<FieldDescriptor> getPaymentInfoResponse() {
-        return List.of(
-                fieldWithPath("quantity").type(JsonFieldType.NUMBER).description("과외 횟수"),
-                fieldWithPath("title").type(JsonFieldType.STRING).description("과외 타이틀"),
-                fieldWithPath("name").type(JsonFieldType.STRING).description("강사 이름"),
-                fieldWithPath("company").type(JsonFieldType.STRING).description("강사 경력"),
-                fieldWithPath("profileImage").type(JsonFieldType.STRING).description("섬네일 이미지"),
-                fieldWithPath("cost").type(JsonFieldType.NUMBER).description("회당 가격"),
-                fieldWithPath("totalCost").type(JsonFieldType.NUMBER).description("총 가격"),
-
-                fieldWithPath("languages").type(JsonFieldType.ARRAY).description("과외 가능 언어 리스트"),
-                fieldWithPath("address").type(JsonFieldType.ARRAY).description("과외 가능 지역 리스트")
-        );
-    }
-
-    protected List<FieldDescriptor> getPaymentReceiptResponse() {
-        return List.of(
-                fieldWithPath("quantity").type(JsonFieldType.NUMBER).description("과외 횟수"),
-                fieldWithPath("title").type(JsonFieldType.STRING).description("과외 타이틀"),
-                fieldWithPath("name").type(JsonFieldType.STRING).description("강사 이름"),
-                fieldWithPath("company").type(JsonFieldType.STRING).description("강사 경력"),
-                fieldWithPath("profileImage").type(JsonFieldType.STRING).description("섬네일 이미지"),
-                fieldWithPath("cost").type(JsonFieldType.NUMBER).description("회당 가격"),
-                fieldWithPath("totalCost").type(JsonFieldType.NUMBER).description("총 가격"),
-                fieldWithPath("paymentMethod").type(JsonFieldType.STRING).description("결제 방식"),
-
-                fieldWithPath("languages").type(JsonFieldType.ARRAY).description("과외 가능 언어 리스트"),
-                fieldWithPath("address").type(JsonFieldType.ARRAY).description("과외 가능 지역 리스트")
-        );
-    }
-
-    protected List<FieldDescriptor> getRefundPaymentInfoResponse() {
-        return List.of(
-                fieldWithPath("quantity").type(JsonFieldType.NUMBER).description("과외 횟수"),
-                fieldWithPath("quantityCount").type(JsonFieldType.NUMBER).description("출석 인정 횟수"),
-                fieldWithPath("title").type(JsonFieldType.STRING).description("과외 타이틀"),
-                fieldWithPath("name").type(JsonFieldType.STRING).description("강사 이름"),
-                fieldWithPath("company").type(JsonFieldType.STRING).description("강사 경력"),
-                fieldWithPath("profileImage").type(JsonFieldType.STRING).description("섬네일 이미지"),
-                fieldWithPath("cost").type(JsonFieldType.NUMBER).description("회당 가격"),
-                fieldWithPath("totalCost").type(JsonFieldType.NUMBER).description("총 가격"),
-                fieldWithPath("cancelCost").type(JsonFieldType.NUMBER).description("취소 가격"),
-                fieldWithPath("paymentMethod").type(JsonFieldType.STRING).description("결제 방법"),
-
-                fieldWithPath("languages").type(JsonFieldType.ARRAY).description("과외 가능 언어 리스트"),
-                fieldWithPath("address").type(JsonFieldType.ARRAY).description("과외 가능 지역 리스트")
-        );
     }
 
     protected List<FieldDescriptor> getTutorSuggestResponse() {
@@ -202,13 +147,6 @@ class SuggestControllerTest {
                 fieldWithPath("pageInfo.size").type(JsonFieldType.NUMBER).description("사이즈"),
                 fieldWithPath("pageInfo.totalElements").type(JsonFieldType.NUMBER).description("총 갯수"),
                 fieldWithPath("pageInfo.totalPages").type(JsonFieldType.NUMBER).description("총 페이지 수")
-        );
-    }
-
-    protected List<FieldDescriptor> messageResponse() {
-        return List.of(
-                fieldWithPath("data").type(JsonFieldType.STRING).description("데이터"),
-                fieldWithPath("message").type(JsonFieldType.STRING).description("메세지")
         );
     }
 }

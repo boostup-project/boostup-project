@@ -1,6 +1,5 @@
-package com.codueon.boostUp.domain.suggest.contoller;
+package com.codueon.boostUp.domain.suggest.kakao;
 
-import com.codueon.boostUp.domain.suggest.kakao.*;
 import com.codueon.boostUp.domain.suggest.response.Message;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -23,7 +22,7 @@ import static org.springframework.restdocs.request.RequestDocumentation.paramete
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-public class KakaoPaymentTest extends SuggestControllerTest{
+public class KakaoPaymentTest extends KakaoPayControllerTest {
 
     @Test
     @DisplayName("GET 신청 프로세스 4-1 Kakao 결제 URL 요청")
@@ -37,7 +36,7 @@ public class KakaoPaymentTest extends SuggestControllerTest{
                 .message(KAKAO_PAY_URI_MSG)
                 .build();
 
-        given(suggestService.getKaKaoPayUrl(Mockito.anyLong())).willReturn(message);
+        given(kakaoPayService.getKaKaoPayUrl(Mockito.anyLong())).willReturn(message);
 
         ResultActions actions =
                 mockMvc.perform(
@@ -69,37 +68,12 @@ public class KakaoPaymentTest extends SuggestControllerTest{
     void successPayment() throws Exception {
         String pgToken = "pgToken";
 
-        Date date = new Date(2023, 01, 05, 05, 00);
-        KakaoCard cardInfo = KakaoCard.builder().build();
-        Amount amount = Amount.builder().build();
-
-        KakaoPaySuccessInfo kakaoPaySuccessInfo = KakaoPaySuccessInfo.builder()
-                .aid("aid")
-                .tid("tid")
-                .cid("cid")
-                .sid("sid")
-                .partnerOrderId("partnerOrderId")
-                .partnerUserId("partnerUserId")
-                .paymentMethodType("paymentMethodType")
-                .amount(amount)
-                .kakaoCard(cardInfo)
-                .itemName("itemName")
-                .itemCode("itemCode")
-                .payload("payload")
-                .quantity(3)
-                .taxFreeAmount(5)
-                .vatAmount(3)
-                .createdAt(date)
-                .approvedAt(date)
-                .orderStatus("orderStatus")
-                .build();
-
         Message<?> message = Message.builder()
-                .data(kakaoPaySuccessInfo)
+                .data(getKakaoPaySuccessInfo())
                 .message(INFO_URI_MSG)
                 .build();
 
-        given(suggestService.getSuccessKakaoPaymentInfo(Mockito.anyLong(), Mockito.anyString()))
+        given(kakaoPayService.getSuccessKakaoPaymentInfo(Mockito.anyLong(), Mockito.anyString()))
                 .willReturn(message);
 
         ResultActions actions =
@@ -155,91 +129,30 @@ public class KakaoPaymentTest extends SuggestControllerTest{
                 ));
     }
 
-    @Test
-    @DisplayName("GET 신청 프로세스 9-1 Kakao 환불")
-    void refundPaymentKakaoOrToss() throws Exception {
-        Integer count = 2;
-        Integer cost = 5000;
+    private KakaoPaySuccessInfo getKakaoPaySuccessInfo() {
+        Date date = new Date(2023, 01, 05, 05, 00);
+        KakaoCard cardInfo = KakaoCard.builder().build();
+        Amount amount = Amount.builder().build();
 
-        RequestForKakaoPayCancelInfo param = RequestForKakaoPayCancelInfo.builder()
+        return KakaoPaySuccessInfo.builder()
+                .aid("aid")
                 .tid("tid")
                 .cid("cid")
-                .cancel_tax_free_amount(1000)
-                .cancel_amount(count * cost)
-                .build();
-
-        Amount amount = Amount.builder()
-                .total(suggest.getTotalCost())
-                .taxFree(param.getCancel_tax_free_amount())
-                .vat(1000)
-                .discount(0)
-                .point(0)
-                .build();
-
-        ApprovedCancelAmount approvedCancelAmount = ApprovedCancelAmount.builder()
-                .total(param.getCancel_amount())
-                .vat(1000)
-                .build();
-
-        CanceledAmount canceledAmount = CanceledAmount.builder()
-                .total(param.getCancel_amount())
-                .vat(1000)
-                .build();
-
-        CancelAvailableAmount cancelAvailableAmount = CancelAvailableAmount.builder()
-                .total(param.getCancel_amount())
-                .build();
-
-        Date date = new Date(2023, 01, 19, 05, 25);
-
-        KakaoPayCancelInfo cancelInfo = KakaoPayCancelInfo.builder()
-                .aid("aid")
-                .tid(param.getTid())
-                .cid(param.getCid())
-                .status("status")
+                .sid("sid")
                 .partnerOrderId("partnerOrderId")
                 .partnerUserId("partnerUserId")
                 .paymentMethodType("paymentMethodType")
                 .amount(amount)
-                .approvedCancelAmount(approvedCancelAmount)
-                .canceledAmount(canceledAmount)
-                .cancelAvailableAmount(cancelAvailableAmount)
+                .kakaoCard(cardInfo)
                 .itemName("itemName")
                 .itemCode("itemCode")
-                .quantity(paymentInfo.getQuantity())
+                .payload("payload")
+                .quantity(3)
+                .taxFreeAmount(5)
+                .vatAmount(3)
                 .createdAt(date)
                 .approvedAt(date)
-                .canceledAt(date)
                 .orderStatus("orderStatus")
                 .build();
-
-        Message message = Message.builder()
-                .data(cancelInfo)
-                .message(CANCELED_PAY_MESSAGE)
-                .build();
-
-        given(suggestService.refundPaymentKakaoOrToss(Mockito.anyLong(), Mockito.anyLong()))
-                .willReturn(message);
-
-        ResultActions actions =
-                mockMvc.perform(
-                        get("/suggest/{suggest-id}/refund", suggest.getId())
-                                .header(AUTHORIZATION, BEARER + accessToken)
-                                .header(REFRESH_TOKEN, refreshToken)
-                );
-
-        actions
-                .andExpect(status().isOk())
-                .andDo(document("신청9.1-카카오결제환불",
-                        getRequestPreProcessor(),
-                        pathParameters(
-                                parameterWithName("suggest-id").description("신청 식별자")
-                        ),
-                        requestHeaders(
-                                headerWithName(AUTHORIZATION).description("엑세스 토큰"),
-                                headerWithName(REFRESH_TOKEN).description("리프레시 토큰")
-                        )
-                ));
     }
-
 }

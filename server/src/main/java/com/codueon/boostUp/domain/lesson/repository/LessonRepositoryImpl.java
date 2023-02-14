@@ -4,9 +4,7 @@ import com.codueon.boostUp.domain.lesson.dto.get.*;
 import com.codueon.boostUp.domain.lesson.dto.post.PostSearchLesson;
 import com.codueon.boostUp.domain.lesson.entity.AddressInfo;
 import com.codueon.boostUp.domain.lesson.entity.LanguageInfo;
-import com.codueon.boostUp.domain.lesson.entity.QLesson;
 import com.querydsl.core.BooleanBuilder;
-import com.querydsl.core.types.Expression;
 import com.querydsl.core.types.dsl.CaseBuilder;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.core.types.dsl.NumberPath;
@@ -343,6 +341,22 @@ public class LessonRepositoryImpl implements CustomLessonRepository {
     public Long getMemberIdByLessonId(Long lessonId) {
         return queryFactory
                 .select(member.id)
+                .from(member)
+                .leftJoin(lesson).on(member.id.eq(lesson.memberId))
+                .where(lesson.id.eq(lessonId))
+                .fetchOne();
+    }
+
+    /**
+     * 과외 등록한 사용자 닉네임 조회 쿼라
+     *
+     * @param lessonId 과외 식별자
+     * @return String
+     * @author LeeGoh
+     */
+    public String getNameByLessonId(Long lessonId) {
+        return queryFactory
+                .select(member.name)
                 .from(member)
                 .leftJoin(lesson).on(member.id.eq(lesson.memberId))
                 .where(lesson.id.eq(lessonId))

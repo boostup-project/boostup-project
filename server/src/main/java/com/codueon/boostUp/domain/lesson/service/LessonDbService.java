@@ -216,6 +216,17 @@ public class LessonDbService {
     }
 
     /**
+     * 과외 등록한 사용자 닉네임 조회 메서드
+     *
+     * @param lessonId 과외 식별자
+     * @return String
+     * @author LeeGoh
+     */
+    public String getNameByLessonId(Long lessonId) {
+        return lessonRepository.getNameByLessonId(lessonId);
+    }
+
+    /**
      * 알람용 LessonInfo 조회 메서드
      *
      * @param lessonId 과외 식별자
