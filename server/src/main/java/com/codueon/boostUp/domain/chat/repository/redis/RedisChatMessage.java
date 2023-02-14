@@ -25,6 +25,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class RedisChatMessage {
     private final ObjectMapper objectMapper;
+    private final String KEY_FOR_SAVED_TO_RDB = "NewChat";
     // SortedSet 자료구조 사용, <chatRoomId, ChatMessage>
     private ZSetOperations<String, Object> operations;
     private final RedisTemplate<String, Object> redisTemplate;
@@ -43,14 +44,16 @@ public class RedisChatMessage {
      * Redis 최초 입장 시 메시지 생성 메서드
      *
      * @param chatRoomId      채팅방 식별자
-     * @param senderMessage   입장 문구(Sender)
-     * @param receiverMessage 입장 문구(Receiver)
+     * @param enterMessage    입장 문구
+     * @param count           카운트
      * @author mozzi327
      */
     public void initialMessage(Long chatRoomId, RedisChat enterMessage, int count) {
         String key = getKey(chatRoomId);
         if (operations.zCard(key) != 0) return;
         operations.add(key, enterMessage, count);
+        long idx = operations.zCard(KEY_FOR_SAVED_TO_RDB);
+        operations.add(KEY_FOR_SAVED_TO_RDB, enterMessage,idx + 1);
     }
 
     /**
@@ -60,6 +63,20 @@ public class RedisChatMessage {
      * @author mozzi327
      */
     public void saveChatMessage(RedisChat redisChat) {
+        String key = getKey(redisChat.getChatRoomId());
+        Long size = operations.zCard(key);
+        operations.add(key, redisChat, size);
+        long idx = operations.zCard(KEY_FOR_SAVED_TO_RDB);
+        operations.add(KEY_FOR_SAVED_TO_RDB, redisChat,idx + 1);
+    }
+
+    /**
+     * Redis 채팅 메시지 저장 메서드 (Rdb용)
+     *
+     * @param redisChat 메시지 정보
+     * @author mozzi327
+     */
+    public void saveChatMessageFromRdb(RedisChat redisChat) {
         String key = getKey(redisChat.getChatRoomId());
         Long size = operations.zCard(key);
         operations.add(key, redisChat, size);
@@ -136,5 +153,14 @@ public class RedisChatMessage {
     private List<RedisChat> objectToList(Object results) {
         if (results == null) return null;
         return Arrays.asList(objectMapper.convertValue(results, RedisChat[].class));
+    }
+
+    public List<RedisChat> findAllChat() {
+        Object getAllMessage = operations.range(KEY_FOR_SAVED_TO_RDB, 0, -1);
+        return Arrays.asList(objectMapper.convertValue(getAllMessage, RedisChat[].class));
+    }
+
+    public void deleteAllNewChat() {
+        redisTemplate.delete(KEY_FOR_SAVED_TO_RDB);
     }
 }

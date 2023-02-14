@@ -21,22 +21,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/chat/room")
 public class ChatRoomController {
-    private final ChatService chatService;
     private final ChatRoomService chatRoomService;
-
-    /**
-     * 채팅방 내 메시지 전체 조회 컨트롤러 메서드
-     * @param chatRoomId 채팅방 식별자
-     * @param authentication 인증 정보
-     * @return List(RedisChat)
-     * @author mozzi327
-     */
-    @GetMapping("/{room-id}/messages")
-    public ResponseEntity getMessageInChatRoom(@PathVariable("room-id") Long chatRoomId,
-                                               Authentication authentication) {
-        List<RedisChat> response = chatService.getChatMessages(AuthVO.of(authentication), chatRoomId);
-        return ResponseEntity.ok().body(response);
-    }
 
     /**
      * 채팅방 생성 컨트롤러 메서드
