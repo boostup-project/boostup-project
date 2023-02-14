@@ -3,6 +3,8 @@ import { useForm } from "react-hook-form";
 import SmallBtn from "../reuse/btn/SmallBtn";
 import { useRecoilState } from "recoil";
 import { powerEditReviewModal, reviewCommentState } from "atoms/main/mainAtom";
+import { reviewIdState } from "atoms/mypage/myPageAtom";
+import usePatchReview from "hooks/mypage/usePatchReview";
 
 interface Review {
   comment: string;
@@ -12,6 +14,8 @@ interface Review {
 const ReviewEditModal = () => {
   const [powerModal, setPowerModal] = useRecoilState(powerEditReviewModal);
   const [reviewState, setReviewState] = useRecoilState(reviewCommentState);
+  const [reviewIdNum, setReviewIdNum] = useRecoilState(reviewIdState);
+  const { mutate } = usePatchReview();
 
   const {
     control,
@@ -28,6 +32,12 @@ const ReviewEditModal = () => {
     setPowerModal(false);
   };
 
+  const onSubmit = (data: any) => {
+    let score = Number(data.score);
+    let comment = data.comment;
+    mutate({ reviewIdNum, score, comment });
+  };
+
   return (
     <>
       <div
@@ -37,7 +47,7 @@ const ReviewEditModal = () => {
         <CreateModalContainer>
           <form
             className="flex flex-col items-center w-full text-sm z-20"
-            onSubmit={handleSubmit(() => {})}
+            onSubmit={handleSubmit(onSubmit)}
           >
             <div className="flex w-11/12 desktop:w-4/6 h-fit font-SCDream7 text-lg text-textColor mt-4">
               리뷰작성
