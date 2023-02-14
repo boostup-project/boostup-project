@@ -5,4 +5,9 @@ const isMemberEdited = atom({
   default: false,
 });
 
-export { isMemberEdited };
+const reviewIdState = atom<number>({
+  key: "reviewIdState",
+  default: 0,
+});
+
+export { isMemberEdited, reviewIdState };

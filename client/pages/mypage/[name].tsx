@@ -9,14 +9,16 @@ import StudentTab from "components/Mypage/StudentTab";
 import useGetTutorInfo from "hooks/mypage/useGetTutorInfo";
 import useGetMyTutor from "hooks/mypage/useGetMyTutor";
 import { useSetRecoilState } from "recoil";
-import { chatActive } from "atoms/chat/chatAtom";
+import { chatActive, roomIdState } from "atoms/chat/chatAtom";
 const Mypage = () => {
   const router = useRouter();
 
   const setActive = useSetRecoilState(chatActive);
+  const setRoomId = useSetRecoilState(roomIdState);
 
   useEffect(() => {
     setActive(false);
+    setRoomId(0);
   }, []);
 
   const { data: myTutorUrl, isSuccess } = useGetMyTutor();

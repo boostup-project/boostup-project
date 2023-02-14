@@ -12,6 +12,7 @@ import Swal from "sweetalert2";
 import ReviewEditModal from "./ReviewEditModal";
 import { useRecoilState } from "recoil";
 import { powerEditReviewModal, reviewCommentState } from "atoms/main/mainAtom";
+import { reviewIdState } from "atoms/mypage/myPageAtom";
 import { useRouter } from "next/router";
 
 const StudentReview = () => {
@@ -20,10 +21,9 @@ const StudentReview = () => {
 
   const [powerModal, setPowerModal] = useRecoilState(powerEditReviewModal);
   const [commentState, setCommentState] = useRecoilState(reviewCommentState);
+  const [reviewIdNum, setReviewIdNum] = useRecoilState(reviewIdState);
 
-  console.log(MyReview);
   const deleteReview = (reviewId: number) => {
-    console.log(MyReview);
     Swal.fire({
       title: "과외 후기를 삭제하시겠습니까?",
       icon: "question",
@@ -41,9 +41,10 @@ const StudentReview = () => {
     });
   };
 
-  const handleClickEdit = (comment: string) => {
+  const handleClickEdit = (comment: string, reviewId: number) => {
     setPowerModal(true);
     setCommentState(comment);
+    setReviewIdNum(reviewId);
   };
   const router = useRouter();
   const toClass = (lessonId: number) => {
@@ -111,7 +112,9 @@ const StudentReview = () => {
                   <div className="flex mt-1">
                     <button
                       className="text text-pointColor m-1 desktop:text-md tablet:text-sm text-[10px] font-SCDream3"
-                      onClick={() => handleClickEdit(review.comment)}
+                      onClick={() =>
+                        handleClickEdit(review.comment, review.reviewId)
+                      }
                     >
                       수정하기
                     </button>
