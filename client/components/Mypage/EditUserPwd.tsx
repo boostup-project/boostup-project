@@ -139,7 +139,7 @@ const EditUserPwd = ({ editPWd }: Props) => {
                 </p>
               </div>
             )}
-            <div className="mt-7 flex justify-center w-full tablet:w-full items-center w-full h-fit">
+            <div className="mt-7 flex justify-center w-full tablet:w-full items-center h-fit">
               <SmallBtn css="mr-4" type="button" onClick={editPWd}>
                 취 소
               </SmallBtn>
