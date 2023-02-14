@@ -31,59 +31,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class SuggestGetTest extends SuggestControllerTest{
 
     @Test
-    @DisplayName("GET 신청 프로세스 3 결제 페이지 조회")
-    void getPaymentInfo() throws Exception {
-        Integer quantity = 5;
-        Integer totalCost = 250000;
-        String name = "김선생";
-
-        lesson.addProfileImage(profileImage);
-
-        GetPaymentInfo getPaymentInfo =
-                new GetPaymentInfo(lesson, name, totalCost, quantity);
-
-        given(suggestDbService.getPaymentInfoOnMyPage(Mockito.anyLong(), Mockito.anyLong()))
-                .willReturn(getPaymentInfo);
-
-        ResultActions actions =
-                mockMvc.perform(
-                        get("/suggest/{suggest-id}/payment/info", suggest.getLessonId())
-                                .header(AUTHORIZATION, BEARER + accessToken)
-                                .header(REFRESH_TOKEN, refreshToken)
-                );
-
-        actions
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.quantity").value(quantity))
-                .andExpect(jsonPath("$.title").value(getPaymentInfo.getTitle()))
-                .andExpect(jsonPath("$.name").value(getPaymentInfo.getName()))
-                .andExpect(jsonPath("$.company").value(getPaymentInfo.getCompany()))
-                .andExpect(jsonPath("$.profileImage").value(getPaymentInfo.getProfileImage()))
-                .andExpect(jsonPath("$.cost").value(getPaymentInfo.getCost()))
-                .andExpect(jsonPath("$.totalCost").value(getPaymentInfo.getTotalCost()))
-                .andExpect(jsonPath("$.languages[0]").value("Javascript"))
-                .andExpect(jsonPath("$.languages[1]").value("Python"))
-                .andExpect(jsonPath("$.languages[2]").value("Go"))
-                .andExpect(jsonPath("$.address[0]").value("강남구"))
-                .andExpect(jsonPath("$.address[1]").value("강동구"))
-                .andExpect(jsonPath("$.address[2]").value("강북구"))
-                .andDo(document("신청3-결제페이지",
-                        getRequestPreProcessor(),
-                        getResponsePreProcessor(),
-                        pathParameters(
-                                parameterWithName("suggest-id").description("신청 식별자")
-                        ),
-                        requestHeaders(
-                                headerWithName(AUTHORIZATION).description("엑세스 토큰"),
-                                headerWithName(REFRESH_TOKEN).description("리프레시 토큰")
-                        ),
-                        responseFields(
-                                getPaymentInfoResponse()
-                        )
-                ));
-    }
-
-    @Test
     @DisplayName("GET 신청 프로세스 8 과외 종료")
     void endOfLesson() throws Exception {
         doNothing().when(suggestService).setSuggestStatusAndEndTime(Mockito.anyLong(), Mockito.anyLong());
@@ -109,222 +56,7 @@ public class SuggestGetTest extends SuggestControllerTest{
                 ));
     }
 
-    @Test
-    @DisplayName("GET 환불 영수증 조회")
-    void getRefundPaymentInfo() throws Exception {
-        String name = "김선생";
 
-        GetRefundPayment response = GetRefundPayment.builder()
-                .suggest(suggest)
-                .name(name)
-                .lesson(lesson)
-                .paymentInfo(paymentInfo)
-                .build();
-
-        given(suggestService.getRefundPaymentInfo(Mockito.anyLong(), Mockito.anyLong()))
-                .willReturn(response);
-
-        ResultActions actions =
-                mockMvc.perform(
-                        get("/suggest/{suggest-id}/refund/info", suggest.getId())
-                                .header(AUTHORIZATION, BEARER + accessToken)
-                                .header(REFRESH_TOKEN, refreshToken)
-                );
-
-        actions
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.quantity").value(response.getQuantity()))
-                .andExpect(jsonPath("$.quantityCount").value(response.getQuantityCount()))
-                .andExpect(jsonPath("$.title").value(response.getTitle()))
-                .andExpect(jsonPath("$.name").value(response.getName()))
-                .andExpect(jsonPath("$.company").value(response.getCompany()))
-                .andExpect(jsonPath("$.profileImage").value(response.getProfileImage()))
-                .andExpect(jsonPath("$.cost").value(response.getCost()))
-                .andExpect(jsonPath("$.totalCost").value(response.getTotalCost()))
-                .andExpect(jsonPath("$.languages[0]").value("Javascript"))
-                .andExpect(jsonPath("$.languages[1]").value("Python"))
-                .andExpect(jsonPath("$.languages[2]").value("Go"))
-                .andExpect(jsonPath("$.address[0]").value("강남구"))
-                .andExpect(jsonPath("$.address[1]").value("강동구"))
-                .andExpect(jsonPath("$.address[2]").value("강북구"))
-                .andDo(document("환불영수증조회",
-                        getRequestPreProcessor(),
-                        getResponsePreProcessor(),
-                        pathParameters(
-                                parameterWithName("suggest-id").description("신청 식별자")
-                        ),
-                        requestHeaders(
-                                headerWithName(AUTHORIZATION).description("엑세스 토큰"),
-                                headerWithName(REFRESH_TOKEN).description("리프레시 토큰")
-                        ),
-                        responseFields(
-                                getRefundPaymentInfoResponse()
-                        )
-                ));
-
-    }
-
-    @Test
-    @DisplayName("GET 출석부 1 출석부 조회")
-    void getLessonAttendance() throws Exception {
-        GetLessonAttendance response = GetLessonAttendance.builder()
-                .quantity(5)
-                .quantityCount(1)
-                .progress(20)
-                .build();
-
-        given(suggestService.getLessonAttendance(Mockito.anyLong(), Mockito.anyLong()))
-                .willReturn(response);
-
-        ResultActions actions =
-                mockMvc.perform(
-                        get("/suggest/{suggest-id}/attendance", suggest.getId())
-                                .header(AUTHORIZATION, BEARER + accessToken)
-                                .header(REFRESH_TOKEN, refreshToken)
-                );
-
-        actions
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.quantity").value(response.getQuantity()))
-                .andExpect(jsonPath("$.quantityCount").value(response.getQuantityCount()))
-                .andExpect(jsonPath("$.progress").value(response.getProgress()))
-                .andDo(document("출석부1-출석조회",
-                        getRequestPreProcessor(),
-                        getResponsePreProcessor(),
-                        pathParameters(
-                                parameterWithName("suggest-id").description("신청 식별자")
-                        ),
-                        requestHeaders(
-                                headerWithName(AUTHORIZATION).description("엑세스 토큰"),
-                                headerWithName(REFRESH_TOKEN).description("리프레시 토큰")
-                        ),
-                        responseFields(
-                                List.of(
-                                        fieldWithPath("quantity").type(JsonFieldType.NUMBER).description("과외 횟수"),
-                                        fieldWithPath("quantityCount").type(JsonFieldType.NUMBER).description("출석 인정 횟수"),
-                                        fieldWithPath("progress").type(JsonFieldType.NUMBER).description("과외 진행률")
-                                )
-                        )
-                ));
-    }
-
-    @Test
-    @DisplayName("GET 출석부 2 출석 인정")
-    void lessonAttendanceCheck() throws Exception {
-        Integer quantityCount = 5;
-
-        given(suggestService.teacherChecksAttendance(Mockito.anyLong(), Mockito.anyLong()))
-                .willReturn(quantityCount);
-
-        ResultActions actions =
-                mockMvc.perform(
-                        get("/suggest/{suggest-id}/attendance/check", suggest.getId())
-                                .header(AUTHORIZATION, BEARER + accessToken)
-                                .header(REFRESH_TOKEN, refreshToken)
-                );
-
-        actions
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.quantityCount").value(quantityCount))
-                .andDo(document("출석부2-출석인정",
-                        getRequestPreProcessor(),
-                        pathParameters(
-                                parameterWithName("suggest-id").description("신청 식별자")
-                        ),
-                        requestHeaders(
-                                headerWithName(AUTHORIZATION).description("엑세스 토큰"),
-                                headerWithName(REFRESH_TOKEN).description("리프레시 토큰")
-                        ),
-                        responseFields(
-                                fieldWithPath("quantityCount").type(JsonFieldType.NUMBER).description("출석 인정 횟수")
-                        )
-                ));
-    }
-
-    @Test
-    @DisplayName("GET 출석부 3 출석 인정 취소")
-    void lessonAttendanceCancel() throws Exception {
-        Integer quantityCount = 5;
-
-        given(suggestService.teacherCancelAttendance(Mockito.anyLong(), Mockito.anyLong()))
-                .willReturn(quantityCount);
-
-        ResultActions actions =
-                mockMvc.perform(
-                        get("/suggest/{suggest-id}/attendance/cancel", suggest.getId())
-                                .header(AUTHORIZATION, BEARER + accessToken)
-                                .header(REFRESH_TOKEN, refreshToken)
-                );
-
-        actions
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.quantityCount").value(quantityCount))
-                .andDo(document("출석부3-출석인정취소",
-                        getRequestPreProcessor(),
-                        pathParameters(
-                                parameterWithName("suggest-id").description("신청 식별자")
-                        ),
-                        requestHeaders(
-                                headerWithName(AUTHORIZATION).description("엑세스 토큰"),
-                                headerWithName(REFRESH_TOKEN).description("리프레시 토큰")
-                        ),
-                        responseFields(
-                                fieldWithPath("quantityCount").type(JsonFieldType.NUMBER).description("출석 인정 횟수")
-                        )
-                ));
-    }
-
-    @Test
-    @DisplayName("GET 결제 영수증 조회")
-    void getPaymentReceipt() throws Exception {
-        Integer totalCost = 50000;
-        Integer quantity = 5;
-        String paymentMethod = "카카오페이";
-        String name = "김선생";
-
-        GetPaymentReceipt getPaymentInfo = new GetPaymentReceipt(lesson, name, totalCost, quantity, paymentMethod);
-
-        given(suggestDbService.getPaymentReceiptOnMyPage(Mockito.anyLong(), Mockito.anyLong()))
-                .willReturn(getPaymentInfo);
-
-        ResultActions actions =
-                mockMvc.perform(
-                        get("/suggest/{suggest-id}/receipt", suggest.getId())
-                                .header(AUTHORIZATION, BEARER + accessToken)
-                                .header(REFRESH_TOKEN, refreshToken)
-                );
-
-        actions
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.quantity").value(quantity))
-                .andExpect(jsonPath("$.paymentMethod").value(paymentMethod))
-                .andExpect(jsonPath("$.title").value(getPaymentInfo.getTitle()))
-                .andExpect(jsonPath("$.name").value(getPaymentInfo.getName()))
-                .andExpect(jsonPath("$.company").value(getPaymentInfo.getCompany()))
-                .andExpect(jsonPath("$.profileImage").value(getPaymentInfo.getProfileImage()))
-                .andExpect(jsonPath("$.cost").value(getPaymentInfo.getCost()))
-                .andExpect(jsonPath("$.totalCost").value(totalCost))
-                .andExpect(jsonPath("$.languages[0]").value("Javascript"))
-                .andExpect(jsonPath("$.languages[1]").value("Python"))
-                .andExpect(jsonPath("$.languages[2]").value("Go"))
-                .andExpect(jsonPath("$.address[0]").value("강남구"))
-                .andExpect(jsonPath("$.address[1]").value("강동구"))
-                .andExpect(jsonPath("$.address[2]").value("강북구"))
-                .andDo(document("결제영수증조회",
-                        getRequestPreProcessor(),
-                        getResponsePreProcessor(),
-                        pathParameters(
-                                parameterWithName("suggest-id").description("신청 식별자")
-                        ),
-                        requestHeaders(
-                                headerWithName(AUTHORIZATION).description("엑세스 토큰"),
-                                headerWithName(REFRESH_TOKEN).description("리프레시 토큰")
-                        ),
-                        responseFields(
-                                getPaymentReceiptResponse()
-                        )
-                ));
-    }
 
     @Test
     @DisplayName("GET 마이페이지 신청 내역 조회 - 선생님용")
@@ -441,4 +173,113 @@ public class SuggestGetTest extends SuggestControllerTest{
                 ));
     }
 
+    @Test
+    @DisplayName("GET 출석부 1 출석부 조회")
+    void getLessonAttendance() throws Exception {
+        GetLessonAttendance response = GetLessonAttendance.builder()
+                .quantity(5)
+                .quantityCount(1)
+                .progress(20)
+                .build();
+
+        given(suggestService.getLessonAttendance(Mockito.anyLong(), Mockito.anyLong()))
+                .willReturn(response);
+
+        ResultActions actions =
+                mockMvc.perform(
+                        get("/suggest/{suggest-id}/attendance", suggest.getId())
+                                .header(AUTHORIZATION, BEARER + accessToken)
+                                .header(REFRESH_TOKEN, refreshToken)
+                );
+
+        actions
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.quantity").value(response.getQuantity()))
+                .andExpect(jsonPath("$.quantityCount").value(response.getQuantityCount()))
+                .andExpect(jsonPath("$.progress").value(response.getProgress()))
+                .andDo(document("출석부1-출석조회",
+                        getRequestPreProcessor(),
+                        getResponsePreProcessor(),
+                        pathParameters(
+                                parameterWithName("suggest-id").description("신청 식별자")
+                        ),
+                        requestHeaders(
+                                headerWithName(AUTHORIZATION).description("엑세스 토큰"),
+                                headerWithName(REFRESH_TOKEN).description("리프레시 토큰")
+                        ),
+                        responseFields(
+                                List.of(
+                                        fieldWithPath("quantity").type(JsonFieldType.NUMBER).description("과외 횟수"),
+                                        fieldWithPath("quantityCount").type(JsonFieldType.NUMBER).description("출석 인정 횟수"),
+                                        fieldWithPath("progress").type(JsonFieldType.NUMBER).description("과외 진행률")
+                                )
+                        )
+                ));
+    }
+
+    @Test
+    @DisplayName("GET 출석부 2 출석 인정")
+    void lessonAttendanceCheck() throws Exception {
+        Integer quantityCount = 5;
+
+        given(suggestService.teacherChecksAttendance(Mockito.anyLong(), Mockito.anyLong()))
+                .willReturn(quantityCount);
+
+        ResultActions actions =
+                mockMvc.perform(
+                        get("/suggest/{suggest-id}/attendance/check", suggest.getId())
+                                .header(AUTHORIZATION, BEARER + accessToken)
+                                .header(REFRESH_TOKEN, refreshToken)
+                );
+
+        actions
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.quantityCount").value(quantityCount))
+                .andDo(document("출석부2-출석인정",
+                        getRequestPreProcessor(),
+                        pathParameters(
+                                parameterWithName("suggest-id").description("신청 식별자")
+                        ),
+                        requestHeaders(
+                                headerWithName(AUTHORIZATION).description("엑세스 토큰"),
+                                headerWithName(REFRESH_TOKEN).description("리프레시 토큰")
+                        ),
+                        responseFields(
+                                fieldWithPath("quantityCount").type(JsonFieldType.NUMBER).description("출석 인정 횟수")
+                        )
+                ));
+    }
+
+    @Test
+    @DisplayName("GET 출석부 3 출석 인정 취소")
+    void lessonAttendanceCancel() throws Exception {
+        Integer quantityCount = 5;
+
+        given(suggestService.teacherCancelAttendance(Mockito.anyLong(), Mockito.anyLong()))
+                .willReturn(quantityCount);
+
+        ResultActions actions =
+                mockMvc.perform(
+                        get("/suggest/{suggest-id}/attendance/cancel", suggest.getId())
+                                .header(AUTHORIZATION, BEARER + accessToken)
+                                .header(REFRESH_TOKEN, refreshToken)
+                );
+
+        actions
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.quantityCount").value(quantityCount))
+                .andDo(document("출석부3-출석인정취소",
+                        getRequestPreProcessor(),
+                        pathParameters(
+                                parameterWithName("suggest-id").description("신청 식별자")
+                        ),
+                        requestHeaders(
+                                headerWithName(AUTHORIZATION).description("엑세스 토큰"),
+                                headerWithName(REFRESH_TOKEN).description("리프레시 토큰")
+                        ),
+                        responseFields(
+                                fieldWithPath("quantityCount").type(JsonFieldType.NUMBER).description("출석 인정 횟수")
+                        )
+                ));
+    }
 }
