@@ -19,4 +19,5 @@ public interface CustomLessonRepository {
     GetLesson getDetailLessonForEditable(Long lessonId, Long memberId);
     GetLessonInfoForAlarm getLessonInfoForAlarm(Long lessonId);
     Long getMemberIdByLessonId(Long lessonId);
+    String getNameByLessonId(Long lessonId);
 }
