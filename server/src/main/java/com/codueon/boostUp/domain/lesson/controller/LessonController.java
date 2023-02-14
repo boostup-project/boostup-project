@@ -61,7 +61,7 @@ public class LessonController {
                                           @RequestPart(value = "data") @Valid PostLessonInfoEdit postLessonInfoEdit,
                                           @RequestPart(required = false, value = "profileImage") MultipartFile profileImage,
                                           Authentication authentication) {
-        lessonService.updateLessonInfoS3(AuthVO.ofMemberId(authentication), lessonId, postLessonInfoEdit, profileImage);
+        lessonService.updateLessonInfoS3(lessonId, AuthVO.ofMemberId(authentication), postLessonInfoEdit, profileImage);
         return ResponseEntity.ok().build();
     }
 
