@@ -12,6 +12,5 @@ public interface ChatRoomRepository extends JpaRepository<ChatRoom, Long> {
     Boolean existsBySenderIdAndReceiverId(Long firstId, Long secondId);
     Optional<ChatRoom> findBySenderIdAndReceiverId(Long senderId, Long receiverId);
     List<ChatRoom> findChatRoomsBySenderIdOrReceiverId(Long senderId, Long receiverId);
-
     ChatRoom save(ChatRoom chatRoom);
 }
