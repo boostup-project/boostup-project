@@ -10,7 +10,7 @@ import { useRecoilValue } from "recoil";
 import { loginErrorMessage } from "atoms/auth/authAtom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { IconKakao } from "assets/icon";
+
 const Login = () => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
