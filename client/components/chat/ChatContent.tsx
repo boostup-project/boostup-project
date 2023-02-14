@@ -17,8 +17,6 @@ const ChatContent = ({ chatList }: Props) => {
     }
   };
 
-  console.log(chatList);
-
   useEffect(() => {
     scrollToBottom();
   }, [list]);

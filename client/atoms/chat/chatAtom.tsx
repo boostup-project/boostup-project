@@ -1,6 +1,6 @@
 import { atom } from "recoil";
 
-const chatActive = atom({
+const chatActive = atom<boolean>({
   key: "chatActive",
   default: false,
 });
