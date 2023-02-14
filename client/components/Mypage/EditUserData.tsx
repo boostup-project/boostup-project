@@ -193,14 +193,10 @@ const EditUserData = ({ editProfile }: Props) => {
               {errors?.name?.message}
             </p>
             <div className="mt-10 flex flex-row justify-center w-full h-fit items-center tablet:w-full">
-              <SmallBtn
-                css="mr-4"
-                // className="flex justify-center items-center w-1/4 py-2 bg-borderColor rounded-xl text-negativeMessage text-sm mr-5 cursor-pointer"
-                onClick={editProfile}
-              >
+              <SmallBtn css="mr-4" type="button" onClick={editProfile}>
                 취 소
               </SmallBtn>
-              <SmallBtn>변 경</SmallBtn>
+              <SmallBtn type="submit">변 경</SmallBtn>
             </div>
           </form>
         </CreateModalMypageContainer>

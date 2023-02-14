@@ -81,10 +81,14 @@ const DeclineModal = ({
               {errors?.reason && <span>필수 정보입니다</span>}
             </p>
             <div className="flex flex-row justify-center items-center w-full h-fit mt-10">
-              <SmallBtn css="mr-4" onClick={e => onClickToggleModal(suggestId)}>
+              <SmallBtn
+                type="button"
+                css="mr-4"
+                onClick={e => onClickToggleModal(suggestId)}
+              >
                 취 소
               </SmallBtn>
-              <SmallBtn>거 절</SmallBtn>
+              <SmallBtn type="submit">거 절</SmallBtn>
             </div>
           </form>
         </CreateModalContainer>

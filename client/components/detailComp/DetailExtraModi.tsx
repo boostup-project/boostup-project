@@ -312,7 +312,10 @@ const DetailExtraModi = ({ modalOpen, textData, images, lessonId }: Props) => {
             )}
           </div>
           <div className="flex flex-row justify-center items-center w-full h-fit mt-10">
-            <button className="font-SCDream4 w-1/4 py-2 bg-pointColor rounded-md text-white">
+            <button
+              type="submit"
+              className="font-SCDream4 w-1/4 py-2 bg-pointColor rounded-md text-white"
+            >
               수정하기
             </button>
           </div>

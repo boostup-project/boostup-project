@@ -82,7 +82,9 @@ const DetailCurModi = ({ textData, setTextData, modalOpen }: Props) => {
           </div>
         )}
         <div className="flex flex-row justify-center items-center w-full h-fit mt-10">
-          <SmallBtn onClick={onSubmit}>수정</SmallBtn>
+          <SmallBtn type="submit" onClick={onSubmit}>
+            수정
+          </SmallBtn>
         </div>
       </CreateModalContainer>
     </ModalBackDrop>

@@ -438,8 +438,12 @@ const BasicInfo = ({ basicInfo, setBasicInfo, toWrite, setStep }: Props) => {
           {errors?.cost?.message}
         </p>
         <div className="flex flex-row justify-center items-center w-full h-fit mt-10">
-          <SmallBtn onClick={handleClickCancel}>취 소</SmallBtn>
-          <SmallBtn css="ml-5">{btnWord}</SmallBtn>
+          <SmallBtn type="button" onClick={handleClickCancel}>
+            취 소
+          </SmallBtn>
+          <SmallBtn type="submit" css="ml-5">
+            {btnWord}
+          </SmallBtn>
         </div>
       </form>
     </>

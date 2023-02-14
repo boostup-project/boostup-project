@@ -84,10 +84,14 @@ const AcceptModal = ({
               {errors?.quantity && <span>필수 정보입니다</span>}
             </p>
             <div className="flex flex-row justify-center items-center w-full h-fit mt-10">
-              <SmallBtn css="mr-4" onClick={e => onClickToggleModal(suggestId)}>
+              <SmallBtn
+                type="button"
+                css="mr-4"
+                onClick={e => onClickToggleModal(suggestId)}
+              >
                 취 소
               </SmallBtn>
-              <SmallBtn>수 락</SmallBtn>
+              <SmallBtn type="button">수 락</SmallBtn>
             </div>
           </form>
         </CreateModalMypageContainer>
