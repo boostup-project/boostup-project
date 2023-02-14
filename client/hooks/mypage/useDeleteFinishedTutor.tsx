@@ -3,12 +3,8 @@ import { useMutation } from "@tanstack/react-query";
 //과외 종료 삭제(강사용)
 const useDeleteFinishedTutor = () => {
   return useMutation(deleteFinishedTutor, {
-    onSuccess: res => {
-      console.log(res);
-    },
-    onError: err => {
-      console.log(err);
-    },
+    onSuccess: res => {},
+    onError: err => {},
   });
 };
 export default useDeleteFinishedTutor;

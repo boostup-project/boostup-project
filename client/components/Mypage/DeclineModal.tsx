@@ -34,7 +34,7 @@ const DeclineModal = ({
       reason: e.reason,
       suggestId: suggestId,
     };
-    console.log(declineData);
+
     mutate(declineData);
   };
   useEffect(() => {

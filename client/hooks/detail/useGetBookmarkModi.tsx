@@ -8,11 +8,8 @@ const useGetBookmarkModi = (lessonId: number) => {
     enabled: false,
     onSuccess: res => {
       setToggle(!toggle);
-      console.log(res);
     },
-    onError: error => {
-      console.log(error);
-    },
+    onError: error => {},
     retry: 1,
   });
 };

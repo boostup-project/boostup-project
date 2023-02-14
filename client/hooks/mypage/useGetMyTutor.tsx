@@ -3,12 +3,8 @@ import getMyTutor from "apis/mypage/getMyTutor";
 
 const useGetMyTutor = () => {
   return useQuery(["get/MyTutor"], () => getMyTutor(), {
-    onSuccess: res => {
-      console.log(res);
-    },
-    onError: error => {
-      console.log(error);
-    },
+    onSuccess: res => {},
+    onError: error => {},
     retry: 1,
   });
 };

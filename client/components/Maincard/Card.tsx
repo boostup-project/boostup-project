@@ -55,13 +55,11 @@ const Card = () => {
   useEffect(() => {
     if (lessonId !== 0) {
       bookmarkRefetch();
-      console.log(lessonId);
     }
   }, [lessonId]);
 
   useEffect(() => {
     cardRefetch();
-    console.log(cards);
   }, [toggle]);
 
   useEffect(() => {
