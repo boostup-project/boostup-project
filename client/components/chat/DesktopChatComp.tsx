@@ -7,7 +7,6 @@ import { chatActive } from "atoms/chat/chatAtom";
 
 const DesktopChatComp = () => {
   const [active, setActive] = useRecoilState(chatActive);
-  console.log(active);
   return (
     <>
       <div className="w-full h-full flex flex-row justify-center items-start">

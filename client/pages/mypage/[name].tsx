@@ -92,6 +92,12 @@ const Mypage = () => {
         <div className="desktop:min-w-[1000px] min-w-[95%] desktop:min-h-[300px] w-full h-full flex desktop:flex-row flex-col justify-center desktop:items-start items-center">
           <MypageContentContainer>
             {tab === 1 && tutorInfoSuccess && <TeacherTab></TeacherTab>}
+            {tab === 1 && !tutorInfoSuccess && (
+              <div className="flex flex-col justify-center items-center w-full h-36 font-SCDream3 text-lg text-textColor mt-20">
+                <div>아직 등록한 과외가 없어요🙂</div>
+                <div>과외를 등록하고 수업을 진행해 보세요</div>
+              </div>
+            )}
             {tab === 2 && <StudentTab></StudentTab>}
           </MypageContentContainer>
         </div>

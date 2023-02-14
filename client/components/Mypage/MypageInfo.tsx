@@ -90,14 +90,20 @@ const MypageInfo = () => {
             </div>
           </div>
           <div className="flex desktop:mt-8 tablet:mt-6 mt-2">
-            <button className="mr-8 text text-pointColor" onClick={editProfile}>
+            <button
+              className="mr-8 desktop:w-1/6 tablet:w-[15%] w-[5%]  text text-pointColor desktop:text-base tablet:text-sm text-xs"
+              onClick={editProfile}
+            >
               Edit
             </button>
-            <button className="mr-8 text text-pointColor" onClick={editPWd}>
+            <button
+              className="mr-8 desktop:w-[60%] tablet:w-[60%] w-[65%] text text-pointColor desktop:text-base tablet:text-sm text-xs"
+              onClick={editPWd}
+            >
               비밀번호수정
             </button>
             <button
-              className="mr-8 text text-negativeMessage"
+              className="mr-8 desktop:w-[40%] tablet:w-[40%] w-[45%] text text-negativeMessage desktop:text-base tablet:text-sm text-xs"
               onClick={deleteMyAccount}
             >
               회원탈퇴
