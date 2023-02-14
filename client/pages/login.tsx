@@ -10,7 +10,7 @@ import { useRecoilValue } from "recoil";
 import { loginErrorMessage } from "atoms/auth/authAtom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
+import { IconKakao } from "assets/icon";
 const Login = () => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
@@ -142,11 +142,27 @@ const Login = () => {
             <div className="w-full h-fit flex flex-col justify-center items-center mt-7">
               <AuthBtn onClick={handleSubmit}>로그인</AuthBtn>
             </div>
-            <div className="w-full h-fit flex flex-row justify-center items-center desktop:text-[14px] tablet:text-[12px] text-[10px] text-pointColor mt-7">
+            <div className="w-full h-fit flex flex-row justify-center items-center font-SCDream3 desktop:text-[12px] tablet:text-[12px] text-[10px] text-pointColor mt-7">
               <Link href="/resetPassword">비밀번호를 잊으셨나요?</Link> /{" "}
               <Link href="/signup"> 아직 회원이 아니신가요?</Link>
             </div>
           </form>
+          <div className="w-full">
+            <button className="flex items-center justify-center font-SCDream4 w-full h-10 my-2 bg-kakao hover:border-2 border border-kakaoBorder rounded-xl text-black text-sm mt-4">
+              <img
+                className="w-6 h-fit"
+                src="https://cdn.imweb.me/thumbnail/20190731/59ea3ebca6d79.png"
+              />
+              Login With Kakao
+            </button>
+            <button className="flex items-center justify-center font-SCDream4 w-full h-10 my-2 bg-white hover:border-2 border border-borderColor rounded-xl text-textColor text-sm mt-4">
+              <img
+                className="w-6 h-fit"
+                src="https://img1.daumcdn.net/thumb/R800x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2Fdi0lwN%2Fbtq6llq0fqv%2Fj4pSykZA8KEPzKInXknTKk%2Fimg.png"
+              />
+              Login With Google
+            </button>
+          </div>
         </AuthContainer>
       </div>
     </>
