@@ -19,7 +19,6 @@ const postAccept = async ({ quantity, suggestId }: Accept) => {
         "content-Type": `application/json`,
 
         Authorization: `Bearer ${localStorage.getItem("token")}`,
-        // RefreshToken: localStorage.getItem("refresh_token"),
       },
     },
   );

@@ -122,20 +122,15 @@ const Curriculum = ({
 
     if (compressImg) {
       compressFile = new File([compressImg], compressImg?.name);
-      console.log(compressFile);
       formData.append("profileImage", compressFile);
     }
 
     /** 6. 참고 사진 압축 및 할당 */
-    console.log("detaiImg", detailImage);
     if (detailImage.length > 0) {
       const careerImgsBefore = detailImage.map((image: FileList) => image[0]);
-      console.log(careerImgsBefore);
       careerImgsBefore.map(async (img: File, idx: number) => {
         const compressImg = await compressImage(img);
-        // console.log(compressImg);
         const compressImgFile = new File([compressImg!], compressImg?.name!);
-        console.log(compressImgFile);
         formData.append("careerImage", compressImgFile);
       });
     }
@@ -203,18 +198,3 @@ const Curriculum = ({
 };
 
 export default Curriculum;
-
-// const pre = {
-//   title,
-//   language: parseLang,
-//   company,
-//   career: parseInt(career),
-//   address: parseAddress,
-//   cost: parseInt(cost),
-//   introduction,
-//   detailCompany,
-//   detailLocation,
-//   personality,
-//   detailCost,
-//   curriculum: curInfo,
-// };

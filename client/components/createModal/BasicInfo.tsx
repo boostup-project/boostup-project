@@ -118,7 +118,6 @@ const BasicInfo = ({ basicInfo, setBasicInfo, toWrite, setStep }: Props) => {
 
         if (compressImg) {
           compressFile = new File([compressImg], compressImg?.name);
-          console.log(compressFile);
           formData.append("profileImage", compressFile);
         }
       } else {
@@ -164,6 +163,9 @@ const BasicInfo = ({ basicInfo, setBasicInfo, toWrite, setStep }: Props) => {
         <div className="flex w-11/12 desktop:w-4/6 h-fit font-SCDream5 text-sm text-textColor mt-4 mb-2">
           <div>프로필 사진</div>
           <div className="text-pointColor">*</div>
+          <div className="text-[11px] flex items-center text-moneyGrayColor">
+            (얼굴이 보이는 사진을 올려주세요.)
+          </div>
         </div>
         <div className="w-11/12 flex items-center rounded-xl justify-center h-fit border mb-3 desktop:w-4/6">
           <label className="flex flex-col w-full h-32 border-borderColor hover:bg-gray-100 hover:border-gray-300">

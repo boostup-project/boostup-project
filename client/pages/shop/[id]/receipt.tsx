@@ -31,9 +31,7 @@ interface StringToImage {
 
 const payMethod: StringToImage = {
   카카오페이: Kakao,
-  "토스-카드": Toss,
-  "토스-휴대폰": Toss,
-  "토스-계좌": Toss,
+  토스페이: Toss,
 };
 
 const receipt = () => {
@@ -182,7 +180,7 @@ const receipt = () => {
                   <div>{paymentMethod}</div>
                   <span>&nbsp;</span>
                   <Image
-                    src={payMethod[paymentMethod]}
+                    src={payMethod[paymentMethod.split(" ")[0]]}
                     alt="icon"
                     width={30}
                     height={30}

@@ -6,7 +6,6 @@ const getAllBookmark = async () => {
     headers: {
       "content-Type": `application/json`,
       Authorization: `Bearer ${localStorage.getItem("token")}`,
-      // RefreshToken: localStorage.getItem("refresh_token"),
     },
   });
 };
