@@ -1,11 +1,9 @@
-import axios from "axios";
+import instance from "apis/module";
 
 const getChatList = (roomId: number) => {
-  return axios.get(`/chat/room/${roomId}/messages`, {
-    baseURL: process.env.NEXT_PUBLIC_API_URL,
+  return instance.get(`/chat/room/${roomId}/messages`, {
     headers: {
       "content-Type": `application/json`,
-      //   "ngrok-skip-browser-warning": "69420",
       Authorization: `Bearer ${localStorage.getItem("token")}`,
     },
   });

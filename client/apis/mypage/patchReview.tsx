@@ -1,5 +1,4 @@
-import axios from "axios";
-
+import instance from "apis/module";
 interface Props {
   reviewIdNum: number;
   score: number;
@@ -12,11 +11,9 @@ const patchReview = ({ reviewIdNum, score, comment }: Props) => {
     comment,
   };
 
-  return axios.patch(`/review/${reviewIdNum}/modification`, body, {
-    baseURL: process.env.NEXT_PUBLIC_API_URL,
+  return instance.patch(`/review/${reviewIdNum}/modification`, body, {
     headers: {
       "content-Type": `application/json`,
-
       Authorization: `Bearer ${localStorage.getItem("token")}`,
     },
   });

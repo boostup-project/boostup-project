@@ -1,4 +1,4 @@
-import axios from "axios";
+import instance from "apis/module";
 
 interface Decline {
   reason: string;
@@ -9,15 +9,13 @@ const postDecline = async ({ reason, suggestId }: Decline) => {
   const body = {
     reason: reason,
   };
-  return await axios.post(
+  return await instance.post(
     `/suggest/${suggestId}/decline
   `,
     body,
     {
-      baseURL: process.env.NEXT_PUBLIC_API_URL,
       headers: {
         "content-Type": `application/json`,
-
         Authorization: `Bearer ${localStorage.getItem("token")}`,
       },
     },

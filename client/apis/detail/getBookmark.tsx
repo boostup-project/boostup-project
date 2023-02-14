@@ -1,11 +1,9 @@
-import axios from "axios";
+import instance from "apis/module";
 
 const getBookmark = async (lessonId: number) => {
-  return await axios.get(`/bookmark/lesson/${lessonId}`, {
-    baseURL: process.env.NEXT_PUBLIC_API_URL,
+  return await instance.get(`/bookmark/lesson/${lessonId}`, {
     headers: {
       "content-Type": `application/json`,
-      "ngrok-skip-browser-warning": "69420",
       Authorization: `Bearer ${localStorage.getItem("token")}`,
     },
   });

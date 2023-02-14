@@ -1,12 +1,10 @@
-import axios from "axios";
+import instance from "apis/module";
 
 const getTutorInfo = async (lessonId: number, tabId: number) => {
   const url = `/suggest/lesson/${lessonId}/tutor/tab/${tabId}`;
-  return await axios.get(url, {
-    baseURL: process.env.NEXT_PUBLIC_API_URL,
+  return await instance.get(url, {
     headers: {
       "content-Type": `application/json`,
-
       Authorization: `Bearer ${localStorage.getItem("token")}`,
     },
   });

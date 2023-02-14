@@ -1,4 +1,4 @@
-import axios from "axios";
+import instance from "apis/module";
 
 interface Assemble {
   textData: string;
@@ -11,8 +11,7 @@ const postCurModi = async (assemble: Assemble) => {
     curriculum: textData,
   };
   const url = `/lesson/${id}/curriculum/modification`;
-  return await axios.patch(url, textData, {
-    baseURL: process.env.NEXT_PUBLIC_API_URL,
+  return await instance.patch(url, textData, {
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${localStorage.getItem("token")}`,

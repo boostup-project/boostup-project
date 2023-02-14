@@ -1,4 +1,4 @@
-import axios from "axios";
+import instance from "apis/module";
 
 interface Application {
   days: string;
@@ -14,8 +14,7 @@ const postApply = async ({ days, languages, requests, id }: Application) => {
     requests: requests,
   };
 
-  return await axios.post(`/suggest/lesson/${id}`, body, {
-    baseURL: process.env.NEXT_PUBLIC_API_URL,
+  return await instance.post(`/suggest/lesson/${id}`, body, {
     headers: {
       "content-Type": `application/json`,
       Authorization: `Bearer ${localStorage.getItem("token")}`,
