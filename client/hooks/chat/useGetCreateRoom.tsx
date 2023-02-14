@@ -8,7 +8,6 @@ const useGetCreateRoom = (lessonId: number) => {
   return useQuery(["get/createRoom"], () => getCreateRoom(lessonId), {
     enabled: false,
     onSuccess: res => {
-      console.log("success!!", res);
       router.push(`/chat/${lessonId}`);
     },
     onError: err => {
