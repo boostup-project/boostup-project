@@ -112,10 +112,16 @@ const DetailExtra = ({ extraData, lessonId, editable }: Props) => {
               <div className="font-SCDream5">{detailTitles[title]}</div>
               <div className="font-SCDream3">
                 {title === "careerImage" ? (
-                  <div className="w-80 h-28 tablet:w-[450px] tablet:h-36 desktop:w-[500px] desktop:h-40 flex">
+                  // <div className="w-80 h-28 tablet:w-[450px] tablet:h-36 desktop:w-[500px] desktop:h-40 flex border border-borderColor rounded-xl">
+                  <div className="min-w-[150px] w-fit h-28 tablet:h-36 desktop:h-40 ">
+                    {images.length !== 0 ? null : (
+                      <div className="w-full h-full flex flex-col justify-center items-center font-SCDream3 text-sm text-textColor border border-borderColor rounded-xl px-3">
+                        등록된 사진이 없습니다
+                      </div>
+                    )}
                     {images?.map((image: any, idx: number) => (
                       <img
-                        className="w-1/3 mr-5 rounded-xl aspect-square cursor-pointer"
+                        className="w-1/2 mr-5 rounded-xl aspect-square cursor-pointer"
                         key={image.careerImageId}
                         id={String(idx)}
                         src={image.filePath}

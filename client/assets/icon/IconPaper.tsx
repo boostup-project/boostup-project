@@ -8,8 +8,8 @@ interface Props {
 export function IconPaper({ width, heigth }: Props) {
   return (
     <svg
-      width={width}
-      height={heigth}
+      width={15}
+      height={15}
       viewBox="0 0 25 25"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"

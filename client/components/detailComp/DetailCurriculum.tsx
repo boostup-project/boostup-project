@@ -35,7 +35,6 @@ const DetailCurriculum = ({ curData, editable }: Props) => {
       )}
       <div className="w-full h-full p-6 text-base">
         <div className="flex justify-between mb-3">
-          <div className="font-SCDream5">진행방식</div>
           {editable && (
             <div
               onClick={modalOpen}
