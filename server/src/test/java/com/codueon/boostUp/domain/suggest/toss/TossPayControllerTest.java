@@ -54,9 +54,6 @@ public class TossPayControllerTest {
     @MockBean
     protected TossPayService tossPayService;
 
-    @MockBean
-    protected PaymentService paymentService;
-
     protected DataForTest data = new DataForTest();
 
     protected Member member;
@@ -82,12 +79,6 @@ public class TossPayControllerTest {
         suggest.setStartTime();
         suggest.setEndTime();
         suggest.setStatus(DURING_LESSON);
-        lesson = data.getLesson1();
-        profileImage = data.getProfileImage();
-        paymentInfo = PaymentInfo.builder()
-                .quantity(5)
-                .build();
-        paymentInfo.setQuantityCount(3);
 
         accessToken = jwtTokenUtils.generateAccessToken(member);
         refreshToken = jwtTokenUtils.generateRefreshToken(member);
@@ -112,5 +103,31 @@ public class TossPayControllerTest {
                 fieldWithPath("data").type(JsonFieldType.STRING).description("데이터"),
                 fieldWithPath("message").type(JsonFieldType.STRING).description("메세지")
         );
+    }
+
+    protected TossPaySuccessInfo getTossPaySuccessInfo() {
+        Checkout checkout = Checkout.builder().build();
+        TossCard tossCard = TossCard.builder().build();
+        Receipt receipt = Receipt.builder().build();
+        MobilePhone mobilePhone = MobilePhone.builder().build();
+        Transfer transfer = Transfer.builder().build();
+
+        return TossPaySuccessInfo.builder()
+                .totalAmount(5000)
+                .paymentKey("paymentKey")
+                .lastTransactionKey("lastTransactionKey")
+                .method("카드")
+                .orderId("orderId")
+                .orderName("orderName")
+                .checkout(checkout)
+                .mId("mId")
+                .requestedAt("requestedAt")
+                .approvedAt("approvedAt")
+                .card(tossCard)
+                .receipt(receipt)
+                .mobilePhone(mobilePhone)
+                .transfer(transfer)
+                .orderStatus("orderStatus")
+                .build();
     }
 }

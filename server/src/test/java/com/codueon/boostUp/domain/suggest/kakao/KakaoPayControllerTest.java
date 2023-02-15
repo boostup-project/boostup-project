@@ -29,6 +29,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -82,11 +83,6 @@ public class KakaoPayControllerTest {
         suggest.setStartTime();
         suggest.setEndTime();
         suggest.setStatus(DURING_LESSON);
-        profileImage = data.getProfileImage();
-        paymentInfo = PaymentInfo.builder()
-                .quantity(5)
-                .build();
-        paymentInfo.setQuantityCount(3);
 
         accessToken = jwtTokenUtils.generateAccessToken(member);
         refreshToken = jwtTokenUtils.generateRefreshToken(member);
@@ -111,5 +107,32 @@ public class KakaoPayControllerTest {
                 fieldWithPath("data").type(JsonFieldType.STRING).description("데이터"),
                 fieldWithPath("message").type(JsonFieldType.STRING).description("메세지")
         );
+    }
+
+    protected KakaoPaySuccessInfo getKakaoPaySuccessInfo() {
+        Date date = new Date(2023, 01, 05, 05, 00);
+        KakaoCard cardInfo = KakaoCard.builder().build();
+        Amount amount = Amount.builder().build();
+
+        return KakaoPaySuccessInfo.builder()
+                .aid("aid")
+                .tid("tid")
+                .cid("cid")
+                .sid("sid")
+                .partnerOrderId("partnerOrderId")
+                .partnerUserId("partnerUserId")
+                .paymentMethodType("paymentMethodType")
+                .amount(amount)
+                .kakaoCard(cardInfo)
+                .itemName("itemName")
+                .itemCode("itemCode")
+                .payload("payload")
+                .quantity(3)
+                .taxFreeAmount(5)
+                .vatAmount(3)
+                .createdAt(date)
+                .approvedAt(date)
+                .orderStatus("orderStatus")
+                .build();
     }
 }
