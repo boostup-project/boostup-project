@@ -129,7 +129,7 @@ const DetailExtraModi = ({ modalOpen, textData, images, lessonId }: Props) => {
     setDeletedArr(prev => prev.concat(deletedId));
   };
 
-  const testSubmit = (e: any) => {
+  const testSubmit = async (e: any) => {
     const formData = new FormData();
 
     const detailTxt = {
@@ -148,24 +148,20 @@ const DetailExtraModi = ({ modalOpen, textData, images, lessonId }: Props) => {
       .filter(image => typeof image[0] === "object")
       .map(image => image[0]);
     if (addImgs.length > 0) {
-      addImgs.map(async img => {
-        const compressImg = await compressImage(img);
-        const compressImgFile = new File([compressImg!], compressImg?.name!);
-        formData.append("careerImage", compressImgFile);
-      });
+      const some = await Promise.all(
+        addImgs.map(async img => {
+          const compressImg = await compressImage(img);
+          return new File([compressImg!], compressImg?.name!);
+        }),
+      );
+      some.map(el => formData.append("careerImage", el));
     }
     const assemble = {
       object: formData,
       id: lessonId,
     };
-    toast.info("이미지 최적화 중입니다...", {
-      autoClose: 4000,
-      position: toast.POSITION.TOP_RIGHT,
-    });
-    setTimeout(() => {
-      mutate(assemble);
-      modalOpen();
-    }, 4500);
+    mutate(assemble);
+    modalOpen();
   };
 
   return (

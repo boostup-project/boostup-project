@@ -69,10 +69,12 @@ const receipt = () => {
 
       const toRenderAdd = address.join(", ");
       const toRenderLang = languages.join(", ");
+      console.log(toRenderLang);
+      console.log(languages);
 
       setTeacherInfoData({
         name,
-        language: toRenderLang,
+        languages: toRenderLang,
         address: toRenderAdd,
         company,
       });

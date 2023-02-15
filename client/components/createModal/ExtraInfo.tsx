@@ -6,17 +6,24 @@ import SmallBtn from "components/reuse/btn/SmallBtn";
 import { SetterOrUpdater } from "recoil";
 import { Info } from "./WriteModal";
 import { Dispatch } from "react";
+import { useEffect } from "react";
 
-interface ExtraInfo {
+interface ObjectPart {
   [index: string]: string | string[];
 }
 
+interface ExtraInfo {
+  [index: string]: string | string[] | ObjectPart;
+  detailImage: string[];
+}
+
 interface Props {
+  extraInfo: Info;
   setExtraInfo: Dispatch<SetStateAction<Info>>;
   setStep: SetterOrUpdater<number>;
 }
 
-const ExtraInfo = ({ setExtraInfo, setStep }: Props) => {
+const ExtraInfo = ({ extraInfo, setExtraInfo, setStep }: Props) => {
   const [previewImages, setPreviewImages] = useState([]);
   const [detailImage, setDetailImage] = useState<string[]>([]);
   const imageInput: any = useRef();
@@ -56,8 +63,25 @@ const ExtraInfo = ({ setExtraInfo, setStep }: Props) => {
     );
   };
 
+  useEffect(() => {
+    if (extraInfo.detailImage) {
+      setDetailImage(extraInfo.detailImage as string[]);
+      (extraInfo.detailImage as string[]).map(image => {
+        let reader = new FileReader();
+        reader.readAsDataURL(image[0] as any);
+        reader.onloadend = () => {
+          const previewImgUrl: any = reader.result;
+
+          if (previewImgUrl) {
+            setPreviewImages(prev => prev.concat(previewImgUrl));
+          }
+        };
+      });
+    }
+  }, []);
+
   /** 제출 코드 **/
-  const testSubmit = (addtionalData: ExtraInfo) => {
+  const testSubmit = async (addtionalData: ExtraInfo) => {
     addtionalData.detailImage = detailImage;
     setExtraInfo(addtionalData);
     setStep(prev => prev + 1);
@@ -86,7 +110,9 @@ const ExtraInfo = ({ setExtraInfo, setStep }: Props) => {
             className="w-full h-8 px-2 border border-borderColor outline-pointColor rounded-xl font-SCDream4 text-xs text-textColor placeholder:text-center  mt-2 tablet:text-sm tablet:h-12"
             placeholder="본인에 대한 한줄 소개를 입력하세요"
             {...register("introduction", { required: "입력 필요" })}
-            // defaultValue={add.introduction}
+            defaultValue={
+              extraInfo.introduction && extraInfo.introduction.toString()
+            }
           />
         </label>
         <p className="text-xs text-negativeMessage mt-1 tablet:text-sm">
@@ -102,7 +128,9 @@ const ExtraInfo = ({ setExtraInfo, setStep }: Props) => {
             className="w-full h-20 p-2 border border-borderColor outline-pointColor rounded-xl font-SCDream4 text-xs text-textColor placeholder:text-center placeholder:translate-y-[110%] placeholder:leading-loose break-all tablet:text-sm tablet:h-24"
             placeholder="ex)구글 3년차 재직중 / 상명대학교 컴퓨터과학과 전공"
             {...register("detailCompany", { required: "입력 필요" })}
-            // defaultValue={add.detailCompany}
+            defaultValue={
+              extraInfo.detailCompany && extraInfo.detailCompany.toString()
+            }
           />
         </label>
         <p className="text-xs text-negativeMessage mt-1 tablet:text-sm">
@@ -117,7 +145,9 @@ const ExtraInfo = ({ setExtraInfo, setStep }: Props) => {
             className="w-full h-8 px-2 border border-borderColor outline-pointColor rounded-xl font-SCDream4 text-xs text-textColor placeholder:text-center mt-2 tablet:text-sm tablet:h-12"
             placeholder="ex)화이트보드가 사용 가능한 스터디룸"
             {...register("detailLocation", { required: "입력 필요" })}
-            // defaultValue={add.detailLocation}
+            defaultValue={
+              extraInfo.detailLocation && extraInfo.detailLocation.toString()
+            }
           />
         </label>
         <p className="text-xs text-negativeMessage mt-1 tablet:text-sm">
@@ -132,7 +162,9 @@ const ExtraInfo = ({ setExtraInfo, setStep }: Props) => {
             className="w-full h-8 px-2 border border-borderColor outline-pointColor rounded-xl font-SCDream4 text-xs text-textColor placeholder:text-center tablet:text-sm tablet:h-12"
             placeholder="본인에 대한 성격을 입력하세요"
             {...register("personality", { required: "입력 필요" })}
-            // defaultValue={add.personality}
+            defaultValue={
+              extraInfo.personality && extraInfo.personality.toString()
+            }
           />
         </label>
         <p className="text-xs text-negativeMessage mt-1 tablet:text-sm">
@@ -148,7 +180,9 @@ const ExtraInfo = ({ setExtraInfo, setStep }: Props) => {
             placeholder="수업료에 대한 자세한 내용을 입력하세요"
             type="text"
             {...register("detailCost", { required: "입력 필요" })}
-            // defaultValue={add.detailCost}
+            defaultValue={
+              extraInfo.detailCost && extraInfo.detailCost.toString()
+            }
           />
         </label>
         <p className="text-xs text-negativeMessage mt-1 tablet:text-sm">
