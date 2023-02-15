@@ -1,5 +1,6 @@
 package com.codueon.boostUp.domain.member.service;
 
+import com.codueon.boostUp.domain.lesson.service.LessonDbService;
 import com.codueon.boostUp.domain.member.dto.PostPasswordInLoginPage;
 import com.codueon.boostUp.domain.member.entity.Member;
 import com.codueon.boostUp.domain.member.exception.AuthException;

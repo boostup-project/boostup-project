@@ -9,4 +9,5 @@ public interface LessonRepository extends JpaRepository<Lesson, Long>, CustomLes
     Optional<Lesson> findByMemberId(Long memberId);
     Optional<Lesson> findByIdAndMemberId(Long lessonId, Long memberId);
     Boolean existsByMemberId(Long memberId);
+
 }
