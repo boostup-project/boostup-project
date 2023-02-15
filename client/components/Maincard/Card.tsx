@@ -20,9 +20,10 @@ import useGetBookmarkModi from "hooks/detail/useGetBookmarkModi";
 import useGetBookmark from "hooks/detail/useGetBookmark";
 import Swal from "sweetalert2";
 import { mainCardInfo } from "atoms/main/mainAtom";
-import { useSetRecoilState, useRecoilState, useRecoilValue } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { refetchBookmark } from "atoms/detail/detailAtom";
 import Pagination from "./Pagination";
+import { totalCard } from "atoms/main/mainAtom";
 const client = new QueryClient();
 
 const Card = () => {
@@ -32,7 +33,7 @@ const Card = () => {
   const [page, setPage] = useState(1);
   const offset = (page - 1) * limit;
   const [doLike, setDoLike] = useState(false);
-
+  const [totalCards, setTotalCards] = useRecoilState(totalCard);
   const queryClient = useQueryClient();
   const {
     refetch: cardRefetch,
@@ -42,12 +43,13 @@ const Card = () => {
     enabled: true,
     onSuccess: data => {
       setMainCardInfo(data.data.data);
+      setTotalCards(data.data.data.length);
+      // setTotalCards(cardData?.data.data.length);
     },
     retry: 2,
   });
   const toggle = useRecoilValue(refetchBookmark);
   const [lessonId, setLessonId] = useState(0);
-  const [mark, setMark] = useState<boolean>(false);
 
   const { refetch: bookmarkRefetch, data: bookmarkModiData } =
     useGetBookmarkModi(lessonId);
@@ -172,7 +174,7 @@ const Card = () => {
       <>
         {isSuccess ? (
           <Pagination
-            total={cardData?.data.data.length}
+            // total={cardData?.data.data.length}
             limit={limit}
             page={page}
             setPage={setPage}
