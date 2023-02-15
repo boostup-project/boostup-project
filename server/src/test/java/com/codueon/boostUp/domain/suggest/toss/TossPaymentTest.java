@@ -75,32 +75,8 @@ public class TossPaymentTest extends TossPayControllerTest {
     @Test
     @DisplayName("GET 신청 프로세스 5-2 Toss 결제 성공")
     void successTossPayment() throws Exception {
-        Checkout checkout = Checkout.builder().build();
-        TossCard tossCard = TossCard.builder().build();
-        Receipt receipt = Receipt.builder().build();
-        MobilePhone mobilePhone = MobilePhone.builder().build();
-        Transfer transfer = Transfer.builder().build();
-
-        TossPaySuccessInfo tossPaySuccessInfo = TossPaySuccessInfo.builder()
-                .totalAmount(5000)
-                .paymentKey("paymentKey")
-                .lastTransactionKey("lastTransactionKey")
-                .method("카드")
-                .orderId("orderId")
-                .orderName("orderName")
-                .checkout(checkout)
-                .mId("mId")
-                .requestedAt("requestedAt")
-                .approvedAt("approvedAt")
-                .card(tossCard)
-                .receipt(receipt)
-                .mobilePhone(mobilePhone)
-                .transfer(transfer)
-                .orderStatus("orderStatus")
-                .build();
-
         Message<?> message = Message.builder()
-                .data(tossPaySuccessInfo)
+                .data(getTossPaySuccessInfo())
                 .message(INFO_URI_MSG)
                 .build();
 

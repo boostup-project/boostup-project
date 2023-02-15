@@ -3,12 +3,14 @@ package com.codueon.boostUp.domain.suggest.payment;
 import com.codueon.boostUp.domain.suggest.dto.GetPaymentInfo;
 import com.codueon.boostUp.domain.suggest.dto.GetPaymentReceipt;
 import com.codueon.boostUp.domain.suggest.dto.GetRefundPayment;
+import com.codueon.boostUp.domain.suggest.dto.WrapPaymentStatusCheck;
 import com.codueon.boostUp.domain.suggest.kakao.*;
 import com.codueon.boostUp.domain.suggest.response.Message;
 import com.codueon.boostUp.domain.suggest.toss.*;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
+import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.test.web.servlet.ResultActions;
 
 import java.util.ArrayList;
@@ -25,6 +27,7 @@ import static org.springframework.restdocs.headers.HeaderDocumentation.headerWit
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
+import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
@@ -87,6 +90,42 @@ public class PaymentTest extends PaymentControllerTest {
     }
 
     @Test
+    @DisplayName("GET 신청 프로세스 9 결제 여부 조회")
+    void paymentStatusCheck() throws Exception {
+        Boolean paymentCheck = true;
+        WrapPaymentStatusCheck wrapPaymentStatusCheck = new WrapPaymentStatusCheck(paymentCheck);
+
+        given(paymentService.getPaymentStatusCheck(suggest.getId(), suggest.getMemberId()))
+                .willReturn(wrapPaymentStatusCheck.getPaymentCheck());
+
+        ResultActions actions =
+                mockMvc.perform(
+                        get("/suggest/{suggest-id}/payment/check", suggest.getId())
+                                .header(AUTHORIZATION, BEARER + accessToken)
+                                .header(REFRESH_TOKEN, refreshToken)
+                );
+
+        actions
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.paymentCheck").value(true))
+                .andDo(document("신청9-결제여부조회",
+                        getRequestPreProcessor(),
+                        getResponsePreProcessor(),
+                        pathParameters(
+                                parameterWithName("suggest-id").description("신청 식별자")
+                        ),
+                        requestHeaders(
+                                headerWithName(AUTHORIZATION).description("엑세스 토큰"),
+                                headerWithName(REFRESH_TOKEN).description("리프레시 토큰")
+                        ),
+                        responseFields(
+                                fieldWithPath("paymentCheck").type(JsonFieldType.BOOLEAN).description("결제 여부")
+                        )
+                ));
+
+    }
+
+    @Test
     @DisplayName("GET 결제 영수증 조회")
     void getPaymentReceipt() throws Exception {
         Integer totalCost = 50000;
@@ -140,7 +179,7 @@ public class PaymentTest extends PaymentControllerTest {
     }
 
     @Test
-    @DisplayName("GET 신청 프로세스 9-1 Kakao 환불")
+    @DisplayName("GET 신청 프로세스 10-1 Kakao 환불")
     void refundPaymentKakao() throws Exception {
         Message message = Message.builder()
                 .data(getKakaoPayCancelInfo())
@@ -159,7 +198,7 @@ public class PaymentTest extends PaymentControllerTest {
 
         actions
                 .andExpect(status().isOk())
-                .andDo(document("신청9.1-카카오결제환불",
+                .andDo(document("신청10.1-카카오결제환불",
                         getRequestPreProcessor(),
                         pathParameters(
                                 parameterWithName("suggest-id").description("신청 식별자")
@@ -172,7 +211,7 @@ public class PaymentTest extends PaymentControllerTest {
     }
 
     @Test
-    @DisplayName("GET 신청 프로세스 9-2 Toss 환불")
+    @DisplayName("GET 신청 프로세스 10-2 Toss 환불")
     void refundPaymentToss() throws Exception {
         Integer count = 2;
         Integer amount = 5000;
@@ -224,7 +263,7 @@ public class PaymentTest extends PaymentControllerTest {
 
         actions
                 .andExpect(status().isOk())
-                .andDo(document("신청9.2-토스결제환불",
+                .andDo(document("신청10.2-토스결제환불",
                         getRequestPreProcessor(),
                         pathParameters(
                                 parameterWithName("suggest-id").description("신청 식별자")

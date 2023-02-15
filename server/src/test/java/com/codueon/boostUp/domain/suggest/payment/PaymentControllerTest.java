@@ -53,9 +53,6 @@ public class PaymentControllerTest {
     protected GlobalAdvice globalAdvice;
 
     @MockBean
-    protected SuggestService suggestService;
-
-    @MockBean
     protected SuggestDbService suggestDbService;
 
     @MockBean

@@ -6,8 +6,6 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.test.web.servlet.ResultActions;
 
-import java.util.Date;
-
 import static com.codueon.boostUp.domain.suggest.utils.SuggestConstants.*;
 import static com.codueon.boostUp.domain.utils.ApiDocumentUtils.getRequestPreProcessor;
 import static com.codueon.boostUp.domain.utils.ApiDocumentUtils.getResponsePreProcessor;
@@ -127,32 +125,5 @@ public class KakaoPaymentTest extends KakaoPayControllerTest {
                                 parameterWithName("suggest-id").description("신청 식별자")
                         )
                 ));
-    }
-
-    private KakaoPaySuccessInfo getKakaoPaySuccessInfo() {
-        Date date = new Date(2023, 01, 05, 05, 00);
-        KakaoCard cardInfo = KakaoCard.builder().build();
-        Amount amount = Amount.builder().build();
-
-        return KakaoPaySuccessInfo.builder()
-                .aid("aid")
-                .tid("tid")
-                .cid("cid")
-                .sid("sid")
-                .partnerOrderId("partnerOrderId")
-                .partnerUserId("partnerUserId")
-                .paymentMethodType("paymentMethodType")
-                .amount(amount)
-                .kakaoCard(cardInfo)
-                .itemName("itemName")
-                .itemCode("itemCode")
-                .payload("payload")
-                .quantity(3)
-                .taxFreeAmount(5)
-                .vatAmount(3)
-                .createdAt(date)
-                .approvedAt(date)
-                .orderStatus("orderStatus")
-                .build();
     }
 }

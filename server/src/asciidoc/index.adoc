@@ -221,7 +221,7 @@ include::{snippets}/회원가입/http-request.adoc[]
 
 
 == SuggestController
-=== 신청1-과외신청
+=== 신청1-과외 신청
 .curl-request
 include::{snippets}/신청1-과외신청/curl-request.adoc[]
 
@@ -235,7 +235,7 @@ include::{snippets}/신청1-과외신청/request-headers.adoc[]
 include::{snippets}/신청1-과외신청/request-fields.adoc[]
 
 
-=== 신청2.1-신청수락
+=== 신청2.1-신청 수락
 .curl-request
 include::{snippets}/신청2.1-신청수락/curl-request.adoc[]
 
@@ -249,7 +249,7 @@ include::{snippets}/신청2.1-신청수락/request-headers.adoc[]
 include::{snippets}/신청2.1-신청수락/request-fields.adoc[]
 
 
-=== 신청2.2-신청거절
+=== 신청2.2-신청 거절
 .curl-request
 include::{snippets}/신청2.2-신청거절/curl-request.adoc[]
 
@@ -280,7 +280,7 @@ include::{snippets}/신청3-결제페이지/http-response.adoc[]
 include::{snippets}/신청3-결제페이지/response-fields.adoc[]
 
 
-=== 신청4.1-카카오결제요청
+=== 신청4.1-카카오 결제 요청
 .curl-request
 include::{snippets}/신청4.1-카카오결제요청/curl-request.adoc[]
 
@@ -294,7 +294,7 @@ include::{snippets}/신청4.1-카카오결제요청/request-headers.adoc[]
 include::{snippets}/신청4.1-카카오결제요청/response-fields.adoc[]
 
 
-=== 신청4.2-토스결제요청
+=== 신청4.2-토스 결제 요청
 .curl-request
 include::{snippets}/신청4.2-토스결제요청/curl-request.adoc[]
 
@@ -316,7 +316,7 @@ include::{snippets}/신청5.1-카카오결제요청/curl-request.adoc[]
 include::{snippets}/신청5.1-카카오결제요청/http-request.adoc[]
 
 
-=== 신청5.2-토스결제성공
+=== 신청5.2-토스 결제 성공
 .curl-request
 include::{snippets}/신청5.2-토스결제성공/curl-request.adoc[]
 
@@ -324,7 +324,7 @@ include::{snippets}/신청5.2-토스결제성공/curl-request.adoc[]
 include::{snippets}/신청5.2-토스결제성공/http-request.adoc[]
 
 
-=== 신청6-카카오결제취소
+=== 신청6-카카오 결제 취소
 .curl-request
 include::{snippets}/신청6-카카오결제취소/curl-request.adoc[]
 
@@ -332,7 +332,7 @@ include::{snippets}/신청6-카카오결제취소/curl-request.adoc[]
 include::{snippets}/신청6-카카오결제취소/http-request.adoc[]
 
 
-=== 신청7.1-카카오결제실패
+=== 신청7.1-카카오 결제 실패
 .curl-request
 include::{snippets}/신청7.1-카카오결제실패/curl-request.adoc[]
 
@@ -340,7 +340,7 @@ include::{snippets}/신청7.1-카카오결제실패/curl-request.adoc[]
 include::{snippets}/신청7.1-카카오결제실패/http-request.adoc[]
 
 
-=== 신청7.2-토스결제실패
+=== 신청7.2-토스 결제 실패
 .curl-request
 include::{snippets}/신청7.2-토스결제실패/curl-request.adoc[]
 
@@ -348,7 +348,7 @@ include::{snippets}/신청7.2-토스결제실패/curl-request.adoc[]
 include::{snippets}/신청7.2-토스결제실패/http-request.adoc[]
 
 
-=== 신청8-과외종료
+=== 신청8-과외 종료
 .curl-request
 include::{snippets}/신청8-과외종료/curl-request.adoc[]
 
@@ -359,29 +359,46 @@ include::{snippets}/신청8-과외종료/http-request.adoc[]
 include::{snippets}/신청8-과외종료/request-headers.adoc[]
 
 
-=== 신청9.1-카카오결제환불
+=== 신청9-결제 여부 조회
 .curl-request
-include::{snippets}/신청9.1-카카오결제환불/curl-request.adoc[]
+include::{snippets}/신청9-결제여부조회/curl-request.adoc[]
 
 .http-request
-include::{snippets}/신청9.1-카카오결제환불/http-request.adoc[]
+include::{snippets}/신청9-결제여부조회/http-request.adoc[]
 
 .request-header
-include::{snippets}/신청9.1-카카오결제환불/request-headers.adoc[]
+include::{snippets}/신청9-결제여부조회/request-headers.adoc[]
+
+.http-response
+include::{snippets}/신청9-결제여부조회/http-response.adoc[]
+
+.request-fields
+include::{snippets}/신청9-결제여부조회/response-fields.adoc[]
 
 
-=== 신청9.2-토스결제환불
+=== 신청10.1-카카오 결제 환불
 .curl-request
-include::{snippets}/신청9.2-토스결제환불/curl-request.adoc[]
+include::{snippets}/신청10.1-카카오결제환불/curl-request.adoc[]
 
 .http-request
-include::{snippets}/신청9.2-토스결제환불/http-request.adoc[]
+include::{snippets}/신청10.1-카카오결제환불/http-request.adoc[]
 
 .request-header
-include::{snippets}/신청9.2-토스결제환불/request-headers.adoc[]
+include::{snippets}/신청10.1-카카오결제환불/request-headers.adoc[]
 
 
-=== 신청취소
+=== 신청10.2-토스 결제 환불
+.curl-request
+include::{snippets}/신청10.2-토스결제환불/curl-request.adoc[]
+
+.http-request
+include::{snippets}/신청10.2-토스결제환불/http-request.adoc[]
+
+.request-header
+include::{snippets}/신청10.2-토스결제환불/request-headers.adoc[]
+
+
+=== 신청 취소
 .curl-request
 include::{snippets}/신청취소/curl-request.adoc[]
 
@@ -395,7 +412,35 @@ include::{snippets}/신청취소/request-headers.adoc[]
 include::{snippets}/신청취소/http-response.adoc[]
 
 
-=== 결제영수증조회
+=== 강사 종료 과외 삭제
+.curl-request
+include::{snippets}/강사종료과외삭제/curl-request.adoc[]
+
+.http-request
+include::{snippets}/강사종료과외삭제/http-request.adoc[]
+
+.request-header
+include::{snippets}/강사종료과외삭제/request-headers.adoc[]
+
+.http-response
+include::{snippets}/강사종료과외삭제/http-response.adoc[]
+
+
+=== 학생 종료 과외 삭제
+.curl-request
+include::{snippets}/학생종료과외삭제/curl-request.adoc[]
+
+.http-request
+include::{snippets}/학생종료과외삭제/http-request.adoc[]
+
+.request-header
+include::{snippets}/학생종료과외삭제/request-headers.adoc[]
+
+.http-response
+include::{snippets}/학생종료과외삭제/http-response.adoc[]
+
+
+=== 결제 영수증 조회
 .curl-request
 include::{snippets}/결제영수증조회/curl-request.adoc[]
 
@@ -412,7 +457,7 @@ include::{snippets}/결제영수증조회/http-response.adoc[]
 include::{snippets}/결제영수증조회/response-fields.adoc[]
 
 
-===환불영수증조회
+=== 환불 영수증 조회
 .curl-request
 include::{snippets}/환불영수증조회/curl-request.adoc[]
 
@@ -429,7 +474,7 @@ include::{snippets}/환불영수증조회/http-response.adoc[]
 include::{snippets}/환불영수증조회/response-fields.adoc[]
 
 
-=== 출석부1-출석조회
+=== 출석부1-출석 조회
 .curl-request
 include::{snippets}/출석부1-출석조회/curl-request.adoc[]
 
@@ -446,7 +491,7 @@ include::{snippets}/출석부1-출석조회/http-response.adoc[]
 include::{snippets}/출석부1-출석조회/response-fields.adoc[]
 
 
-=== 출석부2-출석인정
+=== 출석부2-출석 인정
 .curl-request
 include::{snippets}/출석부2-출석인정/curl-request.adoc[]
 
@@ -460,7 +505,7 @@ include::{snippets}/출석부2-출석인정/request-headers.adoc[]
 include::{snippets}/출석부2-출석인정/http-response.adoc[]
 
 
-=== 출석부3-출석인정취소
+=== 출석부3-출석 인정 취소
 .curl-request
 include::{snippets}/출석부3-출석인정취소/curl-request.adoc[]
 
@@ -474,7 +519,7 @@ include::{snippets}/출석부3-출석인정취소/request-headers.adoc[]
 include::{snippets}/출석부3-출석인정취소/http-response.adoc[]
 
 
-=== 신청내역조회(강사)
+=== 강사 신청내역 조회
 .curl-request
 include::{snippets}/신청내역조회(강사)/curl-request.adoc[]
 
@@ -491,7 +536,7 @@ include::{snippets}/신청내역조회(강사)/http-response.adoc[]
 include::{snippets}/신청내역조회(강사)/response-fields.adoc[]
 
 
-=== 신청내역조회(학생)
+=== 학생 신청내역 조회
 .curl-request
 include::{snippets}/신청내역조회(학생)/curl-request.adoc[]
 
@@ -506,11 +551,6 @@ include::{snippets}/신청내역조회(학생)/http-response.adoc[]
 
 .request-fields
 include::{snippets}/신청내역조회(학생)/response-fields.adoc[]
-
-
-
-== ChatController
-
 
 
 == ReviewController
