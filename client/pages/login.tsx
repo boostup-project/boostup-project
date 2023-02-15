@@ -44,16 +44,10 @@ const Login = () => {
         autoClose: 3000,
         position: toast.POSITION.TOP_RIGHT,
       });
-      setTimeout(() => {
-        toast.success("메인페이지로 이동합니다!", {
-          autoClose: 2000,
-          position: toast.POSITION.TOP_RIGHT,
-        });
-      }, 1000);
 
       setTimeout(() => {
         router.push("/");
-      }, 3000);
+      }, 1000);
     }
 
     if (isError) {

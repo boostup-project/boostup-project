@@ -80,21 +80,26 @@ const Card = () => {
   };
   return (
     <QueryClientProvider client={client}>
-      <div className="flex flex-row flex-wrap w-full">
+      <div className="flex flex-row flex-wrap w-full justify-start desktop:ml-0 ml-3">
         {cards?.slice(offset, offset + limit).map((card: any) => (
           <div
             key={card.lessonId}
             className="h-fit m-1 desktop:w-[24%] tablet:w-[32%] w-[47%] rounded-lg"
           >
             <div className="flex flex-col w-full h-1/4 border border-borderColor rounded-lg">
-              <div className="relative">
+              <div className="relative z-0">
                 <div className="flex relative w-full h-full">
-                  <img
-                    className="flex w-full object-cover rounded-t-lg desktop:h-44 tablet:h-40 h-36"
-                    src={card.profileImage}
-                  />
+                  <Link
+                    href={`/lesson/${card.lessonId}`}
+                    className="flex relative w-full h-full"
+                  >
+                    <img
+                      className="flex w-full object-cover rounded-t-lg desktop:h-44 tablet:h-40 h-36"
+                      src={card.profileImage}
+                    />
+                  </Link>
                   <button
-                    className="flex decktop:w-[15%] tablet:w-[28px] w-[25px] absolute top-2 right-1"
+                    className="flex decktop:w-[15%] tablet:w-[28px] w-[25px] absolute top-2 right-1 z-30"
                     onClick={() => {
                       handleLike(card.lessonId);
                     }}
@@ -105,14 +110,14 @@ const Card = () => {
               </div>
               <div>
                 <Link href={`/lesson/${card.lessonId}`}>
-                  <div className="flex flex-col w-full h-2/3 bg-white rounded-xl">
+                  <div className="flex flex-col w-full h-2/3 bg-white rounded-xl pt-2">
                     <div className="flex flex-row whitespace-wrap">
-                      <div className="flex">
+                      <div className="flex mb-1">
                         {card.languages?.map((el: any, idx: any) => {
                           return (
                             <div
                               key={idx}
-                              className={`flex justify-center bg-${el} items-center px-1 py-0.5 ml-1 mt-1 font-SCDream5 text-white rounded-xl desktop:text-xs tablet:text-[10px] text-[6px]`}
+                              className={`flex justify-center bg-${el} items-center px-1.5 py-1 ml-1.5 mt-1 font-SCDream5 text-white rounded-xl desktop:text-xs tablet:text-[10px] text-[6px]`}
                             >
                               {el}
                             </div>
@@ -120,26 +125,30 @@ const Card = () => {
                         })}
                       </div>
                     </div>
-                    <div className="flex justify-start items-start w-full h-fit font-SCDream5 desktop:text-xs tablet:text-[10px] text-[8px] text-textColor ml-2  my-1">
+                    <div className="flex justify-start items-start w-full h-fit font-SCDream5 desktop:text-xs tablet:text-[10px] text-[8px] text-textColor/80 ml-2  my-1">
                       {card.name}
                     </div>
-                    <div className="flex justify-start items-start w-full h-fit font-SCDream6 desktop:text-base tablet:text-sm text-xs text-textColor ml-1 mb-2 flex-wrap">
-                      {card.title}
+                    <div className="flex justify-start items-start w-full h-fit font-SCDream6 desktop:text-base tablet:text-sm text-xs text-textColor ml-2 mb-2 flex-wrap">
+                      {card.title.length > 12
+                        ? `${card.title.slice(0, 12)}...`
+                        : card.title}
                     </div>
-                    <div className="flex justify-start items-start w-full h-fit font-SCDream5 text-textColor ml-2 mb-2 desktop:text-xs tablet:text-[10px] text-[8px]">
-                      <div className="mr-1 desktop:w-4 tablet:w-3.5 w-3">
+                    <div className="flex justify-start items-start w-full h-fit font-SCDream5 text-textColor ml-2 mb-3 desktop:text-xs tablet:text-[10px] text-[8px]">
+                      <div className="mr-2 desktop:w-4 tablet:w-3.5 w-3">
                         <IconRibbon />
                       </div>
-                      {card.company}
+                      {card.company.length > 19
+                        ? `${card.company.slice(0, 19)}...`
+                        : card.company}
                     </div>
-                    <div className="flex justify-start items-start w-full h-fit font-SCDream5 desktop:text-xs tablet:text-[11px] text-[8px] text-textColor ml-2  mb-2">
-                      <div className="mr-1 desktop:w-4 tablet:w-3.5 w-3">
+                    <div className="flex justify-start items-start w-full h-fit font-SCDream5 desktop:text-xs tablet:text-[11px] text-[8px] text-textColor ml-2  mb-2.5">
+                      <div className="mr-2 desktop:w-4 tablet:w-3.5 w-3">
                         <IconPaper />
                       </div>
                       {card.career}년
                     </div>
-                    <div className="flex justify-start items-start w-full h-fit font-SCDream5 desktop:text-xs tablet:text-[10px] text-[8px] text-textColor ml-2 desktop:my-1 mb-1">
-                      <div className="mr-1 desktop:w-3.5 tablet:w-2.5 w-2 ">
+                    <div className="flex justify-start items-start w-full h-fit font-SCDream5 desktop:text-xs tablet:text-[10px] text-[8px] text-textColor ml-2 desktop:my-1 mb-2">
+                      <div className="mr-2 desktop:w-3.5 tablet:w-2.5 w-2 ">
                         <IconPlace />
                       </div>
                       {card.address?.map((el: any, idx: any) => {
@@ -150,10 +159,8 @@ const Card = () => {
                         );
                       })}
                     </div>
-                    <div className="flex justify-center items-start w-full h-fit font-SCDream7 desktop:text-base tablet:text-sm text-[12px] text-moneyGrayColor ml-1 mb-2 font-bold">
-                      <div className="ml-1">
-                        ₩ {card.cost.toLocaleString("ko-KR")}원/회
-                      </div>
+                    <div className="flex justify-center items-start w-full h-fit font-SCDream7 desktop:text-base tablet:text-sm text-[12px] text-moneyGrayColor my-2 font-bold">
+                      ₩ {card.cost.toLocaleString("ko-KR")}원/회
                     </div>
                   </div>
                 </Link>

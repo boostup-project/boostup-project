@@ -6,9 +6,11 @@ import Cards from "../components/Maincard/Cards";
 import { useRecoilState } from "recoil";
 import { chatActive, roomIdState } from "atoms/chat/chatAtom";
 import { useEffect } from "react";
+import useWindowSize from "hooks/useWindowSize";
 const Home = () => {
   const [active, setActive] = useRecoilState(chatActive);
   const [roomId, setRoomId] = useRecoilState(roomIdState);
+  const widthSize = useWindowSize();
 
   useEffect(() => {
     setActive(false);
@@ -19,8 +21,7 @@ const Home = () => {
     <>
       <div className="flex flex-col bg-bgColor items-center justify-start w-full h-full">
         <Carouselcomp />
-        <LanguageFilter />
-        <MoblieLanguageFilter />
+        {widthSize > 764 ? <LanguageFilter /> : <MoblieLanguageFilter />}
         <Cards></Cards>
       </div>
     </>
