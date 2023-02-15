@@ -80,7 +80,7 @@ const Card = () => {
   };
   return (
     <QueryClientProvider client={client}>
-      <div className="flex flex-row flex-wrap w-full justify-start desktop:ml-0 ml-3">
+      <div className="flex flex-row flex-wrap w-full justify-start desktop:ml-0 ml-1">
         {cards?.slice(offset, offset + limit).map((card: any) => (
           <div
             key={card.lessonId}
