@@ -228,8 +228,8 @@ const BasicInfo = ({ basicInfo, setBasicInfo, toWrite, setStep }: Props) => {
           {...register("title", {
             required: "필수 정보입니다.",
             maxLength: {
-              value: 12,
-              message: "타이틀을 12자 이하로 입력하여 주시길 바랍니다.",
+              value: 25,
+              message: "타이틀을 25자 이하로 입력하여 주시길 바랍니다.",
             },
           })}
         />

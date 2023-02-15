@@ -139,7 +139,7 @@ const ExtraInfo = ({ extraInfo, setExtraInfo, setStep }: Props) => {
           <div></div>
           <textarea
             className="w-full h-20 p-2 border border-borderColor outline-pointColor rounded-xl font-SCDream4 text-xs text-textColor placeholder:text-center placeholder:translate-y-[110%] placeholder:leading-loose break-all tablet:text-sm tablet:h-24"
-            placeholder="재직중인 회사 또는 재학중인 학교를 입력하세요"
+            placeholder="ex)구글 3년차 재직중 / 상명대학교 컴퓨터과학과 전공"
             {...register("detailCompany", { required: "입력 필요" })}
             defaultValue={
               extraInfo.detailCompany && extraInfo.detailCompany.toString()

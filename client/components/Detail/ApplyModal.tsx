@@ -35,14 +35,23 @@ const ApplyModal = ({
   const dayArr = Object.keys(dayDict);
 
   const onSubmit = (e: Application) => {
-    const applyData = {
-      days: e.days.toString(),
-      languages: e.languages.toString(),
-      requests: e.requests,
-      id: lessonId,
-    };
-
-    mutate(applyData);
+    if (e.requests.length === 0) {
+      const applyData = {
+        days: e.days.toString(),
+        languages: e.languages.toString(),
+        requests: "요청사항이 없습니다.",
+        id: lessonId,
+      };
+      mutate(applyData);
+    } else {
+      const applyData = {
+        days: e.days.toString(),
+        languages: e.languages.toString(),
+        requests: e.requests,
+        id: lessonId,
+      };
+      mutate(applyData);
+    }
   };
 
   useEffect(() => {
@@ -78,9 +87,7 @@ const ApplyModal = ({
             <div className="flex w-full desktop:w-4/6 h-fit font-SCDream5 text-lg text-textColor mt-4 mb-2">
               <div>희망요일</div>
               <div className="text-pointColor">*</div>{" "}
-              <div className="text-pointColor text-xs">
-                3개까지 선택가능합니다
-              </div>
+              <div className="text-pointColor text-xs">필수 정보입니다.</div>
             </div>
             <div className="w-11/12 list h-fit flex flex-row items-start desktop:w-4/6">
               {dayArr.map((el: string, idx: number) => {
@@ -137,7 +144,9 @@ const ApplyModal = ({
                         <input
                           type="checkbox"
                           value={el}
-                          {...register("languages", { required: "true" })}
+                          {...register("languages", {
+                            required: "true",
+                          })}
                         />
                         {el}
                       </label>
@@ -155,7 +164,9 @@ const ApplyModal = ({
                         <input
                           type="checkbox"
                           value={el}
-                          {...register("languages", { required: "true" })}
+                          {...register("languages", {
+                            required: "true",
+                          })}
                         />
                         {el}
                       </label>
@@ -174,11 +185,11 @@ const ApplyModal = ({
               type="text"
               placeholder="요청사항을 입력하세요"
               className="w-11/12 desktop:w-4/6 h-fit p-2 border border-borderColor outline-pointColor rounded-xl font-SCDream4 text-xs text-textColor tablet:text-sm "
-              {...register("requests", { required: "true" })}
+              {...register("requests")}
             />
-            <p className="w-11/12 text-xs text-negativeMessage mt-1 tablet:text-sm desktop:w-4/6">
+            {/* <p className="w-11/12 text-xs text-negativeMessage mt-1 tablet:text-sm desktop:w-4/6">
               {errors?.requests && <span>필수 정보입니다</span>}
-            </p>
+            </p> */}
             <div className="flex flex-row justify-center items-center w-full h-fit mt-10">
               <SmallBtn type="button" css="mr-4" onClick={onClickToggleModal}>
                 취 소
