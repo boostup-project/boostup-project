@@ -128,20 +128,16 @@ const Curriculum = ({
     /** 6. 참고 사진 압축 및 할당 */
     if (detailImage.length > 0) {
       const careerImgsBefore = detailImage.map((image: FileList) => image[0]);
-      careerImgsBefore.map(async (img: File, idx: number) => {
-        const compressImg = await compressImage(img);
-        const compressImgFile = new File([compressImg!], compressImg?.name!);
-        formData.append("careerImage", compressImgFile);
-      });
+      const some = await Promise.all(
+        careerImgsBefore.map(async (img: File, idx: number) => {
+          const compressImg = await compressImage(img);
+          return new File([compressImg!], compressImg?.name!);
+        }),
+      );
+      console.log(some);
+      some.map(el => formData.append("careerImage", el));
     }
-
-    toast.info("과외를 저장중입니다", {
-      autoClose: 4000,
-      position: toast.POSITION.TOP_RIGHT,
-    });
-    setTimeout(() => {
-      mutate(formData);
-    }, 4500);
+    mutate(formData);
   };
 
   return (

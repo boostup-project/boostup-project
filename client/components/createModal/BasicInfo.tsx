@@ -163,7 +163,7 @@ const BasicInfo = ({ basicInfo, setBasicInfo, toWrite, setStep }: Props) => {
         <div className="flex w-11/12 desktop:w-4/6 h-fit font-SCDream5 text-sm text-textColor mt-4 mb-2">
           <div>프로필 사진</div>
           <div className="text-pointColor">*</div>
-          <div className="text-[11px] flex items-center text-moneyGrayColor">
+          <div className="text-[11px] flex items-center text-pointColor">
             (얼굴이 보이는 사진을 올려주세요.)
           </div>
         </div>
@@ -238,8 +238,10 @@ const BasicInfo = ({ basicInfo, setBasicInfo, toWrite, setStep }: Props) => {
         </p>
         <div className="flex flex-row justify-start items-start w-11/12  h-fit font-SCDream5 text-sm text-textColor mt-4 mb-2 desktop:w-4/6">
           <div>가능언어</div>
-          <div className="text-pointColor">*</div>{" "}
-          <div className="text-pointColor text-xs">3개까지 선택가능합니다</div>
+          <div className="text-pointColor">*</div>
+          <div className="text-[11px] flex items-center text-pointColor">
+            3개까지 선택가능합니다
+          </div>
         </div>
         <div className="w-11/12 list h-fit flex flex-row items-start desktop:w-4/6">
           {langArr.map((el: string, idx: number) => {
@@ -357,7 +359,7 @@ const BasicInfo = ({ basicInfo, setBasicInfo, toWrite, setStep }: Props) => {
           <div className="flex flex-row justify-start items-stretch w-full h-fit font-SCDream5 text-sm text-textColor my-2">
             <div>과외가능지역</div>
             <div className="text-pointColor">*</div>
-            <div className="text-pointColor text-xs">
+            <div className="text-[11px] flex items-center text-pointColor">
               3개까지 선택가능합니다
             </div>
           </div>
