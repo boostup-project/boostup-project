@@ -10,7 +10,8 @@ import { useRecoilValue } from "recoil";
 import { loginErrorMessage } from "atoms/auth/authAtom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
+import useGetKakaoLogin from "hooks/auth/useGetKakaoLogin";
+import useGetGoogleLogin from "hooks/auth/useGetGoogleLogin";
 const Login = () => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
@@ -64,6 +65,14 @@ const Login = () => {
     }
   }, [isSuccess, isError]);
 
+  const { refetch: kakaoRefetch } = useGetKakaoLogin();
+  const kakaoLogin = () => {
+    kakaoRefetch();
+  };
+  const { refetch: googleRefetch } = useGetGoogleLogin();
+  const googleLogin = () => {
+    googleRefetch();
+  };
   return (
     <>
       <ToastContainer />
@@ -148,14 +157,20 @@ const Login = () => {
             </div>
           </form>
           <div className="w-full">
-            <button className="flex items-center justify-center font-SCDream4 w-full h-10 my-2 bg-kakao hover:border-2 border border-kakaoBorder rounded-xl text-black text-sm mt-4">
+            <button
+              className="flex items-center justify-center font-SCDream4 w-full h-10 my-2 bg-kakao hover:border-2 border border-kakaoBorder rounded-xl text-black text-sm mt-4"
+              onClick={kakaoLogin}
+            >
               <img
                 className="w-6 h-fit"
                 src="https://cdn.imweb.me/thumbnail/20190731/59ea3ebca6d79.png"
               />
               Login With Kakao
             </button>
-            <button className="flex items-center justify-center font-SCDream4 w-full h-10 my-2 bg-white hover:border-2 border border-borderColor rounded-xl text-textColor text-sm mt-4">
+            <button
+              className="flex items-center justify-center font-SCDream4 w-full h-10 my-2 bg-white hover:border-2 border border-borderColor rounded-xl text-textColor text-sm mt-4"
+              onClick={googleLogin}
+            >
               <img
                 className="w-6 h-fit"
                 src="https://img1.daumcdn.net/thumb/R800x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2Fdi0lwN%2Fbtq6llq0fqv%2Fj4pSykZA8KEPzKInXknTKk%2Fimg.png"

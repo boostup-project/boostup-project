@@ -85,8 +85,8 @@ const ApplicationList = () => {
       {tutorInfoSuccess
         ? applyInfoData?.data.data.map((apply: any) => (
             <div className="flex flex-col" key={apply.name}>
-              <div className="flex flex-row w-full h-fit border border-borderColor rounded-xl desktop:mt-5 tablet:mt-3 mt-2 p-3 pl-5">
-                <div className="flex flex-col w-[60%]">
+              <div className="flex flex-row w-full h-fit bg-white border border-borderColor rounded-xl desktop:mt-5 tablet:mt-3 mt-2 p-3 pl-5">
+                <div className="flex flex-col w-[60%] font-SCDream4">
                   <div className="flex mb-2">
                     <div className="mr-3">신청학생</div>
                     <div> {apply.name}</div>

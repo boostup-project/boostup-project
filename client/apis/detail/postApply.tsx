@@ -3,7 +3,7 @@ import instance from "apis/module";
 interface Application {
   days: string;
   languages: string;
-  requests: string;
+  requests?: string | null;
   id: number;
 }
 

@@ -346,7 +346,7 @@ const BasicInfo = ({ basicInfo, setBasicInfo, toWrite, setStep }: Props) => {
           className="w-11/12 h-fit p-2 border border-borderColor outline-pointColor rounded-xl font-SCDream4 text-[11px] text-textColor tablet:text-sm desktop:w-4/6"
           {...register("career", {
             required: "필수 정보입니다.",
-            valueAsNumber: true,
+            min: 1,
           })}
           defaultValue={basicInfo.career as string}
         />

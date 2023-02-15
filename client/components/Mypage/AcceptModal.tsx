@@ -91,7 +91,7 @@ const AcceptModal = ({
               >
                 취 소
               </SmallBtn>
-              <SmallBtn type="button">수 락</SmallBtn>
+              <SmallBtn type="submit">수 락</SmallBtn>
             </div>
           </form>
         </CreateModalMypageContainer>

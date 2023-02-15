@@ -42,21 +42,21 @@ const FinishedTutor = () => {
             </div>
           ) : null}
           {finishedClassData?.data.data.map((finished: any) => (
-            <div className="flex flex-row w-full h-fit border border-borderColor rounded-xl mt-3 p-3 pl-5">
+            <div className="flex flex-row w-full h-fit border bg-white border-borderColor rounded-xl mt-3 p-3 pl-5">
               <div className="flex flex-col w-[60%]">
-                <div className="flex">
+                <div className="flex font-SCDream4">
                   <div className="mr-3 mb-2">신청학생</div>
                   <div> {finished.name}</div>
                 </div>
-                <div className="flex">
+                <div className="flex font-SCDream4">
                   <div className="mr-3 mb-2">희망요일</div>
                   <div> {finished.days}</div>
                 </div>
-                <div className="flex">
+                <div className="flex font-SCDream4">
                   <div className="mr-3 mb-2">희망언어</div>
                   <div> {finished.languages}</div>
                 </div>
-                <div className="flex">
+                <div className="flex font-SCDream4">
                   <div className="mr-3">요청사항</div>
                   <div>{finished.requests}</div>
                 </div>
