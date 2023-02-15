@@ -27,9 +27,12 @@ const ChatContent = ({ chatList }: Props) => {
         ref={messageBoxRef}
         className="w-full tablet:h-4/5 h-[82%] flex flex-col justify-start items-center pb-3 px-3 overflow-auto"
       >
-        {list.map((el: any) => {
+        {list.map((el: any, idx: number) => {
           return (
-            <>
+            <div
+              className="w-full h-fit flex flex-col justify-center items-center"
+              key={idx}
+            >
               {el.messageType === "ALARM" ? (
                 <ChatNoticeMessage content={el.message} time={el.createdAt} />
               ) : el.displayName ===
@@ -42,7 +45,7 @@ const ChatContent = ({ chatList }: Props) => {
                   time={el.createdAt}
                 />
               )}
-            </>
+            </div>
           );
         })}
       </div>
