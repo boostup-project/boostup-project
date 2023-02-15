@@ -81,7 +81,7 @@ public class LessonService {
                                MultipartFile profileImage,
                                List<MultipartFile> careerImage) {
 
-        if (lessonRepository.existsByMemberId(memberId)) {
+        if (lessonDbService.ifExistsByMemberId(memberId)) {
             throw new BusinessLogicException(ExceptionCode.LESSON_ALREADY_EXIST);
         }
         Lesson savedLesson = saveLessonAndReturnLessonS3(postLesson, memberId, profileImage);

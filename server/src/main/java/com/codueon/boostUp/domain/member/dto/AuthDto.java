@@ -11,15 +11,18 @@ public class AuthDto {
     private String memberImage;
     private String name;
     private String email;
+    private boolean lessonExistence;
 
     @Builder
     public AuthDto(Long memberId,
                    String memberImage,
                    String name,
-                   String email) {
+                   String email,
+                   boolean lessonExistence) {
         this.memberId = memberId;
         this.memberImage = memberImage;
         this.name = name;
         this.email = email;
+        this.lessonExistence = lessonExistence;
     }
 }

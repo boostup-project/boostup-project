@@ -118,6 +118,15 @@ public class LessonDbService {
     /*--------------------------------------- DB Read 메서드 --------------------------------------*/
 
     /**
+     * memberId로 lessonId 조회 메서드
+     * @param memberId 회원 식별자
+     * @author Quartz614
+     */
+    public boolean ifExistsByMemberId(Long memberId) {
+        return lessonRepository.existsByMemberId(memberId);
+    }
+
+    /**
      * 과외 요약 정보 조회 메서드
      *
      * @param lessonId 과외 식별자
