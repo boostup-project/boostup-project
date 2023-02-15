@@ -69,21 +69,21 @@ const ClassList = () => {
             </div>
           ) : null}
           {tutorInfoData?.data.data.map((curStu: any) => (
-            <div className="flex flex-row w-full h-fit border border-borderColor rounded-xl mt-3 p-3 pl-5">
+            <div className="flex flex-row w-full h-fit bg-white  border border-borderColor rounded-xl mt-3 p-3 pl-5">
               <div className="flex flex-col w-[60%]">
-                <div className="flex mb-2">
+                <div className="flex mb-2 font-SCDream4">
                   <div className="mr-3">신청학생</div>
                   <div> {curStu.name}</div>
                 </div>
-                <div className="flex">
+                <div className="flex font-SCDream4">
                   <div className="mr-3 mb-2">희망요일</div>
                   <div>{curStu.days}</div>
                 </div>
-                <div className="flex">
+                <div className="flex font-SCDream4">
                   <div className="mr-3 mb-2">희망언어</div>
                   <div> {curStu.languages}</div>
                 </div>
-                <div className="flex">
+                <div className="flex font-SCDream4">
                   <div className="mr-3">요청사항</div>
                   <div> {curStu.requests}</div>
                 </div>
