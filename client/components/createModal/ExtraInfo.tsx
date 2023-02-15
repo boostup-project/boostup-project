@@ -7,7 +7,6 @@ import { SetterOrUpdater } from "recoil";
 import { Info } from "./WriteModal";
 import { Dispatch } from "react";
 import { useEffect } from "react";
-import imageCompression from "browser-image-compression";
 
 interface ObjectPart {
   [index: string]: string | string[];
@@ -23,18 +22,6 @@ interface Props {
   setExtraInfo: Dispatch<SetStateAction<Info>>;
   setStep: SetterOrUpdater<number>;
 }
-
-const compressImage = async (image: any) => {
-  try {
-    const options = {
-      maxSizeMb: 2,
-      maxWidthOrHeight: 300,
-    };
-    return await imageCompression(image, options);
-  } catch (e) {
-    console.log(e);
-  }
-};
 
 const ExtraInfo = ({ extraInfo, setExtraInfo, setStep }: Props) => {
   const [previewImages, setPreviewImages] = useState([]);
