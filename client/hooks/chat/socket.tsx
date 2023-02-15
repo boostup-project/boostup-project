@@ -19,6 +19,7 @@ export const connectSocket = async ({ handleConnectSocket }: Props) => {
     const headers = {
       Authorization,
     };
+    stomp_client.debug = () => {};
     stomp_client.connect(
       headers,
       frame => {

@@ -14,7 +14,6 @@ const ChatListContent = ({
   displayName,
   message,
   createAt,
-  key,
   alarmCount,
 }: Props) => {
   let currTime = new Date();
