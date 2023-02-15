@@ -1,5 +1,7 @@
 package com.codueon.boostUp.domain.member.service;
 
+import com.codueon.boostUp.domain.lesson.repository.LessonRepository;
+import com.codueon.boostUp.domain.lesson.service.LessonDbService;
 import com.codueon.boostUp.domain.member.dto.AuthDto;
 import com.codueon.boostUp.domain.member.dto.PostLogin;
 import com.codueon.boostUp.domain.member.dto.TokenDto;
@@ -22,6 +24,7 @@ import static com.codueon.boostUp.global.security.utils.AuthConstants.REFRESH_TO
 @RequiredArgsConstructor
 public class AuthService {
     private final MemberDbService memberDbService;
+    private final LessonDbService lessonDbService;
     private final JwtTokenUtils jwtTokenUtils;
     private final RedisUtils redisUtils;
 
@@ -44,12 +47,13 @@ public class AuthService {
 
         //redis 저장
         redisUtils.setData(findMember.getEmail(), findMember.getAccountStatus().getProvider(), generateRefreshToken, jwtTokenUtils.getRefreshTokenExpirationMinutes());
-
+        Boolean lessonExistence = lessonDbService.ifExistsByMemberId(findMember.getId());
         AuthDto memberRes = AuthDto.builder()
                 .memberId(findMember.getId())
                 .memberImage(findMember.getMemberImage().getFilePath())
                 .email(findMember.getEmail())
                 .name(findMember.getName())
+                .lessonExistence(lessonExistence)
                 .build();
 
         return TokenDto.Response.builder()
