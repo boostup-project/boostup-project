@@ -101,7 +101,7 @@ const ApplicationList = () => {
                   </div>
                   <div className="flex">
                     <div className="mr-3">요청사항</div>
-                    <div> {apply.status}</div>
+                    <div> {apply.requests}</div>
                   </div>
                 </div>
 

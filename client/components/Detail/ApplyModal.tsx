@@ -10,7 +10,7 @@ import { useRouter } from "next/router";
 interface Application {
   days: string;
   languages: string;
-  requests?: string | null;
+  requests: string;
   id: number;
 }
 interface ModalDefaultType {
@@ -35,14 +35,23 @@ const ApplyModal = ({
   const dayArr = Object.keys(dayDict);
 
   const onSubmit = (e: Application) => {
-    const applyData = {
-      days: e.days.toString(),
-      languages: e.languages.toString(),
-      requests: e.requests,
-      id: lessonId,
-    };
-
-    mutate(applyData);
+    if (e.requests.length === 0) {
+      const applyData = {
+        days: e.days.toString(),
+        languages: e.languages.toString(),
+        requests: "요청사항이 없습니다.",
+        id: lessonId,
+      };
+      mutate(applyData);
+    } else {
+      const applyData = {
+        days: e.days.toString(),
+        languages: e.languages.toString(),
+        requests: e.requests,
+        id: lessonId,
+      };
+      mutate(applyData);
+    }
   };
 
   useEffect(() => {
@@ -135,7 +144,9 @@ const ApplyModal = ({
                         <input
                           type="checkbox"
                           value={el}
-                          {...register("languages", { required: "true" })}
+                          {...register("languages", {
+                            required: "true",
+                          })}
                         />
                         {el}
                       </label>
@@ -153,7 +164,9 @@ const ApplyModal = ({
                         <input
                           type="checkbox"
                           value={el}
-                          {...register("languages", { required: "true" })}
+                          {...register("languages", {
+                            required: "true",
+                          })}
                         />
                         {el}
                       </label>
