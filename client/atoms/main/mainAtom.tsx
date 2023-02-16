@@ -35,6 +35,10 @@ const reviewCommentState = atom({
   key: "reviewCommentState",
   default: "",
 });
+const totalCard = atom<number>({
+  key: "totalCard",
+  default: 0,
+});
 
 export {
   inputStep,
@@ -44,4 +48,5 @@ export {
   mainCardInfo,
   powerEditReviewModal,
   reviewCommentState,
+  totalCard,
 };

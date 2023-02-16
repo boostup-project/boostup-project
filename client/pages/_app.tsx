@@ -7,29 +7,32 @@ import Footer from "components/Footer/Footer";
 import Navbar from "components/Navbar/Navbar";
 import { useEffect } from "react";
 import { useRouter } from "next/router";
+import { SessionProvider } from "next-auth/react";
 
 export default function App({ Component, pageProps }: AppProps) {
-  const router = useRouter()
+  const router = useRouter();
   const queryClient = new QueryClient();
-  
+
   useEffect(() => {
     router.push(window.location.href);
   }, []);
 
   return (
     <>
-      <QueryClientProvider client={queryClient}>
-        <RecoilRoot>
-          <div className="flex flex-col max-h-full justify-center items-center bg-bgColor">
-            <Header />
-            <div className="flex flex-col justify-center items-center desktop:max-w-[1139px] w-full h-full bg-bgColor">
-              <Component {...pageProps} />
+      <SessionProvider session={pageProps.session}>
+        <QueryClientProvider client={queryClient}>
+          <RecoilRoot>
+            <div className="flex flex-col max-h-full justify-center items-center bg-bgColor">
+              <Header />
+              <div className="flex flex-col justify-center items-center desktop:max-w-[1139px] w-full h-full bg-bgColor">
+                <Component {...pageProps} />
+              </div>
+              <Footer />
+              <Navbar />
             </div>
-            <Footer />
-            <Navbar />
-          </div>
-        </RecoilRoot>
-      </QueryClientProvider>
+          </RecoilRoot>
+        </QueryClientProvider>
+      </SessionProvider>
     </>
   );
 }

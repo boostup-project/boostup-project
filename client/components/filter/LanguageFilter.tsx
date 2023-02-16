@@ -6,13 +6,13 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import getMainCard from "apis/card/getMainCard";
 import { useRecoilState } from "recoil";
 import { mainCardInfo } from "atoms/main/mainAtom";
-
+import { totalCard } from "atoms/main/mainAtom";
 const LanguageFilter = () => {
   const [langId, setLangId] = useState<number>(0);
   const { refetch } = useGetFilteredBoard(langId);
   const queryClient = useQueryClient();
   const [cards, setMainCardInfo] = useRecoilState(mainCardInfo);
-
+  const [totalCards, setTotalCards] = useRecoilState(totalCard);
   const {
     refetch: cardRefetch,
     data: cardData,
@@ -37,6 +37,7 @@ const LanguageFilter = () => {
 
   const handleAllClick = () => {
     cardRefetch();
+    setTotalCards(cardData?.data.data.length);
   };
 
   return (

@@ -1,4 +1,9 @@
-const Pagination = ({ total, limit, page, setPage }: any) => {
+import { totalCard } from "atoms/main/mainAtom";
+import { useRecoilState } from "recoil";
+
+const Pagination = ({ limit, page, setPage }: any) => {
+  const [totalCards, setTotalCards] = useRecoilState(totalCard);
+  const total = totalCards;
   const numPages = Math.ceil(total / limit);
 
   return (
