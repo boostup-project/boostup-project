@@ -36,6 +36,15 @@
 
 1️⃣ 사용자가 자유롭게 대표 언어, 가능 지역을 골라 과외를 등록하고, 받을 수 있습니다. <br>
 2️⃣ 사용자는 과외를 결제하고 실시간 채팅이 가능해 과외 선생님과 학생 간에 자유로운 소통이 가능합니다. <br>
+<br><br>
+## 📌 기술 스택
+### BACK-END <br>
+![코듀온 백엔드 (1)](https://user-images.githubusercontent.com/96826217/219315687-b8575709-11ec-4dd4-bb8c-68cc4e161eba.png)
+### FRONT-END <br>
+![코듀온 프론트엔드](https://user-images.githubusercontent.com/96826217/219315814-f1f2410d-50ce-4aae-a455-9323c3468147.png)
+### Team Collaboration Tool <br>
+![코듀온 협업툴 (2)](https://user-images.githubusercontent.com/96826217/219316024-20a77840-ad5f-40db-8558-4bb41cc4d4b7.png)
+
 
 ## 💫 Commit / PR Convention
 - `feat` : 새로운 기능 추가
