@@ -34,7 +34,6 @@ import org.springframework.web.filter.CharacterEncodingFilter;
 @RequiredArgsConstructor
 public class SecurityConfig {
     private final RedisUtils redisUtils;
-    private final ObjectMapper objectMapper;
     private final JwtTokenUtils jwtTokenUtils;
     private final MemberRepository memberRepository;
     private final CustomAuthorityUtils authorityUtils;
@@ -90,6 +89,7 @@ public class SecurityConfig {
         configuration.addAllowedOrigin("http://localhost:8080");
         configuration.addAllowedOrigin("http://localhost:3000");
         configuration.addAllowedOrigin("http://codeuon.s3-website.ap-northeast-2.amazonaws.com");
+        configuration.addAllowedOrigin("https://boostup-project.vercel.app");
         configuration.addAllowedOrigin("https://d12vhbt0xdnnpo.cloudfront.net");
         configuration.addAllowedHeader("*");
         configuration.addAllowedMethod("*");
