@@ -7,6 +7,7 @@ import { useState, useEffect } from "react";
 import Swal from "sweetalert2";
 import { PropsWithChildren } from "react";
 import { useRouter } from "next/router";
+import { ErrorMessage } from "@hookform/error-message";
 interface Application {
   days: string;
   languages: string;
@@ -25,6 +26,7 @@ const ApplyModal = ({
     register,
     handleSubmit,
     formState: { errors },
+    watch,
   } = useForm<Application>({ mode: "onBlur" });
 
   const router = useRouter();
@@ -145,7 +147,12 @@ const ApplyModal = ({
                           type="checkbox"
                           value={el}
                           {...register("languages", {
-                            required: "true",
+                            required: "필수 정보입니다",
+                            validate: (val: string | string[]) => {
+                              if (watch("languages").length > 3) {
+                                return "3개가지 선택할 수 있습니다";
+                              }
+                            },
                           })}
                         />
                         {el}
@@ -165,7 +172,12 @@ const ApplyModal = ({
                           type="checkbox"
                           value={el}
                           {...register("languages", {
-                            required: "true",
+                            required: "필수 정보입니다",
+                            validate: (val: string | string[]) => {
+                              if (watch("languages").length > 3) {
+                                return "3개가지 선택할 수 있습니다";
+                              }
+                            },
                           })}
                         />
                         {el}
@@ -175,9 +187,17 @@ const ApplyModal = ({
                 }
               })}
             </div>
-            <p className="w-11/12 text-xs text-negativeMessage mt-1 tablet:text-sm desktop:w-4/6">
-              {errors?.languages && <span>필수 정보입니다</span>}
-            </p>
+            <ErrorMessage
+              errors={errors}
+              name="languages"
+              render={({ message }) => {
+                return (
+                  <p className="w-11/12 text-xs text-negativeMessage mt-1 tablet:text-sm desktop:w-4/6">
+                    {message}
+                  </p>
+                );
+              }}
+            />
             <div className="flex w-full desktop:w-4/6 h-fit font-SCDream5 text-lg text-textColor mt-4 mb-2">
               요청사항
             </div>

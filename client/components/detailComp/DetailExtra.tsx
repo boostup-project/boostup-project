@@ -50,6 +50,7 @@ const DetailExtra = ({ extraData, lessonId, editable }: Props) => {
   const [isImageModal, setIsImageModal] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
 
+  console.log(extraData);
   useEffect(() => {
     if (extraData) {
       const prompt = {
