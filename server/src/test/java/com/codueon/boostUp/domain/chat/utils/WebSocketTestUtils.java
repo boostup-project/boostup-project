@@ -23,9 +23,10 @@ import org.springframework.web.socket.sockjs.client.WebSocketTransport;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
-@Component
 public class WebSocketTestUtils {
 
     public WebSocketStompClient makeStompClient() {
@@ -50,9 +51,8 @@ public class WebSocketTestUtils {
                 .build();
     }
 
-    @SneakyThrows
     public StompSession getSessionAfterConnect(WebSocketStompClient stompClient, String url,
-                                               WebSocketHttpHeaders httpHeaders, StompHeaders stompHeaders) {
+                                               WebSocketHttpHeaders httpHeaders, StompHeaders stompHeaders) throws ExecutionException, InterruptedException, TimeoutException {
         ListenableFuture<StompSession> connection = stompClient
                 .connect(url, httpHeaders, stompHeaders, new StompSessionHandlerAdapter() {
                 });
