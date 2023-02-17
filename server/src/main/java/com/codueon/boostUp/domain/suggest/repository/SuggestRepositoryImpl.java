@@ -181,7 +181,7 @@ public class SuggestRepositoryImpl implements CustomSuggestRepository {
     }
 
     /**
-     * 과외 등록한 사용자 닉네임 조회 QueryDSL
+     * 과외 한 사용자 닉네임 조회 QueryDSL
      *
      * @param suggestId 과외 식별자
      * @return String
