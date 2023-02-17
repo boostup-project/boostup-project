@@ -3,10 +3,10 @@ package com.codueon.boostUp.domain.suggest.dto;
 import lombok.Getter;
 
 @Getter
-public class WrapQuantityCount {
+public class GetQuantityCount {
     private Integer quantityCount;
 
-    public WrapQuantityCount(Integer quantityCount) {
+    public GetQuantityCount(Integer quantityCount) {
         this.quantityCount = quantityCount;
     }
 }
