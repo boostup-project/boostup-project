@@ -45,7 +45,8 @@ public class StompHandler implements ChannelInterceptor {
         } else if (StompCommand.SUBSCRIBE.equals(command)) {
             log.info("[SUBSCRIBE] start {}", sessionId);
             Long chatRoomId = parseRoomIdFromHeader(accessor);
-            if (chatRoomId != null) chatRegisterController.registerUserAndSendEnterMessage(chatRoomId, AuthVO.of(accessor.getUser()));
+            if (chatRoomId != null)
+                chatRegisterController.registerUserAndSendEnterMessage(chatRoomId, AuthVO.of(accessor.getUser()));
             log.info("[SUBSCRIBE] end {}", sessionId);
         } else if (StompCommand.UNSUBSCRIBE.equals(command)) {
             log.info("[UNSUBSCRIBE] start {}", sessionId);

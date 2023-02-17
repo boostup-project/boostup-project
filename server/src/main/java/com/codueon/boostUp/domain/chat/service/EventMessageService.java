@@ -14,7 +14,6 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class EventMessageService {
     private final RedisChatMessage redisChatMessage;
-    private final AlarmMessageUtils alarmMessageUtils;
     private final RedisTemplate<Object, Object> redisTemplate;
 
     /**
@@ -25,22 +24,6 @@ public class EventMessageService {
     public void sendMessage(RedisChat redisChat) {
         redisChatMessage.saveChatMessage(redisChat);
         redisTemplate.convertAndSend("chat", redisChat);
-    }
-
-    /**
-     * 알람 채팅방 메시지 저장 및 전송 메서드
-     * @param chatRoomId 채팅방 식별자
-     * @param memberId 사용자 식벌자
-     * @param memberNickname 사용자 닉네임
-     * @param rejectMessage 거절 메시지
-     * @param alarmType 알람 타입
-     * @author mozzi327
-     */
-    public void sendAlarmMessage(Long chatRoomId, Long memberId, String lessonTitle,
-                                 String displayName, Integer attendanceCount, String rejectMessage, AlarmType alarmType) {
-        RedisChat alarmMessage = alarmMessageUtils.makeMemberAlarmMessage(chatRoomId, memberId, lessonTitle, displayName, attendanceCount, rejectMessage, alarmType);
-        redisChatMessage.saveChatMessage(alarmMessage);
-        redisTemplate.convertAndSend("chat", alarmMessage);
     }
 
     /**

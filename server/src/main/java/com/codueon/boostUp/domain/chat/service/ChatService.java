@@ -10,11 +10,9 @@ import com.codueon.boostUp.domain.chat.utils.MessageType;
 import com.codueon.boostUp.domain.vo.AuthVO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.data.jpa.repository.Lock;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.LockModeType;
 import java.util.List;
 
 @Service
@@ -97,22 +95,11 @@ public class ChatService {
      * @return List(RedisChat)
      * @author mozzi327
      */
+    @Transactional
     public List<RedisChat> getChatMessages(Long memberId, Long chatRoomId) {
-        isExistsChatRoomKey(chatRoomId, memberId);
         List<RedisChat> getChat = redisChatMessage.findAll(chatRoomId);
         if (getChat.size() == 0) return ifNotExistsMessageLookingForRdb(chatRoomId);
         return getChat;
-    }
-
-    /**
-     * 채팅방 식별 키 존재유무 확인 및 생성 메서드
-     * @param chatRoomId 채팅방 식별자
-     * @param memberId 사용자 식별자
-     * @author mozzi327
-     */
-    private void isExistsChatRoomKey(Long chatRoomId, Long memberId) {
-        if (!redisChatRoom.isExistMemberInChatRoom(chatRoomId, memberId))
-            redisChatRoom.createChatRoom(chatRoomId, memberId);
     }
 
     /**
@@ -121,11 +108,10 @@ public class ChatService {
      * @param chatRoomId 채팅방 식별자
      * @author mozzi327
      */
-    @Transactional
-    @Lock(value = LockModeType.PESSIMISTIC_WRITE)
     private List<RedisChat> ifNotExistsMessageLookingForRdb(Long chatRoomId) {
         List<RedisChat> redisChats = chatRepository.findTop30ChatByChatRoomId(chatRoomId);
-        redisChats.forEach(redisChat -> redisChatMessage.saveChatMessageFromRdb(redisChat));
+        if (redisChatMessage.numOfNewChat() == 0)
+            redisChats.forEach(redisChat -> redisChatMessage.saveChatMessageFromRdb(redisChat));
         return redisChatMessage.findAll(chatRoomId);
     }
 }

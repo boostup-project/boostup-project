@@ -129,7 +129,7 @@ public class ChatRoomService {
 
         checkExistRoomKeyInfo(chatRoomId, senderId, receiverId);
 
-        sendMakeRoomMessage(chatRoomId, senderChat, 0);
+        sendMakeRoomMessage(chatRoomId, senderChat, 1);
         sendMakeRoomMessage(chatRoomId, receiverChat, 1);
 
         eventPublisher.publishEvent(InitialChatRoomListEvent.builder()
