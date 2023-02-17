@@ -34,6 +34,7 @@ public class SuggestDbService {
 
     /**
      * 신청 조회 메서드
+     *
      * @param suggestId 신청 식별자
      * @return Suggest
      * @author LeeGoh
@@ -45,6 +46,7 @@ public class SuggestDbService {
 
     /**
      * 결제 정보 조회 메서드
+     *
      * @param suggestId 신청 식별자
      * @return PaymentInfo
      * @author LeeGoh
@@ -56,6 +58,7 @@ public class SuggestDbService {
 
     /**
      * 과외 신청 정보 존재 여부 확인 메서드
+     *
      * @param suggestId 과외 신청 식별자
      * @param memberId 사용자 식별자
      * @author Suggest
@@ -68,6 +71,7 @@ public class SuggestDbService {
 
     /**
      * 중복 신청 방지 메서드(Status 확인)
+     *
      * @param lessonId 과외 식별자
      * @param memberId 사용자 식별자
      */
@@ -84,6 +88,7 @@ public class SuggestDbService {
 
     /**
      * 신청 저장 메서드
+     *
      * @param suggest 신청 정보
      * @author LeeGoh
      */
@@ -93,6 +98,7 @@ public class SuggestDbService {
 
     /**
      * 거절 사유 저장 메서드
+     *
      * @param reason 거절 사유 정보
      * @author LeeGoh
      */
@@ -102,6 +108,7 @@ public class SuggestDbService {
 
     /**
      * 결제 정보 저장 메서드
+     *
      * @param paymentInfo 결제 정보
      * @author LeeGoh
      */
@@ -113,6 +120,7 @@ public class SuggestDbService {
 
     /**
      * 결제 페이지 요청 메서드
+     *
      * @param suggestId 신청 식별자
      * @param memberId 사용자 식별자
      * @return GetPaymentInfo
@@ -124,6 +132,7 @@ public class SuggestDbService {
 
     /**
      * 결제 영수증 요청 메서드
+     *
      * @param suggestId 신청 식별자
      * @param memberId 사용자 식별자
      * @return GetPaymentReceipt
@@ -135,6 +144,7 @@ public class SuggestDbService {
 
     /**
      * 마이페이지 선생님용 신청 내역 조회 메서드
+     *
      * @param lessonId 과외 식별자
      * @param memberId 사용자 식별자
      * @param tabId 탭 번호
@@ -148,6 +158,7 @@ public class SuggestDbService {
 
     /**
      * 마이페이지 학생용 신청 내역 조회 메서드
+     *
      * @param memberId 사용자 식별자
      * @param pageable 페이지 정보
      * @return Page
@@ -159,6 +170,7 @@ public class SuggestDbService {
 
     /**
      * 과외에 대한 과외 신청 내역 전체 조회 메서드
+     *
      * @param lessonId 과외 식별자
      * @return Lesson
      * @author Quartz614
@@ -167,10 +179,23 @@ public class SuggestDbService {
         return suggestRepository.findAllById(lessonId);
     }
 
+    /**
+     * 과외 신청한 사용자 닉네임 조회 메서드
+     *
+     *
+     * @param suggestId 과외 식별자
+     * @return String
+     * @author LeeGoh
+     */
+    public String findStudentNameBySuggestId(Long suggestId) {
+        return suggestRepository.findStudentNameBySuggestId(suggestId);
+    }
+
     /*--------------------------------------- DB Delete 메서드 --------------------------------------*/
 
     /**
      * 신청 삭제 메서드
+     *
      * @param suggest 신청 정보
      * @author LeeGoh
      */
@@ -182,6 +207,7 @@ public class SuggestDbService {
 
     /**
      * 출석 인정(출석 횟수 증가) 메서드
+     *
      * @param paymentInfo 결제 정보
      * @return PaymentInfo
      * @author LeeGoh
@@ -196,6 +222,7 @@ public class SuggestDbService {
 
     /**
      * 출석 인정 취소(출석 횟수 감소) 메서드
+     *
      * @param paymentInfo
      * @return PaymentInfo
      * @author LeeGoh

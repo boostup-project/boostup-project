@@ -4,8 +4,6 @@ import com.codueon.boostUp.domain.chat.utils.AlarmType;
 import com.codueon.boostUp.domain.lesson.dto.get.GetLessonInfoForAlarm;
 import com.codueon.boostUp.domain.lesson.entity.Lesson;
 import com.codueon.boostUp.domain.lesson.service.LessonDbService;
-import com.codueon.boostUp.domain.member.entity.Member;
-import com.codueon.boostUp.domain.member.service.MemberDbService;
 import com.codueon.boostUp.domain.suggest.entity.PaymentInfo;
 import com.codueon.boostUp.domain.suggest.entity.Suggest;
 import com.codueon.boostUp.domain.suggest.kakao.*;
@@ -21,14 +19,12 @@ import static com.codueon.boostUp.domain.suggest.entity.SuggestStatus.PAY_IN_PRO
 import static com.codueon.boostUp.domain.suggest.utils.PayConstants.ORDER_APPROVED;
 import static com.codueon.boostUp.domain.suggest.utils.PayConstants.REFUND_APPROVED;
 import static com.codueon.boostUp.domain.suggest.utils.SuggestConstants.*;
-import static com.codueon.boostUp.domain.suggest.utils.SuggestConstants.INVALID_PARAMS;
 import static com.codueon.boostUp.global.exception.ExceptionCode.INVALID_ACCESS;
 
 @Service
 @RequiredArgsConstructor
 public class KakaoPayService {
     private final FeignService feignService;
-    private final MemberDbService memberDbService;
     private final LessonDbService lessonDbService;
     private final SuggestDbService suggestDbService;
     private final SuggestEventService suggestEventService;
@@ -93,9 +89,11 @@ public class KakaoPayService {
         findSuggest.setStatus(DURING_LESSON);
         suggestDbService.saveSuggest(findSuggest);
 
-        Member student = memberDbService.ifExistsReturnMember(findSuggest.getMemberId());
+        String studentName = suggestDbService.findStudentNameBySuggestId(suggestId);
         GetLessonInfoForAlarm tutorInfo = lessonDbService.getLessonInfoForAlarm(findSuggest.getLessonId());
-        suggestEventService.sendAlarmMessage(tutorInfo.getTutorId(), tutorInfo.getTitle(), student.getName(), null, null, AlarmType.PAYMENT_SUCCESS);
+        suggestEventService.sendAlarmMessage(tutorInfo.getTutorId(), tutorInfo.getTitle(),
+                studentName, null, null, AlarmType.PAYMENT_SUCCESS);
+
         return Message.builder()
                 .data(kakaoPaySuccessInfo)
                 .message(INFO_URI_MSG)
@@ -117,13 +115,23 @@ public class KakaoPayService {
     /**
      * Kakao 환불 메서드
      *
-     * @param suggest     신청 정보
-     * @param paymentInfo 결제 정보
+     * @param suggest       신청 정보
+     * @param quantity      과외 횟수
+     * @param quantityCount 과외 진행 횟수
+     * @param totalAmount   총 환불 가격
+     * @param tid           tid
+     * @param cid           cid
      * @author LeeGoh
      */
-    public Message refundKakaoPayment(Suggest suggest, PaymentInfo paymentInfo) {
+    public Message refundKakaoPayment(Suggest suggest,
+                                      Integer quantity,
+                                      Integer quantityCount,
+                                      Integer totalAmount,
+                                      String tid,
+                                      String cid) {
         KakaoPayHeader headers = feignService.setKakaoHeaders();
-        RequestForKakaoPayCancelInfo params = feignService.setRequestCancelParams(paymentInfo);
+        RequestForKakaoPayCancelInfo params =
+                feignService.setRequestCancelParams(quantity, quantityCount, totalAmount, tid, cid);
 
         KakaoPayCancelInfo cancelInfo =
                 feignService.getCancelKakaoPaymentResponse(headers, params);
@@ -135,6 +143,7 @@ public class KakaoPayService {
 
         GetLessonInfoForAlarm tutorInfo = lessonDbService.getLessonInfoForAlarm(suggest.getLessonId());
         suggestEventService.sendAlarmMessage(suggest.getMemberId(), tutorInfo.getTitle(), null, null, null, AlarmType.ACCEPT_REFUND);
+
         return Message.builder()
                 .data(cancelInfo)
                 .message(CANCELED_PAY_MESSAGE)

@@ -358,7 +358,7 @@ public class LessonRepositoryImpl implements CustomLessonRepository {
     }
 
     /**
-     * 북마크 여부 조회 서브 쿼리
+     * 북마크 여부 조회 서브 QueryDsl
      *
      * @param lessonId 과외 식별자(NumberPath)
      * @param memberId 사용자 식별자
@@ -376,7 +376,7 @@ public class LessonRepositoryImpl implements CustomLessonRepository {
     }
 
     /**
-     * 과외 등록한 사용자 식별자 조회 쿼라
+     * 과외 등록한 사용자 식별자 조회 QueryDsl
      *
      * @param lessonId 과외 식별자
      * @return Long
@@ -392,7 +392,7 @@ public class LessonRepositoryImpl implements CustomLessonRepository {
     }
 
     /**
-     * 과외 등록한 사용자 닉네임 조회 쿼라
+     * 과외 등록한 사용자 닉네임 조회 QueryDsl
      *
      * @param lessonId 과외 식별자
      * @return String

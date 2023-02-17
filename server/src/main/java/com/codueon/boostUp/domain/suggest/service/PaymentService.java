@@ -58,9 +58,13 @@ public class PaymentService {
             throw new BusinessLogicException(INVALID_ACCESS);
 
         if (findSuggest.getPaymentMethod().equals("카카오페이"))
-            return kakaoPayService.refundKakaoPayment(findSuggest, findPaymentInfo);
+            return kakaoPayService.refundKakaoPayment(
+                    findSuggest, findPaymentInfo.getQuantity(), findPaymentInfo.getQuantityCount(),
+                    findPaymentInfo.getTotalAmount(), findPaymentInfo.getTid(), findPaymentInfo.getCid());
 
-        return tossPayService.refundTossPayment(findSuggest, findPaymentInfo);
+        return tossPayService.refundTossPayment(
+                findSuggest, findPaymentInfo.getQuantity(), findPaymentInfo.getQuantityCount(),
+                findPaymentInfo.getTotalAmount(), findPaymentInfo.getPaymentKey());
     }
 
     /**
@@ -85,10 +89,12 @@ public class PaymentService {
         PaymentInfo findPaymentInfo = suggestDbService.ifExistsReturnPaymentInfo(suggestId);
 
         return GetRefundPayment.builder()
-                .suggest(findSuggest)
-                .name(name)
                 .lesson(findLesson)
-                .paymentInfo(findPaymentInfo)
+                .totalCost(findSuggest.getTotalCost())
+                .paymentMethod(findSuggest.getPaymentMethod())
+                .quantity(findPaymentInfo.getQuantity())
+                .quantityCount(findPaymentInfo.getQuantityCount())
+                .name(name)
                 .build();
     }
 }
