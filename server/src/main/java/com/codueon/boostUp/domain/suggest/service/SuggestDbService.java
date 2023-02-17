@@ -182,7 +182,6 @@ public class SuggestDbService {
     /**
      * 과외 신청한 사용자 닉네임 조회 메서드
      *
-     *
      * @param suggestId 과외 식별자
      * @return String
      * @author LeeGoh
