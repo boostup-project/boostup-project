@@ -10,9 +10,7 @@ const useGetMainCard = (props: any) => {
   return useQuery(["cards"], () => getMainCard(), {
     initialData: props.posts,
     enabled: true,
-    onSuccess: (data: any) => {
-      console.log(data);
-    },
+    onSuccess: (data: any) => {},
     onError: error => {},
     retry: 1,
   });

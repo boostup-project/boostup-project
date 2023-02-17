@@ -4,12 +4,8 @@ import getCloseClass from "apis/mypage/getCloseClass";
 const useGetCloseClass = (suggestId: number) => {
   return useQuery(["get/CloseClass"], () => getCloseClass(suggestId), {
     enabled: false,
-    onSuccess: res => {
-      console.log("success");
-    },
-    onError: error => {
-      console.log("error");
-    },
+    onSuccess: res => {},
+    onError: error => {},
     retry: 1,
   });
 };

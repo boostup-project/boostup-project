@@ -1,13 +1,24 @@
 import Image from "next/image";
 
 const DetailReview = (reviewData: any) => {
-  console.log(reviewData);
+  const changeToTime = (timeCode: Date) => {
+    const createTime = new Date(timeCode);
 
-  const changeToTime = (timeCode: string) => {
-    let date = timeCode.slice(0, 10);
-    let time = timeCode.slice(11, 16);
+    const utc =
+      createTime.getTime() + createTime.getTimezoneOffset() * 60 * 1000;
+    const KR_TIME_DIFF = 18 * 60 * 60 * 1000 + 22 * 1000;
+    const kr_curr = new Date(utc + KR_TIME_DIFF);
 
-    return `${date} ${time}`;
+    let [currYear, currMonth, currDay, currHour, currMinute, currSecond] = [
+      kr_curr.getFullYear(),
+      kr_curr.getMonth() + 1,
+      kr_curr.getDate(),
+      kr_curr.getHours(),
+      kr_curr.getMinutes(),
+      kr_curr.getSeconds(),
+    ];
+
+    return `${currYear}년 ${currMonth}월 ${currDay}일 ${currHour}시 ${currMinute}분`;
   };
 
   return (
@@ -50,22 +61,18 @@ const DetailReview = (reviewData: any) => {
                             만족도
                           </div>
                           <div className="w-fit h-fit font-SCDream5 text-sm text-pointColor ml-3">
-                            {/* "★ ".repeat(reviewData.reviewData?.data.data.score) */}
                             {"★ ".repeat(el.score)}
                           </div>
                         </div>
                         <div className="w-fit h-fit font-SCDream3 text-sm text-textColor mt-2">
-                          {/* reviewData.reviewData?.data.data.name */}
                           {el.name}
                         </div>
                       </div>
                     </div>
                     <div className="w-full h-fit flex flex-col justify-center items-start text-sm font-SCDream3 text-textColor p-3">
-                      {/* reviewData.reviewData?.data.data.comment */}
                       {el.comment}
                     </div>
                     <div className="w-full h-fit flex flex-col justify-center items-end text-sm font-SCDream3 text-textColor p-3">
-                      {/* reviewData.reviewData?.data.data.createdAt */}
                       {changeToTime(el.createdAt)}
                     </div>
                   </div>

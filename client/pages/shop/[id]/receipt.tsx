@@ -8,6 +8,9 @@ import {
   teacherInfoKeys,
   costInfoKeys,
 } from "./index";
+import Kakao from "../../../public/images/Kakao.png";
+import Toss from "../../../public/images/Toss.png";
+import Image from "next/image";
 
 interface FetchedData {
   address: string[];
@@ -22,17 +25,13 @@ interface FetchedData {
   paymentMethod: string;
 }
 
-const dummy = {
-  address: ["강남구", "서초구"],
-  company: "북극",
-  cost: 30000,
-  languages: ["Java", "Flutter"],
-  name: "펭귄",
-  profileImage: "string",
-  quantity: 5,
-  title: "황제펭귄되기",
-  totalCost: 150000,
-  paymentMethod: "카카오",
+interface StringToImage {
+  [index: string]: any;
+}
+
+const payMethod: StringToImage = {
+  카카오페이: Kakao,
+  토스페이: Toss,
 };
 
 const receipt = () => {
@@ -47,43 +46,7 @@ const receipt = () => {
   const [costInfoData, setCostInfoData] = useState<StringToString>();
   const [paymentMethod, setPaymentMethod] = useState("");
 
-  // useEffect(() => {
-  //   const nameFrom = localStorage.getItem("name");
-  //   const emailFrom = localStorage.getItem("email");
-  //   setUserName(nameFrom);
-  //   setUserEmail(emailFrom);
-  //   const {
-  //     address,
-  //     company,
-  //     cost,
-  //     languages,
-  //     name,
-  //     profileImage,
-  //     quantity,
-  //     title,
-  //     totalCost,
-  //     paymentMethod,
-  //   } = dummy;
-  //   const toRenderAdd = address.join(", ");
-  //   const toRenderLang = languages.join(", ");
-  //   setTeacherInfoData({
-  //     name,
-  //     languages: toRenderLang,
-  //     address: toRenderAdd,
-  //     company,
-  //   });
-  //   setCostInfoData({
-  //     cost: cost.toLocaleString("ko-KR") + " 원",
-  //     quantity: String(quantity),
-  //     totalCost: totalCost.toLocaleString("ko-KR") + " 원",
-  //   });
-  //   setTeacherImg(profileImage);
-  //   setTitle(title);
-  //   setPaymentMethod(paymentMethod);
-  // }, []);
-
-  const { refetch, isSuccess, isError, data } = useGetReceipt(queryId);
-  console.log(data);
+  const { refetch, data } = useGetReceipt(queryId);
   useEffect(() => {
     if (queryId) {
       refetch();
@@ -106,10 +69,12 @@ const receipt = () => {
 
       const toRenderAdd = address.join(", ");
       const toRenderLang = languages.join(", ");
+      console.log(toRenderLang);
+      console.log(languages);
 
       setTeacherInfoData({
         name,
-        language: toRenderLang,
+        languages: toRenderLang,
         address: toRenderAdd,
         company,
       });
@@ -143,7 +108,7 @@ const receipt = () => {
                 <div className="flex h-full my-4 tablet:justify-start desktop:h-fit">
                   <div className="w-fit">
                     <img
-                      className="rounded-xl w-[140px]"
+                      className="object-cover rounded-xl w-[140px] h-[140px]"
                       src={teacherImg as string}
                     />
                   </div>
@@ -213,8 +178,15 @@ const receipt = () => {
             <div className="desktop:h-1/2">
               <div className="mb-1">결제 수단</div>
               <div className="desktop:h-[87%]">
-                <div className="flex text-xs mb-6 p-5 border rounded-xl border-borderColor bg-white tablet:text-sm desktop:h-full desktop:flex-col desktop:justify-evenly desktop:items-center">
-                  {paymentMethod}
+                <div className="flex text-xs mb-6 p-5 border rounded-xl border-borderColor bg-white tablet:text-sm desktop:h-full desktop:justify-center desktop:items-center">
+                  <div>{paymentMethod}</div>
+                  <span>&nbsp;</span>
+                  <Image
+                    src={payMethod[paymentMethod.split(" ")[0]]}
+                    alt="icon"
+                    width={30}
+                    height={30}
+                  />
                 </div>
               </div>
             </div>

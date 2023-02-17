@@ -12,6 +12,7 @@ import Link from "next/link";
 import useGetBookmarkModi from "hooks/detail/useGetBookmarkModi";
 import { useRecoilValue } from "recoil";
 import { refetchBookmark } from "atoms/detail/detailAtom";
+import useGetCreateRoom from "hooks/chat/useGetCreateRoom";
 
 const StudentBookmark = () => {
   const [lessonId, setLessonId] = useState(0);
@@ -19,7 +20,8 @@ const StudentBookmark = () => {
   const { data: studentBookmark, refetch: allBookmark } = useGetAllBookmark();
   const [bookmarkData, setBookmarkData] = useState<any>();
   const toggle = useRecoilValue(refetchBookmark);
-
+  const [chat, setChat] = useState(false);
+  const [bookmark, setBookmark] = useState(false);
   useEffect(() => {
     allBookmark();
   }, [toggle]);
@@ -29,17 +31,35 @@ const StudentBookmark = () => {
   }, [studentBookmark]);
 
   useEffect(() => {
-    if (lessonId !== 0) {
+    if (lessonId !== 0 && bookmark) {
       bookmarkRefetch();
+      setBookmark(false);
     }
   }, [lessonId]);
+
   const saveBookmark = (lessonId: any) => {
     setLessonId(lessonId);
+    setBookmark(true);
+  };
+
+  const { refetch: createChatRoomRefetch } = useGetCreateRoom(lessonId);
+  const chatNow = (lessonId: number) => {
+    setChat(true);
+    setLessonId(lessonId);
+    if (chat && lessonId !== 0) {
+      setChat(false);
+      createChatRoomRefetch();
+    }
   };
   return (
     <>
-      <div className="mt-6 flex flex-col w-full font-SCDream4">
+      <div className="flex flex-col w-full min-h-[300px] bg-bgColor">
         <div className="w-full">
+          {bookmarkData === undefined || bookmarkData.length === 0 ? (
+            <div className="flex flex-col justify-center items-center w-full h-36 font-SCDream3 text-lg text-textColor mt-20">
+              아직 등록된 관심과외가 없어요🙂
+            </div>
+          ) : null}
           {bookmarkData?.map((bookmark: any) => (
             <div
               key={bookmark.lessonId}
@@ -63,7 +83,7 @@ const StudentBookmark = () => {
                     return (
                       <div
                         key={idx}
-                        className={`flex justify-center bg-${el} items-center px-1 py-0.5 ml-1 mt-1 border rounded-xl desktop:text-xs tablet:text-[10px] text-[6px]`}
+                        className={`flex justify-center bg-${el} text-white items-center px-1 py-0.5 ml-1 mt-1 border rounded-xl desktop:text-xs tablet:text-[10px] text-[6px]`}
                       >
                         {el}
                       </div>
@@ -112,7 +132,10 @@ const StudentBookmark = () => {
                   {true ? <IconFullheart /> : <IconEmptyheart />}
                 </button>
                 <div className="flex">
-                  <button className="text text-pointColor font-SCDream3 m-2 desktop:text-base tablet:text-sm text-[10px]">
+                  <button
+                    className="text text-pointColor font-SCDream3 m-2 desktop:text-base tablet:text-sm text-[10px]"
+                    onClick={() => chatNow(bookmark.lessonId)}
+                  >
                     채팅하기
                   </button>
                 </div>

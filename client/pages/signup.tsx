@@ -101,8 +101,8 @@ const Signup = () => {
                 required: "필수로 입력해야되는 값입니다.",
                 onChange: handleNameChange,
                 pattern: {
-                  value: /^[a-zA-Zㄱ-힣0-9|s]{5,12}$/gm,
-                  message: "5자이상 숫자,영문자로 작성해 주세요",
+                  value: /^[a-zA-Zㄱ-힣0-9|s]{3,12}$/gm,
+                  message: "3자이상 숫자,영문자,한글로 작성해 주세요",
                 },
               })}
             />

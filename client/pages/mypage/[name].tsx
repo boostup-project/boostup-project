@@ -9,14 +9,16 @@ import StudentTab from "components/Mypage/StudentTab";
 import useGetTutorInfo from "hooks/mypage/useGetTutorInfo";
 import useGetMyTutor from "hooks/mypage/useGetMyTutor";
 import { useSetRecoilState } from "recoil";
-import { chatActive } from "atoms/chat/chatAtom";
+import { chatActive, roomIdState } from "atoms/chat/chatAtom";
 const Mypage = () => {
   const router = useRouter();
 
   const setActive = useSetRecoilState(chatActive);
+  const setRoomId = useSetRecoilState(roomIdState);
 
   useEffect(() => {
     setActive(false);
+    setRoomId(0);
   }, []);
 
   const { data: myTutorUrl, isSuccess } = useGetMyTutor();
@@ -25,10 +27,11 @@ const Mypage = () => {
 
   const [tab, setTab] = useState(1);
 
-  const { refetch: refetchTutorInfo, data: tutorInfoData } = useGetTutorInfo(
-    lessonId,
-    tab,
-  );
+  const {
+    refetch: refetchTutorInfo,
+    data: tutorInfoData,
+    isSuccess: tutorInfoSuccess,
+  } = useGetTutorInfo(lessonId, tab);
   const handleTabClick = (id: number) => {
     setTab(id);
     refetchTutorInfo();
@@ -36,16 +39,16 @@ const Mypage = () => {
 
   useEffect(() => {
     setLessonId(myTutorUrl?.data.lessonId);
-    console.log(myTutorUrl?.data.lessonId);
   }, [isSuccess]);
 
   useEffect(() => {
     // tab이 바뀔때마다 refetch 실행
-    if (lessonId) {
-      // 요약정보 요청
+    if (lessonId && tutorInfoSuccess) {
+      refetchTutorInfo();
     }
     if (tab === 1 && lessonId) {
       // teacherTab refetch
+      refetchTutorInfo();
     } else if (tab === 2 && lessonId) {
       // StudentTab refetch
     } else if (tab === 3) {
@@ -88,7 +91,13 @@ const Mypage = () => {
         </div>
         <div className="desktop:min-w-[1000px] min-w-[95%] desktop:min-h-[300px] w-full h-full flex desktop:flex-row flex-col justify-center desktop:items-start items-center">
           <MypageContentContainer>
-            {tab === 1 && <TeacherTab></TeacherTab>}
+            {tab === 1 && tutorInfoSuccess && <TeacherTab></TeacherTab>}
+            {tab === 1 && !tutorInfoSuccess && (
+              <div className="flex flex-col justify-center items-center w-full h-36 font-SCDream3 text-lg text-textColor mt-20">
+                <div>아직 등록한 과외가 없어요🙂</div>
+                <div>과외를 등록하고 수업을 진행해 보세요</div>
+              </div>
+            )}
             {tab === 2 && <StudentTab></StudentTab>}
           </MypageContentContainer>
         </div>

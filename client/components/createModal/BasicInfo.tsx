@@ -118,7 +118,6 @@ const BasicInfo = ({ basicInfo, setBasicInfo, toWrite, setStep }: Props) => {
 
         if (compressImg) {
           compressFile = new File([compressImg], compressImg?.name);
-          console.log(compressFile);
           formData.append("profileImage", compressFile);
         }
       } else {
@@ -164,6 +163,9 @@ const BasicInfo = ({ basicInfo, setBasicInfo, toWrite, setStep }: Props) => {
         <div className="flex w-11/12 desktop:w-4/6 h-fit font-SCDream5 text-sm text-textColor mt-4 mb-2">
           <div>프로필 사진</div>
           <div className="text-pointColor">*</div>
+          <div className="text-[11px] flex items-center text-pointColor ml-1">
+            얼굴이 보이는 사진을 올려주세요.
+          </div>
         </div>
         <div className="w-11/12 flex items-center rounded-xl justify-center h-fit border mb-3 desktop:w-4/6">
           <label className="flex flex-col w-full h-32 border-borderColor hover:bg-gray-100 hover:border-gray-300">
@@ -226,18 +228,20 @@ const BasicInfo = ({ basicInfo, setBasicInfo, toWrite, setStep }: Props) => {
           {...register("title", {
             required: "필수 정보입니다.",
             maxLength: {
-              value: 12,
-              message: "타이틀을 12자 이하로 입력하여 주시길 바랍니다.",
+              value: 25,
+              message: "타이틀을 25자 이하로 입력하여 주시길 바랍니다.",
             },
           })}
         />
         <p className="w-11/12 text-xs text-negativeMessage mt-1 tablet:text-sm desktop:w-4/6">
           {errors?.title?.message}
         </p>
-        <div className="flex flex-row justify-start items-start w-11/12  h-fit font-SCDream5 text-sm text-textColor mt-4 mb-2 desktop:w-4/6">
+        <div className="flex flex-row justify-start items-center w-11/12  h-fit font-SCDream5 text-sm text-textColor mt-4 mb-2 desktop:w-4/6">
           <div>가능언어</div>
           <div className="text-pointColor">*</div>{" "}
-          <div className="text-pointColor text-xs">3개까지 선택가능합니다</div>
+          <div className="text-pointColor text-xs ml-1">
+            3개까지 선택가능합니다
+          </div>
         </div>
         <div className="w-11/12 list h-fit flex flex-row items-start desktop:w-4/6">
           {langArr.map((el: string, idx: number) => {
@@ -323,7 +327,13 @@ const BasicInfo = ({ basicInfo, setBasicInfo, toWrite, setStep }: Props) => {
           type="text"
           placeholder="현재 회사 또는 학교를 입력하세요"
           className="w-11/12 h-fit p-2 border border-borderColor outline-pointColor rounded-xl font-SCDream4 text-[11px] text-textColor tablet:text-sm desktop:w-4/6"
-          {...register("company", { required: "필수 정보입니다." })}
+          {...register("company", {
+            required: "필수 정보입니다.",
+            maxLength: {
+              value: 18,
+              message: "재직 회사/학교를 18자 이하로 입력하여 주시길 바랍니다.",
+            },
+          })}
           defaultValue={basicInfo.company as string}
         />
         <p className="w-11/12 text-xs text-negativeMessage mt-1 tablet:text-sm desktop:w-4/6">
@@ -334,6 +344,7 @@ const BasicInfo = ({ basicInfo, setBasicInfo, toWrite, setStep }: Props) => {
         </div>
         <input
           type="number"
+          min="0"
           placeholder="경력을 입력하세요"
           className="w-11/12 h-fit p-2 border border-borderColor outline-pointColor rounded-xl font-SCDream4 text-[11px] text-textColor tablet:text-sm desktop:w-4/6"
           {...register("career", {
@@ -346,10 +357,10 @@ const BasicInfo = ({ basicInfo, setBasicInfo, toWrite, setStep }: Props) => {
           {errors?.career?.message}
         </p>
         <label className="w-11/12 flex flex-col items-start mt-5 desktop:w-4/6">
-          <div className="flex flex-row justify-start items-stretch w-full h-fit font-SCDream5 text-sm text-textColor my-2">
+          <div className="flex flex-row justify-start items-center w-full h-fit font-SCDream5 text-sm text-textColor my-2">
             <div>과외가능지역</div>
             <div className="text-pointColor">*</div>
-            <div className="text-pointColor text-xs">
+            <div className="text-pointColor text-xs ml-1">
               3개까지 선택가능합니다
             </div>
           </div>
@@ -418,6 +429,7 @@ const BasicInfo = ({ basicInfo, setBasicInfo, toWrite, setStep }: Props) => {
         </div>
         <input
           type="number"
+          min="0"
           placeholder="회 당 수업료를 입력하세요"
           className="w-11/12 h-fit p-2 border border-borderColor outline-pointColor rounded-xl font-SCDream4 text-[11px] text-textColor tablet:text-sm desktop:w-4/6"
           {...register("cost", {
@@ -430,8 +442,12 @@ const BasicInfo = ({ basicInfo, setBasicInfo, toWrite, setStep }: Props) => {
           {errors?.cost?.message}
         </p>
         <div className="flex flex-row justify-center items-center w-full h-fit mt-10">
-          <SmallBtn onClick={handleClickCancel}>취 소</SmallBtn>
-          <SmallBtn css="ml-5">{btnWord}</SmallBtn>
+          <SmallBtn type="button" onClick={handleClickCancel}>
+            취 소
+          </SmallBtn>
+          <SmallBtn type="submit" css="ml-5">
+            {btnWord}
+          </SmallBtn>
         </div>
       </form>
     </>

@@ -15,6 +15,7 @@ const FinishedTutor = () => {
   const deleteFinishedList = (suggestId: number) => {
     Swal.fire({
       title: "과외 내역을 삭제하시겠습니까?",
+      text: "학생의 수업내역에서도 해당 수업이 사라집니다.",
       icon: "question",
       showCancelButton: true,
       confirmButtonColor: "#3085d6",
@@ -32,21 +33,30 @@ const FinishedTutor = () => {
 
   return (
     <>
-      <div className="flex flex-col w-full">
+      <div className="flex flex-col w-full min-h-[300px] bg-bgColor">
         <div className="flex flex-col">
+          {finishedClassData === undefined ||
+          finishedClassData?.data.data.length === 0 ? (
+            <div className="flex flex-col justify-center items-center w-full h-36 font-SCDream3 text-lg text-textColor mt-20">
+              아직 종료된 과외가 없어요🙂
+            </div>
+          ) : null}
           {finishedClassData?.data.data.map((finished: any) => (
-            <div className="flex flex-row w-full h-fit border border-borderColor rounded-xl mt-3 p-3 pl-5">
+            <div className="flex flex-row w-full h-fit border bg-white border-borderColor rounded-xl mt-3 p-3 pl-5">
               <div className="flex flex-col w-[60%]">
-                <div className="mb-3 ">data.name</div>
-                <div className="flex">
-                  <div className="mr-3">희망요일</div>
+                <div className="flex font-SCDream4">
+                  <div className="mr-3 mb-2">신청학생</div>
+                  <div> {finished.name}</div>
+                </div>
+                <div className="flex font-SCDream4">
+                  <div className="mr-3 mb-2">희망요일</div>
                   <div> {finished.days}</div>
                 </div>
-                <div className="flex">
-                  <div className="mr-3">희망언어</div>
+                <div className="flex font-SCDream4">
+                  <div className="mr-3 mb-2">희망언어</div>
                   <div> {finished.languages}</div>
                 </div>
-                <div className="flex">
+                <div className="flex font-SCDream4">
                   <div className="mr-3">요청사항</div>
                   <div>{finished.requests}</div>
                 </div>
@@ -55,7 +65,7 @@ const FinishedTutor = () => {
                 <div className="text text-textColor font-SCDream6 m-2">
                   {finished.status}
                 </div>
-                <div className="text text-textColor">
+                <div className="text text-textColor my-2 mr-2">
                   {finished.endTime?.slice(0, 10)}
                 </div>
                 <button

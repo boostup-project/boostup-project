@@ -139,15 +139,11 @@ const EditUserPwd = ({ editPWd }: Props) => {
                 </p>
               </div>
             )}
-            <div className="mt-7 flex justify-center w-full tablet:w-full items-center w-full h-fit">
-              <SmallBtn
-                css="mr-4"
-                // className="flex justify-center items-center w-1/4 py-2 bg-borderColor rounded-xl text-negativeMessage text-sm mr-5 cursor-pointer"
-                onClick={editPWd}
-              >
+            <div className="mt-7 flex justify-center w-full tablet:w-full items-center h-fit">
+              <SmallBtn css="mr-4" type="button" onClick={editPWd}>
                 취 소
               </SmallBtn>
-              {isEditable && <SmallBtn>변 경</SmallBtn>}
+              {isEditable && <SmallBtn type="submit">변 경</SmallBtn>}
             </div>
           </form>
         </div>

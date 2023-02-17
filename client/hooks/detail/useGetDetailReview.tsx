@@ -4,12 +4,6 @@ import getDetailReview from "apis/detail/getDetailReview";
 const useGetDetailReview = (lessonId: number) => {
   return useQuery(["get/review"], () => getDetailReview(lessonId), {
     enabled: false,
-    onSuccess: res => {
-      console.log(res);
-    },
-    onError: err => {
-      console.log(err);
-    },
   });
 };
 

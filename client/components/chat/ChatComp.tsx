@@ -1,6 +1,6 @@
 import BackIcon from "assets/icon/BackIcon";
 import { useRecoilState } from "recoil";
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { chatActive } from "atoms/chat/chatAtom";
 import ChatContent from "./ChatContent";
 import {
@@ -13,12 +13,10 @@ import {
 import { sendMsg, subscribeRoom, unSubscribeRoom } from "hooks/chat/socket";
 import useWindowSize from "hooks/useWindowSize";
 import useGetChatList from "hooks/chat/useGetChatList";
-import { useQueryClient } from "@tanstack/react-query";
-import useGetResetChatAlarm from "hooks/chat/useGetResetChatAlarm";
+import { useForm } from "react-hook-form";
 
 const ChatComp = () => {
   const [active, setActive] = useRecoilState(chatActive);
-  const [inputValue, setInputValue] = useState<string>("");
   const [chatList, setChatList] = useRecoilState(chatListState);
   const [roomIdNum, setRoomId] = useRecoilState(roomIdState);
   const [chatRoomName, setChatRoomName] = useRecoilState(chatDisplayName);
@@ -27,9 +25,10 @@ const ChatComp = () => {
   const [newData, setNewData] = useRecoilState(newDataState);
 
   const { refetch: chatListFetch } = useGetChatList(roomIdNum);
-  // const { refetch: chatRoomAlarmResetFetch } = useGetResetChatAlarm(roomIdNum);
 
   let windowSize = useWindowSize();
+
+  const { handleSubmit, register, setValue } = useForm();
 
   const handleSocketData = (data: any) => {
     setNewData(data);
@@ -42,22 +41,10 @@ const ChatComp = () => {
     setReceiverId(0);
   };
 
-  const handleInputChange = (e: any) => {
-    setInputValue(e.target.value);
-  };
-
-  const handlePressEnter = (e: any) => {
-    if (e.key === "Enter" && inputValue) {
-      sendMsg(roomIdNum, inputValue, receiverId);
-      setInputValue("");
-    }
-  };
-
-  const handleClickSubmit = (e: any) => {
-    if (inputValue) {
-      sendMsg(roomIdNum, inputValue, receiverId);
-      setInputValue("");
-    }
+  const onSubmit = (data: any) => {
+    let inputValue = data.value;
+    sendMsg(roomIdNum, inputValue, receiverId);
+    setValue("value", "");
   };
 
   useEffect(() => {
@@ -94,23 +81,21 @@ const ChatComp = () => {
         </div>
         {/* content */}
         <ChatContent chatList={chatList} />
-        {/* input */}
-        <div className="flex flex-row justify-center items-center w-[95%] h-[10%] border-t border-borderColor/30 ">
+        <form
+          onSubmit={handleSubmit(onSubmit)}
+          className="flex flex-row justify-center items-center w-[95%] h-[10%] border-t border-borderColor/30 "
+        >
           <input
             type="text"
-            value={inputValue}
-            onChange={handleInputChange}
-            onKeyDown={handlePressEnter}
+            autoComplete="off"
             placeholder="메세지를 입력하세요"
             className="w-full h-full rounded-xl outline-none bg-bgColor font-SCDream3 text-textColor text-sm p-3"
+            {...register("value", { required: "true" })}
           />
-          <button
-            className="w-16 h-fit p-2 bg-pointColor rounded-md font-SCDream3 text-xs text-white flex flex-col justify-center items-center"
-            onClick={handleClickSubmit}
-          >
+          <button className="w-16 h-fit p-2 bg-pointColor rounded-md font-SCDream3 text-xs text-white flex flex-col justify-center items-center">
             전송
           </button>
-        </div>
+        </form>
       </div>
     </>
   );

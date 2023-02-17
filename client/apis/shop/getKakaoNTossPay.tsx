@@ -1,4 +1,4 @@
-import axios from "axios";
+import instance from "apis/module";
 
 export interface Assemble {
   suggestId: number;
@@ -11,20 +11,17 @@ const getKakaoNTossPay = async (aseemble: Assemble) => {
   const tossUrl = `/suggest/${suggestId}/toss/payment/${paymentId}`;
 
   if (paymentId === "0") {
-    return await axios.get(kakaoUrl, {
-      baseURL: process.env.NEXT_PUBLIC_API_URL,
+    return await instance.get(kakaoUrl, {
       headers: {
         "Content-Type": "application/json",
-        "ngrok-skip-browser-warning": "69420",
         Authorization: `Bearer ${localStorage.getItem("token")}`,
       },
     });
   } else {
-    return await axios.get(tossUrl, {
+    return await instance.get(tossUrl, {
       baseURL: process.env.NEXT_PUBLIC_API_URL,
       headers: {
         "Content-Type": "application/json",
-        "ngrok-skip-browser-warning": "69420",
         Authorization: `Bearer ${localStorage.getItem("token")}`,
       },
     });

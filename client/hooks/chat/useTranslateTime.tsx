@@ -54,7 +54,7 @@ const useTranslateTIme = ({ currTime, kr_curr }: Props) => {
       } else if (createMinute < 10) {
         finalCreatedAt = `오전 ${createHour}:0${createMinute}`;
       } else {
-        finalCreatedAt = `오후 ${createHour}:${createMinute}`;
+        finalCreatedAt = `오전 ${createHour}:${createMinute}`;
       }
     }
   } else if (

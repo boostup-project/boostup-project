@@ -5,9 +5,13 @@ import EditUserData from "./EditUserData";
 import EditUserPwd from "./EditUserPwd";
 import { useRouter } from "next/router";
 import Swal from "sweetalert2";
+import { useRecoilValue } from "recoil";
+import { isMemberEdited } from "atoms/mypage/myPageAtom";
 const MypageInfo = () => {
+  const isMemEdited = useRecoilValue(isMemberEdited);
   const [isMemberEdit, setIsMemberEdit] = useState(false);
   const [isPwdEdit, setIsPwdEdit] = useState(false);
+  const [memberImg, setMemberImg] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [name, setName] = useState<string>("");
   const router = useRouter();
@@ -21,8 +25,9 @@ const MypageInfo = () => {
     if (localStorage) {
       setEmail(localStorage.email);
       setName(localStorage.name);
+      setMemberImg(localStorage.memberImage);
     }
-  }, [email, name]);
+  }, [isMemEdited]);
   const { mutate, isSuccess, isError } = useDeleteAccount();
   const deleteMyAccount = () => {
     Swal.fire({
@@ -58,14 +63,13 @@ const MypageInfo = () => {
   return (
     <>
       <div className="w-full flex flex-row justify-start items-center">
-        <div className="object-cover desktop:w-[260px] tablet:w-[250px] w-[150px] h-fit flex flex-col justify-start items-start p-5 ">
+        <div className="object-cover tablet:w-[250px] tablet:h-[250px] w-[150px] h-[150px] flex flex-col justify-start items-start p-5 ">
           <img
-            // src={localStorage.memberImage}
-            // src={data.profileImage}
+            src={memberImg}
             alt="profile Image"
             width={200}
             height={200}
-            className="object-cover rounded-xl border border-borderColor"
+            className="w-full h-full object-cover rounded-xl"
           />
         </div>
         <div className="w-4/5 h-full flex flex-col justify-start items-start py-5">
@@ -86,14 +90,20 @@ const MypageInfo = () => {
             </div>
           </div>
           <div className="flex desktop:mt-8 tablet:mt-6 mt-2">
-            <button className="mr-8 text text-pointColor" onClick={editProfile}>
+            <button
+              className="mr-8 desktop:w-1/6 tablet:w-[15%] w-[5%]  text text-pointColor desktop:text-base tablet:text-sm text-xs"
+              onClick={editProfile}
+            >
               Edit
             </button>
-            <button className="mr-8 text text-pointColor" onClick={editPWd}>
+            <button
+              className="mr-8 desktop:w-[60%] tablet:w-[60%] w-[65%] text text-pointColor desktop:text-base tablet:text-sm text-xs"
+              onClick={editPWd}
+            >
               비밀번호수정
             </button>
             <button
-              className="mr-8 text text-negativeMessage"
+              className="mr-8 desktop:w-[40%] tablet:w-[40%] w-[45%] text text-negativeMessage desktop:text-base tablet:text-sm text-xs"
               onClick={deleteMyAccount}
             >
               회원탈퇴

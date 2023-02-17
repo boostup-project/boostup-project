@@ -122,31 +122,22 @@ const Curriculum = ({
 
     if (compressImg) {
       compressFile = new File([compressImg], compressImg?.name);
-      console.log(compressFile);
       formData.append("profileImage", compressFile);
     }
 
     /** 6. 참고 사진 압축 및 할당 */
-    console.log("detaiImg", detailImage);
     if (detailImage.length > 0) {
       const careerImgsBefore = detailImage.map((image: FileList) => image[0]);
-      console.log(careerImgsBefore);
-      careerImgsBefore.map(async (img: File, idx: number) => {
-        const compressImg = await compressImage(img);
-        // console.log(compressImg);
-        const compressImgFile = new File([compressImg!], compressImg?.name!);
-        console.log(compressImgFile);
-        formData.append("careerImage", compressImgFile);
-      });
+      const some = await Promise.all(
+        careerImgsBefore.map(async (img: File, idx: number) => {
+          const compressImg = await compressImage(img);
+          return new File([compressImg!], compressImg?.name!);
+        }),
+      );
+      console.log(some);
+      some.map(el => formData.append("careerImage", el));
     }
-
-    toast.info("과외를 저장중입니다", {
-      autoClose: 4000,
-      position: toast.POSITION.TOP_RIGHT,
-    });
-    setTimeout(() => {
-      mutate(formData);
-    }, 4500);
+    mutate(formData);
   };
 
   return (
@@ -193,8 +184,10 @@ const Curriculum = ({
         </div>
       )}
       <div className="flex flex-row justify-center items-center w-full h-fit mt-10">
-        <SmallBtn onClick={toBack}>이전</SmallBtn>
-        <SmallBtn onClick={onClick} css="ml-5">
+        <SmallBtn type="button" onClick={toBack}>
+          이전
+        </SmallBtn>
+        <SmallBtn type="submit" onClick={onClick} css="ml-5">
           등 록
         </SmallBtn>
       </div>
@@ -203,18 +196,3 @@ const Curriculum = ({
 };
 
 export default Curriculum;
-
-// const pre = {
-//   title,
-//   language: parseLang,
-//   company,
-//   career: parseInt(career),
-//   address: parseAddress,
-//   cost: parseInt(cost),
-//   introduction,
-//   detailCompany,
-//   detailLocation,
-//   personality,
-//   detailCost,
-//   curriculum: curInfo,
-// };

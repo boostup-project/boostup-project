@@ -14,6 +14,7 @@ interface ObjectPart {
 
 export interface Info {
   [index: string]: string | string[] | ObjectPart;
+  // detailImage: string
 }
 
 const WriteModal = () => {
@@ -39,7 +40,11 @@ const WriteModal = () => {
           />
         )}
         {step === 2 && (
-          <ExtraInfo setExtraInfo={setExtraInfo} setStep={setStep} />
+          <ExtraInfo
+            extraInfo={extraInfo}
+            setExtraInfo={setExtraInfo}
+            setStep={setStep}
+          />
         )}
         {step === 3 && (
           <Curriculum

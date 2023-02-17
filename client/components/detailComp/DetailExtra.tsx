@@ -1,16 +1,15 @@
 import { AxiosResponse } from "axios";
-import useGetExtra from "hooks/detail/useGetExtra";
-import Image from "next/image";
 import { useState } from "react";
 import { useEffect } from "react";
 import DetailExtraModi from "./DetailExtraModi";
 import FadeLoader from "react-spinners/FadeLoader";
 import { loaderBlue } from "assets/color/color";
+import DetailImageModal from "./DetailImageModal";
 
-interface CareerImage {
+export interface CareerImage {
   [index: string]: string;
   careerImageId: string;
-  careerImageUrl: string;
+  filePath: string;
 }
 
 export interface DetailExtraInfo {
@@ -46,7 +45,9 @@ const detailTitlesArray = Object.keys(detailTitles);
 
 const DetailExtra = ({ extraData, lessonId, editable }: Props) => {
   const [textData, setTextData] = useState<DetailTitles>();
-  const [images, setImages] = useState<string[]>([]);
+  const [images, setImages] = useState<CareerImage[]>([]);
+  const [imagesToShow, setImagesToShow] = useState<string>("");
+  const [isImageModal, setIsImageModal] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
 
   useEffect(() => {
@@ -55,10 +56,7 @@ const DetailExtra = ({ extraData, lessonId, editable }: Props) => {
         introduction: extraData.data.introduction,
         detailCompany: extraData.data.detailCompany,
         personality: extraData.data.personality,
-        detailCost:
-          parseInt(extraData.data.detailCost.split("원")).toLocaleString(
-            "ko-KR",
-          ) + "원/회",
+        detailCost: extraData.data.detailCost,
         detailLocation: extraData.data.detailLocation,
       };
       setTextData(prompt);
@@ -67,6 +65,14 @@ const DetailExtra = ({ extraData, lessonId, editable }: Props) => {
   }, [extraData]);
   const modalOpen = () => {
     setIsEdit(prev => !prev);
+  };
+  const modalImageOpen = (e: any) => {
+    setImagesToShow(images[e.target.id].filePath);
+    setIsImageModal(prev => !prev);
+  };
+
+  const modalImageClose = () => {
+    setIsImageModal(prev => !prev);
   };
 
   return (
@@ -89,7 +95,7 @@ const DetailExtra = ({ extraData, lessonId, editable }: Props) => {
           </span>
         </div>
       )}
-      <div className="w-full h-full pb-6 pt-3 px-6 text-base">
+      <div className="w-full h-full pb-6 pt-3 px-3 text-base">
         {!textData ? (
           <div className="w-full h-full flex justify-center items-center">
             <FadeLoader
@@ -106,13 +112,21 @@ const DetailExtra = ({ extraData, lessonId, editable }: Props) => {
               <div className="font-SCDream5">{detailTitles[title]}</div>
               <div className="font-SCDream3">
                 {title === "careerImage" ? (
-                  <div className="border border-borderColor w-72 h-fit flex">
-                    {images?.map((image: any) => (
+                  // <div className="w-80 h-28 tablet:w-[450px] tablet:h-36 desktop:w-[500px] desktop:h-40 flex border border-borderColor rounded-xl">
+                  <div className="w-full h-28 tablet:h-36 desktop:h-40 flex flex-row justify-start items-center">
+                    {images.length !== 0 ? null : (
+                      <div className="min-w-[150px] h-full flex flex-col justify-center items-center font-SCDream3 text-sm text-textColor border border-borderColor rounded-xl px-3">
+                        등록된 사진이 없습니다
+                      </div>
+                    )}
+                    {images?.map((image: any, idx: number) => (
                       <img
-                        className="w-1/3 p-1 rounded-xl"
+                        className="w-auto h-[80%] mr-1 rounded-xl aspect-square cursor-pointer"
                         key={image.careerImageId}
+                        id={String(idx)}
                         src={image.filePath}
                         alt="detailImage"
+                        onClick={e => modalImageOpen(e)}
                       />
                     ))}
                   </div>
@@ -124,6 +138,12 @@ const DetailExtra = ({ extraData, lessonId, editable }: Props) => {
           ))
         )}
       </div>
+      {isImageModal && (
+        <DetailImageModal
+          modalImageClose={modalImageClose}
+          imagesToShow={imagesToShow}
+        />
+      )}
     </div>
   );
 };

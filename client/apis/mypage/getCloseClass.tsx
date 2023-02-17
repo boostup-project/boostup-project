@@ -1,12 +1,10 @@
-import axios from "axios";
+import instance from "apis/module";
 
 const getCloseClass = async (suggestId: number) => {
   const url = `/suggest/${suggestId}/done`;
-  return await axios.get(url, {
-    baseURL: process.env.NEXT_PUBLIC_API_URL,
+  return await instance.get(url, {
     headers: {
       "content-Type": `application/json`,
-      "ngrok-skip-browser-warning": "63490",
       Authorization: `Bearer ${localStorage.getItem("token")}`,
     },
   });

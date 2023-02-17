@@ -1,5 +1,6 @@
 import ChatSendMessage from "./ChatSendMessage";
 import ChatReceiveMessage from "./ChatReceiveMessage";
+import ChatNoticeMessage from "./ChatNoticeMessage";
 import { useEffect, useRef } from "react";
 
 interface Props {
@@ -26,10 +27,16 @@ const ChatContent = ({ chatList }: Props) => {
         ref={messageBoxRef}
         className="w-full tablet:h-4/5 h-[82%] flex flex-col justify-start items-center pb-3 px-3 overflow-auto"
       >
-        {list.map((el: any) => {
+        {list.map((el: any, idx: number) => {
           return (
-            <>
-              {el.displayName === localStorage.getItem("name")?.toString() ? (
+            <div
+              className="w-full h-fit flex flex-col justify-center items-center"
+              key={idx}
+            >
+              {el.messageType === "ALARM" ? (
+                <ChatNoticeMessage content={el.message} time={el.createdAt} />
+              ) : el.displayName ===
+                localStorage.getItem("name")?.toString() ? (
                 <ChatSendMessage content={el.message} time={el.createdAt} />
               ) : (
                 <ChatReceiveMessage
@@ -38,7 +45,7 @@ const ChatContent = ({ chatList }: Props) => {
                   time={el.createdAt}
                 />
               )}
-            </>
+            </div>
           );
         })}
       </div>

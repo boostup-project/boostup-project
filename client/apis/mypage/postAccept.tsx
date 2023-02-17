@@ -1,4 +1,4 @@
-import axios from "axios";
+import instance from "apis/module";
 
 interface Accept {
   quantity: number;
@@ -9,17 +9,14 @@ const postAccept = async ({ quantity, suggestId }: Accept) => {
   const body = {
     quantity: quantity,
   };
-  return await axios.post(
+  return await instance.post(
     `/suggest/${suggestId}/accept
   `,
     body,
     {
-      baseURL: process.env.NEXT_PUBLIC_API_URL,
       headers: {
         "content-Type": `application/json`,
-        "ngrok-skip-browser-warning": "69420",
         Authorization: `Bearer ${localStorage.getItem("token")}`,
-        // RefreshToken: localStorage.getItem("refresh_token"),
       },
     },
   );

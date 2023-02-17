@@ -4,7 +4,7 @@ import { IconImg } from "assets/icon";
 import { useState, useRef } from "react";
 import ExtraInfo from "../createModal/ExtraInfo";
 import CreateModalContainer from "../reuse/container/CreateModalContainer";
-import { DetailTitles } from "./DetailExtra";
+import { CareerImage, DetailTitles } from "./DetailExtra";
 import usePostExtraModi from "hooks/detail/usePostExtraModi";
 import { useEffect } from "react";
 import { toast } from "react-toastify";
@@ -16,7 +16,7 @@ import { refetchToggle } from "atoms/detail/detailAtom";
 interface Props {
   modalOpen: () => void;
   textData: DetailTitles;
-  images: string[];
+  images: CareerImage[];
   lessonId: number;
 }
 
@@ -129,7 +129,7 @@ const DetailExtraModi = ({ modalOpen, textData, images, lessonId }: Props) => {
     setDeletedArr(prev => prev.concat(deletedId));
   };
 
-  const testSubmit = (e: any) => {
+  const testSubmit = async (e: any) => {
     const formData = new FormData();
 
     const detailTxt = {
@@ -148,24 +148,20 @@ const DetailExtraModi = ({ modalOpen, textData, images, lessonId }: Props) => {
       .filter(image => typeof image[0] === "object")
       .map(image => image[0]);
     if (addImgs.length > 0) {
-      addImgs.map(async img => {
-        const compressImg = await compressImage(img);
-        const compressImgFile = new File([compressImg!], compressImg?.name!);
-        formData.append("careerImage", compressImgFile);
-      });
+      const some = await Promise.all(
+        addImgs.map(async img => {
+          const compressImg = await compressImage(img);
+          return new File([compressImg!], compressImg?.name!);
+        }),
+      );
+      some.map(el => formData.append("careerImage", el));
     }
     const assemble = {
       object: formData,
       id: lessonId,
     };
-    toast.info("이미지 최적화 중입니다...", {
-      autoClose: 4000,
-      position: toast.POSITION.TOP_RIGHT,
-    });
-    setTimeout(() => {
-      mutate(assemble);
-      modalOpen();
-    }, 4500);
+    mutate(assemble);
+    modalOpen();
   };
 
   return (
@@ -312,7 +308,10 @@ const DetailExtraModi = ({ modalOpen, textData, images, lessonId }: Props) => {
             )}
           </div>
           <div className="flex flex-row justify-center items-center w-full h-fit mt-10">
-            <button className="font-SCDream4 w-1/4 py-2 bg-pointColor rounded-md text-white">
+            <button
+              type="submit"
+              className="font-SCDream4 w-1/4 py-2 bg-pointColor rounded-md text-white"
+            >
               수정하기
             </button>
           </div>

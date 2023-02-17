@@ -1,13 +1,10 @@
-import axios from "axios";
+import instance from "apis/module";
 
 const getAllBookmark = async () => {
-  return await axios.get(`/bookmark`, {
-    baseURL: process.env.NEXT_PUBLIC_API_URL,
+  return await instance.get(`/bookmark`, {
     headers: {
       "content-Type": `application/json`,
-      "ngrok-skip-browser-warning": "69420",
       Authorization: `Bearer ${localStorage.getItem("token")}`,
-      // RefreshToken: localStorage.getItem("refresh_token"),
     },
   });
 };

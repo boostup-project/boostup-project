@@ -1,12 +1,10 @@
-import axios from "axios";
+import instance from "apis/module";
 
 const postMemberModi = async (object: FormData) => {
   const url = "/member/modification";
-  return await axios.post(url, object, {
-    baseURL: process.env.NEXT_PUBLIC_API_URL,
+  return await instance.post(url, object, {
     headers: {
       "content-Type": `multipart/form-data`,
-      "ngrok-skip-browser-warning": "69420",
       Authorization: `Bearer ${localStorage.getItem("token")}`,
     },
   });

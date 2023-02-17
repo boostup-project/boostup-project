@@ -1,5 +1,5 @@
 import ChatListContent from "./ChatListContent";
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { useRecoilState } from "recoil";
 import {
   chatActive,
@@ -69,17 +69,20 @@ const ChatListComp = () => {
         </div>
         {/* map */}
         {chatRoomList.map(
-          (el: {
-            receiverId: number;
-            chatRoomId: number;
-            displayName: string;
-            latestMessage: string;
-            createdAt: string;
-            alarmCount: number;
-          }) => {
+          (
+            el: {
+              receiverId: number;
+              chatRoomId: number;
+              displayName: string;
+              latestMessage: string;
+              createdAt: string;
+              alarmCount: number;
+            },
+            idx: number,
+          ) => {
             return (
               <ChatListContent
-                key={el.chatRoomId}
+                key={idx}
                 onClick={() =>
                   handleClickChat(el.chatRoomId, el.displayName, el.receiverId)
                 }
