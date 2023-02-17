@@ -36,7 +36,6 @@ const nextConfig = {
   },
 };
 
-module.exports = nextConfig;
-//   removeImports({
-//   ...nextConfig,
-// });
+module.exports = removeImports({
+  ...nextConfig,
+});
