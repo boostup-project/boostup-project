@@ -6,9 +6,9 @@ import { resetPwStep } from "atoms/auth/authAtom";
 const usePostEmailAuth = () => {
   const [step, setStep] = useRecoilState(resetPwStep);
   return useMutation(postAuthPw, {
-    onSuccess: () => {
-      setStep(2);
-    },
+    // onSuccess: () => {
+    //   setStep(2);
+    // },
     onError: error => {
       console.log(error);
       alert("요청실패!");

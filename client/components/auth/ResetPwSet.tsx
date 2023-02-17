@@ -67,6 +67,11 @@ const ResetPwSet = () => {
         position: toast.POSITION.TOP_RIGHT,
       });
     }
+
+    return () => {
+      setPw("");
+      setRePw("");
+    };
   }, [isSuccess, isError]);
 
   return (
