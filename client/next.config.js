@@ -24,6 +24,7 @@ const nextConfig = {
   },
 };
 
-module.exports = removeImports({
-  ...nextConfig,
-});
+module.exports = nextConfig;
+// removeImports({
+//   ...nextConfig,
+// });
