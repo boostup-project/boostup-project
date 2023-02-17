@@ -3,7 +3,7 @@ package com.codueon.boostUp.domain.suggest.payment;
 import com.codueon.boostUp.domain.suggest.dto.GetPaymentInfo;
 import com.codueon.boostUp.domain.suggest.dto.GetPaymentReceipt;
 import com.codueon.boostUp.domain.suggest.dto.GetRefundPayment;
-import com.codueon.boostUp.domain.suggest.dto.WrapPaymentStatusCheck;
+import com.codueon.boostUp.domain.suggest.dto.GetPaymentStatusCheck;
 import com.codueon.boostUp.domain.suggest.kakao.*;
 import com.codueon.boostUp.domain.suggest.response.Message;
 import com.codueon.boostUp.domain.suggest.toss.*;
@@ -93,10 +93,10 @@ public class PaymentTest extends PaymentControllerTest {
     @DisplayName("GET 신청 프로세스 9 결제 여부 조회")
     void paymentStatusCheck() throws Exception {
         Boolean paymentCheck = true;
-        WrapPaymentStatusCheck wrapPaymentStatusCheck = new WrapPaymentStatusCheck(paymentCheck);
+        GetPaymentStatusCheck getPaymentStatusCheck = new GetPaymentStatusCheck(paymentCheck);
 
         given(paymentService.getPaymentStatusCheck(suggest.getId(), suggest.getMemberId()))
-                .willReturn(wrapPaymentStatusCheck.getPaymentCheck());
+                .willReturn(getPaymentStatusCheck.getPaymentCheck());
 
         ResultActions actions =
                 mockMvc.perform(
@@ -281,10 +281,12 @@ public class PaymentTest extends PaymentControllerTest {
         String name = "김선생";
 
         GetRefundPayment response = GetRefundPayment.builder()
-                .suggest(suggest)
                 .name(name)
                 .lesson(lesson)
-                .paymentInfo(paymentInfo)
+                .totalCost(suggest.getTotalCost())
+                .quantity(paymentInfo.getQuantity())
+                .paymentMethod(suggest.getPaymentMethod())
+                .quantityCount(paymentInfo.getQuantityCount())
                 .build();
 
         given(paymentService.getRefundPaymentInfo(Mockito.anyLong(), Mockito.anyLong()))

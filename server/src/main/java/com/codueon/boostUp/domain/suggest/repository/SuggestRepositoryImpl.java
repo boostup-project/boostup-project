@@ -32,6 +32,7 @@ public class SuggestRepositoryImpl implements CustomSuggestRepository {
 
     /**
      * 마이페이지 선생님 신청 내역 조회 QueryDSL
+     *
      * @param lessonId 과외 식별자
      * @param memberId 사용자 식별자
      * @param tabId 탭 번호
@@ -70,6 +71,7 @@ public class SuggestRepositoryImpl implements CustomSuggestRepository {
 
     /**
      * tabId별 조회 Where문 메서드
+     *
      * @param tabId 탭 번호
      * @return suggestStatus
      * @author LeeGoh
@@ -89,6 +91,7 @@ public class SuggestRepositoryImpl implements CustomSuggestRepository {
 
     /**
      * 마이페이지 학생 신청 내역 조회 QueryDSL
+     *
      * @param memberId 사용자 식별자
      * @param pageable 페이지 정보
      * @return Page
@@ -132,6 +135,7 @@ public class SuggestRepositoryImpl implements CustomSuggestRepository {
 
     /**
      * 결제 상세 정보 조회 QueryDSL
+     *
      * @param suggestId 신청 식별자
      * @param memberId 사용자 식별자
      * @return GetPaymentInfo
@@ -154,6 +158,7 @@ public class SuggestRepositoryImpl implements CustomSuggestRepository {
 
     /**
      * 결제 영수증 조회 QueryDSL
+     *
      * @param suggestId 신청 식별자
      * @param memberId 사용자 식별자
      * @return GetPaymentReceipt
@@ -172,6 +177,22 @@ public class SuggestRepositoryImpl implements CustomSuggestRepository {
                 .leftJoin(member).on(lesson.memberId.eq(member.id))
                 .leftJoin(paymentInfo).on(suggest.id.eq(paymentInfo.suggest.id))
                 .where(suggest.memberId.eq(memberId).and(suggest.id.eq(suggestId)))
+                .fetchOne();
+    }
+
+    /**
+     * 과외 한 사용자 닉네임 조회 QueryDSL
+     *
+     * @param suggestId 과외 식별자
+     * @return String
+     * @author LeeGoh
+     */
+    public String findStudentNameBySuggestId(Long suggestId) {
+        return queryFactory
+                .select(member.name)
+                .from(member)
+                .leftJoin(suggest).on(member.id.eq(suggest.memberId))
+                .where(suggest.id.eq(suggestId))
                 .fetchOne();
     }
 }

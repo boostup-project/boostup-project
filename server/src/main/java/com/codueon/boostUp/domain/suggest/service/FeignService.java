@@ -44,6 +44,7 @@ public class FeignService {
 
     /**
      * Kakao 결제 헤더 입력 메서드
+     *
      * @return KakaoPayHeader
      * @author LeeGoh
      */
@@ -57,6 +58,7 @@ public class FeignService {
 
     /**
      * Toss 결제 헤더 입력 메서드
+     *
      * @return TossPayHeader
      * @author LeeGoh
      */
@@ -69,6 +71,7 @@ public class FeignService {
 
     /**
      * Kakao 결제 전 파라미터 입력 메서드
+     *
      * @param requestUrl 요청 URL
      * @param suggestId 신청 식별자
      * @param totalCost 총 가격
@@ -103,6 +106,7 @@ public class FeignService {
 
     /**
      * Toss 결제 전 파라미터 입력 메서드
+     *
      * @param requestUrl 요청 URL
      * @param suggestId 신청 식별자
      * @param cost 과외 가격
@@ -129,6 +133,7 @@ public class FeignService {
 
     /**
      * Kakao 결제 URL 생성 결과 메서드
+     *
      * @param headers KakaoPayHeader
      * @param params ReadyToPaymentInfo
      * @return KakaoPayReadyInfo
@@ -151,6 +156,7 @@ public class FeignService {
 
     /**
      * Toss 결제 URL 생성 결과 메서드
+     *
      * @param headers TossPayHeader
      * @param body ReadyToTossPaymentInfo
      * @return TossPayReadyInfo
@@ -172,12 +178,14 @@ public class FeignService {
 
     /**
      * Kakao 결제 후 예약 정보 조회를 위한 파라미터 입력 메서드
+     *
      * @param pgToken Payment Gateway Token
      * @param paymentInfo 결제 정보
      * @return RequestForKakaoPaymentInfo
      * @author LeeGoh
      */
-    public RequestForKakaoPayInfo setRequestParams(String pgToken, PaymentInfo paymentInfo) {
+    public RequestForKakaoPayInfo setRequestParams(String pgToken,
+                                                   PaymentInfo paymentInfo) {
         return RequestForKakaoPayInfo.builder()
                 .cid(paymentInfo.getCid())
                 .tid(paymentInfo.getTid())
@@ -190,25 +198,34 @@ public class FeignService {
 
     /**
      * Toss 결제 후 예약 정보 조회를 위한 파라미터 입력 메서드
-     * @param paymentInfo 결제 정보
+     *
+     * @param paymentKey    paymentKey
+     * @param amount        과외 가격
+     * @param orderId       주문아이디
      * @return RequestForTossPaymentInfo
      * @author LeeGoh
      */
-    public RequestForTossPayInfo setRequestBody(PaymentInfo paymentInfo) {
+    public RequestForTossPayInfo setRequestBody(String paymentKey,
+                                                Integer amount,
+                                                String orderId) {
         return RequestForTossPayInfo.builder()
-                .paymentKey(paymentInfo.getPaymentKey())
-                .amount(paymentInfo.getAmount())
-                .orderId(paymentInfo.getOrderId())
+                .paymentKey(paymentKey)
+                .amount(amount)
+                .orderId(orderId)
                 .build();
     }
 
-    public RequestForKakaoPayCancelInfo setRequestCancelParams(PaymentInfo paymentInfo) {
-        Integer count = paymentInfo.getQuantity() - paymentInfo.getQuantityCount();
-        Integer amount = paymentInfo.getTotalAmount() / paymentInfo.getQuantity();
+    public RequestForKakaoPayCancelInfo setRequestCancelParams(Integer quantity,
+                                                               Integer quantityCount,
+                                                               Integer totalAmount,
+                                                               String tid,
+                                                               String cid) {
+        Integer count = quantity - quantityCount;
+        Integer amount = totalAmount / quantity;
 
         return RequestForKakaoPayCancelInfo.builder()
-                .tid(paymentInfo.getTid())
-                .cid(paymentInfo.getCid())
+                .tid(tid)
+                .cid(cid)
                 .cancel_amount(count * amount)
                 .cancel_tax_free_amount(1000)
                 .build();
@@ -216,15 +233,19 @@ public class FeignService {
 
     /**
      * Toss 환불 정보 바디 입력 메서드
-     * @param paymentInfo 결제 정보
+     *
+     * @param quantity          과외 횟수
+     * @param quantityCount     과외 진행 횟수
+     * @param amount            과외 금액
      * @return CancelToTossPaymentInfo
      * @author LeeGoh
      */
-    public RequestForTossPayCancelInfo setCancelBody(PaymentInfo paymentInfo) {
-        Integer count = paymentInfo.getQuantity() - paymentInfo.getQuantityCount();
-        Integer amount = paymentInfo.getAmount();
+    public RequestForTossPayCancelInfo setCancelBody(Integer quantity,
+                                                     Integer quantityCount,
+                                                     Integer amount) {
+        Integer count = quantity - quantityCount;
 
-        if (paymentInfo.getQuantityCount() > 0) {
+        if (quantityCount > 0) {
             return RequestForTossPayCancelInfo.builder()
                     .cancelReason("고객이 취소를 원함")
                     .cancelAmount(count * amount)
@@ -236,6 +257,7 @@ public class FeignService {
 
     /**
      * Kakao 결제 완료 후 신청 정보 요청 메서드
+     *
      * @param headers KakaoPayHeader
      * @param params RequestForKakaoPaymentInfo
      * @return KakaoPaySuccessInfo
@@ -259,6 +281,7 @@ public class FeignService {
 
     /**
      * Toss 결제 완료 후 신청 정보 요청 메서드
+     *
      * @param headers TossPayHeader
      * @param body RequestForTossPaymentInfo
      * @return TossPaySuccessInfo
@@ -297,14 +320,16 @@ public class FeignService {
 
     /**
      * Toss 환불 완료 후 환불 정보 요청 메서드
+     *
      * @param headers TossPayHeader
      * @param paymentKey paymentKey
      * @param body CancelToTossPaymentInfo
      * @return TossPayCancelInfo
      * @author LeeGoh
      */
-    public TossPayCancelInfo getCancelTossPaymentResponse(TossPayHeader headers, String paymentKey, RequestForTossPayCancelInfo body) {
-
+    public TossPayCancelInfo getCancelTossPaymentResponse(TossPayHeader headers,
+                                                          String paymentKey,
+                                                          RequestForTossPayCancelInfo body) {
         try {
             return tossPayFeignClient
                     .cancelPayment(

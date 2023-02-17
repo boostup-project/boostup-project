@@ -3,7 +3,7 @@ package com.codueon.boostUp.domain.suggest.contoller;
 import com.codueon.boostUp.domain.suggest.dto.GetPaymentInfo;
 import com.codueon.boostUp.domain.suggest.dto.GetPaymentReceipt;
 import com.codueon.boostUp.domain.suggest.dto.GetRefundPayment;
-import com.codueon.boostUp.domain.suggest.dto.WrapPaymentStatusCheck;
+import com.codueon.boostUp.domain.suggest.dto.GetPaymentStatusCheck;
 import com.codueon.boostUp.domain.suggest.response.Message;
 import com.codueon.boostUp.domain.suggest.service.PaymentService;
 import com.codueon.boostUp.domain.suggest.service.SuggestDbService;
@@ -46,10 +46,10 @@ public class PaymentController {
      * @author LeeGoh
      */
     @GetMapping("/{suggest-id}/payment/check")
-    public ResponseEntity<WrapPaymentStatusCheck> paymentStatusCheck(@PathVariable("suggest-id") Long suggestId,
-                                                                     Authentication authentication) {
+    public ResponseEntity<GetPaymentStatusCheck> paymentStatusCheck(@PathVariable("suggest-id") Long suggestId,
+                                                                    Authentication authentication) {
         Boolean paymentCheck = paymentService.getPaymentStatusCheck(suggestId, AuthVO.ofMemberId(authentication));
-        return ResponseEntity.ok().body(new WrapPaymentStatusCheck(paymentCheck));
+        return ResponseEntity.ok().body(new GetPaymentStatusCheck(paymentCheck));
     }
 
     /**

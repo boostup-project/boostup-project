@@ -300,6 +300,7 @@ public class SuggestService {
 
     /**
      * 예외처리 - Suggest memberId, status 비교
+     *
      * @param suggest 신청 정보
      * @param memberId 회원 식별자
      * @author LeeGoh
@@ -314,6 +315,7 @@ public class SuggestService {
 
     /**
      * 예외처리 - Lesson memberId, Suggest status 비교
+     *
      * @param status 신청 상태
      * @param tutorMemberId 과외 등록한 사용자 식별자
      * @param memberId 회원 식별자
@@ -330,6 +332,7 @@ public class SuggestService {
 
     /**
      * 예외처리 - Suggest memberId, Suggest status 두 가지 비교
+     *
      * @param suggest 신청 정보
      * @param memberId 회원 식별자
      * @author LeeGoh

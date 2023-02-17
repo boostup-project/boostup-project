@@ -12,4 +12,5 @@ public interface CustomSuggestRepository {
     Page<GetStudentSuggest> getStudentSuggestsOnMyPage(Long memberId, Pageable pageable);
     GetPaymentInfo getPaymentInfoOnMyPage(Long suggestId, Long memberId);
     GetPaymentReceipt getPaymentReceiptOnMyPage(Long suggestId, Long memberId);
+    String findStudentNameBySuggestId(Long suggestId);
 }

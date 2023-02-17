@@ -4,8 +4,6 @@ import com.codueon.boostUp.domain.chat.utils.AlarmType;
 import com.codueon.boostUp.domain.lesson.dto.get.GetLessonInfoForAlarm;
 import com.codueon.boostUp.domain.lesson.entity.Lesson;
 import com.codueon.boostUp.domain.lesson.service.LessonDbService;
-import com.codueon.boostUp.domain.member.entity.Member;
-import com.codueon.boostUp.domain.member.service.MemberDbService;
 import com.codueon.boostUp.domain.suggest.entity.PaymentInfo;
 import com.codueon.boostUp.domain.suggest.entity.Suggest;
 import com.codueon.boostUp.domain.suggest.response.Message;
@@ -21,14 +19,12 @@ import static com.codueon.boostUp.domain.suggest.entity.SuggestStatus.PAY_IN_PRO
 import static com.codueon.boostUp.domain.suggest.utils.PayConstants.ORDER_APPROVED;
 import static com.codueon.boostUp.domain.suggest.utils.PayConstants.REFUND_APPROVED;
 import static com.codueon.boostUp.domain.suggest.utils.SuggestConstants.*;
-import static com.codueon.boostUp.domain.suggest.utils.SuggestConstants.INVALID_PARAMS;
 import static com.codueon.boostUp.global.exception.ExceptionCode.INVALID_ACCESS;
 
 @Service
 @RequiredArgsConstructor
 public class TossPayService {
     private final FeignService feignService;
-    private final MemberDbService memberDbService;
     private final LessonDbService lessonDbService;
     private final SuggestDbService suggestDbService;
     private final SuggestEventService suggestEventService;
@@ -97,7 +93,8 @@ public class TossPayService {
         PaymentInfo findPaymentInfo = suggestDbService.ifExistsReturnPaymentInfo(suggestId);
 
         TossPayHeader headers = feignService.setTossHeaders();
-        RequestForTossPayInfo body = feignService.setRequestBody(findPaymentInfo);
+        RequestForTossPayInfo body = feignService.setRequestBody(
+                findPaymentInfo.getPaymentKey(), findPaymentInfo.getAmount(), findPaymentInfo.getOrderId());
 
         TossPaySuccessInfo tossPaySuccessInfo = feignService.getSuccessTossResponse(headers, body);
 
@@ -116,10 +113,11 @@ public class TossPayService {
         findSuggest.setStatus(DURING_LESSON);
         suggestDbService.saveSuggest(findSuggest);
 
-        Member student = memberDbService.ifExistsReturnMember(findSuggest.getMemberId());
+        String studentName = suggestDbService.findStudentNameBySuggestId(suggestId);
         GetLessonInfoForAlarm tutorInfo = lessonDbService.getLessonInfoForAlarm(findSuggest.getLessonId());
         suggestEventService.sendAlarmMessage(tutorInfo.getTutorId(), tutorInfo.getTitle(),
-                student.getName(), null, null, AlarmType.PAYMENT_SUCCESS);
+                studentName, null, null, AlarmType.PAYMENT_SUCCESS);
+
         return Message.builder()
                 .data(tossPaySuccessInfo)
                 .message(INFO_URI_MSG)
@@ -141,16 +139,23 @@ public class TossPayService {
     /**
      * Toss 환불 메서드
      *
-     * @param suggest     신청 정보
-     * @param paymentInfo 결제 정보
+     * @param suggest           신청 정보
+     * @param quantity          과외 횟수
+     * @param quantityCount     과외 진행 횟수
+     * @param amount            과외 금액
+     * @param paymentKey        paymentKey
      * @author LeeGoh
      */
-    public Message refundTossPayment(Suggest suggest, PaymentInfo paymentInfo) {
+    public Message refundTossPayment(Suggest suggest,
+                                     Integer quantity,
+                                     Integer quantityCount,
+                                     Integer amount,
+                                     String paymentKey) {
         TossPayHeader headers = feignService.setTossHeaders();
-        RequestForTossPayCancelInfo body = feignService.setCancelBody(paymentInfo);
+        RequestForTossPayCancelInfo body = feignService.setCancelBody(quantity, quantityCount, amount);
 
         TossPayCancelInfo cancelInfo =
-                feignService.getCancelTossPaymentResponse(headers, paymentInfo.getPaymentKey(), body);
+                feignService.getCancelTossPaymentResponse(headers, paymentKey, body);
 
         cancelInfo.setOrderStatus(REFUND_APPROVED);
         // suggest.setStatus(REFUND_PAYMENT);
@@ -160,6 +165,7 @@ public class TossPayService {
         GetLessonInfoForAlarm tutorInfo = lessonDbService.getLessonInfoForAlarm(suggest.getLessonId());
         suggestEventService.sendAlarmMessage(suggest.getMemberId(), tutorInfo.getTitle(),
                 null, null, null, AlarmType.ACCEPT_REFUND);
+
         return Message.builder()
                 .data(cancelInfo)
                 .message(CANCELED_PAY_MESSAGE)

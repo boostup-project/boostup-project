@@ -73,7 +73,7 @@ public class SuggestController {
     /**
      * 신청 프로세스 9 과외 종료 컨트롤러 메서드
      *
-     * @param suggestId 신청 식별자
+     * @param suggestId      신청 식별자
      * @param authentication 인증 정보
      * @return ResponseEntity
      * @author LeeGoh
@@ -88,10 +88,10 @@ public class SuggestController {
     /**
      * 마이페이지 선생님용 신청내역 조회 컨트롤러 메서드
      *
-     * @param lessonId 과외 식별자
-     * @param tabId    탭 번호
+     * @param lessonId       과외 식별자
+     * @param tabId          탭 번호
      * @param authentication 인증 정보
-     * @param pageable 페이지 정보
+     * @param pageable       페이지 정보
      * @return MultiResponseDto
      * @author LeeGoh
      */
@@ -107,7 +107,7 @@ public class SuggestController {
     /**
      * 마이페이지 학생용 신청내역 조회 컨트롤러 메서드
      *
-     * @param pageable 페이지 정보
+     * @param pageable       페이지 정보
      * @param authentication 인증 정보
      * @return MultiResponseDto
      * @author LeeGoh
@@ -122,14 +122,14 @@ public class SuggestController {
     /**
      * 신청 취소 컨트롤러 메서드
      *
-     * @param suggestId 신청 식별자
+     * @param suggestId      신청 식별자
      * @param authentication 인증 정보
      * @return ResponseEntity
      * @author LeeGoh
      */
     @DeleteMapping("/{suggest-id}")
     public ResponseEntity<?> cancelSuggest(@PathVariable("suggest-id") Long suggestId,
-                                        Authentication authentication) {
+                                           Authentication authentication) {
         suggestService.cancelSuggest(suggestId, AuthVO.of(authentication));
         return ResponseEntity.noContent().build();
     }
@@ -137,7 +137,7 @@ public class SuggestController {
     /**
      * 강사 종료 과외 삭제
      *
-     * @param suggestId 신청 식별자
+     * @param suggestId      신청 식별자
      * @param authentication 인증 정보
      * @return ResponseEntity
      * @author LeeGoh
@@ -152,7 +152,7 @@ public class SuggestController {
     /**
      * 학생 종료 과외 삭제
      *
-     * @param suggestId 신청 식별자
+     * @param suggestId      신청 식별자
      * @param authentication 인증 정보
      * @return ResponseEntity
      * @author LeeGoh
@@ -167,7 +167,7 @@ public class SuggestController {
     /**
      * 출석부 1 출석부 조회 컨트롤러 메서드
      *
-     * @param suggestId 신청 식별자
+     * @param suggestId      신청 식별자
      * @param authentication 인증 정보
      * @author LeeGoh
      */
@@ -180,28 +180,28 @@ public class SuggestController {
     /**
      * 출석부 2 출석 인정(출석 횟수 차감) 컨트롤러 메서드
      *
-     * @param suggestId 신청 식별자
+     * @param suggestId      신청 식별자
      * @param authentication 인증 정보
      * @author LeeGoh
      */
     @GetMapping("/{suggest-id}/attendance/check")
-    public ResponseEntity<WrapQuantityCount> lessonAttendanceCheck(@PathVariable("suggest-id") Long suggestId,
-                                                                   Authentication authentication) {
+    public ResponseEntity<GetQuantityCount> lessonAttendanceCheck(@PathVariable("suggest-id") Long suggestId,
+                                                                  Authentication authentication) {
         Integer quantityCount = suggestService.teacherChecksAttendance(suggestId, AuthVO.ofMemberId(authentication));
-        return ResponseEntity.ok().body(new WrapQuantityCount(quantityCount));
+        return ResponseEntity.ok().body(new GetQuantityCount(quantityCount));
     }
 
     /**
      * 출석부 3 출석 인정 취소(출석 횟수 증가) 컨트롤러 메서드
      *
-     * @param suggestId 신청 식별자
+     * @param suggestId      신청 식별자
      * @param authentication 인증 정보
      * @author LeeGoh
      */
     @GetMapping("/{suggest-id}/attendance/cancel")
-    public ResponseEntity<WrapQuantityCount> lessonAttendanceCancel(@PathVariable("suggest-id") Long suggestId,
-                                                                    Authentication authentication) {
+    public ResponseEntity<GetQuantityCount> lessonAttendanceCancel(@PathVariable("suggest-id") Long suggestId,
+                                                                   Authentication authentication) {
         Integer quantityCount = suggestService.teacherCancelAttendance(suggestId, AuthVO.ofMemberId(authentication));
-        return ResponseEntity.ok().body(new WrapQuantityCount(quantityCount));
+        return ResponseEntity.ok().body(new GetQuantityCount(quantityCount));
     }
 }
