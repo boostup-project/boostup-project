@@ -163,4 +163,8 @@ public class RedisChatMessage {
     public void deleteAllNewChat() {
         redisTemplate.delete(KEY_FOR_SAVED_TO_RDB);
     }
+
+    public Long numOfNewChat() {
+        return operations.zCard(KEY_FOR_SAVED_TO_RDB);
+    }
 }

@@ -61,7 +61,7 @@ public enum ExceptionCode {
     // 인증 코드
     INVALID_EMAIL_CODE(403, "유효하지 않은 인증 코드입니다."),
     ALREADY_EXPIRED_EMAIL_CODE(403, "인증 코드가 만료되었습니다."),
-
+    IMPOSSIBLE_CHANGE_SAME_PASSWORD(504, "같은 비밀번호로는 변경할 수 없습니다."),
 
     // 과외 신청
     NOT_ACCEPT_IN_PROGRESS(504, "과외 수락 대기중 상태가 아닙니다."),

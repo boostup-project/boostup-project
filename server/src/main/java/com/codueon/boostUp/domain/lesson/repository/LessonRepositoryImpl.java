@@ -287,30 +287,74 @@ public class LessonRepositoryImpl implements CustomLessonRepository {
      */
     private BooleanBuilder makeDetailSearchConditions(PostSearchLesson postSearchLesson) {
         BooleanBuilder builder = new BooleanBuilder();
-
-        if (postSearchLesson.getAddress() != null && postSearchLesson.getLanguage() != null)
-            builder.and(lessonLanguage.lesson.id.eq(lessonAddress.lesson.id));
-
-        if (postSearchLesson.getAddress() != null)
-            builder.and(lessonAddress.addressInfo.eq(AddressInfo.findById(postSearchLesson.getAddress())));
-
-        if (postSearchLesson.getLanguage() != null)
-            builder.and(lessonLanguage.languageInfo.eq(LanguageInfo.findById(postSearchLesson.getLanguage())));
-
-        if (postSearchLesson.getName() != null)
-            builder.and(member.name.contains(postSearchLesson.getName()));
-
-        if (postSearchLesson.getCareer() != null)
-            builder.and(lesson.career.goe(postSearchLesson.getCareer()));
-
-        if (postSearchLesson.getStartCost() != null && postSearchLesson.getEndCost() != null)
-            return builder.and(lesson.cost.between(postSearchLesson.getStartCost(), postSearchLesson.getEndCost()));
-        else if (postSearchLesson.getStartCost() != null)
-            return builder.and(lesson.cost.goe(postSearchLesson.getStartCost()));
-        else if (postSearchLesson.getEndCost() != null)
-            return builder.and(lesson.cost.loe(postSearchLesson.getEndCost()));
-
+        addAddressCondition(builder, postSearchLesson.getAddress());
+        addLanguageCondition(builder, postSearchLesson.getLanguage());
+        addTutorNameCondition(builder, postSearchLesson.getName());
+        addTutorCareerCondition(builder, postSearchLesson.getCareer());
+        addLessonCostCondition(builder, postSearchLesson.getStartCost(), postSearchLesson.getEndCost());
         return builder;
+    }
+
+    /**
+     * 가능 지역 조건 메서드
+     *
+     * @param builder BooleanBuilder
+     * @param address 가능 지역
+     * @author mozzi327
+     */
+    private void addAddressCondition(BooleanBuilder builder, Integer address) {
+        if (address == null) return;
+        builder.and(lessonAddress.addressInfo.eq(AddressInfo.findById(address)));
+    }
+
+    /**
+     * 사용 언어 조건 메서드
+     *
+     * @param builder  BooleanBuilder
+     * @param language 사용 언어
+     * @author mozzi327
+     */
+    private void addLanguageCondition(BooleanBuilder builder, Integer language) {
+        if (language == null) return;
+        builder.and(lessonLanguage.languageInfo.eq(LanguageInfo.findById(language)));
+    }
+
+    /**
+     * 선생님 이름 조건 메서드
+     *
+     * @param builder BooleanBuilder
+     * @param name    닉네임
+     * @author mozzi327
+     */
+    private void addTutorNameCondition(BooleanBuilder builder, String name) {
+        if (name == null) return;
+        builder.and(member.name.contains(name));
+    }
+
+    /**
+     * 경력 조건 메서드
+     *
+     * @param builder BooleanBuilder
+     * @param career  경력
+     * @author mozzi327
+     */
+    private void addTutorCareerCondition(BooleanBuilder builder, Integer career) {
+        if (career == null) return;
+        builder.and(lesson.career.goe(career));
+    }
+
+    /**
+     * 과외 비용 조건 메서드
+     *
+     * @param builder   BooleanBuilder
+     * @param startCost 금액 이상
+     * @param endCost   금액 이하
+     * @author mozzi327
+     */
+    private void addLessonCostCondition(BooleanBuilder builder, Integer startCost, Integer endCost) {
+        if (startCost != null && endCost != null) builder.and(lesson.cost.between(startCost, endCost));
+        else if (startCost != null) builder.and(lesson.cost.goe(startCost));
+        else if (endCost != null) builder.and(lesson.cost.loe(endCost));
     }
 
     /**

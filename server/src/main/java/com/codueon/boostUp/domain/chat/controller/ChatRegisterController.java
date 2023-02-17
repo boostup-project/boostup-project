@@ -26,7 +26,7 @@ public class ChatRegisterController {
      */
     public void registerUserAndSendEnterMessage(Long chatRoomId, AuthVO authInfo) {
         boolean isExistMember = redisChatRoom.isExistMemberInChatRoom(chatRoomId, authInfo.getMemberId());
-        if (!isExistMember) throw new BusinessLogicException(ExceptionCode.CHATROOM_NOT_FOUND);
+        if (!isExistMember) redisChatRoom.createChatRoom(chatRoomId, authInfo.getMemberId());
     }
 
     /**
