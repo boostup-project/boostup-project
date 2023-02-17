@@ -17,9 +17,6 @@ const nextConfig = {
     return [
       {
         source: "/api/:path*",
-        headers: [
-          { key: "Access-Control-Allow-Origin", value: "*" },
-        ],
         destination: BASE_URL + "/:path*",
       },
     ];
