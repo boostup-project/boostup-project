@@ -1,6 +1,8 @@
 /** @type {import('next').NextConfig} */
 const removeImports = require("next-remove-imports")();
 
+const BASE_URL = process.env.NEXT_PUBLIC_API_URL;
+
 const nextConfig = {
   reactStrictMode: false,
   swcMinify: true,
@@ -11,7 +13,14 @@ const nextConfig = {
   images: {
     unoptimized: true,
   },
-//   trailingSlash: true,
+  async rewrites() {
+    return [
+      {
+        source: "/api/:path*",
+        destination: BASE_URL + "/:path*",
+      },
+    ];
+  },
 };
 
 module.exports = removeImports({
