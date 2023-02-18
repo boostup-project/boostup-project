@@ -17,14 +17,12 @@ const nextConfig = {
     return [
       {
         source: "/apis/:path*",
-        headers: [{ key: "Access-Control-Allow-Origin", value: BASE_URL }],
         destination: BASE_URL + "/:path*",
       },
     ];
   },
 };
 
-module.exports = nextConfig;
-// removeImports({
-//   ...nextConfig,
-// });
+module.exports = removeImports({
+  ...nextConfig,
+});
