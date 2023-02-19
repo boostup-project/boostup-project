@@ -91,6 +91,8 @@ public class SecurityConfig {
         configuration.addAllowedOrigin("http://codeuon.s3-website.ap-northeast-2.amazonaws.com");
         configuration.addAllowedOrigin("https://boostup-project.vercel.app");
         configuration.addAllowedOrigin("https://d12vhbt0xdnnpo.cloudfront.net");
+        configuration.addAllowedOrigin("https://www.codueon.com");
+        configuration.addAllowedOrigin("https://codueon.com");
         configuration.addAllowedHeader("*");
         configuration.addAllowedMethod("*");
         configuration.setAllowCredentials(true);
