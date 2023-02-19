@@ -2,11 +2,20 @@ import AuthContainer from "components/reuse/container/AuthContainer";
 import ResetPwEmailAuth from "components/auth/ResetPwEmailAuth";
 import ResetPwSet from "components/auth/ResetPwSet";
 import ResetPwCodeAuth from "components/auth/ResetPwCodeAuth";
-import { useRecoilValue } from "recoil";
-import { resetPwStep } from "atoms/auth/authAtom";
+import { useRecoilState } from "recoil";
+import { resetPwStep, findPwEmail } from "atoms/auth/authAtom";
+import { useEffect } from "react";
 
 const ResetPassword = () => {
-  const step = useRecoilValue(resetPwStep);
+  const [step, setStep] = useRecoilState(resetPwStep);
+  const [email, setEmail] = useRecoilState(findPwEmail);
+
+  useEffect(() => {
+    return () => {
+      setStep(1);
+      setEmail("");
+    };
+  }, []);
   return (
     <>
       <div className="flex flex-col bg-bgColor items-center justify-center w-full h-screen">

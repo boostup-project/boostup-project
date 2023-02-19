@@ -21,7 +21,7 @@ const Home = () => {
     <>
       <div className="flex flex-col bg-bgColor items-center justify-start w-full h-full">
         <Carouselcomp />
-        {widthSize > 764 ? <LanguageFilter /> : <MoblieLanguageFilter />}
+        {widthSize > 1024 ? <LanguageFilter /> : <MoblieLanguageFilter />}
         <Cards></Cards>
       </div>
     </>

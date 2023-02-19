@@ -13,6 +13,8 @@ import { editMode } from "atoms/detail/detailAtom";
 import usePostBasicModi from "hooks/detail/usePostBasicModi";
 import imageCompression from "browser-image-compression";
 import { useEffect } from "react";
+import { AnyARecord } from "dns";
+import { ErrorMessage } from "@hookform/error-message";
 
 interface BasicInfo {
   [index: string]: string | string[];
@@ -38,6 +40,7 @@ const BasicInfo = ({ basicInfo, setBasicInfo, toWrite, setStep }: Props) => {
     register,
     handleSubmit,
     formState: { errors },
+    watch,
   } = useForm<BasicInfo>({ mode: "onBlur" });
 
   const langArr = Object.keys(langDict);
@@ -146,8 +149,6 @@ const BasicInfo = ({ basicInfo, setBasicInfo, toWrite, setStep }: Props) => {
     }
   };
 
-  // 페이지 랜더링이 데이터 Fetch 보다 먼저 진행됨에 따른 딜레이 해결
-
   return (
     <>
       <div className="w-full h-fit font-SCDream5 text-xs text-center text-pointColor mt-2 tablet:text-sm">
@@ -254,7 +255,12 @@ const BasicInfo = ({ basicInfo, setBasicInfo, toWrite, setStep }: Props) => {
                         type="checkbox"
                         value={el}
                         {...register("languages", {
-                          required: "필수정보입니다",
+                          required: "필수 정보입니다",
+                          validate: (val: string | string[]) => {
+                            if (watch("languages").length > 3) {
+                              return "3개가지 선택할 수 있습니다";
+                            }
+                          },
                         })}
                         defaultChecked={
                           [...(basicInfo.languages as any)].includes(el)
@@ -267,7 +273,12 @@ const BasicInfo = ({ basicInfo, setBasicInfo, toWrite, setStep }: Props) => {
                         type="checkbox"
                         value={el}
                         {...register("languages", {
-                          required: "필수정보입니다",
+                          required: "필수 정보입니다",
+                          validate: (val: string | string[]) => {
+                            if (watch("languages").length > 3) {
+                              return "3개가지 선택할 수 있습니다";
+                            }
+                          },
                         })}
                       />
                     )}
@@ -278,9 +289,9 @@ const BasicInfo = ({ basicInfo, setBasicInfo, toWrite, setStep }: Props) => {
             }
           })}
         </div>
-        <p className="w-11/12 text-xs text-negativeMessage mt-1 tablet:text-sm desktop:w-4/6">
+        {/* <p className="w-11/12 text-xs text-negativeMessage mt-1 tablet:text-sm desktop:w-4/6">
           {errors?.language && <span>필수 정보입니다</span>}
-        </p>
+        </p> */}
         <div className="w-11/12 list h-fit flex flex-row items-start mt-3 desktop:w-4/6">
           {langArr.map((el: string, idx: number) => {
             if (idx > 3) {
@@ -292,7 +303,12 @@ const BasicInfo = ({ basicInfo, setBasicInfo, toWrite, setStep }: Props) => {
                         type="checkbox"
                         value={el}
                         {...register("languages", {
-                          required: "필수정보입니다",
+                          required: "필수 정보입니다",
+                          validate: (val: string | string[]) => {
+                            if (watch("languages").length > 3) {
+                              return "3개가지 선택할 수 있습니다";
+                            }
+                          },
                         })}
                         defaultChecked={
                           [...(basicInfo.languages as any)].includes(el)
@@ -305,7 +321,12 @@ const BasicInfo = ({ basicInfo, setBasicInfo, toWrite, setStep }: Props) => {
                         type="checkbox"
                         value={el}
                         {...register("languages", {
-                          required: "필수정보입니다",
+                          required: "필수 정보입니다",
+                          validate: () => {
+                            if (watch("languages").length > 3) {
+                              return "3개까지 선택할 수 있습니다";
+                            }
+                          },
                         })}
                       />
                     )}
@@ -317,9 +338,20 @@ const BasicInfo = ({ basicInfo, setBasicInfo, toWrite, setStep }: Props) => {
             }
           })}
         </div>
-        <p className="w-11/12 text-xs text-negativeMessage mt-1 tablet:text-sm desktop:w-4/6">
+        <ErrorMessage
+          errors={errors}
+          name="languages"
+          render={({ message }) => {
+            return (
+              <p className="w-11/12 text-xs text-negativeMessage mt-1 tablet:text-sm desktop:w-4/6">
+                {message}
+              </p>
+            );
+          }}
+        />
+        {/* <p className="w-11/12 text-xs text-negativeMessage mt-1 tablet:text-sm desktop:w-4/6">
           {errors?.languages && <span>필수 정보입니다</span>}
-        </p>
+        </p> */}
         <div className="flex flex-row justify-start items-start w-11/12 h-fit font-SCDream5 text-sm text-textColor mt-4 mb-2 desktop:w-4/6">
           재직 회사/학교 <div className="text-pointColor">*</div>
         </div>
@@ -379,20 +411,7 @@ const BasicInfo = ({ basicInfo, setBasicInfo, toWrite, setStep }: Props) => {
                   control={control}
                   rules={{
                     required: "필수 정보입니다.",
-                    maxLength: {
-                      value: 3,
-                      message: "3개까지만 넣어주세요",
-                    },
                   }}
-                  // defaultValue={defaultAddress[0].map(
-                  //   (el: string, idx: number) => {
-                  //     return {
-                  //       key: idx,
-                  //       value: addDict[el],
-                  //       label: el,
-                  //     };
-                  //   },
-                  // )}
                   render={({ field }) => (
                     <Select
                       {...field}
@@ -414,6 +433,11 @@ const BasicInfo = ({ basicInfo, setBasicInfo, toWrite, setStep }: Props) => {
                       }}
                       isMulti
                       options={options}
+                      isOptionDisabled={() =>
+                        watch("address") && watch("address").length > 2
+                          ? true
+                          : false
+                      }
                     />
                   )}
                 />
