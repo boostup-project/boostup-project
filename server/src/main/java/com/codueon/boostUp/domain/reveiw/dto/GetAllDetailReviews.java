@@ -12,7 +12,7 @@ import java.util.List;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class GetAllDetailReviews {
-    private Double average;
+    private double average;
     private Integer totalReviews;
     private List<GetReview> data;
     private PageInfo pageInfo;
@@ -20,8 +20,8 @@ public class GetAllDetailReviews {
     public GetAllDetailReviews(Page<GetReview> pages) {
         List<GetReview> reviews = pages.getContent();
         this.totalReviews = reviews.size();
-        double avg = reviews.stream().mapToInt(GetReview::getScore).sum() / ((totalReviews == 0) ? 1 : totalReviews);
-        this.average = Math.round(avg * 10) / 10.0;
+        double avg = reviews.stream().mapToInt(GetReview::getScore).sum() / (double)((totalReviews == 0) ? 1 : totalReviews);
+        this.average = Math.round(avg * 100) / 100.0;
         this.data = reviews;
         this.pageInfo = PageInfo.builder()
                 .page(pages.getNumber() + 1)
