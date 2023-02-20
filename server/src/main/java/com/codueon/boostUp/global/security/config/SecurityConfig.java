@@ -12,6 +12,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -63,12 +64,36 @@ public class SecurityConfig {
                 .and()
                 .authorizeRequests()
                 .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
-                .antMatchers("/h2/**").permitAll()
-                .antMatchers("/auth/**").permitAll()
-                .antMatchers("/member/**").permitAll()
-                .antMatchers("/lesson/**").permitAll()
-                //.antMatchers(HttpMethod.POST, "/lesson/registration").hasAuthority("ROLE_USER")
-                .antMatchers("/suggest/**").permitAll()
+                .antMatchers("/h2/**").hasRole("ADMIN")
+                /* --------------------------------------------  AUTH 도메인  -----------------------------------------*/
+                .antMatchers(HttpMethod.POST, "/auth/login").permitAll()
+                .antMatchers(HttpMethod.DELETE, "/auth/logout").hasAuthority("ROLE_USER")
+
+                /* -------------------------------------------- MEMBER 도메인 -----------------------------------------*/
+                .antMatchers(HttpMethod.POST, "/member/**").permitAll()
+
+                /* -------------------------------------------- BOOKMARK 도메인 -----------------------------------------*/
+                .antMatchers(HttpMethod.GET, "/bookmark/**").hasAuthority("ROLE_USER")
+
+                /* -------------------------------------------- LESSON 도메인 -----------------------------------------*/
+                .antMatchers(HttpMethod.POST, "/lesson/**").hasAuthority("ROLE_USER")
+                .antMatchers(HttpMethod.PATCH, "/lesson/*/curriculum/modification").hasAuthority("ROLE_USER")
+                .antMatchers(HttpMethod.GET, "/lesson/**").permitAll()
+                .antMatchers(HttpMethod.DELETE, "/lesson/*").hasAuthority("ROLE_USER")
+                .antMatchers(HttpMethod.POST, "/lesson/search").permitAll()
+
+                /* -------------------------------------------- REVIEW 도메인 -----------------------------------------*/
+                .antMatchers(HttpMethod.POST, "/review/lesson/*/suggest/*").hasAuthority("ROLE_USER")
+                .antMatchers(HttpMethod.PATCH, "/review/*/modification").hasAuthority("ROLE_USER")
+                .antMatchers(HttpMethod.GET, "/review/**").hasAuthority("ROLE_USER")
+                .antMatchers(HttpMethod.DELETE, "/review/*").hasAuthority("ROLE_USER")
+
+                /* -------------------------------------------- SUGGEST 도메인 -----------------------------------------*/
+                .antMatchers(HttpMethod.POST, "/suggest/**").hasAuthority("ROLE_USER")
+                .antMatchers(HttpMethod.GET, "/suggest/**").hasAuthority("ROLE_USER")
+                .antMatchers(HttpMethod.DELETE, "/suggest/**").hasAuthority("ROLE_USER")
+
+                /* -------------------------------------------- 채팅관련 도메인 -----------------------------------------*/
                 .antMatchers("/api/**").permitAll()
                 .antMatchers("/ws/chat/**").permitAll()
                 .anyRequest().permitAll()
