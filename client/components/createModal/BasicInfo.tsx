@@ -16,7 +16,7 @@ import { useEffect } from "react";
 import { AnyARecord } from "dns";
 import { ErrorMessage } from "@hookform/error-message";
 
-interface BasicInfo {
+export interface BasicInfo {
   [index: string]: string | string[];
 }
 
