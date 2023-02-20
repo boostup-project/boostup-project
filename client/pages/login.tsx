@@ -12,6 +12,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import useGetKakaoLogin from "hooks/auth/useGetKakaoLogin";
 import useGetGoogleLogin from "hooks/auth/useGetGoogleLogin";
+import SeoHead from "components/reuse/SEO/SeoHead";
 const Login = () => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
@@ -69,6 +70,7 @@ const Login = () => {
   };
   return (
     <>
+      <SeoHead metaType="Login" />
       <ToastContainer />
       <div className="flex flex-col bg-bgColor items-center mt-44 w-full h-screen">
         <div className="flex flex-col w-full h-fit justify-center items-center font-SCDream5 text-xl text-textColor mb-2">

@@ -11,6 +11,7 @@ import Toss from "../../../public/images/Toss.png";
 import useWindowSize from "hooks/useWindowSize";
 
 import Image from "next/image";
+import SeoHead from "components/reuse/SEO/SeoHead";
 
 interface FetchedData {
   address: string[];
@@ -196,45 +197,78 @@ const shop = () => {
   };
 
   if (!data) {
-    <div className="mt-28 desktop:mt-12">Loading</div>;
+    <>
+      <SeoHead metaType="Pay" />
+      <div className="mt-28 desktop:mt-12">Loading</div>;
+    </>;
   } else {
     return (
-      <div className="flex flex-col bg-bgColor items-center w-full h-full mt-10 text-base tablet:text-2xl desktop:w-3/4 desktop:min-w-[1000px]">
-        <form
-          className="w-full h-full flex flex-col justify-center items-center"
-          onSubmit={handleSubmit(onSubmit)}
-        >
-          <div className="font-SCDream5 text-2xl text-center tablet:text-3xl desktop:mb-12">
-            결제
-          </div>
-          <div className="w-11/12 font-SCDream5 desktop:w-full desktop:flex desktop:justify-between">
-            <div className="desktop:w-7/12">
-              <div className="mb-1 pl-5">과외정보</div>
-              <div className="mb-6 p-5 border rounded-xl border-borderColor bg-white desktop:h-[500px]">
-                <div className="desktop:h-1/2">
-                  <div>선생님 정보</div>
-                  <div className="flex h-full my-4 tablet:justify-start desktop:h-fit">
-                    <div className="w-fit">
-                      <img
-                        className="object-cover rounded-xl w-[140px] h-[140px]"
-                        src={teacherImg as string}
-                      />
-                    </div>
-                    <div className="w-2/3 flex flex-col justify-evenly text-sm ml-7 tablet:text-xl tablet:ml-16">
-                      <div className="w-fit bold">{title}</div>
-                      {teacherInfoKeys.map((key, i) => (
-                        <div
-                          key={i}
-                          className="w-full flex text-xs tablet:text-sm"
-                        >
-                          <div className="bold w-[85px]">
-                            {teacherInfo[key]}
+      <>
+        <SeoHead metaType="Pay" />
+        <div className="flex flex-col bg-bgColor items-center w-full h-full mt-10 text-base tablet:text-2xl desktop:w-3/4 desktop:min-w-[1000px]">
+          <form
+            className="w-full h-full flex flex-col justify-center items-center"
+            onSubmit={handleSubmit(onSubmit)}
+          >
+            <div className="font-SCDream5 text-2xl text-center tablet:text-3xl desktop:mb-12">
+              결제
+            </div>
+            <div className="w-11/12 font-SCDream5 desktop:w-full desktop:flex desktop:justify-between">
+              <div className="desktop:w-7/12">
+                <div className="mb-1 pl-5">과외정보</div>
+                <div className="mb-6 p-5 border rounded-xl border-borderColor bg-white desktop:h-[500px]">
+                  <div className="desktop:h-1/2">
+                    <div>선생님 정보</div>
+                    <div className="flex h-full my-4 tablet:justify-start desktop:h-fit">
+                      <div className="w-fit">
+                        <img
+                          className="object-cover rounded-xl w-[140px] h-[140px]"
+                          src={teacherImg as string}
+                        />
+                      </div>
+                      <div className="w-2/3 flex flex-col justify-evenly text-sm ml-7 tablet:text-xl tablet:ml-16">
+                        <div className="w-fit bold">{title}</div>
+                        {teacherInfoKeys.map((key, i) => (
+                          <div
+                            key={i}
+                            className="w-full flex text-xs tablet:text-sm"
+                          >
+                            <div className="bold w-[85px]">
+                              {teacherInfo[key]}
+                            </div>
+                            <div className="w-[80px] ml-2 tablet:w-fit">
+                              {typeof teacherInfoData === "undefined" ? (
+                                <div>loading</div>
+                              ) : (
+                                teacherInfoData[key]
+                              )}
+                            </div>
                           </div>
-                          <div className="w-[80px] ml-2 tablet:w-fit">
-                            {typeof teacherInfoData === "undefined" ? (
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                  <div className="desktop:h-1/2">
+                    <div>결제 상세내역</div>
+                    <div className="text-sm flex flex-col h-full justify-between my-4 tablet:text-sm desktop:h-2/5">
+                      {costInfoKeys.map((key, i) => (
+                        <div key={i} className="w-full flex">
+                          <div
+                            className={`w-24 ${
+                              key === "totalCost" && `font-SCDream7 font-bold`
+                            }`}
+                          >
+                            {costInfo[key]}
+                          </div>
+                          <div
+                            className={`w-24 text-center ${
+                              key === "totalCost" && `font-SCDream7 font-bold`
+                            }`}
+                          >
+                            {typeof costInfoData === "undefined" ? (
                               <div>loading</div>
                             ) : (
-                              teacherInfoData[key]
+                              costInfoData[key]
                             )}
                           </div>
                         </div>
@@ -242,111 +276,84 @@ const shop = () => {
                     </div>
                   </div>
                 </div>
+              </div>
+              <div className="desktop:w-4/12 desktop:h-[532px] desktop:flex desktop:flex-col desktop:justify-between">
+                <div className="desktop:h-2/6">
+                  <div className="mb-1">내 정보</div>
+                  <div className="text-sm mb-6 p-5 border rounded-xl border-borderColor bg-white desktop:h-full desktop:flex desktop:flex-col desktop:justify-evenly desktop:items-center">
+                    <div className="flex">
+                      <div className="w-14 text-end mr-9">이름</div>
+                      <div className="w-64 desktop:w-48">{userName}</div>
+                    </div>
+                    <div className="flex">
+                      <div className="w-14 text-end mr-9">이메일</div>
+                      <div className="w-64 desktop:w-48">{userEmail}</div>
+                    </div>
+                  </div>
+                </div>
                 <div className="desktop:h-1/2">
-                  <div>결제 상세내역</div>
-                  <div className="text-sm flex flex-col h-full justify-between my-4 tablet:text-sm desktop:h-2/5">
-                    {costInfoKeys.map((key, i) => (
-                      <div key={i} className="w-full flex">
-                        <div
-                          className={`w-24 ${
-                            key === "totalCost" && `font-SCDream7 font-bold`
-                          }`}
+                  <div className="mb-1">결제 수단</div>
+                  <div className="desktop:h-[87%]">
+                    <div className="flex justify-center text-xs mb-6 px-3 py-5 border rounded-xl border-borderColor bg-white tablet:text-sm desktop:h-full desktop:flex-col desktop:justify-evenly desktop:items-center">
+                      {payMethod.map((el, i) => (
+                        <label
+                          key={i}
+                          className="w-1/4 flex justify-center text-xs items-center desktop:justify-start desktop:w-32"
                         >
-                          {costInfo[key]}
-                        </div>
-                        <div
-                          className={`w-24 text-center ${
-                            key === "totalCost" && `font-SCDream7 font-bold`
-                          }`}
-                        >
-                          {typeof costInfoData === "undefined" ? (
-                            <div>loading</div>
-                          ) : (
-                            costInfoData[key]
-                          )}
-                        </div>
-                      </div>
-                    ))}
+                          <input
+                            type="radio"
+                            value={i}
+                            disabled={isPayClicked ? true : false}
+                            {...register("pay", {
+                              required: true,
+                            })}
+                          />
+                          <span>&nbsp;</span>
+                          <div className="desktop:w-16">
+                            {screenWidth <= 412 ? el.mobile : el.name}
+                          </div>
+                          <span>&nbsp;</span>
+                          <Image
+                            src={el.icon}
+                            alt="kakao"
+                            width={screenWidth < 412 ? 15 : 30}
+                            height={screenWidth < 412 ? 15 : 30}
+                          />
+                        </label>
+                      ))}
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
-            <div className="desktop:w-4/12 desktop:h-[532px] desktop:flex desktop:flex-col desktop:justify-between">
-              <div className="desktop:h-2/6">
-                <div className="mb-1">내 정보</div>
-                <div className="text-sm mb-6 p-5 border rounded-xl border-borderColor bg-white desktop:h-full desktop:flex desktop:flex-col desktop:justify-evenly desktop:items-center">
-                  <div className="flex">
-                    <div className="w-14 text-end mr-9">이름</div>
-                    <div className="w-64 desktop:w-48">{userName}</div>
-                  </div>
-                  <div className="flex">
-                    <div className="w-14 text-end mr-9">이메일</div>
-                    <div className="w-64 desktop:w-48">{userEmail}</div>
-                  </div>
-                </div>
-              </div>
-              <div className="desktop:h-1/2">
-                <div className="mb-1">결제 수단</div>
-                <div className="desktop:h-[87%]">
-                  <div className="flex justify-center text-xs mb-6 px-3 py-5 border rounded-xl border-borderColor bg-white tablet:text-sm desktop:h-full desktop:flex-col desktop:justify-evenly desktop:items-center">
-                    {payMethod.map((el, i) => (
-                      <label
-                        key={i}
-                        className="w-1/4 flex justify-center text-xs items-center desktop:justify-start desktop:w-32"
-                      >
-                        <input
-                          type="radio"
-                          value={i}
-                          disabled={isPayClicked ? true : false}
-                          {...register("pay", {
-                            required: true,
-                          })}
-                        />
-                        <span>&nbsp;</span>
-                        <div className="desktop:w-16">
-                          {screenWidth <= 412 ? el.mobile : el.name}
-                        </div>
-                        <span>&nbsp;</span>
-                        <Image
-                          src={el.icon}
-                          alt="kakao"
-                          width={screenWidth < 412 ? 15 : 30}
-                          height={screenWidth < 412 ? 15 : 30}
-                        />
-                      </label>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          {isPayClicked && (
-            <div className="w-full font-SCDream5 text-center mt-7 tablet:text-base">
-              <button
-                className="rounded-xl bg-pointColor text-white px-4 py-2"
-                onClick={paymentCheck}
-              >
-                결제 확인
-              </button>
-            </div>
-          )}
-          {!isPayClicked && (
-            <div className="w-11/12 font-SCDream5 desktop:full">
-              <div className="w-full text-center mt-10 tablet:text-base">
-                <label className="w-full justify-center items-center">
-                  <input type="checkbox" required={true} /> 모든 결제 정보에
-                  대해서 확인하였습니다
-                </label>
-              </div>
-              <div className="w-full text-center mt-7 tablet:text-base">
-                <button className="rounded-xl bg-pointColor text-white px-4 py-2">
-                  결제하기
+            {isPayClicked && (
+              <div className="w-full font-SCDream5 text-center mt-7 tablet:text-base">
+                <button
+                  className="rounded-xl bg-pointColor text-white px-4 py-2"
+                  onClick={paymentCheck}
+                >
+                  결제 확인
                 </button>
               </div>
-            </div>
-          )}
-        </form>
-      </div>
+            )}
+            {!isPayClicked && (
+              <div className="w-11/12 font-SCDream5 desktop:full">
+                <div className="w-full text-center mt-10 tablet:text-base">
+                  <label className="w-full justify-center items-center">
+                    <input type="checkbox" required={true} /> 모든 결제 정보에
+                    대해서 확인하였습니다
+                  </label>
+                </div>
+                <div className="w-full text-center mt-7 tablet:text-base">
+                  <button className="rounded-xl bg-pointColor text-white px-4 py-2">
+                    결제하기
+                  </button>
+                </div>
+              </div>
+            )}
+          </form>
+        </div>
+      </>
     );
   }
 };

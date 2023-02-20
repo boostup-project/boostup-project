@@ -5,6 +5,7 @@ import ResetPwCodeAuth from "components/auth/ResetPwCodeAuth";
 import { useRecoilState } from "recoil";
 import { resetPwStep, findPwEmail } from "atoms/auth/authAtom";
 import { useEffect } from "react";
+import SeoHead from "components/reuse/SEO/SeoHead";
 
 const ResetPassword = () => {
   const [step, setStep] = useRecoilState(resetPwStep);
@@ -18,6 +19,7 @@ const ResetPassword = () => {
   }, []);
   return (
     <>
+      <SeoHead metaType="ResetPassword" />
       <div className="flex flex-col bg-bgColor items-center justify-center w-full h-screen">
         <div className="flex flex-col w-full h-fit justify-center items-center font-SCDream5 text-xl text-textColor mb-2">
           비밀번호 변경

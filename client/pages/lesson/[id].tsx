@@ -17,9 +17,17 @@ import DetailButtons from "components/Detail/DetailButtons";
 import { useRecoilValue } from "recoil";
 import { powerBasicEditModal, refetchToggle } from "atoms/detail/detailAtom";
 import useGetDetailReview from "hooks/detail/useGetDetailReview";
+import axios from "axios";
+import { BasicInfo } from "components/createModal/BasicInfo";
+import SeoHead from "components/reuse/SEO/SeoHead";
 
-const Detail = () => {
+interface LessonMeta {
+  lessonMeta: BasicInfo;
+}
+
+const Detail = ({ lessonMeta }: LessonMeta) => {
   // lessonId 받아오기
+  console.log(lessonMeta);
   const router = useRouter();
   const lessonId = Number(router.query.id);
 
@@ -79,10 +87,10 @@ const Detail = () => {
 
   return (
     <>
+      <SeoHead metaInfo={lessonMeta} metaType="Lesson" />
       {basicInfoSuccess && basicEditPower ? (
         <DetailBasicInfoEditModal basicData={basicInfo} />
       ) : null}
-
       <div className="flex flex-col bg-bgColor items-center justify-start w-full h-full pt-4">
         {/* 요약정보 */}
         <DetailSummeryContainer>
@@ -147,10 +155,21 @@ const Detail = () => {
 
 export default Detail;
 
-// export async function getServerSideProps({ query: { id } }) {
-//   return {
-//     props: {
-//       id,
-//     },
-//   };
-// }
+export async function getServerSideProps(context: { query: { id: any } }) {
+  const { id } = context.query;
+  const { data } = await axios.get(
+    `${process.env.NEXT_PUBLIC_API_URL}/lesson/${id}`,
+    {
+      headers: {
+        "content-Type": `application/json`,
+        "ngrok-skip-browser-warning": "69420",
+        Authorization: `${null}`,
+      },
+    },
+  );
+  data.id = id;
+  const lessonMeta: BasicInfo = data;
+  return {
+    props: { lessonMeta },
+  };
+}

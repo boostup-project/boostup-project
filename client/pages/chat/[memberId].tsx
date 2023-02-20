@@ -8,6 +8,7 @@ import { useRecoilState } from "recoil";
 import { useState } from "react";
 import { SyncLoader } from "react-spinners";
 import { useEffect } from "react";
+import SeoHead from "components/reuse/SEO/SeoHead";
 
 const Chat = () => {
   const widthSize = useWindowSize();
@@ -71,6 +72,7 @@ const Chat = () => {
 
   return (
     <>
+      <SeoHead metaType="Chat" />
       {subscribeState ? (
         <div className="w-full h-screen flex flex-col justify-start items-center pt-2">
           <ChatContainer>

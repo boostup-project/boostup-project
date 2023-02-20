@@ -10,6 +10,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useRecoilValue } from "recoil";
 import { signUpErrorMessage } from "atoms/auth/authAtom";
+import SeoHead from "components/reuse/SEO/SeoHead";
 
 const Signup = () => {
   const [name, setName] = useState<string>("");
@@ -79,6 +80,7 @@ const Signup = () => {
 
   return (
     <>
+      <SeoHead metaType="Signup" />
       <ToastContainer />
       <div className="flex flex-col bg-bgColor items-center justify-center w-full h-screen">
         <div className="flex flex-col w-full h-fit justify-center items-center font-SCDream5 text-xl text-textColor mb-2">
