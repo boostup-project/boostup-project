@@ -8,6 +8,7 @@ import com.codueon.boostUp.domain.member.dto.TokenDto;
 import com.codueon.boostUp.domain.member.entity.Member;
 import com.codueon.boostUp.domain.member.exception.AuthException;
 import com.codueon.boostUp.global.exception.ExceptionCode;
+import com.codueon.boostUp.global.security.token.JwtAuthenticationToken;
 import com.codueon.boostUp.global.security.utils.JwtTokenUtils;
 import com.codueon.boostUp.global.utils.RedisUtils;
 import lombok.RequiredArgsConstructor;
@@ -64,22 +65,18 @@ public class AuthService {
 
     /**
      * 사용자 로그아웃
-     * @param accessToken
-     * @param refreshToken
-     * @param memberId
+     * @param token 사용자 인증 정보
      * @author LimJaeminZ
      */
-    public void logoutMember(String accessToken, Long memberId) {
-        Member findMember = memberDbService.ifExistsReturnMember(memberId);
-
-        accessToken = jwtTokenUtils.parseAccessToken(accessToken);
+    public void logoutMember(JwtAuthenticationToken token) {
+        Member findMember = memberDbService.ifExistsReturnMember(token.getId());
 
         // refreshToken 존재 시 삭제
         redisUtils.deleteData(findMember.getEmail(), findMember.getAccountStatus().getProvider());
 
         // accessToken 만료 전까지 블랙리스트 처리
-        Long expiration = jwtTokenUtils.getExpiration(accessToken);
-        if (expiration > 0) redisUtils.setBlackList(accessToken, "Logout", expiration);
+        Long expiration = jwtTokenUtils.getExpiration(token.getAccessToken());
+        if (expiration > 0) redisUtils.setBlackList(token.getAccessToken(), "Logout", expiration);
     }
 
     /**

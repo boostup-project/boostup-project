@@ -65,4 +65,10 @@ public class AuthVO {
         JwtAuthenticationToken token = (JwtAuthenticationToken) auth;
         return token.getId();
     }
+
+    public static JwtAuthenticationToken convertToToken(Authentication auth) {
+        if (auth == null) throw new AuthException(ExceptionCode.INVALID_AUTH_TOKEN);
+        JwtAuthenticationToken token = (JwtAuthenticationToken) auth;
+        return token;
+    }
 }
