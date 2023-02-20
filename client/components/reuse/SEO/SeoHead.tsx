@@ -67,7 +67,10 @@ const SeoHead = ({ metaInfo, url, metaType }: Props) => {
           <title>{`${metaInfo!.title} | 코듀온`}</title>
           <meta name="description" content={metaInfo!.title.toString()}></meta>
           {/* Facebook Meta Tags  */}
-          <meta property="og:title" content={`${metaInfo!.title} | 코듀온`} />
+          <meta
+            property="og:title"
+            content={`${metaInfo!.name}님의 ${metaInfo!.title} | 코듀온`}
+          />
           <meta
             property="og:url"
             content={`https://www.codueon.com/lesson/${metaInfo!.id}`}
@@ -82,8 +85,14 @@ const SeoHead = ({ metaInfo, url, metaType }: Props) => {
             content="코딩 과외 매칭 플랫폼 코듀온, Codueon"
           />
           {/* Twitter Meta Tags  */}
-          <meta name={`${metaInfo!.title} | 코듀온`} content="코듀온" />
-          <meta name="twitter:card" content="images/logo.png" />
+          <meta
+            name="twitter:title"
+            content={`${metaInfo!.name}님의 ${metaInfo!.title} | 코듀온`}
+          />
+          <meta
+            name="twitter:card"
+            content={metaInfo!.profileImage.toString()}
+          />
           <meta
             property="twitter:url"
             content={`https://www.codueon.com/lesson/${metaInfo!.id}`}
