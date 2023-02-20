@@ -13,6 +13,9 @@ const nextConfig = {
   // images: {
   //   unoptimized: true,
   // },
+  images: {
+    domains: ["codueon.s3.ap-northeast-2.amazonaws.com"],
+  },
   async rewrites() {
     return [
       {

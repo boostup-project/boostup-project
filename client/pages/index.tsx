@@ -7,6 +7,7 @@ import { useRecoilState } from "recoil";
 import { chatActive, roomIdState } from "atoms/chat/chatAtom";
 import { useEffect } from "react";
 import useWindowSize from "hooks/useWindowSize";
+import SeoHead from "components/reuse/SEO/SeoHead";
 const Home = () => {
   const [active, setActive] = useRecoilState(chatActive);
   const [roomId, setRoomId] = useRecoilState(roomIdState);
@@ -19,6 +20,7 @@ const Home = () => {
 
   return (
     <>
+      <SeoHead metaType="Home" />
       <div className="flex flex-col bg-bgColor items-center justify-start w-full h-full">
         <Carouselcomp />
         {widthSize > 1024 ? <LanguageFilter /> : <MoblieLanguageFilter />}
