@@ -27,7 +27,6 @@ interface LessonMeta {
 
 const Detail = ({ lessonMeta }: LessonMeta) => {
   // lessonId 받아오기
-  console.log(lessonMeta);
   const router = useRouter();
   const lessonId = Number(router.query.id);
 
