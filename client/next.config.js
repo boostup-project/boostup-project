@@ -10,9 +10,9 @@ const nextConfig = {
   //     loader: 'imgix',
   //     path: '/',
   //   },
-  images: {
-    unoptimized: true,
-  },
+  // images: {
+  //   unoptimized: true,
+  // },
   async rewrites() {
     return [
       {
