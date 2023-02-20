@@ -27,7 +27,6 @@ const ResetPwEmailAuth = () => {
   };
 
   const onSubmit = (e: any) => {
-    console.log("Success Submit!");
     checkEmail({ email });
     // requestCode({ email });
   };
@@ -42,9 +41,10 @@ const ResetPwEmailAuth = () => {
         autoClose: 1500,
         position: toast.POSITION.TOP_RIGHT,
       });
+      setStep(2);
       setTimeout(() => {
         requestCode({ email });
-      }, 1700);
+      }, 1500);
     }
 
     if (isError) {

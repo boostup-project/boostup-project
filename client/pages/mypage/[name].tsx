@@ -10,6 +10,7 @@ import useGetTutorInfo from "hooks/mypage/useGetTutorInfo";
 import useGetMyTutor from "hooks/mypage/useGetMyTutor";
 import { useSetRecoilState } from "recoil";
 import { chatActive, roomIdState } from "atoms/chat/chatAtom";
+import SeoHead from "components/reuse/SEO/SeoHead";
 const Mypage = () => {
   const router = useRouter();
 
@@ -58,6 +59,7 @@ const Mypage = () => {
 
   return (
     <>
+      <SeoHead metaType="Mypage" />
       <div className="flex flex-col bg-bgColor items-center justify-center w-full h-full pt-4">
         {/* 내요약정보 */}
         <DetailSummeryContainer>
