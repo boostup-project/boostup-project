@@ -2,13 +2,11 @@ import {
   IconPaper,
   IconPlace,
   IconRibbon,
-  IconWon,
   IconFullheart,
   IconEmptyheart,
 } from "assets/icon/";
 import { useEffect, useState } from "react";
 import Link from "next/link";
-// import useGetMainCard from "./useGetMainCard";
 import getMainCard from "apis/card/getMainCard";
 import {
   QueryClient,
@@ -17,7 +15,6 @@ import {
   useQueryClient,
 } from "@tanstack/react-query";
 import useGetBookmarkModi from "hooks/detail/useGetBookmarkModi";
-import useGetBookmark from "hooks/detail/useGetBookmark";
 import Swal from "sweetalert2";
 import { mainCardInfo } from "atoms/main/mainAtom";
 import { useRecoilState, useRecoilValue } from "recoil";
@@ -44,7 +41,6 @@ const Card = () => {
     onSuccess: data => {
       setMainCardInfo(data.data.data);
       setTotalCards(data.data.data.length);
-      // setTotalCards(cardData?.data.data.length);
     },
     retry: 2,
   });
@@ -98,6 +94,7 @@ const Card = () => {
                     <img
                       className="flex w-full object-cover rounded-t-lg desktop:h-44 tablet:h-40 h-36"
                       src={card.profileImage}
+                      alt="profileImage"
                     />
                   </Link>
                   <button

@@ -9,7 +9,6 @@ import Image from "next/image";
 import Logo from "../../public/images/logo.png";
 import Link from "next/link";
 import { logUser } from "atoms/auth/authAtom";
-import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useEffect } from "react";
 import { useRouter } from "next/router";
