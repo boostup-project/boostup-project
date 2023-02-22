@@ -50,7 +50,6 @@ const DetailExtra = ({ extraData, lessonId, editable }: Props) => {
   const [isImageModal, setIsImageModal] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
 
-  console.log(extraData);
   useEffect(() => {
     if (extraData) {
       const prompt = {
@@ -113,7 +112,6 @@ const DetailExtra = ({ extraData, lessonId, editable }: Props) => {
               <div className="font-SCDream5">{detailTitles[title]}</div>
               <div className="font-SCDream3">
                 {title === "careerImage" ? (
-                  // <div className="w-80 h-28 tablet:w-[450px] tablet:h-36 desktop:w-[500px] desktop:h-40 flex border border-borderColor rounded-xl">
                   <div className="w-full h-28 tablet:h-36 desktop:h-40 flex flex-row justify-start items-center">
                     {images.length !== 0 ? null : (
                       <div className="min-w-[150px] h-full flex flex-col justify-center items-center font-SCDream3 text-sm text-textColor border border-borderColor rounded-xl px-3">
