@@ -23,7 +23,7 @@ public class AlarmController {
     @GetMapping("/alarm/room/{room-id}")
     public ResponseEntity enterChatRoom(@PathVariable("room-id") Long chatRoomId,
                                         Authentication authentication) {
-        chatAlarmService.sendAlarm(AuthVO.of(authentication), chatRoomId);
+        chatAlarmService.initAlarm(AuthVO.ofMemberId(authentication), chatRoomId);
         return ResponseEntity.noContent().build();
     }
 }

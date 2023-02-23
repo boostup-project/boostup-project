@@ -25,8 +25,8 @@ public class LessonDbService {
 
     /*--------------------------------------- DB Create 메서드 --------------------------------------*/
 
-    public void saveLesson(Lesson lesson) {
-        lessonRepository.save(lesson);
+    public Lesson saveLesson(Lesson lesson) {
+        return lessonRepository.save(lesson);
     }
 
     /**

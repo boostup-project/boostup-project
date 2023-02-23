@@ -62,7 +62,7 @@ public class ChatRoomService {
      * @param displayName     사용자 닉네임
      * @param attendanceCount 출석일수
      * @param lessonTitle     과외 타이틀
-     * @param rejectMessage   거절 사유
+     * @param message         사유
      * @param alarmType       알람 타입
      * @author mozzi327
      */
@@ -129,7 +129,7 @@ public class ChatRoomService {
 
         checkExistRoomKeyInfo(chatRoomId, senderId, receiverId);
 
-        sendMakeRoomMessage(chatRoomId, senderChat, 1);
+        sendMakeRoomMessage(chatRoomId, senderChat, 0);
         sendMakeRoomMessage(chatRoomId, receiverChat, 1);
 
         eventPublisher.publishEvent(InitialChatRoomListEvent.builder()
@@ -186,6 +186,17 @@ public class ChatRoomService {
                         .redisChat(redisChatMessage.getLatestMessage(redisChatMessage.getKey(chatRoom.getId())))
                         .build()
                 ).collect(Collectors.toList());
+    }
+
+    /**
+     * 채팅방 식별자 삭제 메서드
+     *
+     * @param memberId   사용자 식별자
+     * @param chatRoomId 채팅방 식별자
+     * @author mozzi327
+     */
+    public void deleteRedisChatRoomKey(Long memberId) {
+        redisChatRoom.deleteAllChatRoomKey(memberId);
     }
 
     /**

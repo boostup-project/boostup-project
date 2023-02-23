@@ -114,4 +114,23 @@ public class ChatService {
             redisChats.forEach(redisChat -> redisChatMessage.saveChatMessageFromRdb(redisChat));
         return redisChatMessage.findAll(chatRoomId);
     }
+
+    /**
+     * 채팅방 메시지 전체 삭제 메서드
+     *
+     * @param chatRoomId 채팅방 식별자
+     * @author mozzi327
+     */
+    public void deleteChatMessage(Long chatRoomId) {
+        redisChatMessage.removeAllMessageInChatRoom(chatRoomId);
+    }
+
+    /**
+     * 채팅방 저장용 메시지 전체 삭제 메서드
+     *
+     * @author mozzi327
+     */
+    public void deleteAllNewChatMessage() {
+        redisChatMessage.deleteAllNewChat();
+    }
 }
