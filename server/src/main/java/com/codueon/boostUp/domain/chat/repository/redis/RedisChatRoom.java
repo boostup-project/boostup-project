@@ -52,4 +52,8 @@ public class RedisChatRoom {
     public void deleteChatMember(Long chatRoomId, Long memberId) {
         setOperations.remove(chatRoomUtils.makeMemberKey(memberId), chatRoomUtils.makeKey(chatRoomId));
     }
+
+    public void deleteAllChatRoomKey(Long memberId) {
+        redisTemplate.delete(chatRoomUtils.makeMemberKey(memberId));
+    }
 }

@@ -43,17 +43,16 @@ public class RedisChatMessage {
     /**
      * Redis 최초 입장 시 메시지 생성 메서드
      *
-     * @param chatRoomId      채팅방 식별자
-     * @param enterMessage    입장 문구
-     * @param count           카운트
+     * @param chatRoomId   채팅방 식별자
+     * @param enterMessage 입장 문구
+     * @param count        카운트
      * @author mozzi327
      */
     public void initialMessage(Long chatRoomId, RedisChat enterMessage, int count) {
         String key = getKey(chatRoomId);
-        if (operations.zCard(key) != 0) return;
         operations.add(key, enterMessage, count);
         long idx = operations.zCard(KEY_FOR_SAVED_TO_RDB);
-        operations.add(KEY_FOR_SAVED_TO_RDB, enterMessage,idx + 1);
+        operations.add(KEY_FOR_SAVED_TO_RDB, enterMessage, idx + 1);
     }
 
     /**
@@ -67,7 +66,7 @@ public class RedisChatMessage {
         Long size = operations.zCard(key);
         operations.add(key, redisChat, size);
         long idx = operations.zCard(KEY_FOR_SAVED_TO_RDB);
-        operations.add(KEY_FOR_SAVED_TO_RDB, redisChat,idx + 1);
+        operations.add(KEY_FOR_SAVED_TO_RDB, redisChat, idx + 1);
     }
 
     /**
@@ -155,15 +154,32 @@ public class RedisChatMessage {
         return Arrays.asList(objectMapper.convertValue(results, RedisChat[].class));
     }
 
+    /**
+     * Redis 저장용 채팅 전체 조회 메서드
+     *
+     * @return List(RedisChat)
+     * @author mozzi327
+     */
     public List<RedisChat> findAllChat() {
         Object getAllMessage = operations.range(KEY_FOR_SAVED_TO_RDB, 0, -1);
         return Arrays.asList(objectMapper.convertValue(getAllMessage, RedisChat[].class));
     }
 
+    /**
+     * Redis 백업 후 저장용 메시지 삭제 메서드
+     *
+     * @author mozzi327
+     */
     public void deleteAllNewChat() {
         redisTemplate.delete(KEY_FOR_SAVED_TO_RDB);
     }
 
+    /**
+     * Redis 저장용 메시지 개수 카운트 메서드
+     *
+     * @return Long
+     * @author mozzi327
+     */
     public Long numOfNewChat() {
         return operations.zCard(KEY_FOR_SAVED_TO_RDB);
     }

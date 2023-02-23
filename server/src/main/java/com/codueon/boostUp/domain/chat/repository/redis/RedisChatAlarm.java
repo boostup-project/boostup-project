@@ -63,7 +63,7 @@ public class RedisChatAlarm {
      * @author mozzi327
      */
     public void deleteAlarmCount(Long memberId, Long chatRoomId) {
-        operations.getAndDelete(getKey(memberId, chatRoomId));
+        redisTemplate.delete(getKey(memberId, chatRoomId));
     }
 
     /**

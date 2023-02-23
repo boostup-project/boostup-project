@@ -36,5 +36,6 @@ out/
 
 ### VS Code ###
 .vscode/
+application-test.properties
 application-local.yml
 application-server.yml

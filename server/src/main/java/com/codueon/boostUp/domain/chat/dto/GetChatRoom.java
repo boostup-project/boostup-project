@@ -1,19 +1,26 @@
 package com.codueon.boostUp.domain.chat.dto;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @Getter
 @NoArgsConstructor
-public class GetChatRoom implements Comparable<GetChatRoom> {
+public class GetChatRoom implements Comparable<GetChatRoom>, Serializable {
     private Long chatRoomId;
     private Long receiverId;
     private int alarmCount;
     private String displayName;
     private String latestMessage;
+    @JsonSerialize(using = LocalDateTimeSerializer.class)
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     private LocalDateTime createdAt;
 
     @Builder
