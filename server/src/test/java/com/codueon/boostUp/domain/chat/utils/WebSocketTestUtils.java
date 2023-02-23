@@ -37,15 +37,21 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
-@Component
-@RequiredArgsConstructor
 public class WebSocketTestUtils {
-
     private final MemberDbService memberDbService;
     private final LessonDbService lessonDbService;
     private final ChatService chatService;
     private final ChatRoomService chatRoomService;
     private final ChatAlarmService chatAlarmService;
+
+    public WebSocketTestUtils(MemberDbService memberDbService, LessonDbService lessonDbService, ChatService chatService,
+                              ChatRoomService chatRoomService, ChatAlarmService chatAlarmService) {
+        this.memberDbService = memberDbService;
+        this.lessonDbService = lessonDbService;
+        this.chatService = chatService;
+        this.chatRoomService = chatRoomService;
+        this.chatAlarmService = chatAlarmService;
+    }
 
     public void initializeChattingTest(Member tutor, Member student, Lesson saveLesson) {
         memberDbService.saveMember(tutor);
@@ -60,7 +66,6 @@ public class WebSocketTestUtils {
         chatAlarmService.initAlarm(2L, 1L);
         chatRoomService.deleteRedisChatRoomKey(1L);
         chatRoomService.deleteRedisChatRoomKey(2L);
-
     }
 
     public void applyChattingRoom(AuthVO authInfo, Long lessonId) {
