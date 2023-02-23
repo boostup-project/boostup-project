@@ -176,7 +176,7 @@ public class SuggestDbService {
      * @author Quartz614
      */
     public List<Suggest> findAllSuggestForLesson(Long lessonId) {
-        return suggestRepository.findAllById(lessonId);
+        return suggestRepository.findAllByLessonId(lessonId);
     }
 
     /**
