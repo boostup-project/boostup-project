@@ -27,9 +27,9 @@ public class RedisSubscriber {
     public void sendMessage(String publishedMessage) {
         try {
             RedisChat redisChat = objectMapper.readValue(publishedMessage, RedisChat.class);
-            log.info("[LISTENER] {}", redisChat.getChatRoomId());
+            log.info("[MESSAGE CHATROOM] {}", redisChat.getChatRoomId());
             operations.convertAndSend("/topic/rooms/" + redisChat.getChatRoomId(), redisChat);
-            log.info("[COMPLETE SEND]");
+            log.info("[COMPLETE MESSAGE SEND]");
         } catch (JsonProcessingException e) {
             throw new BusinessLogicException(ExceptionCode.FAIL_TO_SERIALIZE);
         }
@@ -43,7 +43,9 @@ public class RedisSubscriber {
     public void sendAlarm(String publishedMessage) {
         try {
             GetAlarmMessage alarmMessage = objectMapper.readValue(publishedMessage, GetAlarmMessage.class);
+            log.info("[ALARM RECEIVER] {}", alarmMessage.getReceiverId());
             operations.convertAndSend("/topic/member/" + alarmMessage.getReceiverId(), alarmMessage);
+            log.info("[COMPLETE ALARM SEND]");
         } catch (JsonProcessingException e) {
             throw new BusinessLogicException(ExceptionCode.FAIL_TO_SERIALIZE);
         }
@@ -57,7 +59,9 @@ public class RedisSubscriber {
     public void sendEnterAlarm(String publishedMessage) {
         try {
             GetChatRoom firstAlarm = objectMapper.readValue(publishedMessage, GetChatRoom.class);
+            log.info("[FIRST ALARM RECEIVER] {}", firstAlarm.getReceiverId());
             operations.convertAndSend("/topic/member/" + firstAlarm.getReceiverId(), firstAlarm);
+            log.info("[COMPLETE FIRST ALARM SEND]");
         } catch (JsonProcessingException e) {
             throw new BusinessLogicException(ExceptionCode.FAIL_TO_SERIALIZE);
         }

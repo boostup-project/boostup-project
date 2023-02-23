@@ -18,7 +18,7 @@ public class ChatAlarmService {
      * @param chatRoomId 채팅방 식별자
      * @author mozzi327
      */
-    public void sendAlarm(AuthVO authInfo, Long chatRoomId) {
-        redisChatAlarm.deleteAlarmCount(authInfo.getMemberId(), chatRoomId);
+    public void initAlarm(Long memberId, Long chatRoomId) {
+        redisChatAlarm.deleteAlarmCount(memberId, chatRoomId);
     }
 }

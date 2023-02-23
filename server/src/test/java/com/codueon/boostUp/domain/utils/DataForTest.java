@@ -69,7 +69,7 @@ public class DataForTest {
 
     public Member getMember2() {
         Member member = Member.builder()
-                .id(2L)
+                .id(1L)
                 .name("조길동입니다")
                 .email("jddong@gmail.com")
                 .password("ghdrlfehd1!")
@@ -77,6 +77,52 @@ public class DataForTest {
                 .build();
         member.addMemberImage(getMemberImage());
         return member;
+    }
+
+    public Member getTutor() {
+        Member tutor = Member.builder()
+                .name("선생이에요")
+                .email("tutor@gmail.com")
+                .password("Ghdrlfehd1!")
+                .roles(List.of("USER"))
+                .build();
+        tutor.addMemberImage(getMemberImage());
+        return tutor;
+    }
+
+    public Member getSavedTutor() {
+        Member tutor = Member.builder()
+                .id(1L)
+                .name("선생이에요")
+                .email("tutor@gmail.com")
+                .password("Ghdrlfehd1!")
+                .roles(List.of("USER"))
+                .build();
+        tutor.addMemberImage(getMemberImage());
+        return tutor;
+    }
+
+    public Member getStudent() {
+        Member student = Member.builder()
+                .name("학생이에요")
+                .email("student@gmail.com")
+                .password("Ghdrlfehd1!")
+                .roles(List.of("USER"))
+                .build();
+        student.addMemberImage(getMemberImage());
+        return student;
+    }
+
+    public Member getSavedStudent() {
+        Member student = Member.builder()
+                .id(2L)
+                .name("학생이에요")
+                .email("student@gmail.com")
+                .password("Ghdrlfehd1!")
+                .roles(List.of("USER"))
+                .build();
+        student.addMemberImage(getMemberImage());
+        return student;
     }
 
     public List<Integer> getAddressList() {
@@ -124,6 +170,31 @@ public class DataForTest {
                 .cost(5000)
                 .memberId(2L)
                 .company("코코넛 엔터프라이즈")
+                .career(100)
+                .build();
+
+        List<Integer> addressList = getAddressList();
+        List<Integer> languageList = getLanguageList();
+        addressList.forEach(id ->
+                lesson.addLessonAddress(LessonAddress.builder()
+                        .addressId(id)
+                        .build()));
+        languageList.forEach(id ->
+                lesson.addLessonLanguage(LessonLanguage.builder()
+                        .languageId(id)
+                        .build()));
+
+        lesson.addProfileImage(getProfileImage());
+
+        return lesson;
+    }
+
+    public Lesson getSaveLesson() {
+        Lesson lesson = Lesson.builder()
+                .title("자바 숙성 강의")
+                .cost(5000)
+                .memberId(1L)
+                .company("배달의 민족")
                 .career(100)
                 .build();
 
@@ -233,6 +304,19 @@ public class DataForTest {
     }
 
     public Suggest getSuggest2() {
+        return Suggest.builder()
+                .id(2L)
+                .lessonId(1L)
+                .memberId(2L)
+                .days("월, 수, 금")
+                .languages("Javascript")
+                .requests("일어나서 수업 들어도 되나요?")
+                .totalCost(200000)
+                .paymentMethod("카카오페이")
+                .build();
+    }
+
+    public Suggest getSaveSuggest() {
         return Suggest.builder()
                 .id(2L)
                 .lessonId(1L)

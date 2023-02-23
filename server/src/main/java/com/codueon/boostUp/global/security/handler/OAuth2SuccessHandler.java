@@ -68,13 +68,12 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
     private URI createUri(String accessToken, String refreshToken, String provider) {
         MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<>();
         queryParams.add(AuthConstants.AUTHORIZATION, accessToken);
-        queryParams.add(AuthConstants.REFRESH_TOKEN, refreshToken);
 
         return UriComponentsBuilder
                 .newInstance()
                 .scheme("http")
-                //.host("codueon.com")
-                .host("localhost")
+//                .host("codueon.com")
+                .host("localhost:3000")
                 .path("/oauth/" + provider)
                 .queryParams(queryParams)
                 .build()
