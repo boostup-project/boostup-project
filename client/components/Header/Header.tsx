@@ -16,6 +16,7 @@ import usePostSearch from "hooks/main/usePostSearch";
 
 import { useQueryClient } from "@tanstack/react-query";
 import useDeleteLogout from "hooks/auth/useDeleteLogout";
+import Swal from "sweetalert2";
 
 interface SelectData {
   key: number;
@@ -87,7 +88,15 @@ const Header = () => {
   }, [isSuccess]);
 
   const toWrite = (e: React.MouseEvent<HTMLDivElement>) => {
-    setIsPowerWrite(prev => !prev);
+    if (localStorage.getItem("lessonExistence") === "true") {
+      Swal.fire({
+        text: "이미 과외를 등록하셨습니다.",
+        icon: "warning",
+        confirmButtonColor: "#3085d6",
+      });
+    } else {
+      setIsPowerWrite(prev => !prev);
+    }
   };
 
   const wordOneEvent = () => {

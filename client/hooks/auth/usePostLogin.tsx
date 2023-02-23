@@ -14,6 +14,7 @@ const usePostLogin = () => {
       localStorage.setItem("name", res.data.name);
       localStorage.setItem("memberId", res.data.memberId);
       localStorage.setItem("memberImage", res.data.memberImage);
+      localStorage.setItem("lessonExistence", res.data.lessonExistence);
       setLog(prev => !prev);
     },
     onError: (err: any) => {
