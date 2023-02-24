@@ -1,10 +1,10 @@
 import CreateModalContainer from "../reuse/container/CreateModalContainer";
 import { useForm } from "react-hook-form";
 import SmallBtn from "../reuse/btn/SmallBtn";
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { PropsWithChildren } from "react";
 import usePostReview from "hooks/mypage/usePostReview";
-import Swal from "sweetalert2";
+import { toast } from "react-toastify";
 
 interface Review {
   comment: string;
@@ -45,19 +45,16 @@ const ReviewModal = ({
   };
   useEffect(() => {
     if (isSuccess) {
-      Swal.fire({
-        text: "리뷰작성이 완료되었습니다",
-        icon: "success",
-        confirmButtonColor: "#3085d6",
+      toast.success("리뷰작성이 완료되었습니다", {
+        autoClose: 2500,
+        position: toast.POSITION.TOP_RIGHT,
       });
       openDeclineModal();
     }
-
     if (isError) {
-      Swal.fire({
-        text: "다시 작성해주세요",
-        icon: "warning",
-        confirmButtonColor: "#3085d6",
+      toast.error("다시 작성해주세요", {
+        autoClose: 2500,
+        position: toast.POSITION.TOP_RIGHT,
       });
     }
   }, [isSuccess, isError]);

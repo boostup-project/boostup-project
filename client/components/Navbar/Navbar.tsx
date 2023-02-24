@@ -14,7 +14,6 @@ import Link from "next/link";
 import "react-toastify/dist/ReactToastify.css";
 import { logUser } from "atoms/auth/authAtom";
 import Swal from "sweetalert2";
-import { POSITION } from "react-toastify/dist/utils";
 import { useRouter } from "next/router";
 
 const navContents = [
@@ -52,14 +51,27 @@ const Navbar = () => {
   const mounted = useRef(false);
   const toWrite = (e: React.MouseEvent<HTMLDivElement>) => {
     if (isLog) {
-      setIsPowerWrite(prev => !prev);
+      if (localStorage.getItem("lessonExistence") === "true") {
+        toast.info("이미 과외를 등록하셨습니다", {
+          autoClose: 2500,
+          position: toast.POSITION.TOP_RIGHT,
+        });
+      } else {
+        setIsPowerWrite(prev => !prev);
+      }
     }
     if (!isLog) {
-      toast.info("과외 작성은 로그인 후 이용해주세요", {
-        autoClose: 3000,
-        position: toast.POSITION.TOP_RIGHT,
+      Swal.fire({
+        title: "로그인 하시겠습니까?",
+        text: "로그인이 필요한 서비스입니다.",
+        icon: "question",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+      }).then(result => {
+        if (result.isConfirmed) {
+          router.push("/login");
+        }
       });
-      router.push("/login");
     }
   };
   const toProfile = () => {
@@ -67,11 +79,17 @@ const Navbar = () => {
       router.push(`/mypage/${localStorage.name}`);
     }
     if (!isLog) {
-      toast.info("마이페이지는 로그인 후 이용해주세요", {
-        autoClose: 3000,
-        position: toast.POSITION.TOP_RIGHT,
+      Swal.fire({
+        title: "로그인 하시겠습니까?",
+        text: "로그인이 필요한 서비스입니다.",
+        icon: "question",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+      }).then(result => {
+        if (result.isConfirmed) {
+          router.push("/login");
+        }
       });
-      router.push("/login");
     }
   };
   const toChat = () => {
@@ -79,11 +97,17 @@ const Navbar = () => {
       router.push("/chat/0");
     }
     if (!isLog) {
-      toast.info("채팅은 로그인 후 이용해주세요", {
-        autoClose: 3000,
-        position: toast.POSITION.TOP_RIGHT,
+      Swal.fire({
+        title: "로그인 하시겠습니까?",
+        text: "로그인이 필요한 서비스입니다.",
+        icon: "question",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+      }).then(result => {
+        if (result.isConfirmed) {
+          router.push("/login");
+        }
       });
-      router.push("/login");
     }
   };
 

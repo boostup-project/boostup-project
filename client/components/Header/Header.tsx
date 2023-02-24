@@ -13,10 +13,9 @@ import "react-toastify/dist/ReactToastify.css";
 import { useEffect } from "react";
 import { useRouter } from "next/router";
 import usePostSearch from "hooks/main/usePostSearch";
-
 import { useQueryClient } from "@tanstack/react-query";
 import useDeleteLogout from "hooks/auth/useDeleteLogout";
-import Swal from "sweetalert2";
+import { toast } from "react-toastify";
 
 interface SelectData {
   key: number;
@@ -89,10 +88,9 @@ const Header = () => {
 
   const toWrite = (e: React.MouseEvent<HTMLDivElement>) => {
     if (localStorage.getItem("lessonExistence") === "true") {
-      Swal.fire({
-        text: "이미 과외를 등록하셨습니다.",
-        icon: "warning",
-        confirmButtonColor: "#3085d6",
+      toast.info("이미 과외를 등록하셨습니다", {
+        autoClose: 2500,
+        position: toast.POSITION.TOP_RIGHT,
       });
     } else {
       setIsPowerWrite(prev => !prev);

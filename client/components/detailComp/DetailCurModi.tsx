@@ -54,9 +54,12 @@ const DetailCurModi = ({ textData, setTextData, modalOpen }: Props) => {
             </div>
           </div>
         </div>
-
-        <div className="w-full h-fit flex flex-row justify-start items-center font-SCDream5 text-md text-textColor mt-10">
-          진행방식
+        <div className="w-full h-fit flex flex-row justify-start items-end font-SCDream5 text-md text-textColor mt-10">
+          <div>진행방식</div>
+          <div className="text-pointColor">*</div>
+          <div className="h-full flex justify-end items-end text-[12px] text-pointColor">
+            현재 {textData.length} / 최대 1000글자
+          </div>
         </div>
         {screenWidth > 764 ? (
           <div data-color-mode="light" className="w-full">

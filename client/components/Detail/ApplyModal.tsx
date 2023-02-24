@@ -3,11 +3,11 @@ import { useForm } from "react-hook-form";
 import SmallBtn from "../reuse/btn/SmallBtn";
 import { langDict, dayDict } from "../reuse/dict";
 import usePostApply from "hooks/detail/usePostApply";
-import { useState, useEffect } from "react";
-import Swal from "sweetalert2";
+import { useEffect } from "react";
 import { PropsWithChildren } from "react";
 import { useRouter } from "next/router";
 import { ErrorMessage } from "@hookform/error-message";
+import { toast } from "react-toastify";
 interface Application {
   days: string;
   languages: string;
@@ -58,19 +58,17 @@ const ApplyModal = ({
 
   useEffect(() => {
     if (isSuccess) {
-      Swal.fire({
-        text: "신청이 완료되었습니다",
-        icon: "success",
-        confirmButtonColor: "#3085d6",
+      toast.success("신청이 완료되었습니다", {
+        autoClose: 2500,
+        position: toast.POSITION.TOP_RIGHT,
       });
       onClickToggleModal();
     }
 
     if (isError) {
-      Swal.fire({
-        text: "다시 신청해주세요",
-        icon: "warning",
-        confirmButtonColor: "#3085d6",
+      toast.error("다시 신청해주세요", {
+        autoClose: 2500,
+        position: toast.POSITION.TOP_RIGHT,
       });
     }
   }, [isSuccess, isError]);
