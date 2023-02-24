@@ -16,8 +16,10 @@ public class Curriculum {
     @Column(name = "CURRICULUM_ID")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    
     @Column(length = 1000)
     private String curriculum;
+    
     private Long lessonId;
     private Long memberId;
 
