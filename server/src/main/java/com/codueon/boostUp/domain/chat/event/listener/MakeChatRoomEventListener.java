@@ -25,18 +25,6 @@ public class MakeChatRoomEventListener {
     }
 
     /**
-     * 과외 신청 시 알람 메시지 전송 EventListener 메서드
-     *
-     * @param event 알람 전송 이벤트
-     * @author mozzi327
-     */
-    @EventListener
-    public void handleSendAlarmMessage(SendSuggestMessageEvent event) {
-        chatRoomService.sendAlarmChannelMessage(event.getMemberId(), event.getLessonTitle(), event.getDisplayName(),
-                                                event.getAttendanceCount(), event.getMessage(), event.getAlarmType());
-    }
-
-    /**
      * 과외 신청 시 유저 간 채팅방 생성 EventListener 메서드
      *
      * @param event 유저 채팅방 생성 이벤트

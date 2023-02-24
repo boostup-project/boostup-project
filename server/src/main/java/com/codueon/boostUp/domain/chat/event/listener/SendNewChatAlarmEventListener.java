@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class SendAlarmMessageEventListener {
+public class SendNewChatAlarmEventListener {
     private final EventAlarmService sendAlarmService;
 
     /**

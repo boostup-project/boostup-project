@@ -2,6 +2,7 @@ package com.codueon.boostUp.domain.chat.event.listener;
 
 import com.codueon.boostUp.domain.chat.dto.RedisChat;
 import com.codueon.boostUp.domain.chat.event.vo.InitialChatRoomMessageEvent;
+import com.codueon.boostUp.domain.chat.event.vo.SendSuggestMessageEvent;
 import com.codueon.boostUp.domain.chat.service.EventMessageService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -38,5 +39,17 @@ public class SendMessageEventListener {
                 event.getEnterChat(),
                 event.getCount()
         );
+    }
+
+    /**
+     * 과외 신청 시 알람 메시지 전송 EventListener 메서드
+     *
+     * @param event 알람 전송 이벤트
+     * @author mozzi327
+     */
+    @EventListener
+    public void handleSendAlarmMessage(SendSuggestMessageEvent event) {
+        sendChatService.sendAlarmChannelMessage(event.getMemberId(), event.getLessonTitle(), event.getDisplayName(),
+                event.getAttendanceCount(), event.getMessage(), event.getAlarmType());
     }
 }

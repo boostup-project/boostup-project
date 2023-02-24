@@ -44,7 +44,7 @@ public class ChatRoomController {
      */
     @GetMapping
     public ResponseEntity getAllChatRoom(Authentication authentication) {
-        List<GetChatRoom> response = chatRoomService.findAllChatRoom(AuthVO.of(authentication));
+        List<GetChatRoom> response = chatRoomService.findAllChatRoom(AuthVO.ofMemberId(authentication));
         Collections.sort(response);
         return ResponseEntity.ok().body(response);
     }
