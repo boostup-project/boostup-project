@@ -11,7 +11,6 @@ import javax.persistence.*;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Bookmark {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "BOOKMARK_ID")
@@ -21,7 +20,6 @@ public class Bookmark {
     private String bookmarkUrl;
 
     private Long memberId;
-
     private Long lessonId;
 
     @Builder

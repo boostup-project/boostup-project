@@ -15,21 +15,17 @@ import java.util.Optional;
 @NamedEntityGraph
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Review extends Auditable {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "REVIEW")
     private Long id;
 
-    private Integer score;
-
     @Column(length = 1000)
     private String comment;
 
+    private Integer score;
     private Long lessonId;
-
     private Long memberId;
-
     private Long suggestId;
 
     @Builder

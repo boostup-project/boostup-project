@@ -1,20 +1,14 @@
 package com.codueon.boostUp.domain.lesson.entity;
 
 import com.codueon.boostUp.global.file.UploadFile;
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.web.multipart.MultipartFile;
-
-import javax.persistence.*;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ProfileImage {
-
     private String originFileName;
     private String fileName;
     private String filePath;

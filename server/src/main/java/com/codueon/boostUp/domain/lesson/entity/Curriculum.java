@@ -5,7 +5,6 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
 
@@ -13,12 +12,11 @@ import javax.persistence.*;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Curriculum {
-
     @Id
     @Column(name = "CURRICULUM_ID")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Length(max = 5000)
+    @Column(length = 1000)
     private String curriculum;
     private Long lessonId;
     private Long memberId;

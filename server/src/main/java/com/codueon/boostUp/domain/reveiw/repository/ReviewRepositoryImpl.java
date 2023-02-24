@@ -20,7 +20,6 @@ import static com.codueon.boostUp.domain.suggest.entity.QSuggest.suggest;
 
 @Repository
 public class ReviewRepositoryImpl implements CustomReviewRepository {
-
     private final JPAQueryFactory queryFactory;
 
     public ReviewRepositoryImpl(EntityManager em) {

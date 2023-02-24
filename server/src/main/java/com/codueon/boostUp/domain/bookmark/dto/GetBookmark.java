@@ -11,7 +11,6 @@ import java.util.List;
 @Getter
 @NoArgsConstructor
 public class GetBookmark {
-
     private Long bookmarkId;
     private Long lessonId;
     private String image;

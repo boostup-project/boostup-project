@@ -17,7 +17,6 @@ import static com.codueon.boostUp.domain.member.entity.QMember.member;
 
 @Repository
 public class BookmarkRepositoryImpl implements CustomBookmarkRepository {
-
     private final JPAQueryFactory queryFactory;
     public BookmarkRepositoryImpl(EntityManager em) {
         this.queryFactory = new JPAQueryFactory(em);
