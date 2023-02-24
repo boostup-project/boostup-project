@@ -34,7 +34,21 @@ const DetailButtons = (basicInfo: any) => {
   }, [bookmarkData]);
 
   const onClickToggleModal = useCallback(() => {
-    setOpenModal(!isOpenModal);
+    if (!localStorage.getItem("token")) {
+      Swal.fire({
+        title: "로그인 하시겠습니까?",
+        text: "로그인이 필요한 서비스입니다.",
+        icon: "question",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+      }).then(result => {
+        if (result.isConfirmed) {
+          router.push("/login");
+        }
+      });
+    } else {
+      setOpenModal(!isOpenModal);
+    }
   }, [isOpenModal]);
 
   const { refetch: createChatRoomRefetch } = useGetCreateRoom(lessonId);
@@ -62,9 +76,15 @@ const DetailButtons = (basicInfo: any) => {
       bookmarkRefetch(lessonId);
     } else {
       return Swal.fire({
-        text: "로그인 후 원하는 선생님을 찜 해보세요",
-        icon: "warning",
+        title: "로그인 하시겠습니까?",
+        text: "로그인이 필요한 서비스입니다.",
+        icon: "question",
+        showCancelButton: true,
         confirmButtonColor: "#3085d6",
+      }).then(result => {
+        if (result.isConfirmed) {
+          router.push("/login");
+        }
       });
     }
   };
