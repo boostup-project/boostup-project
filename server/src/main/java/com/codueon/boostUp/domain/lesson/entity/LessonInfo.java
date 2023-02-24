@@ -16,13 +16,14 @@ import java.util.List;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class LessonInfo {
-
     @Id
     @Column(name = "LESSON_INFO_ID")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private Long lessonId;
     private String introduction;
+
+    @Column(length = 500)
     private String companies;
     private String favoriteLocation;
     private String personality;
