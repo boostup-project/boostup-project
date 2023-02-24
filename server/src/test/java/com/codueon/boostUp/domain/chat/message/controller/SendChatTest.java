@@ -1,4 +1,4 @@
-package com.codueon.boostUp.domain.chat.chat;
+package com.codueon.boostUp.domain.chat.message.controller;
 
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
@@ -9,5 +9,4 @@ import org.springframework.test.context.TestPropertySource;
 public class SendChatTest {
     @LocalServerPort
     protected int port;
-
 }

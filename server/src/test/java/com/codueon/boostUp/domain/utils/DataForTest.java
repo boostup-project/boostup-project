@@ -11,7 +11,7 @@ import java.util.List;
 
 public class DataForTest {
 
-    public MemberImage getMemberImage() {
+    public static MemberImage getMemberImage() {
         return MemberImage.builder()
                 .fileName("하이하이")
                 .filePath("https://test.com/memberImage/test.jpg")
@@ -20,7 +20,7 @@ public class DataForTest {
                 .build();
     }
 
-    public ProfileImage getProfileImage() {
+    public static ProfileImage getProfileImage() {
         return ProfileImage.builder()
                 .fileName("하이하이")
                 .filePath("https://test.com/profileImage/test.jpg")
@@ -29,7 +29,7 @@ public class DataForTest {
                 .build();
     }
 
-    public List<CareerImage> getCareerImages() {
+    public static List<CareerImage> getCareerImages() {
         return List.of(
                 CareerImage.builder()
                         .id(1L)
@@ -55,7 +55,7 @@ public class DataForTest {
         );
     }
 
-    public Member getMember1() {
+    public static Member getMember1() {
         Member member = Member.builder()
                 .id(1L)
                 .name("김길동입니다")
@@ -67,7 +67,7 @@ public class DataForTest {
         return member;
     }
 
-    public Member getMember2() {
+    public static Member getMember2() {
         Member member = Member.builder()
                 .id(1L)
                 .name("조길동입니다")
@@ -79,7 +79,7 @@ public class DataForTest {
         return member;
     }
 
-    public Member getTutor() {
+    public static Member getTutor() {
         Member tutor = Member.builder()
                 .name("선생이에요")
                 .email("tutor@gmail.com")
@@ -90,7 +90,7 @@ public class DataForTest {
         return tutor;
     }
 
-    public Member getSavedTutor() {
+    public static Member getSavedTutor() {
         Member tutor = Member.builder()
                 .id(1L)
                 .name("선생이에요")
@@ -102,7 +102,7 @@ public class DataForTest {
         return tutor;
     }
 
-    public Member getStudent() {
+    public static Member getStudent() {
         Member student = Member.builder()
                 .name("학생이에요")
                 .email("student@gmail.com")
@@ -113,7 +113,7 @@ public class DataForTest {
         return student;
     }
 
-    public Member getSavedStudent() {
+    public static Member getSavedStudent() {
         Member student = Member.builder()
                 .id(2L)
                 .name("학생이에요")
@@ -125,19 +125,19 @@ public class DataForTest {
         return student;
     }
 
-    public List<Integer> getAddressList() {
+    public static List<Integer> getAddressList() {
         return List.of(
                 1, 2, 3
         );
     }
 
-    public List<Integer> getLanguageList() {
+    public static List<Integer> getLanguageList() {
         return List.of(
                 1, 2, 3
         );
     }
 
-    public Lesson getLesson1() {
+    public static Lesson getLesson1() {
         Lesson lesson = Lesson.builder()
                 .id(1L)
                 .title("자바 숙성 강의")
@@ -163,7 +163,7 @@ public class DataForTest {
         return lesson;
     }
 
-    public Lesson getLesson2() {
+    public static Lesson getLesson2() {
         Lesson lesson = Lesson.builder()
                 .id(2L)
                 .title("자바 스크립트 숙성 강의")
@@ -189,7 +189,7 @@ public class DataForTest {
         return lesson;
     }
 
-    public Lesson getSaveLesson() {
+    public static Lesson getSaveLesson() {
         Lesson lesson = Lesson.builder()
                 .title("자바 숙성 강의")
                 .cost(5000)
@@ -214,11 +214,11 @@ public class DataForTest {
         return lesson;
     }
 
-    public List<Lesson> getLessonList() {
+    public static List<Lesson> getLessonList() {
         return List.of(getLesson1(), getLesson2());
     }
 
-    public LessonInfo getLessonInfo1() {
+    public static LessonInfo getLessonInfo1() {
         LessonInfo lessonInfo = LessonInfo.builder()
                 .id(1L)
                 .lessonId(1L)
@@ -234,7 +234,7 @@ public class DataForTest {
         return lessonInfo;
     }
 
-    public LessonInfo getLessonInfo2() {
+    public static LessonInfo getLessonInfo2() {
         LessonInfo lessonInfo = LessonInfo.builder()
                 .id(2L)
                 .lessonId(2L)
@@ -250,7 +250,7 @@ public class DataForTest {
         return lessonInfo;
     }
 
-    public Curriculum getCurriculum1() {
+    public static Curriculum getCurriculum1() {
         return Curriculum.builder()
                 .id(1L)
                 .curriculum("주입식 빠따 교육으로 갑니다.")
@@ -258,7 +258,7 @@ public class DataForTest {
                 .build();
     }
 
-    public Curriculum getCurriculum2() {
+    public static Curriculum getCurriculum2() {
         return Curriculum.builder()
                 .id(2L)
                 .curriculum("주입식 빠따 빠따 교육으로 갑니다.")
@@ -266,7 +266,7 @@ public class DataForTest {
                 .build();
     }
 
-    public Review getReview1() {
+    public static Review getReview1() {
         return Review.builder()
                 .id(1L)
                 .score(4)
@@ -276,7 +276,7 @@ public class DataForTest {
                 .build();
     }
 
-    public Review getReview2() {
+    public static Review getReview2() {
         return Review.builder()
                 .id(2L)
                 .score(3)
@@ -290,7 +290,7 @@ public class DataForTest {
         return List.of(getReview1(), getReview2());
     }
 
-    public Suggest getSuggest1() {
+    public static Suggest getSuggest1() {
         return Suggest.builder()
                 .id(1L)
                 .lessonId(1L)
@@ -303,7 +303,7 @@ public class DataForTest {
                 .build();
     }
 
-    public Suggest getSuggest2() {
+    public static Suggest getSuggest2() {
         return Suggest.builder()
                 .id(2L)
                 .lessonId(1L)
@@ -316,9 +316,8 @@ public class DataForTest {
                 .build();
     }
 
-    public Suggest getSaveSuggest() {
+    public static Suggest getSaveSuggest() {
         return Suggest.builder()
-                .id(2L)
                 .lessonId(1L)
                 .memberId(2L)
                 .days("월, 수, 금")
@@ -329,11 +328,11 @@ public class DataForTest {
                 .build();
     }
 
-    public List<Suggest> getSuggestList() {
+    public static List<Suggest> getSuggestList() {
         return List.of(getSuggest1(), getSuggest2());
     }
 
-    public Bookmark getBookmark1() {
+    public static Bookmark getBookmark1() {
         return Bookmark.builder()
                 .id(1L)
                 .lessonId(1L)
@@ -341,7 +340,7 @@ public class DataForTest {
                 .build();
     }
 
-    public Bookmark getBookmark2() {
+    public static Bookmark getBookmark2() {
         return Bookmark.builder()
                 .id(2L)
                 .lessonId(2L)
@@ -349,7 +348,7 @@ public class DataForTest {
                 .build();
     }
 
-    public List<Bookmark> getBookmarkList() {
+    public static List<Bookmark> getBookmarkList() {
         return List.of(getBookmark1(), getBookmark2());
     }
 }

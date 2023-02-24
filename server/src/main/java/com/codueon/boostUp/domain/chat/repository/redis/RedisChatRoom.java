@@ -12,6 +12,7 @@ import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Repository
@@ -47,6 +48,12 @@ public class RedisChatRoom {
 
     public List<String> findAllChatRoom(Long memberId) {
         return new ArrayList<>(Objects.requireNonNull(setOperations.members(chatRoomUtils.makeMemberKey(memberId))));
+    }
+
+    public List<Long> findAllChatRoomAsLong(Long memberId) {
+        return Objects.requireNonNull(setOperations.members(chatRoomUtils.makeMemberKey(memberId))).stream()
+                .map(chatRoomUtils::parseChatRoomId)
+                .collect(Collectors.toList());
     }
 
     public void deleteChatMember(Long chatRoomId, Long memberId) {

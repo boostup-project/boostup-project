@@ -14,7 +14,8 @@ public class ChatAlarmService {
 
     /**
      * Redis 알람을 초기화해주는 메서드
-     * @param authInfo 인증 정보
+     *
+     * @param memberId   사용자 식별자
      * @param chatRoomId 채팅방 식별자
      * @author mozzi327
      */

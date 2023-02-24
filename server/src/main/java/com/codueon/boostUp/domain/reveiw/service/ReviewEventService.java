@@ -21,13 +21,13 @@ public class ReviewEventService {
      * @param memberId        사용자 식별자
      * @param displayName     사용자 닉네임
      * @param attendanceCount 출석일수
-     * @param rejectMessage   거절 사유
+     * @param review          리뷰 내용
      * @param alarmType       알람 타입
      * @author mozzi327
      */
     public void sendAlarmMessage(Long memberId, String lessonTitle, String displayName, Integer attendanceCount, Review review, AlarmType alarmType) {
-        String  message = "평점: " + review.getScore() + "\n"
-                          + "후기: " + review.getComment();
+        String message = "평점: " + review.getScore() + "\n"
+                + "후기: " + review.getComment();
 
         // 채팅방 메시지 최신화
         eventPublisher.publishEvent(SendSuggestMessageEvent.builder()
