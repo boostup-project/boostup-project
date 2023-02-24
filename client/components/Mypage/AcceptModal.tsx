@@ -1,12 +1,10 @@
-import CreateModalContainer from "../reuse/container/CreateModalContainer";
 import CreateModalMypageContainer from "components/reuse/container/CreateModalMypageContainer";
 import { useForm } from "react-hook-form";
 import SmallBtn from "../reuse/btn/SmallBtn";
 import usePostAccept from "hooks/mypage/usePostAccept";
-import { useState, useEffect } from "react";
-import Swal from "sweetalert2";
+import { useEffect } from "react";
 import { PropsWithChildren } from "react";
-import { useRouter } from "next/router";
+import { toast } from "react-toastify";
 interface Accept {
   quantity: number;
   suggestId: any;
@@ -42,19 +40,17 @@ const AcceptModal = ({
 
   useEffect(() => {
     if (isSuccess) {
-      Swal.fire({
-        text: "수락이 완료되었습니다",
-        icon: "success",
-        confirmButtonColor: "#3085d6",
+      toast.success("수락이 완료되었습니다", {
+        autoClose: 2500,
+        position: toast.POSITION.TOP_RIGHT,
       });
       onClickToggleModal(suggestId);
     }
 
     if (isError) {
-      Swal.fire({
-        text: "다시 수락해주세요",
-        icon: "warning",
-        confirmButtonColor: "#3085d6",
+      toast.error("다시 수락해주세요", {
+        autoClose: 2500,
+        position: toast.POSITION.TOP_RIGHT,
       });
     }
   }, [isSuccess, isError]);

@@ -3,9 +3,9 @@ import useGetTutorInfo from "hooks/mypage/useGetTutorInfo";
 import { useRouter } from "next/router";
 import AcceptModal from "./AcceptModal";
 import DeclineModal from "./DeclineModal";
-import Swal from "sweetalert2";
 
-import { useState, useCallback, useEffect, useRef } from "react";
+import { useState, useCallback, useEffect } from "react";
+import { toast } from "react-toastify";
 const ApplicationList = () => {
   const [openAccept, setOpenAccept] = useState<boolean>(false);
   const [openDecline, setOpenDecline] = useState<boolean>(false);
@@ -37,11 +37,9 @@ const ApplicationList = () => {
     if (myTutorUrl) {
       router.push(`/lesson/${islessonId}`);
     } else {
-      Swal.fire({
-        title: "등록하신 과외가 없습니다",
-        text: "과외를 등록해보세요",
-        icon: "warning",
-        confirmButtonColor: "#3085d6",
+      toast.info("등록하신 과외가 없습니다", {
+        autoClose: 2500,
+        position: toast.POSITION.TOP_RIGHT,
       });
     }
   };

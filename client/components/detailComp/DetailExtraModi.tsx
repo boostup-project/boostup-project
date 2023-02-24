@@ -44,6 +44,7 @@ const DetailExtraModi = ({ modalOpen, textData, images, lessonId }: Props) => {
     register,
     handleSubmit,
     formState: { errors },
+    watch,
   } = useForm<ExtraInfo>({
     mode: "onBlur",
   });
@@ -55,6 +56,11 @@ const DetailExtraModi = ({ modalOpen, textData, images, lessonId }: Props) => {
     detailCost,
     detailLocation,
   } = textData;
+
+  const currentDetailCompany =
+    String(watch("detailCompany")) === "undefined"
+      ? ""
+      : String(watch("detailCompany"));
 
   /** 정보에 이미지 있을 시 집어넣기 **/
   useEffect(() => {
@@ -193,6 +199,9 @@ const DetailExtraModi = ({ modalOpen, textData, images, lessonId }: Props) => {
             <div className="flex">
               <div className="font-SCDream5">재직 회사 / 학력</div>
               <span className="text-pointColor">*</span>
+              <div className="text-[11px] flex items-center text-pointColor ml-1">
+                현재 {currentDetailCompany.length} / 최대 500글자
+              </div>
             </div>
             <div></div>
             <textarea

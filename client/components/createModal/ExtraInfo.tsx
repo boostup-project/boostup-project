@@ -15,6 +15,7 @@ interface ObjectPart {
 interface ExtraInfo {
   [index: string]: string | string[] | ObjectPart;
   detailImage: string[];
+  detailCompany: string;
 }
 
 interface Props {
@@ -31,9 +32,15 @@ const ExtraInfo = ({ extraInfo, setExtraInfo, setStep }: Props) => {
     register,
     handleSubmit,
     formState: { errors },
+    watch,
   } = useForm<ExtraInfo>({
     mode: "onBlur",
   });
+
+  const currentDetailCompany =
+    String(watch("detailCompany")) === "undefined"
+      ? ""
+      : String(watch("detailCompany"));
 
   const onCickImageUpload = () => {
     imageInput.current.click();
@@ -122,12 +129,21 @@ const ExtraInfo = ({ extraInfo, setExtraInfo, setStep }: Props) => {
           <div className="flex">
             <div className="font-SCDream5">재직 회사 / 학력</div>
             <span className="text-pointColor">*</span>
+            <div className="text-[11px] flex items-center text-pointColor ml-1">
+              현재 {currentDetailCompany.length} / 최대 500글자
+            </div>
           </div>
           <div></div>
           <textarea
             className="w-full h-20 p-2 border border-borderColor outline-pointColor rounded-xl font-SCDream4 text-xs text-textColor placeholder:text-center placeholder:translate-y-[110%] placeholder:leading-loose break-all tablet:text-sm tablet:h-24"
             placeholder="ex)구글 3년차 재직중 / 상명대학교 컴퓨터과학과 전공"
-            {...register("detailCompany", { required: "입력 필요" })}
+            {...register("detailCompany", {
+              required: "입력 필요",
+              maxLength: {
+                value: 500,
+                message: "500자를 넘겼습니다.",
+              },
+            })}
             defaultValue={
               extraInfo.detailCompany && extraInfo.detailCompany.toString()
             }

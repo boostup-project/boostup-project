@@ -21,9 +21,11 @@ import { useRecoilState, useRecoilValue } from "recoil";
 import { refetchBookmark } from "atoms/detail/detailAtom";
 import Pagination from "./Pagination";
 import { totalCard } from "atoms/main/mainAtom";
+import { useRouter } from "next/router";
 const client = new QueryClient();
 
 const Card = () => {
+  const router = useRouter();
   const [cards, setMainCardInfo] = useRecoilState(mainCardInfo);
   //pagination
   const limit = 12;
@@ -70,9 +72,15 @@ const Card = () => {
       setDoLike(prev => !prev);
     } else {
       return Swal.fire({
-        text: "로그인 후 원하는 선생님을 찜 해보세요",
-        icon: "warning",
+        title: "로그인 하시겠습니까?",
+        text: "로그인이 필요한 서비스입니다.",
+        icon: "question",
+        showCancelButton: true,
         confirmButtonColor: "#3085d6",
+      }).then(result => {
+        if (result.isConfirmed) {
+          router.push("/login");
+        }
       });
     }
   };
