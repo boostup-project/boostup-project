@@ -2,9 +2,7 @@ package com.codueon.boostUp.domain.chat.controller;
 
 import com.codueon.boostUp.domain.chat.repository.redis.RedisChatRoom;
 import com.codueon.boostUp.domain.chat.service.WebSocketAuthService;
-import com.codueon.boostUp.domain.vo.AuthVO;
-import com.codueon.boostUp.global.exception.BusinessLogicException;
-import com.codueon.boostUp.global.exception.ExceptionCode;
+import com.codueon.boostUp.domain.vo.AuthInfo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
@@ -24,7 +22,7 @@ public class ChatRegisterController {
      * @param principal Principal
      * @author mozzi327
      */
-    public void registerUserAndSendEnterMessage(Long chatRoomId, AuthVO authInfo) {
+    public void registerUserAndSendEnterMessage(Long chatRoomId, AuthInfo authInfo) {
         boolean isExistMember = redisChatRoom.isExistMemberInChatRoom(chatRoomId, authInfo.getMemberId());
         if (!isExistMember) redisChatRoom.createChatRoom(chatRoomId, authInfo.getMemberId());
     }

@@ -98,7 +98,6 @@ public class DataForTest {
                 .password("Ghdrlfehd1!")
                 .roles(List.of("USER"))
                 .build();
-        tutor.addMemberImage(getMemberImage());
         return tutor;
     }
 
@@ -109,7 +108,6 @@ public class DataForTest {
                 .password("Ghdrlfehd1!")
                 .roles(List.of("USER"))
                 .build();
-        student.addMemberImage(getMemberImage());
         return student;
     }
 
@@ -197,19 +195,6 @@ public class DataForTest {
                 .company("배달의 민족")
                 .career(100)
                 .build();
-
-        List<Integer> addressList = getAddressList();
-        List<Integer> languageList = getLanguageList();
-        addressList.forEach(id ->
-                lesson.addLessonAddress(LessonAddress.builder()
-                        .addressId(id)
-                        .build()));
-        languageList.forEach(id ->
-                lesson.addLessonLanguage(LessonLanguage.builder()
-                        .languageId(id)
-                        .build()));
-
-        lesson.addProfileImage(getProfileImage());
 
         return lesson;
     }

@@ -1,38 +1,35 @@
 package com.codueon.boostUp.domain.chat.room.controller;
 
+import com.codueon.boostUp.domain.chat.ChatTest;
 import com.codueon.boostUp.domain.chat.dto.RedisChat;
-import com.codueon.boostUp.domain.chat.ChatRoomTest;
 import com.codueon.boostUp.domain.chat.utils.StompFrameHandlerImpl;
 import com.codueon.boostUp.domain.chat.utils.WebSocketTestUtils;
 import com.codueon.boostUp.domain.lesson.entity.Lesson;
-import com.codueon.boostUp.domain.lesson.repository.LessonRepository;
 import com.codueon.boostUp.domain.member.entity.Member;
 import com.codueon.boostUp.domain.utils.DataForTest;
-import com.codueon.boostUp.domain.vo.AuthVO;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.codueon.boostUp.domain.vo.AuthInfo;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.messaging.simp.stomp.StompHeaders;
 import org.springframework.messaging.simp.stomp.StompSession;
+import org.springframework.test.context.jdbc.Sql;
 import org.springframework.web.socket.WebSocketHttpHeaders;
 import org.springframework.web.socket.messaging.WebSocketStompClient;
 
-import java.util.List;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingDeque;
 import java.util.concurrent.TimeUnit;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
-public class CreateChatRoomTest extends ChatRoomTest {
+@Sql("classpath:sql/initChatTest.sql")
+public class CreateChatRoomTest extends ChatTest {
 
     @LocalServerPort
     protected int port;
-    @Autowired
-    protected LessonRepository lessonRepository;
     protected String url;
     protected WebSocketTestUtils webSocketTestUtils;
     protected BlockingQueue<RedisChat> chatRoomMessages;
@@ -44,6 +41,17 @@ public class CreateChatRoomTest extends ChatRoomTest {
         chatRoomMessages = new LinkedBlockingDeque<>(99);
     }
 
+    @AfterEach
+    void afterAll() {
+        chatService.deleteAllNewChatMessage();
+        chatService.deleteChatMessage(1L);
+        chatService.deleteChatMessage(2L);
+        chatAlarmService.initAlarm(1L, 1L);
+        chatAlarmService.initAlarm(2L, 1L);
+        chatRoomService.deleteRedisChatRoomKey(1L);
+        chatRoomService.deleteRedisChatRoomKey(2L);
+    }
+
     @Test
     @DisplayName("채팅방 생성 통합 테스트")
     void createChatRoomTest() throws Exception {
@@ -51,8 +59,9 @@ public class CreateChatRoomTest extends ChatRoomTest {
         tutorToken = jwtTokenUtils.generateAccessToken(DataForTest.getSavedStudent());
 
         // 1. Save Info
-        memberRepository.saveAll(List.of(DataForTest.getTutor(), DataForTest.getStudent()));
-        lessonRepository.save(DataForTest.getSaveLesson());
+        Member tutor = memberRepository.save(DataForTest.getTutor());
+        Member student = memberRepository.save(DataForTest.getStudent());
+        Lesson savedLesson = lessonRepository.save(DataForTest.getSaveLesson());
 
         Long chatRoomId = 1L;
 
@@ -70,13 +79,13 @@ public class CreateChatRoomTest extends ChatRoomTest {
                 new StompFrameHandlerImpl(new RedisChat(), chatRoomMessages)
         );
 
-        AuthVO authInfo = AuthVO.builder()
-                .memberId(2L)
-                .name("학생이에요")
+        AuthInfo authInfo = AuthInfo.builder()
+                .memberId(student.getId())
+                .name(student.getName())
                 .build();
 
         // 4. Create ChatRoom And Receive ChatRoom Message
-        Long lessonId = 1L;
+        Long lessonId = savedLesson.getId();
         chatRoomService.createChatRoom(authInfo, lessonId);
         RedisChat firstEnterChat = chatRoomMessages.poll(5, TimeUnit.SECONDS);
         RedisChat secondEnterChat = chatRoomMessages.poll(10, TimeUnit.SECONDS);

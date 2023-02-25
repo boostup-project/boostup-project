@@ -3,19 +3,15 @@ package com.codueon.boostUp.domain.chat.utils;
 import com.codueon.boostUp.domain.chat.service.ChatAlarmService;
 import com.codueon.boostUp.domain.chat.service.ChatRoomService;
 import com.codueon.boostUp.domain.chat.service.ChatService;
-import com.codueon.boostUp.domain.vo.AuthVO;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
 
+@Component
+@RequiredArgsConstructor
 public class ChatMethodUtils {
     private final ChatService chatService;
     private final ChatRoomService chatRoomService;
     private final ChatAlarmService chatAlarmService;
-
-    public ChatMethodUtils(ChatService chatService, ChatRoomService chatRoomService,
-                              ChatAlarmService chatAlarmService) {
-        this.chatService = chatService;
-        this.chatRoomService = chatRoomService;
-        this.chatAlarmService = chatAlarmService;
-    }
 
     public void deleteAllRedisAfterTest() {
         chatService.deleteAllNewChatMessage();

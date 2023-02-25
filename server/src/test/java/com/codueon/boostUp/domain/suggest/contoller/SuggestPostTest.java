@@ -3,7 +3,7 @@ package com.codueon.boostUp.domain.suggest.contoller;
 import com.codueon.boostUp.domain.suggest.dto.PostPaymentUrl;
 import com.codueon.boostUp.domain.suggest.dto.PostReason;
 import com.codueon.boostUp.domain.suggest.dto.PostSuggest;
-import com.codueon.boostUp.domain.vo.AuthVO;
+import com.codueon.boostUp.domain.vo.AuthInfo;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -43,7 +43,7 @@ public class SuggestPostTest extends SuggestControllerTest{
                 .build();
 
         String content = gson.toJson(post);
-        doNothing().when(suggestService).createSuggest(Mockito.any(), Mockito.anyLong(), Mockito.any(AuthVO.class));
+        doNothing().when(suggestService).createSuggest(Mockito.any(), Mockito.anyLong(), Mockito.any(AuthInfo.class));
 
         ResultActions actions =
                 mockMvc.perform(
@@ -86,7 +86,7 @@ public class SuggestPostTest extends SuggestControllerTest{
                 .build();
 
         String content = gson.toJson(post);
-        doNothing().when(suggestService).acceptSuggest(Mockito.anyLong(), Mockito.any(AuthVO.class), Mockito.anyInt());
+        doNothing().when(suggestService).acceptSuggest(Mockito.anyLong(), Mockito.any(AuthInfo.class), Mockito.anyInt());
 
         ResultActions actions =
                 mockMvc.perform(
@@ -124,7 +124,7 @@ public class SuggestPostTest extends SuggestControllerTest{
                 .build();
 
         String content = gson.toJson(postReason);
-        doNothing().when(suggestService).declineSuggest(Mockito.anyLong(), Mockito.any(AuthVO.class), Mockito.any());
+        doNothing().when(suggestService).declineSuggest(Mockito.anyLong(), Mockito.any(AuthInfo.class), Mockito.any());
 
         ResultActions actions =
                 mockMvc.perform(

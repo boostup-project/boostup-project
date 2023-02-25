@@ -7,7 +7,7 @@ import com.codueon.boostUp.domain.suggest.dto.GetPaymentStatusCheck;
 import com.codueon.boostUp.domain.suggest.response.Message;
 import com.codueon.boostUp.domain.suggest.service.PaymentService;
 import com.codueon.boostUp.domain.suggest.service.SuggestDbService;
-import com.codueon.boostUp.domain.vo.AuthVO;
+import com.codueon.boostUp.domain.vo.AuthInfo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -34,7 +34,7 @@ public class PaymentController {
     @GetMapping("/{suggest-id}/payment/info")
     public ResponseEntity<GetPaymentInfo> getPaymentInfo(@PathVariable("suggest-id") Long suggestId,
                                                          Authentication authentication) {
-        return ResponseEntity.ok(suggestDbService.getPaymentInfoOnMyPage(suggestId, AuthVO.ofMemberId(authentication)));
+        return ResponseEntity.ok(suggestDbService.getPaymentInfoOnMyPage(suggestId, AuthInfo.ofMemberId(authentication)));
     }
 
     /**
@@ -48,7 +48,7 @@ public class PaymentController {
     @GetMapping("/{suggest-id}/payment/check")
     public ResponseEntity<GetPaymentStatusCheck> paymentStatusCheck(@PathVariable("suggest-id") Long suggestId,
                                                                     Authentication authentication) {
-        Boolean paymentCheck = paymentService.getPaymentStatusCheck(suggestId, AuthVO.ofMemberId(authentication));
+        Boolean paymentCheck = paymentService.getPaymentStatusCheck(suggestId, AuthInfo.ofMemberId(authentication));
         return ResponseEntity.ok().body(new GetPaymentStatusCheck(paymentCheck));
     }
 
@@ -63,7 +63,7 @@ public class PaymentController {
     @GetMapping("/{suggest-id}/receipt")
     public ResponseEntity<GetPaymentReceipt> getPaymentReceipt(@PathVariable("suggest-id") Long suggestId,
                                                                Authentication authentication) {
-        return ResponseEntity.ok(suggestDbService.getPaymentReceiptOnMyPage(suggestId, AuthVO.ofMemberId(authentication)));
+        return ResponseEntity.ok(suggestDbService.getPaymentReceiptOnMyPage(suggestId, AuthInfo.ofMemberId(authentication)));
     }
 
     /**
@@ -77,7 +77,7 @@ public class PaymentController {
     @GetMapping("/{suggest-id}/refund")
     public ResponseEntity<?> refundPayment(@PathVariable("suggest-id") Long suggestId,
                                            Authentication authentication) {
-        Message message = paymentService.refundPaymentKakaoOrToss(suggestId, AuthVO.ofMemberId(authentication));
+        Message message = paymentService.refundPaymentKakaoOrToss(suggestId, AuthInfo.ofMemberId(authentication));
         return ResponseEntity.ok().body(message);
     }
 
@@ -92,6 +92,6 @@ public class PaymentController {
     @GetMapping("/{suggest-id}/refund/info")
     public ResponseEntity<GetRefundPayment> getRefundPaymentInfo(@PathVariable("suggest-id") Long suggestId,
                                                                  Authentication authentication) {
-        return ResponseEntity.ok().body(paymentService.getRefundPaymentInfo(suggestId, AuthVO.ofMemberId(authentication)));
+        return ResponseEntity.ok().body(paymentService.getRefundPaymentInfo(suggestId, AuthInfo.ofMemberId(authentication)));
     }
 }

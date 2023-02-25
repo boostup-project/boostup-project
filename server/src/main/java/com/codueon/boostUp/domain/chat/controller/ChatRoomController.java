@@ -1,11 +1,8 @@
 package com.codueon.boostUp.domain.chat.controller;
 
 import com.codueon.boostUp.domain.chat.dto.GetChatRoom;
-import com.codueon.boostUp.domain.chat.dto.RedisChat;
 import com.codueon.boostUp.domain.chat.service.ChatRoomService;
-import com.codueon.boostUp.domain.chat.service.ChatService;
-import com.codueon.boostUp.domain.vo.AuthVO;
-import com.codueon.boostUp.global.security.token.JwtAuthenticationToken;
+import com.codueon.boostUp.domain.vo.AuthInfo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -32,7 +29,7 @@ public class ChatRoomController {
     @GetMapping("/create/lesson/{lesson-id}")
     public ResponseEntity createChatRoom(@PathVariable("lesson-id") Long lessonId,
                                          Authentication authentication) {
-        chatRoomService.createChatRoom(AuthVO.of(authentication), lessonId);
+        chatRoomService.createChatRoom(AuthInfo.of(authentication), lessonId);
         return ResponseEntity.ok().build();
     }
 
@@ -44,7 +41,7 @@ public class ChatRoomController {
      */
     @GetMapping
     public ResponseEntity getAllChatRoom(Authentication authentication) {
-        List<GetChatRoom> response = chatRoomService.findAllChatRoom(AuthVO.ofMemberId(authentication));
+        List<GetChatRoom> response = chatRoomService.findAllChatRoom(AuthInfo.ofMemberId(authentication));
         Collections.sort(response);
         return ResponseEntity.ok().body(response);
     }

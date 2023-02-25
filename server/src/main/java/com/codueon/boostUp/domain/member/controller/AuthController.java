@@ -2,8 +2,7 @@ package com.codueon.boostUp.domain.member.controller;
 
 import com.codueon.boostUp.domain.member.dto.TokenDto;
 import com.codueon.boostUp.domain.member.service.AuthService;
-import com.codueon.boostUp.domain.vo.AuthVO;
-import com.codueon.boostUp.global.security.token.JwtAuthenticationToken;
+import com.codueon.boostUp.domain.vo.AuthInfo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -42,7 +41,7 @@ public class AuthController {
      */
     @DeleteMapping("/logout")
     public ResponseEntity deleteLoginMember(Authentication authentication) {
-        authService.logoutMember(AuthVO.convertToToken(authentication));
+        authService.logoutMember(AuthInfo.convertToToken(authentication));
         return ResponseEntity.ok().build();
     }
 
@@ -58,7 +57,7 @@ public class AuthController {
     public ResponseEntity getReIssueToken(@RequestHeader("Authorization") String accessToken,
                                           @RequestHeader("RefreshToken") String refreshToken,
                                           Authentication authentication) {
-        TokenDto.Response response = authService.reIssueToken(accessToken, refreshToken, AuthVO.ofMemberId(authentication));
+        TokenDto.Response response = authService.reIssueToken(accessToken, refreshToken, AuthInfo.ofMemberId(authentication));
         return ResponseEntity.ok()
                 .headers(response.getHeaders())
                 .body(response.getResponse());

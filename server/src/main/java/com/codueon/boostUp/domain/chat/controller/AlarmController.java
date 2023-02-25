@@ -1,7 +1,7 @@
 package com.codueon.boostUp.domain.chat.controller;
 
 import com.codueon.boostUp.domain.chat.service.ChatAlarmService;
-import com.codueon.boostUp.domain.vo.AuthVO;
+import com.codueon.boostUp.domain.vo.AuthInfo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -23,7 +23,7 @@ public class AlarmController {
     @GetMapping("/alarm/room/{room-id}")
     public ResponseEntity enterChatRoom(@PathVariable("room-id") Long chatRoomId,
                                         Authentication authentication) {
-        chatAlarmService.initAlarm(AuthVO.ofMemberId(authentication), chatRoomId);
+        chatAlarmService.initAlarm(AuthInfo.ofMemberId(authentication), chatRoomId);
         return ResponseEntity.noContent().build();
     }
 }

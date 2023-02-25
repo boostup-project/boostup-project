@@ -1,13 +1,6 @@
 package com.codueon.boostUp.domain.chat.utils;
 
 import com.codueon.boostUp.domain.chat.dto.RedisChat;
-import com.codueon.boostUp.domain.chat.service.ChatAlarmService;
-import com.codueon.boostUp.domain.chat.service.ChatRoomService;
-import com.codueon.boostUp.domain.chat.service.ChatService;
-import com.codueon.boostUp.domain.member.entity.Member;
-import com.codueon.boostUp.domain.member.repository.MemberRepository;
-import com.codueon.boostUp.domain.vo.AuthVO;
-import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.converter.MappingJackson2MessageConverter;
 import org.springframework.messaging.simp.stomp.StompHeaders;
 import org.springframework.messaging.simp.stomp.StompSession;

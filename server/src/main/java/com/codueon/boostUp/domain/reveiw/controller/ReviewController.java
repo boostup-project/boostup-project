@@ -5,8 +5,7 @@ import com.codueon.boostUp.domain.dto.MultiResponseDto;
 import com.codueon.boostUp.domain.reveiw.dto.*;
 import com.codueon.boostUp.domain.reveiw.service.ReviewDbService;
 import com.codueon.boostUp.domain.reveiw.service.ReviewService;
-import com.codueon.boostUp.domain.vo.AuthVO;
-import com.codueon.boostUp.global.security.token.JwtAuthenticationToken;
+import com.codueon.boostUp.domain.vo.AuthInfo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -36,7 +35,7 @@ public class ReviewController {
                                         @PathVariable("suggest-id") Long suggestId,
                                         @RequestBody @Valid PostReview postReview,
                                         Authentication authentication) {
-        reviewService.createStudentReview(AuthVO.of(authentication), lessonId, suggestId, postReview);
+        reviewService.createStudentReview(AuthInfo.of(authentication), lessonId, suggestId, postReview);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
@@ -63,7 +62,7 @@ public class ReviewController {
     @GetMapping
     public ResponseEntity<MultiResponseDto> getMyPageReview(Pageable pageable,
                                                             Authentication authentication) {
-        Page<GetReviewMyPage> getReviews = reviewDbService.findAllMyPageReviews(AuthVO.ofMemberId(authentication), pageable);
+        Page<GetReviewMyPage> getReviews = reviewDbService.findAllMyPageReviews(AuthInfo.ofMemberId(authentication), pageable);
         return ResponseEntity.ok().body(new MultiResponseDto<>(getReviews));
     }
 
@@ -77,7 +76,7 @@ public class ReviewController {
     public ResponseEntity<?> updateReview(@PathVariable("review-id") Long reviewId,
                                           @RequestBody @Valid PatchReview patchReview,
                                           Authentication authentication) {
-        reviewService.editReview(AuthVO.ofMemberId(authentication), reviewId, patchReview);
+        reviewService.editReview(AuthInfo.ofMemberId(authentication), reviewId, patchReview);
         return ResponseEntity.ok().build();
     }
 
@@ -89,7 +88,7 @@ public class ReviewController {
     @DeleteMapping("/{review-id}")
     public ResponseEntity<?> deleteReview(@PathVariable("review-id") Long reviewId,
                                           Authentication authentication) {
-        reviewService.removeReview(AuthVO.ofMemberId(authentication), reviewId);
+        reviewService.removeReview(AuthInfo.ofMemberId(authentication), reviewId);
         return ResponseEntity.noContent().build();
     }
 }

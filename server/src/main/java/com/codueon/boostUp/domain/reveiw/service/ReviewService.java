@@ -8,7 +8,7 @@ import com.codueon.boostUp.domain.reveiw.dto.PostReview;
 import com.codueon.boostUp.domain.reveiw.entity.Review;
 import com.codueon.boostUp.domain.suggest.entity.Suggest;
 import com.codueon.boostUp.domain.suggest.service.SuggestDbService;
-import com.codueon.boostUp.domain.vo.AuthVO;
+import com.codueon.boostUp.domain.vo.AuthInfo;
 import com.codueon.boostUp.global.exception.BusinessLogicException;
 import com.codueon.boostUp.global.exception.ExceptionCode;
 import lombok.RequiredArgsConstructor;
@@ -38,7 +38,7 @@ public class ReviewService {
      * @author mozzi327
      */
     @Transactional
-    public void createStudentReview(AuthVO authInfo, Long lessonId, Long suggestId, PostReview postReview) {
+    public void createStudentReview(AuthInfo authInfo, Long lessonId, Long suggestId, PostReview postReview) {
         Suggest suggest = suggestDbService.ifNotExistSuggestThrowException(lessonId, suggestId, authInfo.getMemberId());
 
         // 예외 처리 : 과외 종료 상태가 아닐 때

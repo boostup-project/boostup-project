@@ -32,9 +32,9 @@ public class AlarmMessageUtils {
                                                    AlarmType alarmType) {
         switch (alarmType) {
             case JOIN:
-                return addCreateMemberMessage(chatRoomId, memberId, displayName);
+                return addJoinMemberCongratulationMessage(chatRoomId, memberId, displayName);
             case ENTER:
-                return addEnterMessage(chatRoomId, memberId, displayName);
+                return addEnterChatRoomMessage(chatRoomId, memberId, displayName);
             case REGISTER:
                 return addRegisterSuggestMessage(chatRoomId, memberId, lessonTitle, displayName);
             case ACCEPT:
@@ -52,7 +52,7 @@ public class AlarmMessageUtils {
             case REFUND_REQUEST:
                 return addRefundRequestMessage(chatRoomId, memberId, lessonTitle, displayName);
             case ACCEPT_REFUND:
-                return addAcceptRefundMessage(chatRoomId, memberId, lessonTitle);
+                return addAcceptRefundMessage(chatRoomId, memberId, lessonTitle, attendanceCount);
             case REJECT_REFUND:
                 return addRejectRefundMessage(chatRoomId, memberId, lessonTitle, message);
             case END:
@@ -60,7 +60,7 @@ public class AlarmMessageUtils {
             case COMPLETED_REVIEW:
                 return addCompletedReviewMessage(chatRoomId, memberId, lessonTitle, displayName, message);
             default:
-                return addLeaveMessage(chatRoomId, memberId, displayName);
+                return addLeaveChatRoomMessage(chatRoomId, memberId, displayName);
         }
     }
 
@@ -73,7 +73,7 @@ public class AlarmMessageUtils {
      * @return RedisChat
      * @author mozzi327
      */
-    private static RedisChat addCreateMemberMessage(Long chatRoomId, Long memberId, String displayName) {
+    private static RedisChat addJoinMemberCongratulationMessage(Long chatRoomId, Long memberId, String displayName) {
         return RedisChat.builder()
                 .chatRoomId(chatRoomId)
                 .senderId(memberId)
@@ -96,7 +96,7 @@ public class AlarmMessageUtils {
      * @return RedisChat
      * @author mozzi327
      */
-    private static RedisChat addEnterMessage(Long chatRoomId, Long memberId, String displayName) {
+    private static RedisChat addEnterChatRoomMessage(Long chatRoomId, Long memberId, String displayName) {
         return RedisChat.builder()
                 .chatRoomId(chatRoomId)
                 .senderId(memberId)
@@ -117,7 +117,8 @@ public class AlarmMessageUtils {
      * @return RedisChat
      * @author mozzi327
      */
-    private static RedisChat addRegisterSuggestMessage(Long tutorChatRoomId, Long tutorId, String lessonTitle, String studentName) {
+    private static RedisChat addRegisterSuggestMessage(Long tutorChatRoomId, Long tutorId, String lessonTitle,
+                                                       String studentName) {
         return RedisChat.builder()
                 .chatRoomId(tutorChatRoomId)
                 .senderId(tutorId)
@@ -241,7 +242,7 @@ public class AlarmMessageUtils {
                 .chatRoomId(studentChatRoomId)
                 .senderId(studentId)
                 .message("[알림] " + lessonTitle + "\n"
-                        + studentName + "님! " + lessonTitle + "과외 횟수가 " + attendanceCount + "번 남았어요!")
+                        + studentName + "님! " + lessonTitle + " 과외 횟수가 " + attendanceCount + "번 남았어요!")
                 .displayName("코듀온 알리미")
                 .messageType(MessageType.ALARM)
                 .createdAt(LocalDateTime.now())
@@ -305,12 +306,13 @@ public class AlarmMessageUtils {
      * @return RedisChat
      * @author mozzi327
      */
-    private static RedisChat addAcceptRefundMessage(Long studentChatRoomId, Long studentId, String lessonTitle) {
+    private static RedisChat addAcceptRefundMessage(Long studentChatRoomId, Long studentId, String lessonTitle,
+                                                    Integer attendanceCount) {
         return RedisChat.builder()
                 .chatRoomId(studentChatRoomId)
                 .senderId(studentId)
                 .message("[알림] " + lessonTitle + "\n"
-                        + lessonTitle + "과외 환불 완료되었어요! \n")
+                        + lessonTitle + "과외 횟수 " + attendanceCount + "회분의 환불 완료되었어요! \n")
                 .displayName("코듀온 알리미")
                 .messageType(MessageType.ALARM)
                 .createdAt(LocalDateTime.now())
@@ -400,7 +402,7 @@ public class AlarmMessageUtils {
      * @return RedisChat
      * @author mozzi327
      */
-    private static RedisChat addLeaveMessage(Long chatRoomId, Long memberId, String displayName) {
+    private static RedisChat addLeaveChatRoomMessage(Long chatRoomId, Long memberId, String displayName) {
         return RedisChat.builder()
                 .chatRoomId(chatRoomId)
                 .senderId(memberId)

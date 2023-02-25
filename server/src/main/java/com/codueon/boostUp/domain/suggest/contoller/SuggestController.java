@@ -4,7 +4,7 @@ import com.codueon.boostUp.domain.dto.MultiResponseDto;
 import com.codueon.boostUp.domain.suggest.dto.*;
 import com.codueon.boostUp.domain.suggest.service.SuggestDbService;
 import com.codueon.boostUp.domain.suggest.service.SuggestService;
-import com.codueon.boostUp.domain.vo.AuthVO;
+import com.codueon.boostUp.domain.vo.AuthInfo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -34,7 +34,7 @@ public class SuggestController {
     public ResponseEntity<?> createSuggest(@PathVariable("lesson-id") Long lessonId,
                                            @RequestBody @Valid PostSuggest post,
                                            Authentication authentication) {
-        suggestService.createSuggest(post, lessonId, AuthVO.of(authentication));
+        suggestService.createSuggest(post, lessonId, AuthInfo.of(authentication));
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
@@ -50,7 +50,7 @@ public class SuggestController {
     public ResponseEntity<?> acceptSuggest(@PathVariable("suggest-id") Long suggestId,
                                            @RequestBody @Valid PostPaymentUrl post,
                                            Authentication authentication) {
-        suggestService.acceptSuggest(suggestId, AuthVO.of(authentication), post.getQuantity());
+        suggestService.acceptSuggest(suggestId, AuthInfo.of(authentication), post.getQuantity());
         return ResponseEntity.ok().build();
     }
 
@@ -66,7 +66,7 @@ public class SuggestController {
     public ResponseEntity<?> declineSuggest(@PathVariable("suggest-id") Long suggestId,
                                             @RequestBody @Valid PostReason postReason,
                                             Authentication authentication) {
-        suggestService.declineSuggest(suggestId, AuthVO.of(authentication), postReason);
+        suggestService.declineSuggest(suggestId, AuthInfo.of(authentication), postReason);
         return ResponseEntity.noContent().build();
     }
 
@@ -81,7 +81,7 @@ public class SuggestController {
     @GetMapping("/{suggest-id}/done")
     public ResponseEntity<?> endOfLesson(@PathVariable("suggest-id") Long suggestId,
                                          Authentication authentication) {
-        suggestService.setSuggestStatusAndEndTime(suggestId, AuthVO.ofMemberId(authentication));
+        suggestService.setSuggestStatusAndEndTime(suggestId, AuthInfo.ofMemberId(authentication));
         return ResponseEntity.ok().build();
     }
 
@@ -100,7 +100,7 @@ public class SuggestController {
                                                                @PathVariable("tab-id") int tabId,
                                                                Authentication authentication,
                                                                Pageable pageable) {
-        Page<GetTutorSuggest> suggestions = suggestDbService.getTutorSuggestsOnMyPage(lessonId, AuthVO.ofMemberId(authentication), tabId, pageable);
+        Page<GetTutorSuggest> suggestions = suggestDbService.getTutorSuggestsOnMyPage(lessonId, AuthInfo.ofMemberId(authentication), tabId, pageable);
         return ResponseEntity.ok(new MultiResponseDto<>(suggestions));
     }
 
@@ -115,7 +115,7 @@ public class SuggestController {
     @GetMapping("/student")
     public ResponseEntity<MultiResponseDto<?>> getStudentSuggest(Pageable pageable,
                                                                  Authentication authentication) {
-        Page<GetStudentSuggest> suggestions = suggestDbService.getStudentSuggestsOnMyPage(AuthVO.ofMemberId(authentication), pageable);
+        Page<GetStudentSuggest> suggestions = suggestDbService.getStudentSuggestsOnMyPage(AuthInfo.ofMemberId(authentication), pageable);
         return ResponseEntity.ok(new MultiResponseDto<>(suggestions));
     }
 
@@ -130,7 +130,7 @@ public class SuggestController {
     @DeleteMapping("/{suggest-id}")
     public ResponseEntity<?> cancelSuggest(@PathVariable("suggest-id") Long suggestId,
                                            Authentication authentication) {
-        suggestService.cancelSuggest(suggestId, AuthVO.of(authentication));
+        suggestService.cancelSuggest(suggestId, AuthInfo.of(authentication));
         return ResponseEntity.noContent().build();
     }
 
@@ -145,7 +145,7 @@ public class SuggestController {
     @DeleteMapping("/{suggest-id}/tutor")
     public ResponseEntity<?> deleteTutorEndOfSuggest(@PathVariable("suggest-id") Long suggestId,
                                                      Authentication authentication) {
-        suggestService.deleteTutorEndOfSuggest(suggestId, AuthVO.ofMemberId(authentication));
+        suggestService.deleteTutorEndOfSuggest(suggestId, AuthInfo.ofMemberId(authentication));
         return ResponseEntity.noContent().build();
     }
 
@@ -160,7 +160,7 @@ public class SuggestController {
     @DeleteMapping("/{suggest-id}/student")
     public ResponseEntity<?> deleteStudentEndOfSuggest(@PathVariable("suggest-id") Long suggestId,
                                                        Authentication authentication) {
-        suggestService.deleteStudentEndOfSuggest(suggestId, AuthVO.ofMemberId(authentication));
+        suggestService.deleteStudentEndOfSuggest(suggestId, AuthInfo.ofMemberId(authentication));
         return ResponseEntity.noContent().build();
     }
 
@@ -174,7 +174,7 @@ public class SuggestController {
     @GetMapping("/{suggest-id}/attendance")
     public ResponseEntity<GetLessonAttendance> getLessonAttendance(@PathVariable("suggest-id") Long suggestId,
                                                                    Authentication authentication) {
-        return ResponseEntity.ok(suggestService.getLessonAttendance(suggestId, AuthVO.ofMemberId(authentication)));
+        return ResponseEntity.ok(suggestService.getLessonAttendance(suggestId, AuthInfo.ofMemberId(authentication)));
     }
 
     /**
@@ -187,7 +187,7 @@ public class SuggestController {
     @GetMapping("/{suggest-id}/attendance/check")
     public ResponseEntity<GetQuantityCount> lessonAttendanceCheck(@PathVariable("suggest-id") Long suggestId,
                                                                   Authentication authentication) {
-        Integer quantityCount = suggestService.teacherChecksAttendance(suggestId, AuthVO.ofMemberId(authentication));
+        Integer quantityCount = suggestService.teacherChecksAttendance(suggestId, AuthInfo.ofMemberId(authentication));
         return ResponseEntity.ok().body(new GetQuantityCount(quantityCount));
     }
 
@@ -201,7 +201,7 @@ public class SuggestController {
     @GetMapping("/{suggest-id}/attendance/cancel")
     public ResponseEntity<GetQuantityCount> lessonAttendanceCancel(@PathVariable("suggest-id") Long suggestId,
                                                                    Authentication authentication) {
-        Integer quantityCount = suggestService.teacherCancelAttendance(suggestId, AuthVO.ofMemberId(authentication));
+        Integer quantityCount = suggestService.teacherCancelAttendance(suggestId, AuthInfo.ofMemberId(authentication));
         return ResponseEntity.ok().body(new GetQuantityCount(quantityCount));
     }
 }

@@ -7,7 +7,7 @@ import com.codueon.boostUp.domain.chat.repository.querydsl.ChatRepository;
 import com.codueon.boostUp.domain.chat.repository.redis.RedisChatMessage;
 import com.codueon.boostUp.domain.chat.repository.redis.RedisChatRoom;
 import com.codueon.boostUp.domain.chat.utils.MessageType;
-import com.codueon.boostUp.domain.vo.AuthVO;
+import com.codueon.boostUp.domain.vo.AuthInfo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
@@ -32,7 +32,7 @@ public class ChatService {
      * @author mozzi327
      */
     @Transactional
-    public void setRedisChatInfo(PostMessage message, AuthVO authInfo) {
+    public void setRedisChatInfo(PostMessage message, AuthInfo authInfo) {
         RedisChat createChat = RedisChat.of(message, authInfo);
         eventPublisher.publishEvent(createChat);
         sendAlarmEvent(message);

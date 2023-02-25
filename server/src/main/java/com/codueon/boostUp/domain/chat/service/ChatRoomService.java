@@ -13,7 +13,7 @@ import com.codueon.boostUp.domain.chat.utils.AlarmMessageUtils;
 import com.codueon.boostUp.domain.chat.utils.AlarmType;
 import com.codueon.boostUp.domain.member.entity.Member;
 import com.codueon.boostUp.domain.member.service.MemberDbService;
-import com.codueon.boostUp.domain.vo.AuthVO;
+import com.codueon.boostUp.domain.vo.AuthInfo;
 import com.codueon.boostUp.global.exception.BusinessLogicException;
 import com.codueon.boostUp.global.exception.ExceptionCode;
 import lombok.RequiredArgsConstructor;
@@ -46,7 +46,7 @@ public class ChatRoomService {
     public void createAlarmChatRoom(Long memberId, String memberNickname) {
         if (isExistRoom(memberId, memberId)) return;
         String CODUEON_MANAGER = "코듀온 알리미";
-        ChatRoom savedChatRoom = makeChatRoomThenReturn(memberId, memberId, CODUEON_MANAGER, memberNickname);
+        ChatRoom savedChatRoom = makeChatRoomThenReturn(memberId, memberId, CODUEON_MANAGER, CODUEON_MANAGER);
         Long chatRoomId = savedChatRoom.getId();
         redisChatRoom.createChatRoom(chatRoomId, memberId);
         RedisChat alarmChat = AlarmMessageUtils
@@ -62,7 +62,7 @@ public class ChatRoomService {
      * @author mozzi327
      */
     @Transactional
-    public void createChatRoom(AuthVO authInfo, Long lessonId) {
+    public void createChatRoom(AuthInfo authInfo, Long lessonId) {
         Member receiver = memberDbService.ifExistsReturnMemberByLessonId(lessonId);
         Long senderId = authInfo.getMemberId();
         Long receiverId = receiver.getId();
@@ -114,6 +114,14 @@ public class ChatRoomService {
                 .build());
     }
 
+    /**
+     * 입장 메시지 전송 이벤트 발급 메서드
+     *
+     * @param chatRoomId 채팅방 식별자
+     * @param enterChat  입장 메시지
+     * @param count      알람 카운트
+     * @author mozzi327
+     */
     private void sendMakeRoomMessage(Long chatRoomId, RedisChat enterChat, int count) {
         eventPublisher.publishEvent(InitialChatRoomMessageEvent.builder()
                 .chatRoomId(chatRoomId)

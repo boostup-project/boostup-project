@@ -8,7 +8,7 @@ import com.codueon.boostUp.domain.lesson.dto.patch.PostLessonInfoEdit;
 import com.codueon.boostUp.domain.lesson.dto.post.PostLesson;
 import com.codueon.boostUp.domain.lesson.dto.post.PostSearchLesson;
 import com.codueon.boostUp.domain.lesson.service.LessonService;
-import com.codueon.boostUp.domain.vo.AuthVO;
+import com.codueon.boostUp.domain.vo.AuthInfo;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.data.domain.Page;
@@ -42,7 +42,7 @@ public class LessonController {
                                         @RequestPart(required = false, value = "profileImage") MultipartFile profileImage,
                                         @RequestPart(required = false, value = "careerImage") List<MultipartFile> careerImage,
                                         Authentication authentication) {
-        lessonService.createLessonS3(postLesson, AuthVO.ofMemberId(authentication), profileImage, careerImage);
+        lessonService.createLessonS3(postLesson, AuthInfo.ofMemberId(authentication), profileImage, careerImage);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
@@ -61,7 +61,7 @@ public class LessonController {
                                           @RequestPart(value = "data") @Valid PostLessonInfoEdit postLessonInfoEdit,
                                           @RequestPart(required = false, value = "profileImage") MultipartFile profileImage,
                                           Authentication authentication) {
-        lessonService.updateLessonInfoS3(lessonId, AuthVO.ofMemberId(authentication), postLessonInfoEdit, profileImage);
+        lessonService.updateLessonInfoS3(lessonId, AuthInfo.ofMemberId(authentication), postLessonInfoEdit, profileImage);
         return ResponseEntity.ok().build();
     }
 
@@ -80,7 +80,7 @@ public class LessonController {
                                                 @RequestPart(value = "data") @Valid PostLessonDetailEdit postLessonDetailEdit,
                                                 @RequestPart(required = false, value = "careerImage") List<MultipartFile> careerImage,
                                                 Authentication authentication) {
-        lessonService.updateLessonDetailS3(lessonId, AuthVO.ofMemberId(authentication), postLessonDetailEdit, careerImage);
+        lessonService.updateLessonDetailS3(lessonId, AuthInfo.ofMemberId(authentication), postLessonDetailEdit, careerImage);
         return ResponseEntity.ok().build();
     }
 
@@ -96,7 +96,7 @@ public class LessonController {
     public ResponseEntity<?> updateCurriculum(@PathVariable("lesson-id") Long lessonId,
                                               @RequestBody PatchLessonCurriculum patchLessonCurriculum,
                                               Authentication authentication) {
-        lessonService.updateCurriculum(lessonId, AuthVO.ofMemberId(authentication), patchLessonCurriculum);
+        lessonService.updateCurriculum(lessonId, AuthInfo.ofMemberId(authentication), patchLessonCurriculum);
         return ResponseEntity.ok().build();
     }
 
@@ -110,7 +110,7 @@ public class LessonController {
     @DeleteMapping(value = "/{lesson-id}")
     public ResponseEntity<?> deleteLesson(@PathVariable("lesson-id") Long lessonId,
                                           Authentication authentication) {
-        lessonService.deleteLessonS3(AuthVO.ofMemberId(authentication), lessonId);
+        lessonService.deleteLessonS3(AuthInfo.ofMemberId(authentication), lessonId);
         return ResponseEntity.noContent().build();
     }
 
@@ -122,7 +122,7 @@ public class LessonController {
      */
     @GetMapping(value = "/tutor")
     public ResponseEntity<GetLessonId> getLessonMyPage(Authentication authentication) {
-        return ResponseEntity.ok().body(new GetLessonId(lessonService.getLessonMyPage(AuthVO.ofMemberId(authentication))));
+        return ResponseEntity.ok().body(new GetLessonId(lessonService.getLessonMyPage(AuthInfo.ofMemberId(authentication))));
     }
 
     /**
@@ -136,7 +136,7 @@ public class LessonController {
     @GetMapping
     public ResponseEntity<?> getMainPageLessonInfos(Pageable pageable,
                                                     Authentication authentication) {
-        Page<GetMainPageLesson> response = lessonService.getMainPageLessons(AuthVO.ofMemberIdNotRequired(authentication), pageable);
+        Page<GetMainPageLesson> response = lessonService.getMainPageLessons(AuthInfo.ofMemberIdNotRequired(authentication), pageable);
         return ResponseEntity.ok().body(new MultiResponseDto<>(response));
     }
 
@@ -153,7 +153,7 @@ public class LessonController {
     public ResponseEntity<?> getDetailSearchForLesson(@RequestBody @Valid PostSearchLesson postSearchLesson,
                                                       Pageable pageable,
                                                       Authentication authentication) {
-        Page<GetMainPageLesson> response = lessonService.getDetailSearchLessons(AuthVO.ofMemberIdNotRequired(authentication), postSearchLesson, pageable);
+        Page<GetMainPageLesson> response = lessonService.getDetailSearchLessons(AuthInfo.ofMemberIdNotRequired(authentication), postSearchLesson, pageable);
         return ResponseEntity.ok().body(new MultiResponseDto<>(response));
     }
 
@@ -170,7 +170,7 @@ public class LessonController {
     public ResponseEntity<?> getLessonByLanguage(@PathVariable("language-id") Integer languageId,
                                                  Pageable pageable,
                                                  Authentication authentication) {
-        Page<GetMainPageLesson> response = lessonService.getMainPageLessonsAboutLanguage(AuthVO.ofMemberIdNotRequired(authentication), languageId, pageable);
+        Page<GetMainPageLesson> response = lessonService.getMainPageLessonsAboutLanguage(AuthInfo.ofMemberIdNotRequired(authentication), languageId, pageable);
         return ResponseEntity.ok().body(new MultiResponseDto<>(response));
     }
 
@@ -184,7 +184,7 @@ public class LessonController {
     @GetMapping("/{lesson-id}")
     public ResponseEntity<?> getLesson(@PathVariable("lesson-id") Long lessonId,
                                        Authentication authentication) {
-        GetLesson response = lessonService.getDetailLesson(lessonId, AuthVO.ofMemberIdNotRequired(authentication));
+        GetLesson response = lessonService.getDetailLesson(lessonId, AuthInfo.ofMemberIdNotRequired(authentication));
         return ResponseEntity.ok().body(response);
     }
 

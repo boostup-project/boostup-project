@@ -3,7 +3,7 @@ package com.codueon.boostUp.domain.suggest.service;
 import com.codueon.boostUp.domain.chat.event.vo.MakeChatRoomEvent;
 import com.codueon.boostUp.domain.chat.event.vo.SendSuggestMessageEvent;
 import com.codueon.boostUp.domain.chat.utils.AlarmType;
-import com.codueon.boostUp.domain.vo.AuthVO;
+import com.codueon.boostUp.domain.vo.AuthInfo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
@@ -22,7 +22,7 @@ public class SuggestEventService {
      * @param lessonId 과외 식별자
      * @author mozzi327
      */
-    public void sendMakeChatRoom(AuthVO authInfo, Long lessonId) {
+    public void sendMakeChatRoom(AuthInfo authInfo, Long lessonId) {
         eventPublisher.publishEvent(MakeChatRoomEvent.builder()
                 .authInfo(authInfo)
                 .lessonId(lessonId)

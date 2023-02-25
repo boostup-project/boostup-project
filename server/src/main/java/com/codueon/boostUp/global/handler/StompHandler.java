@@ -1,25 +1,17 @@
 package com.codueon.boostUp.global.handler;
 
 import com.codueon.boostUp.domain.chat.controller.ChatRegisterController;
-import com.codueon.boostUp.domain.chat.vo.ChatRoomIdVO;
-import com.codueon.boostUp.domain.member.entity.Member;
-import com.codueon.boostUp.domain.vo.AuthVO;
+import com.codueon.boostUp.domain.vo.AuthInfo;
 import com.codueon.boostUp.global.exception.BusinessLogicException;
 import com.codueon.boostUp.global.exception.ExceptionCode;
-import com.codueon.boostUp.global.security.utils.JwtTokenUtils;
-import com.codueon.boostUp.global.utils.RedisUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.core.Ordered;
-import org.springframework.core.annotation.Order;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageChannel;
 import org.springframework.messaging.simp.stomp.StompCommand;
 import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.messaging.support.ChannelInterceptor;
 import org.springframework.messaging.support.MessageHeaderAccessor;
-
-import java.util.Arrays;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -46,7 +38,7 @@ public class StompHandler implements ChannelInterceptor {
             log.info("[SUBSCRIBE] start {}", sessionId);
             Long chatRoomId = parseRoomIdFromHeader(accessor);
             if (chatRoomId != null)
-                chatRegisterController.registerUserAndSendEnterMessage(chatRoomId, AuthVO.of(accessor.getUser()));
+                chatRegisterController.registerUserAndSendEnterMessage(chatRoomId, AuthInfo.of(accessor.getUser()));
             log.info("[SUBSCRIBE] end {}", sessionId);
         } else if (StompCommand.UNSUBSCRIBE.equals(command)) {
             log.info("[UNSUBSCRIBE] start {}", sessionId);

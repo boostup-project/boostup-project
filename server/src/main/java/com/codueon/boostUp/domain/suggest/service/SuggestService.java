@@ -14,7 +14,7 @@ import com.codueon.boostUp.domain.suggest.entity.PaymentInfo;
 import com.codueon.boostUp.domain.suggest.entity.Reason;
 import com.codueon.boostUp.domain.suggest.entity.Suggest;
 import com.codueon.boostUp.domain.suggest.entity.SuggestStatus;
-import com.codueon.boostUp.domain.vo.AuthVO;
+import com.codueon.boostUp.domain.vo.AuthInfo;
 import com.codueon.boostUp.global.exception.BusinessLogicException;
 import com.codueon.boostUp.global.exception.ExceptionCode;
 import lombok.RequiredArgsConstructor;
@@ -44,7 +44,7 @@ public class SuggestService {
      * @author LeeGoh
      */
     @Transactional
-    public void createSuggest(PostSuggest post, Long lessonId, AuthVO authInfo) {
+    public void createSuggest(PostSuggest post, Long lessonId, AuthInfo authInfo) {
         if(authInfo.getMemberId().equals(lessonDbService.getMemberIdByLessonId(lessonId))) {
             throw new BusinessLogicException(ExceptionCode.TUTOR_CANNOT_RESERVATION);
         }
@@ -77,7 +77,7 @@ public class SuggestService {
      * @author LeeGoh
      */
     @Transactional
-    public void acceptSuggest(Long suggestId, AuthVO authInfo, Integer quantity) {
+    public void acceptSuggest(Long suggestId, AuthInfo authInfo, Integer quantity) {
         Suggest findSuggest = suggestDbService.ifExistsReturnSuggest(suggestId);
         Lesson findLesson = lessonDbService.ifExistsReturnLesson(findSuggest.getLessonId());
 
@@ -110,7 +110,7 @@ public class SuggestService {
      * @param authInfo  사용자 인증 정보
      * @author LeeGoh
      */
-    public void cancelSuggest(Long suggestId, AuthVO authInfo) {
+    public void cancelSuggest(Long suggestId, AuthInfo authInfo) {
         Suggest findSuggest = suggestDbService.ifExistsReturnSuggest(suggestId);
 
         if (!authInfo.getMemberId().equals(findSuggest.getMemberId())) {
@@ -135,7 +135,7 @@ public class SuggestService {
      * @param postReason 거절 사유
      * @author LeeGoh
      */
-    public void declineSuggest(Long suggestId, AuthVO authInfo, PostReason postReason) {
+    public void declineSuggest(Long suggestId, AuthInfo authInfo, PostReason postReason) {
         Suggest findSuggest = suggestDbService.ifExistsReturnSuggest(suggestId);
 
         if (!authInfo.getMemberId().equals(lessonDbService.getMemberIdByLessonId(findSuggest.getLessonId())))

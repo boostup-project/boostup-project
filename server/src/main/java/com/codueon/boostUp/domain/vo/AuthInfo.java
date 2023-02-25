@@ -12,42 +12,42 @@ import java.security.Principal;
 
 @Getter
 @NoArgsConstructor
-public class AuthVO {
+public class AuthInfo {
     private Long memberId;
     private String name;
     private String email;
 
     @Builder
-    public AuthVO(Long memberId, String name, String email) {
+    public AuthInfo(Long memberId, String name, String email) {
         this.memberId = memberId;
         this.name = name;
         this.email = email;
     }
 
-    public static AuthVO of(Authentication auth) {
+    public static AuthInfo of(Authentication auth) {
         if (auth == null) throw new AuthException(ExceptionCode.INVALID_AUTH_TOKEN);
         JwtAuthenticationToken token = (JwtAuthenticationToken) auth;
-        return AuthVO.builder()
+        return AuthInfo.builder()
                 .memberId(token.getId())
                 .name(token.getName())
                 .email((String) token.getPrincipal())
                 .build();
     }
 
-    public static AuthVO of(Principal principal) {
+    public static AuthInfo of(Principal principal) {
         if (principal == null) throw new AuthException(ExceptionCode.INVALID_AUTH_TOKEN);
         JwtAuthenticationToken token = (JwtAuthenticationToken) principal;
-        return AuthVO.builder()
+        return AuthInfo.builder()
                 .memberId(token.getId())
                 .name(token.getName())
                 .email((String) token.getPrincipal())
                 .build();
     }
 
-    public static AuthVO ofNotRequiredToken(Authentication auth) {
+    public static AuthInfo ofNotRequiredToken(Authentication auth) {
         if (auth == null) return null;
         JwtAuthenticationToken token = (JwtAuthenticationToken) auth;
-        return AuthVO.builder()
+        return AuthInfo.builder()
                 .memberId(token.getId())
                 .name(token.getName())
                 .email((String) token.getPrincipal())
