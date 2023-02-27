@@ -23,6 +23,7 @@ public class EventMessageService {
 
     /**
      * 메시지 Redis 전송 메서드
+     *
      * @param redisChat 메시지 정보
      * @author mozzi327
      */
@@ -34,9 +35,9 @@ public class EventMessageService {
     /**
      * 입장 메시지 Redis 전송 메서드
      *
-     * @param chatRoomId   채팅방 식별자
-     * @param senderChat   메시지 정보(Sender)
-     * @param receiverChat 메시지 정보(Receiver)
+     * @param chatRoomId 채팅방 식별자
+     * @param enterChat  입장 메시지
+     * @param count      알람 카운트
      * @author mozzi327
      */
     public void sendEnterMessage(Long chatRoomId, RedisChat enterChat, int count) {

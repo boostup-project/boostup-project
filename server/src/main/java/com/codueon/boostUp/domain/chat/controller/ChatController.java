@@ -31,7 +31,7 @@ public class ChatController {
     @MessageMapping("/rooms")
     public void sendMessage(PostMessage message, StompHeaderAccessor headerAccessor) {
         log.info("[SEND] start {}", headerAccessor.getSessionId());
-        chatService.setRedisChatInfo(message, AuthInfo.of(headerAccessor.getUser()));
+        chatService.sendRedisChat(message, AuthInfo.of(headerAccessor.getUser()));
         log.info("[SEND] complete {}", headerAccessor.getSessionId());
     }
 

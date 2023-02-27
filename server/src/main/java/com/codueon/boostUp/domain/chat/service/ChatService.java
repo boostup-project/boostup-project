@@ -32,7 +32,7 @@ public class ChatService {
      * @author mozzi327
      */
     @Transactional
-    public void setRedisChatInfo(PostMessage message, AuthInfo authInfo) {
+    public void sendRedisChat(PostMessage message, AuthInfo authInfo) {
         RedisChat createChat = RedisChat.of(message, authInfo);
         eventPublisher.publishEvent(createChat);
         sendAlarmEvent(message);
@@ -122,7 +122,7 @@ public class ChatService {
      * @author mozzi327
      */
     public void deleteChatMessage(Long chatRoomId) {
-        redisChatMessage.removeAllMessageInChatRoom(chatRoomId);
+        redisChatMessage.deleteAllMessageInChatRoom(chatRoomId);
     }
 
     /**

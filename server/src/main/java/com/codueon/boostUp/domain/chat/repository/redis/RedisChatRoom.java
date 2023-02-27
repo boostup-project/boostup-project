@@ -100,7 +100,7 @@ public class RedisChatRoom {
      * @param memberId   사용자 식별자
      * @author mozzi327
      */
-    public void deleteChatMember(Long chatRoomId, Long memberId) {
+    public void deleteChatRoomKey(Long chatRoomId, Long memberId) {
         setOperations.remove(chatRoomUtils.makeMemberKey(memberId), chatRoomUtils.makeKey(chatRoomId));
     }
 

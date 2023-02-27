@@ -34,17 +34,6 @@ public class WebSocketTestUtils {
         return client;
     }
 
-    public RedisChat makeTalkRedisChat(Long memberId, Long chatRoomId) {
-        return RedisChat.builder()
-                .chatRoomId(chatRoomId)
-                .senderId(memberId)
-                .displayName("길동이에요")
-                .message("테스트 메시지입니다.")
-                .messageType(MessageType.TALK)
-                .createdAt(LocalDateTime.now())
-                .build();
-    }
-
     public StompSession getSessionAfterConnect(WebSocketStompClient stompClient, String url,
                                                WebSocketHttpHeaders httpHeaders, StompHeaders stompHeaders) throws ExecutionException, InterruptedException, TimeoutException {
         ListenableFuture<StompSession> connection = stompClient

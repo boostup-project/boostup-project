@@ -1,34 +1,51 @@
 package com.codueon.boostUp.domain.chat.message.event;
 
 import com.codueon.boostUp.domain.chat.ChatTest;
+import com.codueon.boostUp.domain.chat.dto.GetChatRoom;
 import com.codueon.boostUp.domain.chat.dto.RedisChat;
 import com.codueon.boostUp.domain.chat.event.listener.SendMessageEventListener;
 import com.codueon.boostUp.domain.chat.event.vo.InitialChatRoomMessageEvent;
 import com.codueon.boostUp.domain.chat.event.vo.SendSuggestMessageEvent;
 import com.codueon.boostUp.domain.chat.service.EventMessageService;
-import com.codueon.boostUp.domain.chat.utils.AlarmMessageUtils;
-import com.codueon.boostUp.domain.chat.utils.AlarmType;
-import com.codueon.boostUp.domain.chat.utils.MessageType;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import com.codueon.boostUp.domain.chat.utils.*;
+import com.codueon.boostUp.domain.utils.DataForTest;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.web.server.LocalServerPort;
+import org.springframework.messaging.simp.stomp.StompHeaders;
+import org.springframework.messaging.simp.stomp.StompSession;
 import org.springframework.test.context.jdbc.Sql;
+import org.springframework.web.socket.WebSocketHttpHeaders;
+import org.springframework.web.socket.messaging.WebSocketStompClient;
 
 import java.time.LocalDateTime;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingDeque;
 
+import static com.codueon.boostUp.domain.chat.utils.DataForChat.*;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 @Sql("classpath:sql/initChatTest.sql")
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class SendMessageEventListenerTest extends ChatTest {
     @Autowired
-    protected EventMessageService eventMessageService;
-    protected SendMessageEventListener sendMessageEventListener;
+    protected SendMessageEventListener eventListener;
+    @LocalServerPort
+    protected int port;
+    protected String url;
+    protected WebSocketTestUtils webSocketTestUtils;
+    protected BlockingQueue<RedisChat> chatRoomMessages;
 
     @BeforeEach
     void setUp() throws Exception {
-        sendMessageEventListener = new SendMessageEventListener(eventMessageService);
+        webSocketTestUtils = new WebSocketTestUtils();
+        url = "ws://localhost:" + port + "/ws/chat";
+    }
+
+    @BeforeAll
+    void beforeAll() {
+        chatRoomMessages = new LinkedBlockingDeque<>(99);
+        tutorToken = jwtTokenUtils.generateAccessToken(DataForTest.getSavedTutor());
     }
 
     @AfterEach
@@ -61,7 +78,7 @@ public class SendMessageEventListenerTest extends ChatTest {
                 .build();
 
         // when(Send To Tutor)
-        sendMessageEventListener.handleSendMessage(sendMessage);
+        eventListener.handleSendMessage(sendMessage);
 
         // then
         RedisChat receivedMessage = chatService.getChatMessages(tutorId, chatRoomId).get(0);
@@ -91,7 +108,7 @@ public class SendMessageEventListenerTest extends ChatTest {
                 .build();
 
         // when
-        sendMessageEventListener.handleSendEnterMessage(event);
+        eventListener.handleSendEnterMessage(event);
 
         // then
         RedisChat enterChat = chatService.getChatMessages(studentId, chatRoomId).get(0);
@@ -103,37 +120,40 @@ public class SendMessageEventListenerTest extends ChatTest {
     }
 
     @Test
-    @DisplayName("과외 신청 과정에 대한 알람 메시지 이벤트 발급 시 메시지가 정상적으로 저장되어야 한다.")
+    @DisplayName("과외 신청 과정에 대한 알람 메시지 이벤트 발급 시 메시지가 정상적으로 저장 및 전송되어야 한다.")
     void sendAlarmMessageTest() throws Exception {
         // given
-        Long chatRoomId = 1L;
-        Long tutorId = 1L;
-        Long studentId = 2L;
-        String lessonTitle = "자바 속성 강의!";
-        String tutorName = "선생이에요";
-        String studentName = "학생이에요";
-        Integer attendanceCount = 0;
         AlarmType alarmType = AlarmType.REGISTER;
 
-        chatRoomService.createAlarmChatRoom(tutorId, tutorName);
+        chatRoomService.createAlarmChatRoom(TUTOR_ID, TUTOR_NAME);
+
+        StompHeaders tutorHeaders = webSocketTestUtils.makeStompHeadersWithAccessToken(tutorToken);
+        WebSocketStompClient tutorStompClient = webSocketTestUtils.makeStompClient();
+        StompSession tutorSession = webSocketTestUtils
+                .getSessionAfterConnect(tutorStompClient, url, new WebSocketHttpHeaders(), tutorHeaders);
+
+        tutorSession.subscribe(
+                String.format("/topic/rooms/%d", CHAT_ROOM_ID1),
+                new StompFrameHandlerImpl(new RedisChat(), chatRoomMessages)
+        );
 
         SendSuggestMessageEvent event = SendSuggestMessageEvent.builder()
-                .memberId(tutorId)
-                .lessonTitle(lessonTitle)
-                .displayName(studentName)
-                .attendanceCount(attendanceCount)
+                .memberId(TUTOR_ID)
+                .lessonTitle(LESSON_TITLE)
+                .displayName(STUDENT_NAME)
+                .attendanceCount(0)
                 .message(null)
                 .alarmType(alarmType)
                 .build();
 
         // when
-        sendMessageEventListener.handleSendAlarmMessage(event);
+        eventListener.handleSendAlarmMessage(event);
 
         // then
-        RedisChat suggestMessage = chatService.getChatMessages(studentId, chatRoomId).get(1);
+        RedisChat suggestMessage = chatService.getChatMessages(STUDENT_ID, CHAT_ROOM_ID1).get(1);
 
-        assertThat(suggestMessage.getChatRoomId()).isEqualTo(chatRoomId);
-        assertThat(suggestMessage.getSenderId()).isEqualTo(tutorId);
+        assertThat(suggestMessage.getChatRoomId()).isEqualTo(CHAT_ROOM_ID1);
+        assertThat(suggestMessage.getSenderId()).isEqualTo(TUTOR_ID);
         assertThat(suggestMessage.getDisplayName()).isEqualTo("코듀온 알리미");
         assertThat(suggestMessage.getMessageType()).isEqualTo(MessageType.ALARM);
     }

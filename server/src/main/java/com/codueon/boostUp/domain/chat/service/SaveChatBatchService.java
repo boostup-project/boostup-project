@@ -18,11 +18,12 @@ public class SaveChatBatchService {
 
     public void saveInMemoryChatMessagesToRdb() {
         try {
-            List<RedisChat> redisChats = redisChatMessage.findAllChat();
+            List<RedisChat> redisChats = redisChatMessage.findAllNewChat();
             chatJdbcRepository.batchInsertChatMessages(redisChats);
             redisChatMessage.deleteAllNewChat();
         } catch (Exception e) {
-            log.info("[BATCH ERR] BATCH FAILED");
+            log.info("[BATCH ERR] BATCH FAILED!!");
+            log.info(e.getMessage());
         }
     }
 }
