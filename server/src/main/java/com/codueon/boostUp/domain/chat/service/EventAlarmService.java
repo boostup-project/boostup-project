@@ -21,7 +21,7 @@ public class EventAlarmService {
     private final RedisTemplate<Object, Object> redisTemplate;
 
     /**
-     * 알람 메시지 세팅 메서드
+     * 알람 메시지 세팅 및 전송 메서드
      *
      * @param memberId   사용자 식별자
      * @param chatRoomId 채팅방 식별자
@@ -62,10 +62,11 @@ public class EventAlarmService {
         int alarmCount = redisChatAlarm.makeChatRoomAndEnterAlarm(receiverId, chatRoom.getId());
         GetChatRoom makeEnterRoomAlarm = GetChatRoom.builder()
                 .chatRoomId(chatRoom.getId())
-                .alarmCount(alarmCount)
-                .redisChat(receiverChat)
                 .receiverId(receiverChat.getSenderId())
+                .latestMessage(receiverChat.getMessage())
+                .alarmCount(alarmCount)
                 .displayName(displayName)
+                .createdAt(receiverChat.getCreatedAt())
                 .build();
         redisTemplate.convertAndSend("firstAlarm", makeEnterRoomAlarm);
     }

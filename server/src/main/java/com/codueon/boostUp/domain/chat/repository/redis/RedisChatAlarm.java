@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Repository;
+
 import javax.annotation.PostConstruct;
 
 @Slf4j
@@ -16,6 +17,7 @@ public class RedisChatAlarm {
 
     /**
      * Redis 자료형 초기화 메서드
+     *
      * @author mozzi327
      */
     @PostConstruct
@@ -25,7 +27,8 @@ public class RedisChatAlarm {
 
     /**
      * Redis 채팅방 생성 시 알람 메시지 초기화 메서드
-     * @param memberId 사용자 식별자
+     *
+     * @param memberId   사용자 식별자
      * @param chatRoomId 채팅방 식별자
      * @author mozzi327
      */
@@ -35,8 +38,20 @@ public class RedisChatAlarm {
     }
 
     /**
+     * Redis 알람 카운트 저장 메서드
+     *
+     * @param memberId   사용자 식별자
+     * @param chatRoomId 채팅방 식별자
+     * @author mozzi327
+     */
+    public void saveAlarmCount(Long memberId, Long chatRoomId, int count) {
+        operations.set(getKey(memberId, chatRoomId), count);
+    }
+
+    /**
      * Redis 메시지 전송 시 알람 카운트 메서드
-     * @param memberId 사용자 식별자
+     *
+     * @param memberId   사용자 식별자
      * @param chatRoomId 채팅방 식별자
      * @author mozzi327
      */
@@ -46,19 +61,25 @@ public class RedisChatAlarm {
 
     /**
      * Redis 채팅방 알람 내역 조회 메서드
-     * @param memberId 사용자 식별자
+     *
+     * @param memberId   사용자 식별자
      * @param chatRoomId 채팅방 식별자
      * @return Integer(Alarm Count)
      * @author mozzi327
      */
     public Integer getAlarmCount(Long memberId, Long chatRoomId) {
         Integer count = operations.get(getKey(memberId, chatRoomId));
-        return (count == null) ? 0 : count;
+        if (count == null) {
+            saveAlarmCount(memberId, chatRoomId, 0);
+            return 0;
+        }
+        return count;
     }
 
     /**
      * Redis 채팅방 삭제 시 알람 카운트 제거 메서드
-     * @param memberId 사용자 식별자
+     *
+     * @param memberId   사용자 식별자
      * @param chatRoomId 채팅방 식별자
      * @author mozzi327
      */
@@ -68,7 +89,8 @@ public class RedisChatAlarm {
 
     /**
      * Redis 알람 테이블 키 생성 메서드
-     * @param memberId 사용자 식별자
+     *
+     * @param memberId   사용자 식별자
      * @param chatRoomId 채팅방 식별자
      * @return String(Key)
      * @author mozzi327

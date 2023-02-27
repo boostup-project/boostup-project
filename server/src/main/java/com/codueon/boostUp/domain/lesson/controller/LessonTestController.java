@@ -4,7 +4,7 @@ import com.codueon.boostUp.domain.lesson.dto.patch.PostLessonDetailEdit;
 import com.codueon.boostUp.domain.lesson.dto.patch.PostLessonInfoEdit;
 import com.codueon.boostUp.domain.lesson.dto.post.PostLesson;
 import com.codueon.boostUp.domain.lesson.service.LessonService;
-import com.codueon.boostUp.domain.vo.AuthVO;
+import com.codueon.boostUp.domain.vo.AuthInfo;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.http.HttpStatus;
@@ -35,7 +35,7 @@ public class LessonTestController {
                                             Authentication authentication,
                                             @RequestPart(required = false, value = "profileImage") MultipartFile profileImage,
                                             @RequestPart(required = false, value = "careerImage") List<MultipartFile> careerImage) {
-        lessonService.createLesson(postLesson, AuthVO.ofMemberId(authentication), profileImage, careerImage);
+        lessonService.createLesson(postLesson, AuthInfo.ofMemberId(authentication), profileImage, careerImage);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
@@ -54,7 +54,7 @@ public class LessonTestController {
                                            @RequestPart(value = "data") @Valid PostLessonInfoEdit postLessonInfoEdit,
                                            @RequestPart(required = false, value = "profileImage") MultipartFile profileImage,
                                            Authentication authentication) {
-        lessonService.updateLessonInfo(lessonId, AuthVO.ofMemberId(authentication), postLessonInfoEdit, profileImage);
+        lessonService.updateLessonInfo(lessonId, AuthInfo.ofMemberId(authentication), postLessonInfoEdit, profileImage);
         return ResponseEntity.ok().build();
     }
 
@@ -73,7 +73,7 @@ public class LessonTestController {
                                                  @RequestPart(value = "data") @Valid PostLessonDetailEdit postLessonDetailEdit,
                                                  @RequestPart(required = false, value = "careerImage") List<MultipartFile> careerImage,
                                                  Authentication authentication) {
-        lessonService.updateLessonDetail(lessonId, AuthVO.ofMemberId(authentication), postLessonDetailEdit, careerImage);
+        lessonService.updateLessonDetail(lessonId, AuthInfo.ofMemberId(authentication), postLessonDetailEdit, careerImage);
         return ResponseEntity.ok().build();
     }
 
@@ -87,7 +87,7 @@ public class LessonTestController {
     @DeleteMapping(value = "/{lesson-id}")
     public ResponseEntity<?> testDeleteLesson(@PathVariable("lesson-id") Long lessonId,
                                            Authentication authentication) {
-        lessonService.deleteLesson(AuthVO.ofMemberId(authentication), lessonId);
+        lessonService.deleteLesson(AuthInfo.ofMemberId(authentication), lessonId);
         return ResponseEntity.noContent().build();
     }
 }

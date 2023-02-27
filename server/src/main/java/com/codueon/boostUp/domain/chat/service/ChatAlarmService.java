@@ -1,7 +1,6 @@
 package com.codueon.boostUp.domain.chat.service;
 
 import com.codueon.boostUp.domain.chat.repository.redis.RedisChatAlarm;
-import com.codueon.boostUp.domain.vo.AuthVO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

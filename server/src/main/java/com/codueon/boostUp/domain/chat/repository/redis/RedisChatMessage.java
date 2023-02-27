@@ -1,12 +1,9 @@
 package com.codueon.boostUp.domain.chat.repository.redis;
 
-import com.codueon.boostUp.domain.chat.dto.GetChatRoom;
 import com.codueon.boostUp.domain.chat.dto.RedisChat;
-import com.codueon.boostUp.domain.chat.entity.ChatRoom;
 import com.codueon.boostUp.global.exception.BusinessLogicException;
 import com.codueon.boostUp.global.exception.ExceptionCode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -16,9 +13,6 @@ import org.springframework.stereotype.Repository;
 import javax.annotation.PostConstruct;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Repository
@@ -48,9 +42,9 @@ public class RedisChatMessage {
      * @param count        카운트
      * @author mozzi327
      */
-    public void initialMessage(Long chatRoomId, RedisChat enterMessage, int count) {
+    public void initialMessage(Long chatRoomId, RedisChat enterMessage, int order) {
         String key = getKey(chatRoomId);
-        operations.add(key, enterMessage, count);
+        operations.add(key, enterMessage, order);
         long idx = operations.zCard(KEY_FOR_SAVED_TO_RDB);
         operations.add(KEY_FOR_SAVED_TO_RDB, enterMessage, idx + 1);
     }
@@ -110,13 +104,33 @@ public class RedisChatMessage {
     }
 
     /**
+     * Redis 저장용 채팅 전체 조회 메서드
+     *
+     * @return List(RedisChat)
+     * @author mozzi327
+     */
+    public List<RedisChat> findAllNewChat() {
+        Object getAllMessage = operations.range(KEY_FOR_SAVED_TO_RDB, 0, -1);
+        return Arrays.asList(objectMapper.convertValue(getAllMessage, RedisChat[].class));
+    }
+
+    /**
      * Redis 채팅방 모든 메시지 삭제 메서드
      *
      * @param chatRoomId 채팅방 식별자
      * @author mozzi327
      */
-    public void removeAllMessageInChatRoom(Long chatRoomId) {
+    public void deleteAllMessageInChatRoom(Long chatRoomId) {
         redisTemplate.delete(getKey(chatRoomId));
+    }
+
+    /**
+     * Redis 백업 후 저장용 메시지 삭제 메서드
+     *
+     * @author mozzi327
+     */
+    public void deleteAllNewChat() {
+        redisTemplate.delete(KEY_FOR_SAVED_TO_RDB);
     }
 
     /**
@@ -152,26 +166,6 @@ public class RedisChatMessage {
     private List<RedisChat> objectToList(Object results) {
         if (results == null) return null;
         return Arrays.asList(objectMapper.convertValue(results, RedisChat[].class));
-    }
-
-    /**
-     * Redis 저장용 채팅 전체 조회 메서드
-     *
-     * @return List(RedisChat)
-     * @author mozzi327
-     */
-    public List<RedisChat> findAllChat() {
-        Object getAllMessage = operations.range(KEY_FOR_SAVED_TO_RDB, 0, -1);
-        return Arrays.asList(objectMapper.convertValue(getAllMessage, RedisChat[].class));
-    }
-
-    /**
-     * Redis 백업 후 저장용 메시지 삭제 메서드
-     *
-     * @author mozzi327
-     */
-    public void deleteAllNewChat() {
-        redisTemplate.delete(KEY_FOR_SAVED_TO_RDB);
     }
 
     /**

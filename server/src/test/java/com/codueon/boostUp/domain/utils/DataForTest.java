@@ -1,15 +1,27 @@
 package com.codueon.boostUp.domain.utils;
 
 import com.codueon.boostUp.domain.bookmark.entity.Bookmark;
+import com.codueon.boostUp.domain.chat.entity.ChatRoom;
 import com.codueon.boostUp.domain.lesson.entity.*;
 import com.codueon.boostUp.domain.member.entity.Member;
 import com.codueon.boostUp.domain.member.entity.MemberImage;
 import com.codueon.boostUp.domain.reveiw.entity.Review;
 import com.codueon.boostUp.domain.suggest.entity.Suggest;
+import org.springframework.util.ReflectionUtils;
 
+import java.lang.reflect.Field;
 import java.util.List;
 
 public class DataForTest {
+
+    public static ChatRoom getChatRoom() {
+        return ChatRoom.builder()
+                .senderId(2L)
+                .receiverId(1L)
+                .senderName("학생이에요")
+                .receiverName("선생이에요")
+                .build();
+    }
 
     public static MemberImage getMemberImage() {
         return MemberImage.builder()
@@ -98,7 +110,6 @@ public class DataForTest {
                 .password("Ghdrlfehd1!")
                 .roles(List.of("USER"))
                 .build();
-        tutor.addMemberImage(getMemberImage());
         return tutor;
     }
 
@@ -109,7 +120,6 @@ public class DataForTest {
                 .password("Ghdrlfehd1!")
                 .roles(List.of("USER"))
                 .build();
-        student.addMemberImage(getMemberImage());
         return student;
     }
 
@@ -198,19 +208,6 @@ public class DataForTest {
                 .career(100)
                 .build();
 
-        List<Integer> addressList = getAddressList();
-        List<Integer> languageList = getLanguageList();
-        addressList.forEach(id ->
-                lesson.addLessonAddress(LessonAddress.builder()
-                        .addressId(id)
-                        .build()));
-        languageList.forEach(id ->
-                lesson.addLessonLanguage(LessonLanguage.builder()
-                        .languageId(id)
-                        .build()));
-
-        lesson.addProfileImage(getProfileImage());
-
         return lesson;
     }
 
@@ -284,6 +281,14 @@ public class DataForTest {
                 .memberId(2L)
                 .lessonId(1L)
                 .build();
+    }
+
+    public static ChatRoom getSavedChatRoom() {
+        ChatRoom savedChatRoom = ChatRoom.builder().build();
+        Field field = ReflectionUtils.findField(savedChatRoom.getClass(), "id");
+        ReflectionUtils.makeAccessible(field);
+        ReflectionUtils.setField(field, savedChatRoom, 1L);
+        return savedChatRoom;
     }
 
     public List<Review> getReviewList() {

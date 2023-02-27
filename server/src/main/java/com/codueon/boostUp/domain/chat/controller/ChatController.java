@@ -3,7 +3,7 @@ package com.codueon.boostUp.domain.chat.controller;
 import com.codueon.boostUp.domain.chat.dto.PostMessage;
 import com.codueon.boostUp.domain.chat.dto.RedisChat;
 import com.codueon.boostUp.domain.chat.service.ChatService;
-import com.codueon.boostUp.domain.vo.AuthVO;
+import com.codueon.boostUp.domain.vo.AuthInfo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -31,7 +31,7 @@ public class ChatController {
     @MessageMapping("/rooms")
     public void sendMessage(PostMessage message, StompHeaderAccessor headerAccessor) {
         log.info("[SEND] start {}", headerAccessor.getSessionId());
-        chatService.setRedisChatInfo(message, AuthVO.of(headerAccessor.getUser()));
+        chatService.sendRedisChat(message, AuthInfo.of(headerAccessor.getUser()));
         log.info("[SEND] complete {}", headerAccessor.getSessionId());
     }
 
@@ -45,7 +45,7 @@ public class ChatController {
     @GetMapping("/chat/room/{room-id}/messages")
     public ResponseEntity getMessageInChatRoom(@PathVariable("room-id") Long chatRoomId,
                                                Authentication authentication) {
-        List<RedisChat> response = chatService.getChatMessages(AuthVO.ofMemberId(authentication), chatRoomId);
+        List<RedisChat> response = chatService.getChatMessages(AuthInfo.ofMemberId(authentication), chatRoomId);
         return ResponseEntity.ok().body(response);
     }
 }

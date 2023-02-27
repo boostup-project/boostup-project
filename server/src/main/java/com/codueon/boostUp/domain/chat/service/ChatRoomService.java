@@ -13,7 +13,7 @@ import com.codueon.boostUp.domain.chat.utils.AlarmMessageUtils;
 import com.codueon.boostUp.domain.chat.utils.AlarmType;
 import com.codueon.boostUp.domain.member.entity.Member;
 import com.codueon.boostUp.domain.member.service.MemberDbService;
-import com.codueon.boostUp.domain.vo.AuthVO;
+import com.codueon.boostUp.domain.vo.AuthInfo;
 import com.codueon.boostUp.global.exception.BusinessLogicException;
 import com.codueon.boostUp.global.exception.ExceptionCode;
 import lombok.RequiredArgsConstructor;
@@ -25,7 +25,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-@Transactional
 @RequiredArgsConstructor
 public class ChatRoomService {
     private final RedisChatRoom redisChatRoom;
@@ -44,9 +43,10 @@ public class ChatRoomService {
      */
     @Transactional
     public void createAlarmChatRoom(Long memberId, String memberNickname) {
-        if (isExistRoom(memberId, memberId)) return;
+        if (isExistRoom(memberId, memberId))
+            throw new BusinessLogicException(ExceptionCode.CHATROOM_ALREADY_EXIST);
         String CODUEON_MANAGER = "코듀온 알리미";
-        ChatRoom savedChatRoom = makeChatRoomThenReturn(memberId, memberId, CODUEON_MANAGER, memberNickname);
+        ChatRoom savedChatRoom = makeChatRoomThenReturn(memberId, memberId, CODUEON_MANAGER, CODUEON_MANAGER);
         Long chatRoomId = savedChatRoom.getId();
         redisChatRoom.createChatRoom(chatRoomId, memberId);
         RedisChat alarmChat = AlarmMessageUtils
@@ -62,7 +62,7 @@ public class ChatRoomService {
      * @author mozzi327
      */
     @Transactional
-    public void createChatRoom(AuthVO authInfo, Long lessonId) {
+    public void createChatRoom(AuthInfo authInfo, Long lessonId) {
         Member receiver = memberDbService.ifExistsReturnMemberByLessonId(lessonId);
         Long senderId = authInfo.getMemberId();
         Long receiverId = receiver.getId();
@@ -114,7 +114,15 @@ public class ChatRoomService {
                 .build());
     }
 
-    private void sendMakeRoomMessage(Long chatRoomId, RedisChat enterChat, int count) {
+    /**
+     * 입장 메시지 전송 이벤트 발급 메서드
+     *
+     * @param chatRoomId 채팅방 식별자
+     * @param enterChat  입장 메시지
+     * @param count      알람 카운트
+     * @author mozzi327
+     */
+    public void sendMakeRoomMessage(Long chatRoomId, RedisChat enterChat, int count) {
         eventPublisher.publishEvent(InitialChatRoomMessageEvent.builder()
                 .chatRoomId(chatRoomId)
                 .enterChat(enterChat)
@@ -153,33 +161,64 @@ public class ChatRoomService {
     public List<GetChatRoom> findAllChatRoom(Long memberId) {
         List<ChatRoom> chatRooms = chatRoomRepository.findChatRoomsBySenderIdOrReceiverId(memberId, memberId);
         return chatRooms.stream()
-                .map(chatRoom -> GetChatRoom.builder()
-                        .chatRoomId(chatRoom.getId())
-                        .receiverId(chatRoom.returnReceiverId(memberId))
-                        .displayName(chatRoom.returnChatRoomName(memberId))
-                        .alarmCount(redisChatAlarm.getAlarmCount(memberId, chatRoom.getId()))
-                        .redisChat(redisChatMessage.getLatestMessage(redisChatMessage.getKey(chatRoom.getId())))
-                        .build()
+                .map(chatRoom -> {
+                            RedisChat latestChat = redisChatMessage.getLatestMessage(redisChatMessage.getKey(chatRoom.getId()));
+                            return GetChatRoom.builder()
+                                    .chatRoomId(chatRoom.getId())
+                                    .receiverId(chatRoom.returnReceiverId(memberId))
+                                    .displayName(chatRoom.returnChatRoomName(memberId))
+                                    .alarmCount(redisChatAlarm.getAlarmCount(memberId, chatRoom.getId()))
+                                    .latestMessage(latestChat.getMessage())
+                                    .createdAt(latestChat.getCreatedAt())
+                                    .build();
+                        }
                 ).collect(Collectors.toList());
     }
 
     /**
-     * 채팅방 식별자 삭제 메서드
+     * 채팅방 삭제 메서드
+     *
+     * @param chatRoomId 채팅방 식별자
+     * @param memberId   사용자 식별자
+     * @author mozzi327
+     */
+    public void leaveChatRoom(Long chatRoomId, Long memberId) {
+        chatRoomRepository.deleteById(chatRoomId);
+        redisChatRoom.deleteChatRoomKey(chatRoomId, memberId);
+    }
+
+    /**
+     * 채팅방 전체 삭제 메서드
      *
      * @param memberId 사용자 식별자
      * @author mozzi327
      */
     public void deleteRedisChatRoomKey(Long memberId) {
+        List<ChatRoom> chatRooms = chatRoomRepository.findChatRoomsBySenderIdOrReceiverId(memberId, memberId);
+        if (chatRooms.size() != 0) chatRoomRepository.deleteAll(chatRooms);
         redisChatRoom.deleteAllChatRoomKey(memberId);
     }
 
     /**
-     * 채팅방 RDB 전체 삭제 메서드
+     * 채팅방 식별자 전체 조회 메서드
      *
+     * @param memberId 사용자 식별자
+     * @return List(String)
      * @author mozzi327
      */
-    public void deleteAllChatRoom() {
-        chatRoomRepository.deleteAll();
+    public List<String> findAllChatRoomKey(Long memberId) {
+        return redisChatRoom.findAllChatRoom(memberId);
+    }
+
+    /**
+     * 채팅방 식별자 전체 조회 메서드 (Long)
+     *
+     * @param memberId 사용자 식별자
+     * @return List(Long)
+     * @author mozzi327
+     */
+    public List<Long> findAllChatRoomKeyAsLong(Long memberId) {
+        return redisChatRoom.findAllChatRoomAsLong(memberId);
     }
 
     /**
@@ -194,7 +233,6 @@ public class ChatRoomService {
         redisChatRoom.isNotExistMemberInChatRoomMakeRoomInfo(chatRoomId, senderId);
         redisChatRoom.isNotExistMemberInChatRoomMakeRoomInfo(chatRoomId, receiverId);
     }
-
 
     /**
      * 알람 채팅방 조회 메서드

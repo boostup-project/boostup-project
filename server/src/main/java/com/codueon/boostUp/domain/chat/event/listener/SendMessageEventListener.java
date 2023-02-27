@@ -42,7 +42,7 @@ public class SendMessageEventListener {
     }
 
     /**
-     * 과외 신청 시 알람 메시지 전송 EventListener 메서드
+     * 과외 신청 프로세스에 대한 알람 메시지 전송 EventListener 메서드
      *
      * @param event 알람 전송 이벤트
      * @author mozzi327

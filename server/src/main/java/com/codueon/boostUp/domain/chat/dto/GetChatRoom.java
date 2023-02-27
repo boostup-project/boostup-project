@@ -28,13 +28,14 @@ public class GetChatRoom implements Comparable<GetChatRoom>, Serializable {
                        Long receiverId,
                        int alarmCount,
                        String displayName,
-                       RedisChat redisChat) {
+                       String latestMessage,
+                       LocalDateTime createdAt) {
         this.chatRoomId = chatRoomId;
         this.receiverId = receiverId;
         this.alarmCount = alarmCount;
         this.displayName = displayName;
-        this.latestMessage = redisChat.getMessage();
-        this.createdAt = redisChat.getCreatedAt();
+        this.latestMessage = latestMessage;
+        this.createdAt = createdAt;
     }
 
     @Override

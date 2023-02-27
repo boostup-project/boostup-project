@@ -1,13 +1,6 @@
 package com.codueon.boostUp.domain.chat.utils;
 
 import com.codueon.boostUp.domain.chat.dto.RedisChat;
-import com.codueon.boostUp.domain.chat.service.ChatAlarmService;
-import com.codueon.boostUp.domain.chat.service.ChatRoomService;
-import com.codueon.boostUp.domain.chat.service.ChatService;
-import com.codueon.boostUp.domain.member.entity.Member;
-import com.codueon.boostUp.domain.member.repository.MemberRepository;
-import com.codueon.boostUp.domain.vo.AuthVO;
-import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.converter.MappingJackson2MessageConverter;
 import org.springframework.messaging.simp.stomp.StompHeaders;
 import org.springframework.messaging.simp.stomp.StompSession;
@@ -39,17 +32,6 @@ public class WebSocketTestUtils {
         WebSocketStompClient client = new WebSocketStompClient(sockJsClient);
         client.setMessageConverter(new MappingJackson2MessageConverter());
         return client;
-    }
-
-    public RedisChat makeTalkRedisChat(Long memberId, Long chatRoomId) {
-        return RedisChat.builder()
-                .chatRoomId(chatRoomId)
-                .senderId(memberId)
-                .displayName("길동이에요")
-                .message("테스트 메시지입니다.")
-                .messageType(MessageType.TALK)
-                .createdAt(LocalDateTime.now())
-                .build();
     }
 
     public StompSession getSessionAfterConnect(WebSocketStompClient stompClient, String url,

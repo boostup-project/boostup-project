@@ -4,8 +4,7 @@ import com.codueon.boostUp.domain.bookmark.dto.GetBookmark;
 import com.codueon.boostUp.domain.bookmark.dto.WrapBookmark;
 import com.codueon.boostUp.domain.bookmark.service.BookmarkService;
 import com.codueon.boostUp.domain.dto.MultiResponseDto;
-import com.codueon.boostUp.domain.vo.AuthVO;
-import com.codueon.boostUp.global.security.token.JwtAuthenticationToken;
+import com.codueon.boostUp.domain.vo.AuthInfo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -31,7 +30,7 @@ public class BookmarkController {
     @GetMapping("/lesson/{lesson-id}")
     public ResponseEntity getBookmark(@PathVariable("lesson-id") Long lessonId,
                                       Authentication authentication) {
-        boolean isBookmarked = bookmarkService.isMemberBookmarked(AuthVO.ofMemberIdNotRequired(authentication), lessonId);
+        boolean isBookmarked = bookmarkService.isMemberBookmarked(AuthInfo.ofMemberIdNotRequired(authentication), lessonId);
         return ResponseEntity.ok().body(new WrapBookmark(isBookmarked));
     }
 
@@ -44,7 +43,7 @@ public class BookmarkController {
     @GetMapping("/lesson/{lesson-id}/modification")
     public ResponseEntity changeBookmark(@PathVariable("lesson-id") Long lessonId,
                                          Authentication authentication) {
-        boolean isBookmarked = bookmarkService.changeBookmarkStatus(AuthVO.ofMemberId(authentication), lessonId);
+        boolean isBookmarked = bookmarkService.changeBookmarkStatus(AuthInfo.ofMemberId(authentication), lessonId);
         return ResponseEntity.ok().body(new WrapBookmark(isBookmarked));
     }
 
@@ -56,7 +55,7 @@ public class BookmarkController {
     @GetMapping
     public ResponseEntity getBookmarks(Pageable pageable,
                                        Authentication authentication) {
-        Page<GetBookmark> bookmarkList = bookmarkService.findBookmarkList(AuthVO.ofMemberId(authentication), pageable);
+        Page<GetBookmark> bookmarkList = bookmarkService.findBookmarkList(AuthInfo.ofMemberId(authentication), pageable);
         return ResponseEntity.ok().body(new MultiResponseDto<>(bookmarkList));
     }
 }

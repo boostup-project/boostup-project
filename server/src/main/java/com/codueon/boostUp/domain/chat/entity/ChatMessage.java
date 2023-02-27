@@ -21,7 +21,7 @@ public class ChatMessage implements Serializable {
 
     @Id
     @Column(name = "CHAT_MESSAGE_ID")
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @NotNull
     private Long chatRoomId;

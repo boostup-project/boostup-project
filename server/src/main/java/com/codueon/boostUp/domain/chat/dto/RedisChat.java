@@ -1,14 +1,12 @@
 package com.codueon.boostUp.domain.chat.dto;
 
-import com.codueon.boostUp.domain.chat.utils.AlarmType;
 import com.codueon.boostUp.domain.chat.utils.MessageType;
-import com.codueon.boostUp.domain.vo.AuthVO;
+import com.codueon.boostUp.domain.vo.AuthInfo;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import com.querydsl.core.annotations.QueryProjection;
-import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -49,7 +47,7 @@ public class RedisChat implements Serializable {
         this.createdAt = createdAt;
     }
 
-    public static RedisChat of(PostMessage message, AuthVO authInfo) {
+    public static RedisChat of(PostMessage message, AuthInfo authInfo) {
         return RedisChat.builder()
                 .chatRoomId(message.getChatRoomId())
                 .senderId(authInfo.getMemberId())
