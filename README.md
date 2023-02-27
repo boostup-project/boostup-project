@@ -82,4 +82,3 @@
  feat/이슈내용#[이슈번호]
  ex) feat/entity#1
 ```
->>>>>>> 99c1feb3d664a619f663f1805e6f84cfee13d71b
