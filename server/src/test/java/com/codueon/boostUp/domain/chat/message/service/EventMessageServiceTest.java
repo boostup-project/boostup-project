@@ -52,10 +52,12 @@ public class EventMessageServiceTest extends ChatTest {
     protected ChatRoomService chatRoomService;
     protected WebSocketTestUtils webSocketTestUtils;
     protected BlockingQueue<RedisChat> chatMessages;
+    protected WebSocketStompClient stompClient;
+    protected StompHeaders stompHeaders;
+    protected StompSession stompSession;
 
     @BeforeEach
     void setUp() {
-        webSocketTestUtils = new WebSocketTestUtils();
         chatMessages = new LinkedBlockingDeque<>(99);
     }
 
@@ -72,21 +74,22 @@ public class EventMessageServiceTest extends ChatTest {
 
     @BeforeAll
     void beforeAll() {
+        webSocketTestUtils = new WebSocketTestUtils();
         url = "ws://localhost:" + port + "/ws/chat";
         tutorToken = jwtTokenUtils.generateAccessToken(DataForTest.getSavedTutor());
         studentToken = jwtTokenUtils.generateAccessToken(DataForTest.getSavedStudent());
+        stompClient = webSocketTestUtils.makeStompClient();
     }
 
     @Test
     @DisplayName("전송된 메시지는 정상적으로 전송되어야 한다.")
     void sendMessageTest() throws Exception {
         // given
-        StompHeaders tutorHeaders = webSocketTestUtils.makeStompHeadersWithAccessToken(tutorToken);
-        WebSocketStompClient tutorStompClient = webSocketTestUtils.makeStompClient();
-        StompSession tutorSession = webSocketTestUtils
-                .getSessionAfterConnect(tutorStompClient, url, new WebSocketHttpHeaders(), tutorHeaders);
+        stompHeaders = webSocketTestUtils.makeStompHeadersWithAccessToken(tutorToken);
+        stompSession = webSocketTestUtils
+                .getSessionAfterConnect(stompClient, url, new WebSocketHttpHeaders(), stompHeaders);
 
-        tutorSession.subscribe(
+        stompSession.subscribe(
                 String.format("/topic/rooms/%d", CHAT_ROOM_ID1),
                 new StompFrameHandlerImpl<>(new RedisChat(), chatMessages)
         );
@@ -107,12 +110,11 @@ public class EventMessageServiceTest extends ChatTest {
     @DisplayName("Sender 입장 메시지 테스트")
     void senderSendEnterMessageTest() throws Exception {
         // given
-        StompHeaders studentHeaders = webSocketTestUtils.makeStompHeadersWithAccessToken(studentToken);
-        WebSocketStompClient studentStompClient = webSocketTestUtils.makeStompClient();
-        StompSession studentSession = webSocketTestUtils
-                .getSessionAfterConnect(studentStompClient, url, new WebSocketHttpHeaders(), studentHeaders);
+        stompHeaders = webSocketTestUtils.makeStompHeadersWithAccessToken(studentToken);
+        stompSession = webSocketTestUtils
+                .getSessionAfterConnect(stompClient, url, new WebSocketHttpHeaders(), stompHeaders);
 
-        studentSession.subscribe(
+        stompSession.subscribe(
                 String.format("/topic/rooms/%d", CHAT_ROOM_ID1),
                 new StompFrameHandlerImpl<>(new RedisChat(), chatMessages)
         );
@@ -133,12 +135,11 @@ public class EventMessageServiceTest extends ChatTest {
     @DisplayName("Receiver 입장 메시지 테스트")
     void receiverSendEnterMessageTest() throws Exception {
         // given
-        StompHeaders tutorHeaders = webSocketTestUtils.makeStompHeadersWithAccessToken(tutorToken);
-        WebSocketStompClient tutorStompClient = webSocketTestUtils.makeStompClient();
-        StompSession tutorSession = webSocketTestUtils
-                .getSessionAfterConnect(tutorStompClient, url, new WebSocketHttpHeaders(), tutorHeaders);
+        stompHeaders = webSocketTestUtils.makeStompHeadersWithAccessToken(tutorToken);
+        stompSession = webSocketTestUtils
+                .getSessionAfterConnect(stompClient, url, new WebSocketHttpHeaders(), stompHeaders);
 
-        tutorSession.subscribe(
+        stompSession.subscribe(
                 String.format("/topic/rooms/%d", CHAT_ROOM_ID1),
                 new StompFrameHandlerImpl<>(new RedisChat(), chatMessages)
         );
@@ -159,9 +160,8 @@ public class EventMessageServiceTest extends ChatTest {
     @DisplayName("과외 신청 알람 메시지 테스트")
     void sendAlarmChannelRegisterSuggestMessageTest() throws Exception {
         // given
-        StompHeaders stompHeaders = webSocketTestUtils.makeStompHeadersWithAccessToken(tutorToken);
-        WebSocketStompClient stompClient = webSocketTestUtils.makeStompClient();
-        StompSession stompSession = webSocketTestUtils
+        stompHeaders = webSocketTestUtils.makeStompHeadersWithAccessToken(tutorToken);
+        stompSession = webSocketTestUtils
                 .getSessionAfterConnect(stompClient, url, new WebSocketHttpHeaders(), stompHeaders);
 
         stompSession.subscribe(
@@ -169,7 +169,8 @@ public class EventMessageServiceTest extends ChatTest {
                 new StompFrameHandlerImpl<>(new RedisChat(), chatMessages)
         );
 
-        given(chatRoomService.ifExistsAlarmChatRoomThenReturn(Mockito.anyLong())).willReturn(DataForChat.getSavedTutorChatRoom());
+        given(chatRoomService.ifExistsAlarmChatRoomThenReturn(Mockito.anyLong()))
+                .willReturn(DataForChat.getSavedTutorChatRoom());
 
         // when
         eventMessageService.sendAlarmChannelMessage(
@@ -190,9 +191,8 @@ public class EventMessageServiceTest extends ChatTest {
     @DisplayName("과외 수락 알람 메시지 테스트")
     void sendAlarmChannelAcceptSuggestMessageTest() throws Exception {
         // given
-        StompHeaders stompHeaders = webSocketTestUtils.makeStompHeadersWithAccessToken(studentToken);
-        WebSocketStompClient stompClient = webSocketTestUtils.makeStompClient();
-        StompSession stompSession = webSocketTestUtils
+        stompHeaders = webSocketTestUtils.makeStompHeadersWithAccessToken(studentToken);
+        stompSession = webSocketTestUtils
                 .getSessionAfterConnect(stompClient, url, new WebSocketHttpHeaders(), stompHeaders);
 
         stompSession.subscribe(
@@ -200,7 +200,8 @@ public class EventMessageServiceTest extends ChatTest {
                 new StompFrameHandlerImpl<>(new RedisChat(), chatMessages)
         );
 
-        given(chatRoomService.ifExistsAlarmChatRoomThenReturn(Mockito.anyLong())).willReturn(DataForChat.getSavedStudentChatRoom());
+        given(chatRoomService.ifExistsAlarmChatRoomThenReturn(Mockito.anyLong()))
+                .willReturn(DataForChat.getSavedStudentChatRoom());
 
         // when
         eventMessageService.sendAlarmChannelMessage(
@@ -221,9 +222,8 @@ public class EventMessageServiceTest extends ChatTest {
     @DisplayName("과외 거절 알람 메시지 테스트")
     void sendAlarmChannelRejectSuggestMessageTest() throws Exception {
         // given
-        StompHeaders stompHeaders = webSocketTestUtils.makeStompHeadersWithAccessToken(studentToken);
-        WebSocketStompClient stompClient = webSocketTestUtils.makeStompClient();
-        StompSession stompSession = webSocketTestUtils
+        stompHeaders = webSocketTestUtils.makeStompHeadersWithAccessToken(studentToken);
+        stompSession = webSocketTestUtils
                 .getSessionAfterConnect(stompClient, url, new WebSocketHttpHeaders(), stompHeaders);
 
         stompSession.subscribe(
@@ -231,7 +231,8 @@ public class EventMessageServiceTest extends ChatTest {
                 new StompFrameHandlerImpl<>(new RedisChat(), chatMessages)
         );
 
-        given(chatRoomService.ifExistsAlarmChatRoomThenReturn(Mockito.anyLong())).willReturn(DataForChat.getSavedStudentChatRoom());
+        given(chatRoomService.ifExistsAlarmChatRoomThenReturn(Mockito.anyLong()))
+                .willReturn(DataForChat.getSavedStudentChatRoom());
 
         // when
         eventMessageService.sendAlarmChannelMessage(
@@ -252,9 +253,8 @@ public class EventMessageServiceTest extends ChatTest {
     @DisplayName("과외 취소 알람 메시지 테스트")
     void sendAlarmChannelCancelSuggestMessageTest() throws Exception {
         // given
-        StompHeaders stompHeaders = webSocketTestUtils.makeStompHeadersWithAccessToken(tutorToken);
-        WebSocketStompClient stompClient = webSocketTestUtils.makeStompClient();
-        StompSession stompSession = webSocketTestUtils
+        stompHeaders = webSocketTestUtils.makeStompHeadersWithAccessToken(tutorToken);
+        stompSession = webSocketTestUtils
                 .getSessionAfterConnect(stompClient, url, new WebSocketHttpHeaders(), stompHeaders);
 
         stompSession.subscribe(
@@ -262,7 +262,8 @@ public class EventMessageServiceTest extends ChatTest {
                 new StompFrameHandlerImpl<>(new RedisChat(), chatMessages)
         );
 
-        given(chatRoomService.ifExistsAlarmChatRoomThenReturn(Mockito.anyLong())).willReturn(DataForChat.getSavedTutorChatRoom());
+        given(chatRoomService.ifExistsAlarmChatRoomThenReturn(Mockito.anyLong()))
+                .willReturn(DataForChat.getSavedTutorChatRoom());
 
         // when
         eventMessageService.sendAlarmChannelMessage(
@@ -283,9 +284,8 @@ public class EventMessageServiceTest extends ChatTest {
     @DisplayName("결제 성공 알람 메시지 테스트")
     void sendAlarmChannelPaySuccessMessageTest() throws Exception {
         // given
-        StompHeaders stompHeaders = webSocketTestUtils.makeStompHeadersWithAccessToken(tutorToken);
-        WebSocketStompClient stompClient = webSocketTestUtils.makeStompClient();
-        StompSession stompSession = webSocketTestUtils
+        stompHeaders = webSocketTestUtils.makeStompHeadersWithAccessToken(tutorToken);
+        stompSession = webSocketTestUtils
                 .getSessionAfterConnect(stompClient, url, new WebSocketHttpHeaders(), stompHeaders);
 
         stompSession.subscribe(
@@ -293,7 +293,8 @@ public class EventMessageServiceTest extends ChatTest {
                 new StompFrameHandlerImpl<>(new RedisChat(), chatMessages)
         );
 
-        given(chatRoomService.ifExistsAlarmChatRoomThenReturn(Mockito.anyLong())).willReturn(DataForChat.getSavedTutorChatRoom());
+        given(chatRoomService.ifExistsAlarmChatRoomThenReturn(Mockito.anyLong()))
+                .willReturn(DataForChat.getSavedTutorChatRoom());
 
         // when
         eventMessageService.sendAlarmChannelMessage(
@@ -314,9 +315,8 @@ public class EventMessageServiceTest extends ChatTest {
     @DisplayName("출석 체크 알람 메시지 테스트")
     void sendAlarmChannelCheckAttendanceMessageTest() throws Exception {
         // given
-        StompHeaders stompHeaders = webSocketTestUtils.makeStompHeadersWithAccessToken(studentToken);
-        WebSocketStompClient stompClient = webSocketTestUtils.makeStompClient();
-        StompSession stompSession = webSocketTestUtils
+        stompHeaders = webSocketTestUtils.makeStompHeadersWithAccessToken(studentToken);
+        stompSession = webSocketTestUtils
                 .getSessionAfterConnect(stompClient, url, new WebSocketHttpHeaders(), stompHeaders);
 
         stompSession.subscribe(
@@ -324,7 +324,8 @@ public class EventMessageServiceTest extends ChatTest {
                 new StompFrameHandlerImpl<>(new RedisChat(), chatMessages)
         );
 
-        given(chatRoomService.ifExistsAlarmChatRoomThenReturn(Mockito.anyLong())).willReturn(DataForChat.getSavedStudentChatRoom());
+        given(chatRoomService.ifExistsAlarmChatRoomThenReturn(Mockito.anyLong()))
+                .willReturn(DataForChat.getSavedStudentChatRoom());
 
         // when
         eventMessageService.sendAlarmChannelMessage(
@@ -345,9 +346,8 @@ public class EventMessageServiceTest extends ChatTest {
     @DisplayName("출석 체크 취소 알람 메시지 테스트")
     void sendAlarmChannelCancelAttendanceMessageTest() throws Exception {
         // given
-        StompHeaders stompHeaders = webSocketTestUtils.makeStompHeadersWithAccessToken(studentToken);
-        WebSocketStompClient stompClient = webSocketTestUtils.makeStompClient();
-        StompSession stompSession = webSocketTestUtils
+        stompHeaders = webSocketTestUtils.makeStompHeadersWithAccessToken(studentToken);
+        stompSession = webSocketTestUtils
                 .getSessionAfterConnect(stompClient, url, new WebSocketHttpHeaders(), stompHeaders);
 
         stompSession.subscribe(
@@ -355,7 +355,8 @@ public class EventMessageServiceTest extends ChatTest {
                 new StompFrameHandlerImpl<>(new RedisChat(), chatMessages)
         );
 
-        given(chatRoomService.ifExistsAlarmChatRoomThenReturn(Mockito.anyLong())).willReturn(DataForChat.getSavedStudentChatRoom());
+        given(chatRoomService.ifExistsAlarmChatRoomThenReturn(Mockito.anyLong()))
+                .willReturn(DataForChat.getSavedStudentChatRoom());
 
         // when
         eventMessageService.sendAlarmChannelMessage(
@@ -376,9 +377,8 @@ public class EventMessageServiceTest extends ChatTest {
     @DisplayName("환불 요청 알람 메시지 테스트")
     void sendAlarmChannelRefundRequestMessageTest() throws Exception {
         // given
-        StompHeaders stompHeaders = webSocketTestUtils.makeStompHeadersWithAccessToken(tutorToken);
-        WebSocketStompClient stompClient = webSocketTestUtils.makeStompClient();
-        StompSession stompSession = webSocketTestUtils
+        stompHeaders = webSocketTestUtils.makeStompHeadersWithAccessToken(tutorToken);
+        stompSession = webSocketTestUtils
                 .getSessionAfterConnect(stompClient, url, new WebSocketHttpHeaders(), stompHeaders);
 
         stompSession.subscribe(
@@ -386,7 +386,8 @@ public class EventMessageServiceTest extends ChatTest {
                 new StompFrameHandlerImpl<>(new RedisChat(), chatMessages)
         );
 
-        given(chatRoomService.ifExistsAlarmChatRoomThenReturn(Mockito.anyLong())).willReturn(DataForChat.getSavedTutorChatRoom());
+        given(chatRoomService.ifExistsAlarmChatRoomThenReturn(Mockito.anyLong()))
+                .willReturn(DataForChat.getSavedTutorChatRoom());
 
         // when
         eventMessageService.sendAlarmChannelMessage(
@@ -407,9 +408,8 @@ public class EventMessageServiceTest extends ChatTest {
     @DisplayName("환불 요청 수락 알람 메시지 테스트")
     void sendAlarmChannelAcceptRefundMessageTest() throws Exception {
         // given
-        StompHeaders stompHeaders = webSocketTestUtils.makeStompHeadersWithAccessToken(studentToken);
-        WebSocketStompClient stompClient = webSocketTestUtils.makeStompClient();
-        StompSession stompSession = webSocketTestUtils
+        stompHeaders = webSocketTestUtils.makeStompHeadersWithAccessToken(studentToken);
+        stompSession = webSocketTestUtils
                 .getSessionAfterConnect(stompClient, url, new WebSocketHttpHeaders(), stompHeaders);
 
         stompSession.subscribe(
@@ -417,7 +417,8 @@ public class EventMessageServiceTest extends ChatTest {
                 new StompFrameHandlerImpl<>(new RedisChat(), chatMessages)
         );
 
-        given(chatRoomService.ifExistsAlarmChatRoomThenReturn(Mockito.anyLong())).willReturn(DataForChat.getSavedStudentChatRoom());
+        given(chatRoomService.ifExistsAlarmChatRoomThenReturn(Mockito.anyLong()))
+                .willReturn(DataForChat.getSavedStudentChatRoom());
 
         // when
         eventMessageService.sendAlarmChannelMessage(
@@ -438,9 +439,8 @@ public class EventMessageServiceTest extends ChatTest {
     @DisplayName("환불 요청 거절 알람 메시지 테스트")
     void sendAlarmChannelRejectRefundMessageTest() throws Exception {
         // given
-        StompHeaders stompHeaders = webSocketTestUtils.makeStompHeadersWithAccessToken(studentToken);
-        WebSocketStompClient stompClient = webSocketTestUtils.makeStompClient();
-        StompSession stompSession = webSocketTestUtils
+        stompHeaders = webSocketTestUtils.makeStompHeadersWithAccessToken(studentToken);
+        stompSession = webSocketTestUtils
                 .getSessionAfterConnect(stompClient, url, new WebSocketHttpHeaders(), stompHeaders);
 
         stompSession.subscribe(
@@ -448,7 +448,8 @@ public class EventMessageServiceTest extends ChatTest {
                 new StompFrameHandlerImpl<>(new RedisChat(), chatMessages)
         );
 
-        given(chatRoomService.ifExistsAlarmChatRoomThenReturn(Mockito.anyLong())).willReturn(DataForChat.getSavedStudentChatRoom());
+        given(chatRoomService.ifExistsAlarmChatRoomThenReturn(Mockito.anyLong()))
+                .willReturn(DataForChat.getSavedStudentChatRoom());
 
         // when
         eventMessageService.sendAlarmChannelMessage(
@@ -469,9 +470,8 @@ public class EventMessageServiceTest extends ChatTest {
     @DisplayName("과외 종료 알람 메시지 테스트")
     void sendAlarmChannelEndLessonMessageTest() throws Exception {
         // given
-        StompHeaders stompHeaders = webSocketTestUtils.makeStompHeadersWithAccessToken(studentToken);
-        WebSocketStompClient stompClient = webSocketTestUtils.makeStompClient();
-        StompSession stompSession = webSocketTestUtils
+        stompHeaders = webSocketTestUtils.makeStompHeadersWithAccessToken(studentToken);
+        stompSession = webSocketTestUtils
                 .getSessionAfterConnect(stompClient, url, new WebSocketHttpHeaders(), stompHeaders);
 
         stompSession.subscribe(
@@ -479,7 +479,8 @@ public class EventMessageServiceTest extends ChatTest {
                 new StompFrameHandlerImpl<>(new RedisChat(), chatMessages)
         );
 
-        given(chatRoomService.ifExistsAlarmChatRoomThenReturn(Mockito.anyLong())).willReturn(DataForChat.getSavedStudentChatRoom());
+        given(chatRoomService.ifExistsAlarmChatRoomThenReturn(Mockito.anyLong()))
+                .willReturn(DataForChat.getSavedStudentChatRoom());
 
         // when
         eventMessageService.sendAlarmChannelMessage(
@@ -500,9 +501,8 @@ public class EventMessageServiceTest extends ChatTest {
     @DisplayName("과외 종료 알람 메시지 테스트")
     void sendAlarmChannelCompletedReviewMessageTest() throws Exception {
         // given
-        StompHeaders stompHeaders = webSocketTestUtils.makeStompHeadersWithAccessToken(tutorToken);
-        WebSocketStompClient stompClient = webSocketTestUtils.makeStompClient();
-        StompSession stompSession = webSocketTestUtils
+        stompHeaders = webSocketTestUtils.makeStompHeadersWithAccessToken(tutorToken);
+        stompSession = webSocketTestUtils
                 .getSessionAfterConnect(stompClient, url, new WebSocketHttpHeaders(), stompHeaders);
 
         stompSession.subscribe(
@@ -510,7 +510,8 @@ public class EventMessageServiceTest extends ChatTest {
                 new StompFrameHandlerImpl<>(new RedisChat(), chatMessages)
         );
 
-        given(chatRoomService.ifExistsAlarmChatRoomThenReturn(Mockito.anyLong())).willReturn(DataForChat.getSavedTutorChatRoom());
+        given(chatRoomService.ifExistsAlarmChatRoomThenReturn(Mockito.anyLong()))
+                .willReturn(DataForChat.getSavedTutorChatRoom());
 
         // when
         eventMessageService.sendAlarmChannelMessage(
