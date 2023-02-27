@@ -12,6 +12,7 @@ import org.junit.jupiter.api.*;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.context.jdbc.Sql;
 
 import java.util.List;
 
@@ -19,6 +20,7 @@ import static com.codueon.boostUp.domain.chat.utils.DataForChat.*;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.BDDMockito.given;
 
+@Sql("classpath:sql/initChatTest.sql")
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class ChatServiceTest extends IntegrationTest {
     @Autowired
@@ -48,11 +50,13 @@ public class ChatServiceTest extends IntegrationTest {
     @AfterEach
     void afterEach() {
         redisChatMessage.deleteAllNewChat();
-        redisChatMessage.deleteAllMessageInChatRoom(1L);
-        redisChatAlarm.deleteAlarmCount(1L, 1L);
-        redisChatAlarm.deleteAlarmCount(2L, 1L);
-        redisChatRoom.deleteAllChatRoomKey(1L);
-        redisChatRoom.deleteAllChatRoomKey(2L);
+        redisChatMessage.deleteAllMessageInChatRoom(TUTOR_CHAT_ROOM_ID);
+        redisChatMessage.deleteAllMessageInChatRoom(STUDENT_CHAT_ROOM_ID);
+        redisChatAlarm.deleteAlarmCount(TUTOR_ID, TUTOR_CHAT_ROOM_ID);
+        redisChatAlarm.deleteAlarmCount(STUDENT_ID, CHAT_ROOM_ID1);
+        redisChatAlarm.deleteAlarmCount(STUDENT_ID, STUDENT_CHAT_ROOM_ID);
+        redisChatRoom.deleteAllChatRoomKey(TUTOR_ID);
+        redisChatRoom.deleteAllChatRoomKey(STUDENT_ID);
     }
 
     @Test

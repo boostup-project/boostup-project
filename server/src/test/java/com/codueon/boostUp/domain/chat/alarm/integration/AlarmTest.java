@@ -23,7 +23,7 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingDeque;
 import java.util.concurrent.TimeUnit;
 
-import static com.codueon.boostUp.domain.chat.utils.DataForChat.CHAT_ROOM_ID1;
+import static com.codueon.boostUp.domain.chat.utils.DataForChat.*;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 @Sql("classpath:sql/initChatTest.sql")
@@ -47,12 +47,12 @@ public class AlarmTest extends ChatTest {
     @AfterAll
     void afterAll() {
         chatService.deleteAllNewChatMessage();
-        chatService.deleteChatMessage(1L);
-        chatService.deleteChatMessage(2L);
-        chatAlarmService.initAlarm(1L, 1L);
-        chatAlarmService.initAlarm(2L, 1L);
-        chatRoomService.deleteRedisChatRoomKey(1L);
-        chatRoomService.deleteRedisChatRoomKey(2L);
+        chatService.deleteChatMessage(TUTOR_CHAT_ROOM_ID);
+        chatService.deleteChatMessage(STUDENT_CHAT_ROOM_ID);
+        chatAlarmService.initAlarm(TUTOR_ID, TUTOR_CHAT_ROOM_ID);
+        chatAlarmService.initAlarm(STUDENT_ID, STUDENT_CHAT_ROOM_ID);
+        chatRoomService.deleteRedisChatRoomKey(TUTOR_ID);
+        chatRoomService.deleteRedisChatRoomKey(STUDENT_ID);
     }
 
     /**

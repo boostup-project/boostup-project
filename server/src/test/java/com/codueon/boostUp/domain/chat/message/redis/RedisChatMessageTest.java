@@ -19,7 +19,8 @@ public class RedisChatMessageTest extends IntegrationTest {
 
     @BeforeEach
     void setUp() {
-        redisChatMessage.deleteAllMessageInChatRoom(CHAT_ROOM_ID1);
+        redisChatMessage.deleteAllMessageInChatRoom(TUTOR_CHAT_ROOM_ID);
+        redisChatMessage.deleteAllMessageInChatRoom(STUDENT_CHAT_ROOM_ID);
         redisChatMessage.deleteAllNewChat();
     }
 

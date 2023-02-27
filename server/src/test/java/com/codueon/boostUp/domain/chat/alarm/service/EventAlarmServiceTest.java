@@ -60,10 +60,12 @@ public class EventAlarmServiceTest extends IntegrationTest {
 
     @AfterEach
     void afterEach() {
-        redisChatAlarm.deleteAlarmCount(TUTOR_ID, CHAT_ROOM_ID1);
+        redisChatAlarm.deleteAlarmCount(TUTOR_ID, TUTOR_CHAT_ROOM_ID);
         redisChatAlarm.deleteAlarmCount(STUDENT_ID, CHAT_ROOM_ID1);
+        redisChatAlarm.deleteAlarmCount(STUDENT_ID, STUDENT_CHAT_ROOM_ID);
         redisChatMessage.deleteAllNewChat();
-        redisChatMessage.deleteAllMessageInChatRoom(CHAT_ROOM_ID1);
+        redisChatMessage.deleteAllMessageInChatRoom(TUTOR_CHAT_ROOM_ID);
+        redisChatMessage.deleteAllMessageInChatRoom(STUDENT_CHAT_ROOM_ID);
     }
 
     @Test

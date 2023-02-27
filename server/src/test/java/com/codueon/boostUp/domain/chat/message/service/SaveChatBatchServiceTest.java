@@ -10,6 +10,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.jdbc.Sql;
 
 import java.util.List;
 
@@ -27,6 +28,7 @@ public class SaveChatBatchServiceTest extends IntegrationTest {
     protected ChatRepository chatRepository;
 
     @AfterEach
+    @Sql("classpath:sql/initChatTest.sql")
     void afterEach() {
         redisChatMessage.deleteAllMessageInChatRoom(CHAT_ROOM_ID1);
         redisChatMessage.deleteAllNewChat();

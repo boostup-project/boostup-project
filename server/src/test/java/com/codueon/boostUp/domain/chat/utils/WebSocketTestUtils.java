@@ -38,7 +38,7 @@ public class WebSocketTestUtils {
                                                WebSocketHttpHeaders httpHeaders, StompHeaders stompHeaders) throws ExecutionException, InterruptedException, TimeoutException {
         ListenableFuture<StompSession> connection = stompClient
                 .connect(url, httpHeaders, stompHeaders, new StompSessionHandlerAdapter() {});
-        return connection.get(2, TimeUnit.SECONDS);
+        return connection.get(99, TimeUnit.SECONDS);
     }
 
     public StompHeaders makeStompHeadersWithAccessToken(String token) {

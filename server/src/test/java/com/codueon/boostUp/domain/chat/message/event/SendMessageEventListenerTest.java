@@ -21,6 +21,7 @@ import org.springframework.web.socket.messaging.WebSocketStompClient;
 import java.time.LocalDateTime;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingDeque;
+import java.util.concurrent.TimeUnit;
 
 import static com.codueon.boostUp.domain.chat.utils.DataForChat.*;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
@@ -36,20 +37,16 @@ public class SendMessageEventListenerTest extends ChatTest {
     protected WebSocketTestUtils webSocketTestUtils;
     protected BlockingQueue<RedisChat> chatRoomMessages;
 
-    @BeforeEach
-    void setUp() throws Exception {
-        webSocketTestUtils = new WebSocketTestUtils();
-        url = "ws://localhost:" + port + "/ws/chat";
-    }
-
     @BeforeAll
     void beforeAll() {
+        webSocketTestUtils = new WebSocketTestUtils();
+        url = "ws://localhost:" + port + "/ws/chat";
         chatRoomMessages = new LinkedBlockingDeque<>(99);
         tutorToken = jwtTokenUtils.generateAccessToken(DataForTest.getSavedTutor());
     }
 
     @AfterEach
-    void afterAll() throws Exception {
+    void afterEach() throws Exception {
         chatService.deleteAllNewChatMessage();
         chatService.deleteChatMessage(1L);
         chatService.deleteChatMessage(2L);
@@ -120,7 +117,7 @@ public class SendMessageEventListenerTest extends ChatTest {
     }
 
     @Test
-    @DisplayName("과외 신청 과정에 대한 알람 메시지 이벤트 발급 시 메시지가 정상적으로 저장 및 전송되어야 한다.")
+    @DisplayName("과외 신청 과정에 대한 알람 메시지 이벤트 발급 시 메시지가 정상적으로 전송되어야 한다.")
     void sendAlarmMessageTest() throws Exception {
         // given
         AlarmType alarmType = AlarmType.REGISTER;
@@ -133,7 +130,7 @@ public class SendMessageEventListenerTest extends ChatTest {
                 .getSessionAfterConnect(tutorStompClient, url, new WebSocketHttpHeaders(), tutorHeaders);
 
         tutorSession.subscribe(
-                String.format("/topic/rooms/%d", CHAT_ROOM_ID1),
+                String.format("/topic/rooms/%d", TUTOR_CHAT_ROOM_ID),
                 new StompFrameHandlerImpl(new RedisChat(), chatRoomMessages)
         );
 
@@ -150,10 +147,11 @@ public class SendMessageEventListenerTest extends ChatTest {
         eventListener.handleSendAlarmMessage(event);
 
         // then
-        RedisChat suggestMessage = chatService.getChatMessages(STUDENT_ID, CHAT_ROOM_ID1).get(1);
+        RedisChat suggestMessage = chatRoomMessages.poll(10, TimeUnit.SECONDS);
 
-        assertThat(suggestMessage.getChatRoomId()).isEqualTo(CHAT_ROOM_ID1);
+        assertThat(suggestMessage.getChatRoomId()).isEqualTo(TUTOR_CHAT_ROOM_ID);
         assertThat(suggestMessage.getSenderId()).isEqualTo(TUTOR_ID);
+        assertThat(suggestMessage.getMessage()).isEqualTo(REGISTER_SUGGEST_CHAT.getMessage());
         assertThat(suggestMessage.getDisplayName()).isEqualTo("코듀온 알리미");
         assertThat(suggestMessage.getMessageType()).isEqualTo(MessageType.ALARM);
     }
