@@ -1,6 +1,3 @@
-<<<<<<< HEAD
-# boostup-project
-=======
 # 🚀 BoostUp Project
 ## 👨‍👩‍👧‍👦 팀원 소개
 
