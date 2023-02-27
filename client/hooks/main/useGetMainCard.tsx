@@ -3,6 +3,7 @@ import getMainCard from "apis/card/getMainCard";
 
 export async function getStaticProps() {
   const posts = await getMainCard();
+  console.log(posts);
   return { props: { posts } };
 }
 
