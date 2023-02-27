@@ -1,0 +1,154 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+/* 
+html, body, div, span, applet, object, iframe,
+  h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+  a, abbr, acronym, address, big, cite, code,
+  del, dfn, em, img, ins, kbd, q, s, samp,
+  small, strike, strong, sub, sup, tt, var,
+  b, u, i, center,
+  dl, dt, dd, menu, ol, ul, li,
+  fieldset, form, label, legend,
+  table, caption, tbody, tfoot, thead, tr, th, td,
+  article, aside, canvas, details, embed,
+  figure, figcaption, footer, header, hgroup,
+  main, menu, nav, output, ruby, section, summary,
+  time, mark, audio, video {
+    margin: 0;
+    padding: 0;
+    font-size: 100%;
+    font: inherit;
+    vertical-align: baseline;
+  } */
+
+/* HTML5 display-role reset for older browsers */
+/* article,
+aside,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+main,
+menu,
+nav,
+section {
+  display: block;
+} */
+
+/* menu,
+ol,
+ul,
+li {
+  list-style: none;
+} */
+
+/* HTML5 hidden-attribute fix for newer browsers */
+/* *[hidden] {
+  display: none;
+}
+
+body {
+  line-height: 1;
+}
+
+blockquote,
+q {
+  quotes: none;
+}
+
+blockquote:before,
+blockquote:after,
+q:before,
+q:after {
+  content: "";
+  content: none;
+}
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+button {
+  cursor: pointer;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-size: 100%;
+  vertical-align: baseline;
+} */
+@layer base {
+  input[type="number"]::-webkit-inner-spin-button,
+  input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+}
+@font-face {
+  font-family: "SCDream1";
+  src: url("../public/fonts/SCDream1.otf");
+}
+
+@font-face {
+  font-family: "SCDream2";
+  src: url("../public/fonts/SCDream2.otf");
+}
+
+@font-face {
+  font-family: "SCDream3";
+  src: url("../public/fonts/SCDream3.otf");
+}
+
+@font-face {
+  font-family: "SCDream4";
+  src: url("../public/fonts/SCDream4.otf");
+}
+
+@font-face {
+  font-family: "SCDream5";
+  src: url("../public/fonts/SCDream5.otf");
+}
+
+@font-face {
+  font-family: "SCDream6";
+  src: url("../public/fonts/SCDream6.otf");
+}
+
+@font-face {
+  font-family: "SCDream7";
+  src: url("../public/fonts/SCDream7.otf");
+}
+
+@font-face {
+  font-family: "SCDream8";
+  src: url("../public/fonts/SCDream8.otf");
+}
+
+@font-face {
+  font-family: "SCDream9";
+  src: url("../public/fonts/SCDream9.otf");
+}
+
+.slick-dots {
+  top: 210px;
+}
+
+.slick-dots li button {
+  color: #7e6330;
+}
+
+.slick-dots li button:before {
+  color: orange;
+}
+
+@layer base {
+  button[aria-current="page"] {
+    @apply bg-pointColor;
+  }
+}

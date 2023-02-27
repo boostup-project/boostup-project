@@ -1,0 +1,178 @@
+import { useForm, Controller } from "react-hook-form";
+import { langDict, addDict } from "../reuse/dict";
+import AuthBtn from "../reuse/btn/AuthBtn";
+import { useState, useMemo } from "react";
+import Select from "react-select";
+
+interface Props {
+  onSubmit: any;
+}
+
+export const SearchPop = ({ onSubmit }: Props) => {
+  const { control, register, handleSubmit } = useForm();
+
+  const langArr = Object.keys(langDict);
+  const addArr = Object.keys(addDict);
+
+  return (
+    <div className="h-4/6 border border-borderColor rounded-xl desktop:rounded-t-none desktop:rounded-b-xl bg-white text-xs tablet:text-sm">
+      <form
+        className="h-full flex flex-col justify-center items-center"
+        onSubmit={handleSubmit(onSubmit)}
+      >
+        <label className="w-full  flex flex-col items-center mt-5">
+          <div className="text-textColor text-center text-sm tablet:text-base">
+            닉네임
+          </div>
+          <input
+            className="desktop:w-8/12 w-5/6 h-fit p-2 border  border-borderColor outline-pointColor rounded-xl font-SCDream2 text-textColor placeholder:text-center mt-5"
+            type="text"
+            placeholder="원하는 과외쌤의 닉네임을 입력학세요"
+            {...register("name")}
+          />
+        </label>
+        <label className="w-full flex flex-col items-center mt-4">
+          <div className="text-textColor text-center text-sm tablet:text-base">
+            경력
+          </div>
+          <input
+            className="desktop:w-8/12 w-5/6 h-fit p-2 border  border-borderColor outline-pointColor rounded-xl font-SCDream2 text-textColor placeholder:text-center mt-5"
+            type="number"
+            placeholder="원하는 과외쌤의 경력을 숫자로 입력하세요"
+            {...register("carrer", {
+              valueAsNumber: true,
+            })}
+          />
+        </label>
+        <label className="w-full flex flex-col items-center mt-5">
+          <div className="text-textColor text-center text-sm tablet:text-base">
+            과외가능지역
+          </div>
+          <div className="desktop:w-8/12 w-5/6 flex justify-between items-center">
+            <div className="w-5/12 text-center flex flex-col even:items-end">
+              <div>시,도</div>
+              <div className="w-full h-fit p-2 border border-borderColor outline-pointColor rounded-xl font-SCDream2 text-textColor bg-white text-center mt-5">
+                <span>서울특별시</span>
+              </div>
+            </div>
+            <div className="w-5/12 text-center flex flex-col items-center">
+              <div>구</div>
+              <div className="w-full h-fit rounded-xl mt-5">
+                <Controller
+                  name="address"
+                  render={({ field }) => (
+                    <Select
+                      {...field}
+                      placeholder={
+                        <div className="text-xs tablet:text-sm">구 선택</div>
+                      }
+                      styles={{
+                        control: baseStyles => ({
+                          ...baseStyles,
+                          borderRadius: "12px",
+                          fontSize: "14px",
+                          fontFamily: "SCDream2",
+                          borderColor: "#A8A7A7",
+                          borderWidth: "1px",
+                        }),
+                        menu: base => ({
+                          ...base,
+                          fontFamily: "SCDream2",
+                          fontSize: "14px",
+                        }),
+                      }}
+                      options={[
+                        ...addArr.map((el, idx) => ({
+                          value: addDict[el],
+                          label: el,
+                          key: idx,
+                        })),
+                      ]}
+                    />
+                  )}
+                  control={control}
+                />
+              </div>
+            </div>
+          </div>
+        </label>
+        <label className="desktop:w-8/12 w-5/6 text-center flex flex-col items-center mt-5">
+          <div className="w-full text-textColor text-center text-sm tablet:text-base">
+            개발언어
+          </div>
+          <div className="w-full h-fit rounded-xl mt-5">
+            <Controller
+              name="language"
+              render={({ field }) => (
+                <Select
+                  {...field}
+                  placeholder={<div>언어 선택</div>}
+                  styles={{
+                    control: (baseStyles, state) => ({
+                      ...baseStyles,
+                      borderRadius: "12px",
+                      fontSize: "14px",
+                      fontFamily: "SCDream2",
+                      borderColor: "#A8A7A7",
+                      borderWidth: "1px",
+                    }),
+                    menu: base => ({
+                      ...base,
+                      fontFamily: "SCDream2",
+                      fontSize: "14px",
+                    }),
+                  }}
+                  options={[
+                    ...langArr.map((el, idx) => ({
+                      value: langDict[el],
+                      label: el,
+                      key: idx,
+                    })),
+                  ]}
+                />
+              )}
+              control={control}
+              defaultValue=""
+            />
+          </div>
+        </label>
+        <label className="w-full flex flex-col items-center mt-5">
+          <div className="text-textColor text-center text-sm tablet:text-base">
+            가격
+          </div>
+          <div className="desktop:w-8/12 w-5/6 flex justify-between items-center">
+            <div className="w-5/12 text-center flex flex-col items-center">
+              <span>최소금액</span>
+              <input
+                className="w-full h-fit p-2 border  border-borderColor outline-pointColor rounded-xl font-SCDream2 text-textColor placeholder:text-center mt-5"
+                type="number"
+                placeholder="최소금액"
+                {...(register("startCost"),
+                {
+                  valueAsNumber: true,
+                })}
+              />
+            </div>
+            <div className="flex flex-col justify-end pb-1">
+              <div>~</div>
+            </div>
+            <div className="w-5/12 text-center flex flex-col items-center">
+              <span>최대금액</span>
+              <input
+                className="w-full h-fit p-2 border  border-borderColor outline-pointColor rounded-xl font-SCDream2 text-textColor placeholder:text-center mt-4"
+                type="number"
+                placeholder="최대금액"
+                {...register("endCost", {
+                  valueAsNumber: true,
+                })}
+              />
+            </div>
+          </div>
+        </label>
+        <div className="w-full h-fit mt-5 mb-4 flex justify-center items-center">
+          <AuthBtn>검색</AuthBtn>
+        </div>
+      </form>
+    </div>
+  );
+};
