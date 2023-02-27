@@ -23,7 +23,6 @@ public class SaveChatBatchService {
             redisChatMessage.deleteAllNewChat();
         } catch (Exception e) {
             log.info("[BATCH ERR] BATCH FAILED!!");
-            log.info(e.getMessage());
         }
     }
 }
