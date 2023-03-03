@@ -9,7 +9,6 @@ import java.util.Optional;
 
 @Repository
 public interface ChatRoomRepository extends JpaRepository<ChatRoom, Long> {
-    ChatRoom save(ChatRoom chatRoom);
     Boolean existsBySenderIdAndReceiverId(Long firstId, Long secondId);
     Optional<ChatRoom> findBySenderIdAndReceiverId(Long senderId, Long receiverId);
     List<ChatRoom> findChatRoomsBySenderIdOrReceiverId(Long senderId, Long receiverId);
