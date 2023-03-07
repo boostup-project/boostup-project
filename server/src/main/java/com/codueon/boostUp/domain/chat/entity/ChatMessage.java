@@ -39,8 +39,9 @@ public class ChatMessage implements Serializable {
     private LocalDateTime createdAt;
 
     @Builder
-    public ChatMessage(Long chatRoomId, Long senderId, String message,
+    public ChatMessage(Long id, Long chatRoomId, Long senderId, String message,
                        String displayName, MessageType messageType, LocalDateTime createdAt) {
+        this.id = id;
         this.chatRoomId = chatRoomId;
         this.senderId = senderId;
         this.message = message;

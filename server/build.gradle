@@ -79,7 +79,7 @@ dependencies {
 	runtimeOnly 'com.h2database:h2'
     implementation 'mysql:mysql-connector-java'
 	implementation "com.querydsl:querydsl-jpa:${queryDslVersion}"
-	implementation "com.querydsl:querydsl-apt:${queryDslVersion}"
+	implementation "com.querydsl:querydsl-apt:${queryDslVersion}:jpa"
 	implementation 'org.springframework.boot:spring-boot-starter-jdbc'
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
