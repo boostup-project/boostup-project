@@ -5,7 +5,6 @@ import com.codueon.boostUp.domain.chat.service.WebSocketAuthService;
 import com.codueon.boostUp.domain.member.entity.Member;
 import com.codueon.boostUp.domain.member.exception.AuthException;
 import com.codueon.boostUp.domain.utils.DataForTest;
-import com.codueon.boostUp.domain.vo.AuthInfo;
 import com.codueon.boostUp.global.security.token.JwtAuthenticationToken;
 import com.codueon.boostUp.global.security.utils.JwtTokenUtils;
 import com.codueon.boostUp.global.utils.RedisUtils;
@@ -18,7 +17,6 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
 import java.security.Principal;
-import java.security.SignatureException;
 
 import static com.codueon.boostUp.domain.chat.utils.DataForChat.*;
 import static com.codueon.boostUp.domain.member.entity.AccountStatus.COMMON_MEMBER;

@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class ChatRoom extends Auditable implements Serializable {
+public class ChatRoom extends Auditable {
 
     @Id
     @Column(name = "CHAT_ROOM_ID")

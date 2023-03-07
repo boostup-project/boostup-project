@@ -160,11 +160,18 @@ public class DataForChat {
                     TUTOR_CHAT_ROOM_ID, TUTOR_ID, LESSON_TITLE, STUDENT_NAME, 0, REVIEW_MESSAGE, AlarmType.COMPLETED_REVIEW
             );
 
-    public static ChatRoom CHAT_ROOM = ChatRoom.builder()
+    public static ChatRoom CHAT_ROOM1 = ChatRoom.builder()
             .senderId(STUDENT_ID)
             .senderName(STUDENT_NAME)
             .receiverId(TUTOR_ID)
             .receiverName(TUTOR_NAME)
+            .build();
+
+    public static ChatRoom CHAT_ROOM2 = ChatRoom.builder()
+            .senderId(TUTOR_ID)
+            .senderName(TUTOR_NAME)
+            .receiverId(STUDENT_ID)
+            .receiverName(STUDENT_NAME)
             .build();
 
     public static ChatRoom TUTOR_CHAT_ROOM = ChatRoom.builder()
@@ -172,8 +179,6 @@ public class DataForChat {
             .senderName(TUTOR_NAME)
             .receiverId(TUTOR_ID)
             .receiverName(TUTOR_NAME)
-            .receiverName(CODUEON_ALARM)
-            .receiverName(CODUEON_ALARM)
             .build();
 
     public static ChatRoom STUDENT_CHAT_ROOM = ChatRoom.builder()
@@ -181,12 +186,10 @@ public class DataForChat {
             .senderName(STUDENT_NAME)
             .receiverId(STUDENT_ID)
             .receiverName(STUDENT_NAME)
-            .receiverName(CODUEON_ALARM)
-            .receiverName(CODUEON_ALARM)
             .build();
 
     public static ChatRoom getSavedChatRoom() {
-        ChatRoom chatRoom = CHAT_ROOM;
+        ChatRoom chatRoom = CHAT_ROOM1;
         Field field = org.springframework.util.ReflectionUtils.findField(chatRoom.getClass(), "id");
         ReflectionUtils.makeAccessible(field);
         ReflectionUtils.setField(field, chatRoom, CHAT_ROOM_ID1);

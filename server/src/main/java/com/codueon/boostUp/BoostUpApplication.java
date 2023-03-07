@@ -12,13 +12,10 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @EnableScheduling
 @EnableJpaAuditing
 @EnableFeignClients
-@EnableBatchProcessing
 @SpringBootApplication
 public class BoostUpApplication {
 	@SneakyThrows
 	public static void main(String[] args) {
-		Thread.sleep(10000);
 		SpringApplication.run(BoostUpApplication.class, args);
 	}
-
 }

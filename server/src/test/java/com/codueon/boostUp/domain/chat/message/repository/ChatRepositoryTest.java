@@ -4,17 +4,16 @@ import com.codueon.boostUp.domain.chat.dto.RedisChat;
 import com.codueon.boostUp.domain.chat.entity.ChatMessage;
 import com.codueon.boostUp.domain.chat.repository.querydsl.ChatRepository;
 import com.codueon.boostUp.domain.chat.utils.MessageType;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.codueon.boostUp.domain.chat.utils.DataForChat.CHAT_ROOM_ID1;
@@ -22,21 +21,12 @@ import static com.codueon.boostUp.domain.chat.utils.DataForChat.TUTOR_ID;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 @DataJpaTest
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+@AutoConfigureTestDatabase
+@TestPropertySource(locations = "classpath:application-test.properties")
 public class ChatRepositoryTest {
 
     @Autowired
     protected ChatRepository chatRepository;
-
-    @Autowired
-    private EntityManagerFactory emf;
-
-    protected EntityManager em;
-
-    @BeforeAll
-    void beforeAll() {
-        em = emf.createEntityManager();
-    }
 
     @Test
     @Transactional
@@ -44,11 +34,9 @@ public class ChatRepositoryTest {
     void findTop30ChatByChatRoomId() throws Exception {
         // given
         LocalDateTime times = LocalDateTime.now();
-
-        em.getTransaction().begin();
-
+        List<ChatMessage> chatMessages = new ArrayList<>();
         for (int i = 1; i <= 31; i++) {
-            em.persist(ChatMessage.builder()
+            chatMessages.add(ChatMessage.builder()
                             .chatRoomId(CHAT_ROOM_ID1)
                             .displayName("Test" + i)
                             .senderId(TUTOR_ID)
@@ -56,20 +44,15 @@ public class ChatRepositoryTest {
                             .messageType(MessageType.TALK)
                             .createdAt(times.plusMinutes(i))
                     .build());
-            em.flush();
-            em.clear();
         }
-
-        em.getTransaction().commit();
+        chatRepository.saveAll(chatMessages);
 
         // when
         List<RedisChat> chats = chatRepository.findTop30ChatByChatRoomId(CHAT_ROOM_ID1);
 
         // then
-        // 총 갯수
         List<ChatMessage> messages = chatRepository.findAll();
-        assertThat(messages.size()).isEqualTo(31);
-        assertThat(chats.size()).isEqualTo(30);
-
+        assertThat(messages.size()).isEqualTo(31); // 총 갯수
+        assertThat(chats.size()).isEqualTo(30); // 조회 갯수
     }
 }
