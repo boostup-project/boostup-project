@@ -22,7 +22,7 @@ const RepeatedMeta = ({ url }: { url: string }) => {
       <meta
         name="description"
         content="코딩 과외 매칭 플랫폼 코듀온, Codueon"
-      ></meta>
+      />
       {/* Facebook Meta Tags  */}
       <meta property="og:title" content="코듀온" />
       <meta property="og:url" content={url} />
@@ -58,7 +58,12 @@ const SeoHead = ({ metaInfo, url, metaType }: Props) => {
       {metaType === "Home" && (
         <>
           <title>코딩 과외 매칭 플랫폼 | 코듀온</title>
-          <RepeatedMeta url="https://www.codueon.com/" />
+          <meta
+            name="description"
+            content="코딩 과외 매칭 플랫폼 코듀온, Codueon"
+          />
+          {/* Facebook Meta Tags  */}
+          <meta property="og:title" content="코듀온" />
         </>
       )}
       {/* Lesson */}
