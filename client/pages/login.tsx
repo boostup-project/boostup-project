@@ -61,13 +61,10 @@ const Login = () => {
     }
   }, [isSuccess, isError]);
 
-  const { refetch: kakaoRefetch } = useGetKakaoLogin();
-  const kakaoLogin = () => {
-    kakaoRefetch();
-  };
   const { refetch: googleRefetch, data: googleData } = useGetGoogleLogin();
   const googleLogin = () => {
-    signIn();
+    // signIn();
+    googleRefetch();
     console.log(googleData);
   };
 

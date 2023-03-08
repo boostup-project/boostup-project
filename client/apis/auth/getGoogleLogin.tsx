@@ -8,5 +8,6 @@ const getGoogleLogin = async () => {
     },
   });
 };
-
+//oauth2/authorization/google
+//https://codueon.shop/login/oauth2/code/google
 export default getGoogleLogin;

@@ -102,12 +102,12 @@ const MypageInfo = () => {
             >
               비밀번호수정
             </button>
-            <button
+            {/* <button
               className="mr-8 desktop:w-[40%] tablet:w-[40%] w-[45%] text text-negativeMessage desktop:text-base tablet:text-sm text-xs"
               onClick={deleteMyAccount}
             >
               회원탈퇴
-            </button>
+            </button> */}
           </div>
         </div>
         {isMemberEdit && <EditUserData editProfile={editProfile} />}
