@@ -1,9 +1,9 @@
 import Card from "components/Maincard/Card";
 
-const Cards = () => {
+const Cards = ({ data }: any) => {
   return (
     <div className="mt-6 flex flex-row justify-center flex-wrap w-full desktop:w-9/12 desktop:min-w-[1000px] tablet:w-full min-h-[300px] h-fit">
-      <Card />
+      <Card data={data} />
     </div>
   );
 };
