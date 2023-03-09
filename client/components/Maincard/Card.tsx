@@ -24,7 +24,7 @@ import { totalCard } from "atoms/main/mainAtom";
 import { useRouter } from "next/router";
 const client = new QueryClient();
 
-const Card = () => {
+const Card = ({ data }: any) => {
   const router = useRouter();
   const [cards, setMainCardInfo] = useRecoilState(mainCardInfo);
   //pagination
@@ -34,12 +34,13 @@ const Card = () => {
   const [doLike, setDoLike] = useState(false);
   const [totalCards, setTotalCards] = useRecoilState(totalCard);
   const queryClient = useQueryClient();
+
   const {
     refetch: cardRefetch,
     data: cardData,
     isSuccess,
   } = useQuery(["cards"], getMainCard, {
-    enabled: true,
+    enabled: false,
     onSuccess: data => {
       setMainCardInfo(data.data.data);
       setTotalCards(data.data.data.length);
@@ -59,7 +60,11 @@ const Card = () => {
   }, [lessonId, doLike]);
 
   useEffect(() => {
-    cardRefetch();
+    if (localStorage.getItem("token")) {
+      cardRefetch();
+    } else {
+      data.then((res: any) => setMainCardInfo(res));
+    }
   }, [toggle]);
 
   useEffect(() => {
