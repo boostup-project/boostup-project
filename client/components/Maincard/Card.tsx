@@ -63,7 +63,8 @@ const Card = ({ data }: any) => {
     if (localStorage.getItem("token")) {
       cardRefetch();
     } else {
-      data.then((res: any) => setMainCardInfo(res));
+      // setMainCardInfo(data);
+      // data.then((res: any) => setMainCardInfo(res));
     }
   }, [toggle]);
 

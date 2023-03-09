@@ -11,25 +11,34 @@ import SeoHead from "components/reuse/SEO/SeoHead";
 import axios from "axios";
 import { mainCardInfo } from "atoms/main/mainAtom";
 
-async function fetchData() {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/lesson`, {
-    cache: "no-store",
-  });
+// async function fetchData() {
+//   const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/lesson`, {
+//     cache: "no-store",
+//   });
 
-  const data = await res.json();
-  return data.data;
+//   const data = await res.json();
+//   return data.data;
+// }
+
+export async function getServerSideProps() {
+  const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/lesson`);
+  const data = res.data.data;
+
+  return { props: { data } };
 }
 
-const Home = () => {
+const Home = (data: any) => {
   const [active, setActive] = useRecoilState(chatActive);
   const [roomId, setRoomId] = useRecoilState(roomIdState);
   const widthSize = useWindowSize();
-
-  const data: any = fetchData();
+  const [cardData, setCardData] = useRecoilState(mainCardInfo);
+  // const data: any = fetchData();
+  // console.log(data.data);
 
   useEffect(() => {
     setActive(false);
     setRoomId(0);
+    setCardData(data.data);
   }, []);
 
   return (
@@ -38,7 +47,7 @@ const Home = () => {
       <div className="flex flex-col bg-bgColor items-center justify-start w-full h-full">
         <Carouselcomp />
         {widthSize > 1024 ? <LanguageFilter /> : <MoblieLanguageFilter />}
-        <Cards data={data}></Cards>
+        <Cards data={data.data}></Cards>
       </div>
     </>
   );
