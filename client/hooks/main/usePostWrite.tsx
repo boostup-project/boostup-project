@@ -1,13 +1,17 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import postWrite from "apis/main/postWrite";
 import { toast } from "react-toastify";
+import { refetchBookmark } from "atoms/detail/detailAtom";
+import { useRecoilState, useSetRecoilState } from "recoil";
 
 const usePostWrite = () => {
   const queryClient = useQueryClient();
+  const [toggle, setToggle] = useRecoilState(refetchBookmark);
 
   return useMutation(postWrite, {
     onSuccess: res => {
-      queryClient.invalidateQueries(["cards"]);
+      // queryClient.invalidateQueries(["cards"]);
+      setToggle(!toggle);
     },
     onError: (err: any) => {
       if (err.response.status === 504) {
