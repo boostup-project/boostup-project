@@ -24,8 +24,6 @@ GOOGLE_CLIENT_ID
 
 - TypeScript
     - 타입의 안정성을 활용하고자 사용했습니다.
-- Next.js
-    - SEO를 충족을 위한 프레임워크이기에 사용했습니다.
 - Tailwind CSS
     - 반응형 웹페이지를 위한 preset을 쉽게 설정 및 활용할 수 있어서 사용했습니다.
 - Recoil
