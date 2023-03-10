@@ -12,13 +12,13 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 import SeoHead from "components/reuse/SEO/SeoHead";
-import { useSession, signIn, signOut } from "next-auth/react";
+
 const Login = () => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const Error = useRecoilValue(loginErrorMessage);
   const router = useRouter();
-  const { data: session } = useSession();
+
   const {
     register,
     handleSubmit,
