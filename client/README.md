@@ -11,11 +11,7 @@ npm run dev
 ### Required Enviornment Variables
 ```javascript=
 NEXT_PUBLIC_API_URL=${server_domain}
-// For OAuth
-GOOGLE_CLIENT_SECRET
-NEXTAUTH_URL
-JWT_SECRET
-GOOGLE_CLIENT_ID
+
 ```
 
 <br />
@@ -42,8 +38,6 @@ GOOGLE_CLIENT_ID
     - 과외 선생님과 과외 수강생들의 실시간 대화를 구현하기 위해 사용했습니다.
 - React Hook Form
     - 내부적으로 useRef를 통한 [렌더링 최적화 및 dependancy가 적으면서](https://blog.logrocket.com/react-hook-form-vs-formik-comparison/) 유효성 검사 코드의 간결성을 위해 사용했습니다.
-- NextAuth.js
-    - OAuth 관련 package중 Next.js와 좋은 호환성([designed from the ground up to support Next.js and Serverless.](https://next-auth.js.org/getting-started/introduction))을 가지기에 사용했습니다.
 
 <br />
 
