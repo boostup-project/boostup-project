@@ -46,7 +46,8 @@
 ### FRONT-END <br>
 [Client README로 이동](https://github.com/boostup-project/boostup-project/blob/main/client/README.md)
 <br><br>
-![코듀온 프론트엔드](https://user-images.githubusercontent.com/96826217/219315814-f1f2410d-50ce-4aae-a455-9323c3468147.png)
+![코듀온 프론트엔드 (1)](https://user-images.githubusercontent.com/96826217/224624111-d121ac7e-5a64-41a6-ad5a-bb6cb21d65f2.png)
+
 ### Team Collaboration Tool <br>
 ![코듀온 협업툴 (2)](https://user-images.githubusercontent.com/96826217/219316024-20a77840-ad5f-40db-8558-4bb41cc4d4b7.png)
 
