@@ -150,7 +150,7 @@ const Login = () => {
               <Link href="/resetPassword">비밀번호를 잊으셨나요?</Link> /{" "}
               <Link href="/signup"> 아직 회원이 아니신가요?</Link>
             </div>
-            <div className="w-full h-fit flex flex-row justify-center items-center font-SCDream3 desktop:text-[12px] tablet:text-[12px] text-[10px] text-textColor mt-7">
+            <div className="w-full h-fit flex flex-row justify-center items-center font-SCDream3 desktop:text-[12px] tablet:text-[12px] text-[10px] text-textColor mt-4">
               <div>게스트 계정을 이용해 서비스를 이용해 보실 수 있습니다. </div>
             </div>
           </form>
