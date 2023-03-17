@@ -1,3 +1,4 @@
+import SmallBtn from "components/reuse/btn/SmallBtn";
 import AuthBtn from "components/reuse/btn/AuthBtn";
 import AuthContainer from "components/reuse/container/AuthContainer";
 import { useEffect, useState } from "react";
@@ -38,8 +39,6 @@ const Login = () => {
     mutate({ email, password });
   };
 
-  const failSubmit = (e: any) => {};
-
   useEffect(() => {
     if (isSuccess) {
       toast.success("로그인에 성공하였습니다!", {
@@ -60,7 +59,11 @@ const Login = () => {
     }
   }, [isSuccess, isError]);
 
-  const guestLogin = () => {};
+  const guestLogin = () => {
+    const email = "guest@guest.com";
+    const password = "Wjdgksmf!2";
+    mutate({ email, password });
+  };
   return (
     <>
       <SeoHead metaType="Login" />
@@ -73,10 +76,7 @@ const Login = () => {
           로그인 후 원하는 선생님을 만나보세요!
         </div>
         <AuthContainer>
-          <form
-            onSubmit={handleSubmit(onSubmit, failSubmit)}
-            className="w-full h-fit"
-          >
+          <form onSubmit={handleSubmit(onSubmit)} className="w-full h-fit">
             <div className="flex flex-col justify-center items-start w-full h-fit font-SCDream5 text-sm text-textColor mb-1">
               이메일
             </div>
@@ -137,17 +137,21 @@ const Login = () => {
               }}
             />
 
-            <div className="w-full h-fit flex justify-center items-center mt-7">
-              <div className="flex justify-center items-center mr-px">
-                <AuthBtn onClick={handleSubmit}>로그인</AuthBtn>
-              </div>
-              <div className="flex justify-center items-center">
-                <AuthBtn onClick={guestLogin}>게스트</AuthBtn>
-              </div>
+            <div className="w-full h-fit flex flex-row justify-center items-center mt-7">
+              <SmallBtn type="submit" css="mr-5">
+                로그인
+              </SmallBtn>
+
+              <SmallBtn type="button" onClick={guestLogin}>
+                게스트
+              </SmallBtn>
             </div>
             <div className="w-full h-fit flex flex-row justify-center items-center font-SCDream3 desktop:text-[12px] tablet:text-[12px] text-[10px] text-pointColor mt-7">
               <Link href="/resetPassword">비밀번호를 잊으셨나요?</Link> /{" "}
               <Link href="/signup"> 아직 회원이 아니신가요?</Link>
+            </div>
+            <div className="w-full h-fit flex flex-row justify-center items-center font-SCDream3 desktop:text-[12px] tablet:text-[12px] text-[10px] text-textColor mt-7">
+              <div>게스트 계정을 이용해 서비스를 이용해 보실 수 있습니다. </div>
             </div>
           </form>
           <div className="w-full">
