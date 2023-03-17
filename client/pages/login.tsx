@@ -60,6 +60,7 @@ const Login = () => {
     }
   }, [isSuccess, isError]);
 
+  const guestLogin = () => {};
   return (
     <>
       <SeoHead metaType="Login" />
@@ -136,8 +137,13 @@ const Login = () => {
               }}
             />
 
-            <div className="w-full h-fit flex flex-col justify-center items-center mt-7">
-              <AuthBtn onClick={handleSubmit}>로그인</AuthBtn>
+            <div className="w-full h-fit flex justify-center items-center mt-7">
+              <div className="flex justify-center items-center mr-px">
+                <AuthBtn onClick={handleSubmit}>로그인</AuthBtn>
+              </div>
+              <div className="flex justify-center items-center">
+                <AuthBtn onClick={guestLogin}>게스트</AuthBtn>
+              </div>
             </div>
             <div className="w-full h-fit flex flex-row justify-center items-center font-SCDream3 desktop:text-[12px] tablet:text-[12px] text-[10px] text-pointColor mt-7">
               <Link href="/resetPassword">비밀번호를 잊으셨나요?</Link> /{" "}
