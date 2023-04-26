@@ -53,12 +53,12 @@ public class RedisConfig {
     @Bean
     public RedisConnectionFactory redisConnectionFactory() {
         // [AWS 서버용]
-        RedisClusterConfiguration clusterConfiguration = new RedisClusterConfiguration();
-        clusterConfiguration.clusterNode(redisHost, redisPort);
-        return new LettuceConnectionFactory(clusterConfiguration);
+//        RedisClusterConfiguration clusterConfiguration = new RedisClusterConfiguration();
+//        clusterConfiguration.clusterNode(redisHost, redisPort);
+//        return new LettuceConnectionFactory(clusterConfiguration);
 
-//        // [Local 서버용]
-//        return new LettuceConnectionFactory(redisHost, redisPort);
+        // [Local 서버용]
+        return new LettuceConnectionFactory(redisHost, redisPort);
     }
 
     /**
