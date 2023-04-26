@@ -34,8 +34,6 @@ public class AuthController {
 
     /**
      * 사용자 로그아웃
-     * @param accessToken 엑세스 토큰
-     * @param refreshToken 리프레시 토큰
      * @param authentication 사용자 인증 정보
      * @author LimJaeminZ
      */
